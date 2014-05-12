@@ -48,7 +48,7 @@ package com.sundaytoz.st2D.tests.texture
         // a simple frame counter used for animation
         private var t:Number = 0;
         
-        [Embed (source = "../../utils/res/texture.jpg")] private var myTextureBitmap:Class;
+        [Embed (source = "texture.jpg")] private var myTextureBitmap:Class;
         private var myTextureData:Bitmap = new myTextureBitmap();
         // The Molehill Texture that uses the above myTextureData
         private var myTexture:Texture;
