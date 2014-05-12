@@ -76,7 +76,8 @@ package com.sundaytoz.st2D.utils
          * }
          * 
          * AssetLoader.instance.loadImageTexture("res/texture.png", onComplete, onProgress);
-         *  
+         * 
+         * </listing>
          */
         public function loadImageTexture( path:String, onComplete:Function, onProgress:Function = null ):void
         {
