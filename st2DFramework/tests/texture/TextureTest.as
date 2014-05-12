@@ -1,3 +1,8 @@
+
+/**
+ * Reference : Adobe Flash 11 Stage3D Game Programming Book 
+ */
+
 package com.sundaytoz.st2D.tests.texture
 {
     import com.adobe.utils.AGALMiniAssembler;
