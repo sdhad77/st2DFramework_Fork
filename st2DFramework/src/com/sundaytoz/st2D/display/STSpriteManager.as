@@ -41,7 +41,7 @@ package com.sundaytoz.st2D.display
         public function addSprite(sprite:STSprite):void
         {
             // zOrder 에 맞게 추가
-            
+
             
             _sprites.push(sprite);
         }
@@ -59,6 +59,7 @@ package com.sundaytoz.st2D.display
                 
                 // 화면 안의 스프라이트인 경우 출력
                 
+                _sprites[i].update();
                 
                 
                 modelViewProjection.identity();

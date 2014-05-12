@@ -42,7 +42,7 @@ package com.sundaytoz.st2D.basic
             return _instance;
         }
         
-        public function init(stage:Stage):void
+        public function init(stage:Stage, onInited:Function):void
         {
             stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
@@ -87,7 +87,9 @@ package com.sundaytoz.st2D.basic
                 _projectionMatrix.perspectiveFieldOfViewRH(45.0, stage.fullScreenWidth / stage.fullScreenHeight, 0.01, 100.0);
                 
                 _viewMatrix.identity();
-                _viewMatrix.appendTranslation(0,0,-4);
+                _viewMatrix.appendTranslation(0,0,-20);
+                
+                onInited();
             }
         }
         
