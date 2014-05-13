@@ -34,10 +34,10 @@ package com.sundaytoz.st2D.display
         private var _meshVertexData:Vector.<Number> = Vector.<Number>
                                 ([
                                 //X, Y, Z,              U, V,       nX, nY, nZ,     R,  G, B, A
-                                -0.5, -0.5, 0.5,      0,  1,      0, 0, 1,        1.0,0.0,0.0,1.0,
-                                0.5,  -0.5, 0.5,      1,  1,      0, 0, 1,        0.0,1.0,0.0,1.0,
-                                0.5,  0.5,  0.5,      1,  0,      0, 0, 1,        0.0,0.0,1.0,1.0,
-                                -0.5, 0.5,  0.5,      0,  0,      0, 0, 1,        1.0,1.0,1.0,1.0
+                                    -0.5, 0.5,  0.5,      0,  0,      0, 0, 1,        1.0,1.0,1.0,1.0,
+                                    0.5,  0.5,  0.5,      1,  0,      0, 0, 1,        0.0,0.0,1.0,1.0,
+                                    0.5,  -0.5, 0.5,      1,  1,      0, 0, 1,        0.0,1.0,0.0,1.0,
+                                -0.5, -0.5, 0.5,      0,  1,      0, 0, 1,        1.0,0.0,0.0,1.0
                                 ]);
                         
         
@@ -95,6 +95,11 @@ package com.sundaytoz.st2D.display
                 throw new Error("먼저 StageContext 를 초기화 한뒤 사용해주세요");
                 return ;
             }
+            
+            
+//            [Embed (source = "res/star.png")] 
+//            var myTextureBitmap1:Class;
+//            var myTextureData1:Bitmap = new myTextureBitmap1();
             
             AssetLoader.instance.loadImageTexture(path, onComplete);
             
