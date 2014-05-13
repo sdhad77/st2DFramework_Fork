@@ -5,7 +5,9 @@ package com.sundaytoz.st2D.animation
     2  setAnimationFrame    - 애니메이션 프레임 저장
     3  setAnimation         - 원하는 애니메이션 추가
     4  setPlayAnimation     - 재생하고 싶은 애니메이션 이름 설정
-    5~ getFrame             - 이번에 그릴 frame 정보
+    5  nextFrame            - 다음 frame으로 이동
+    6  getFrame             - 이번에 그릴 frame 정보
+    5~6 반복
     
     skel.png 파일을 이용한 클래스 사용 예시입니다.
     
@@ -47,7 +49,9 @@ package com.sundaytoz.st2D.animation
     //up 애니메이션 시작
     _animation.setPlayAnimation("up");
     
-         이후 _animation.getFrame(); 으로 얻은 animationFrame을 이용해서 화면에 그려주면 됩니다.
+         이후 
+    _animation.nextFrame(); 으로 다음 프레임으로 이동시키고,
+    _animation.getFrame(); 으로 얻은 animationFrame을 이용해서 화면에 그려주면 됩니다.
     
          애니메이션 프레임은 SpriteSheet와 함께 존재하는 XML파일에서 읽어온 정보들 입니다.
     getFrame 함수를 호출할 때 마다 다음 frame으로 애니메이션이 넘어가는 형태이므로 getFrame 함수는 매 프레임마다 호출되게끔 하여야 합니다.
@@ -140,16 +144,14 @@ package com.sundaytoz.st2D.animation
         }
         
         /**
-         * 현재 애니메이션 Frame의 정보를 가져오고, 다음 프레임으로 이동하게 하는 함수입니다. 
-         * @return Frame 좌표가 저장되어있는 object를 반환합니다.
+         * 애니메이션을 다음 프레임으로 이동 시킵니다. 
          */
-        public function getFrame():AnimationFrame
+        public function nextFrame():void
         {
-            //현재 애니메이션 프레임 유지할 경우
+            //현재 애니메이션 프레임 유지할 경우.
             if(_pauseFrameCnt < _animation[_nowPlayAnimationName].framePauseNum[_nowAnimationFlowIdx])
             {
-               _pauseFrameCnt++;
-               return _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]];
+                _pauseFrameCnt++;
             }
             //유지 시간(pauseFrameCnt)이 다되서 다음 프레임으로 넘어갈 때
             else
@@ -161,16 +163,22 @@ package com.sundaytoz.st2D.animation
                     _pauseFrameCnt = 0;
                     _nowAnimationFlowIdx++;
                 }
-                //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
+                    //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
                 else
                 {
                     setPlayAnimation(_animation[_nowPlayAnimationName].nextAnimationName);
                 }
-                
-                return getFrame();
+                nextFrame();
             }
-            
-            return null;
+        }
+        
+        /**
+         * 현재 애니메이션 Frame의 정보를 가져오는 함수입니다.
+         * @return Frame 좌표가 저장되어있는 object를 반환합니다.
+         */
+        public function getFrame():AnimationFrame
+        {
+            return _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]];
         }
         
         public function get frameWidth():int  {return _frameWidth;}
