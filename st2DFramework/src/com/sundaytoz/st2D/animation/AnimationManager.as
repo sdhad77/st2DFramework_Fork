@@ -155,14 +155,13 @@ package com.sundaytoz.st2D.animation
             else
             {
                 //FlowIdx 가 0부터 시작이라서 -1을 해줘야 합니다.
-                //아직 다음으로 넘어갈 프레임이 존재하는 경우
+                //아직 다음으로 넘어갈 프레임이 존재하는 경우. 즉 애니메이션이 종료되지 않았을때
                 if(_nowAnimationFlowIdx < (_animation[_nowPlayAnimationName].animationFlow.length-1))
                 {
                     _pauseFrameCnt = 0;
                     _nowAnimationFlowIdx++;
                 }
-                //현재 애니메이션의 마지막 동작까지 마쳐서 다음 동작으로 넘어가야하는 경우.
-                //지금은 단순 반복을 하게 하였지만, nextAnimationName을 이용해서 다음 애니메이션으로 이동
+                //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
                 else
                 {
                     setPlayAnimation(_animation[_nowPlayAnimationName].nextAnimationName);
