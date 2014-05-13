@@ -34,9 +34,9 @@ package com.sundaytoz.st2D.display
         private var _meshVertexData:Vector.<Number> = Vector.<Number>
                                 ([
                                 //X, Y, Z,              U, V,       nX, nY, nZ,     R,  G, B, A
-                                    -0.5, 0.5,  0.5,      0,  0,      0, 0, 1,        1.0,1.0,1.0,1.0,
-                                    0.5,  0.5,  0.5,      1,  0,      0, 0, 1,        0.0,0.0,1.0,1.0,
-                                    0.5,  -0.5, 0.5,      1,  1,      0, 0, 1,        0.0,1.0,0.0,1.0,
+                                -0.5, 0.5,  0.5,      0,  0,      0, 0, 1,        1.0,1.0,1.0,1.0,
+                                0.5,  0.5,  0.5,      1,  0,      0, 0, 1,        0.0,0.0,1.0,1.0,
+                                0.5,  -0.5, 0.5,      1,  1,      0, 0, 1,        0.0,1.0,0.0,1.0,
                                 -0.5, -0.5, 0.5,      0,  1,      0, 0, 1,        1.0,0.0,0.0,1.0
                                 ]);
                         
@@ -96,13 +96,7 @@ package com.sundaytoz.st2D.display
                 return ;
             }
             
-            
-//            [Embed (source = "res/star.png")] 
-//            var myTextureBitmap1:Class;
-//            var myTextureData1:Bitmap = new myTextureBitmap1();
-            
             AssetLoader.instance.loadImageTexture(path, onComplete);
-            
             function onComplete(object:Object):void
             {
                 setTextureWithBitmap(object as Bitmap);
@@ -111,7 +105,7 @@ package com.sundaytoz.st2D.display
         
         internal function update():void
         {
-            _modelMatrix.identity();
+           // _modelMatrix.identity();
             
             // scale
             _modelMatrix.appendScale(_textureData.width, _textureData.height, 1);
@@ -139,6 +133,8 @@ package com.sundaytoz.st2D.display
             
             _meshVertexData[3+12*3] = u;
             _meshVertexData[4+12*3] = v+height;
+            
+            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
         }
         
         /**
@@ -152,7 +148,7 @@ package com.sundaytoz.st2D.display
             var tmp:BitmapData;
             var transform:Matrix = new Matrix();
             
-            var fillColor:uint = 0xaa000000;
+            var fillColor:uint = 0x00000000;
             
             tmp = new BitmapData(src.width, src.height, true, fillColor);
             
@@ -248,7 +244,7 @@ package com.sundaytoz.st2D.display
         {
             return _textureData;
         }
-            
+        
         
     }
 }
