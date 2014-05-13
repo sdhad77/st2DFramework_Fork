@@ -41,94 +41,24 @@ package com.sundaytoz.st2D.animation
             _frameHeight = frameHeight;
         }
         
-        public function get name():String
-        {
-            return _name;
-        }
-
-        public function set name(value:String):void
-        {
-            _name = value;
-        }
-
-        public function get x():int
-        {
-            return _x;
-        }
-
-        public function set x(value:int):void
-        {
-            _x = value;
-        }
-
-        public function get y():int
-        {
-            return _y;
-        }
-
-        public function set y(value:int):void
-        {
-            _y = value;
-        }
-
-        public function get width():int
-        {
-            return _width;
-        }
-
-        public function set width(value:int):void
-        {
-            _width = value;
-        }
-
-        public function get height():int
-        {
-            return _height;
-        }
-
-        public function set height(value:int):void
-        {
-            _height = value;
-        }
+        public function get name():String     {return _name;}
+        public function get x():int           {return _x;}
+        public function get y():int           {return _y;}
+        public function get width():int       {return _width;}
+        public function get height():int      {return _height;}
+        public function get frameX():int      {return _frameX;}
+        public function get frameY():int      {return _frameY;}
+        public function get frameWidth():int  {return _frameWidth;}
+        public function get frameHeight():int {return _frameHeight;}
         
-        public function get frameX():int
-        {
-            return _frameX;
-        }
-        
-        public function set frameX(value:int):void
-        {
-            _frameX = value;
-        }
-        
-        public function get frameY():int
-        {
-            return _frameY;
-        }
-        
-        public function set frameY(value:int):void
-        {
-            _frameY = value;
-        }
-        
-        public function get frameWidth():int
-        {
-            return _frameWidth;
-        }
-        
-        public function set frameWidth(value:int):void
-        {
-            _frameWidth = value;
-        }
-        
-        public function get frameHeight():int
-        {
-            return _frameHeight;
-        }
-        
-        public function set frameHeight(value:int):void
-        {
-            _frameHeight = value;
-        }
+        public function set name(value:String):void     {_name        = value;}
+        public function set x(value:int):void           {_x           = value;}
+        public function set y(value:int):void           {_y           = value;}
+        public function set width(value:int):void       {_width       = value;}
+        public function set height(value:int):void      {_height      = value;}
+        public function set frameX(value:int):void      {_frameX      = value;}
+        public function set frameY(value:int):void      {_frameY      = value;}
+        public function set frameWidth(value:int):void  {_frameWidth  = value;}
+        public function set frameHeight(value:int):void {_frameHeight = value;}
     }
 }
