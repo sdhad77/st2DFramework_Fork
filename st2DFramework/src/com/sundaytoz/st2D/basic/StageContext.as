@@ -22,7 +22,7 @@ package com.sundaytoz.st2D.basic
         private var _context3D:Context3D;
         private var _shaderProgram:Program3D;
         
-        private var _projectionMatrix:Matrix3D;
+        private var _projectionMatrix:PerspectiveMatrix3D = new PerspectiveMatrix3D();
         private var _viewMatrix:Matrix3D = new Matrix3D();
         
         public function StageContext()
@@ -66,26 +66,14 @@ package com.sundaytoz.st2D.basic
                 
                 initShaders();
                 
-                //_projectionMatrix.identity();
-                _projectionMatrix = createOrthographicProjectionMatrix(0.0, stage.fullScreenWidth, 0.0, stage.fullScreenHeight, -1024, 1024);
+                _projectionMatrix.identity();
+                _projectionMatrix.orthoRH(stage.fullScreenWidth, stage.fullScreenHeight, -1024, 1024);
                 
                 _viewMatrix.identity();
-                _viewMatrix.appendTranslation(-stage.fullScreenWidth/2, -stage.fullScreenHeight/2, 1);
-                
+                _viewMatrix.appendTranslation(-stage.fullScreenWidth/2, -stage.fullScreenHeight/2, 0);
                 
                 onInited();
             }
-        }
-        
-        private function createOrthographicProjectionMatrix(left:Number, right:Number, bottom:Number, top:Number, near:Number, far:Number):Matrix3D
-        {
-            return new Matrix3D(Vector.<Number>
-                ([
-                    2/(right-left), 0, 0, 0,
-                    0, 2/(top-bottom), 0, 0,
-                    0, 0, 2/(far-near), -near/(far-near),
-                    0, 0, 0, 1
-                ]));
         }
         
         private function initShaders():void
