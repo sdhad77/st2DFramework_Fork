@@ -173,7 +173,7 @@ package com.sundaytoz.st2D.animation
         }
         
         /**
-         * 현재 애니메이션 Frame의 정보를 가져오고, 다음 프레임으로 이동하게 하는 함수입니다. 
+         * 현재 애니메이션 Frame의 정보를 가져오는 함수입니다.
          * @return Frame 좌표가 저장되어있는 object를 반환합니다.
          */
         public function getFrame():AnimationFrame
