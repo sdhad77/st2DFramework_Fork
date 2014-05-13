@@ -22,7 +22,7 @@ package com.sundaytoz.st2D.display
         
         private var _texture:Texture;
         private var _textureData:Bitmap;
-        
+
         private var _modelMatrix:Matrix3D = new Matrix3D();
         
         private var _tag:int;
@@ -31,13 +31,14 @@ package com.sundaytoz.st2D.display
         private var _translation:Vector3D = new Vector3D();
         
         private static var _meshIndexData:Vector.<uint> = Vector.<uint>  ([ 0, 1, 2, 0, 2, 3, ]);
-        private var _meshVertexData:Vector.<Number> = Vector.<Number>([
-                            //X,  Y,  Z,   U, V,   nX, nY, nZ		
-                            -1, -1,  1,   0, 0,   0,  0,  1,
-                            1, -1,  1,   1, 0,   0,  0,  1,
-                            1,  1,  1,   1, 1,   0,  0,  1,
-                            -1,  1,  1,   0, 1,   0,  0,  1
-                        ]);
+        private var _meshVertexData:Vector.<Number> = Vector.<Number>
+                                ([
+                                //X, Y, Z,      U, V,       nX, nY, nZ,     R,  G, B, A
+                                -1, -1, 1,      0,  0,      0, 0, 1,        1.0,0.0,0.0,1.0,
+                                1,  -1, 1,      1,  0,      0, 0, 1,        0.0,1.0,0.0,1.0,
+                                1,  1,  1,      1,  1,      0, 0, 1,        0.0,0.0,1.0,1.0,
+                                -1, 1,  1,      0,  1,      0, 0, 1,        1.0,1.0,1.0,1.0
+                                ]);
                         
         
         private var _vertexBuffer:VertexBuffer3D;
@@ -67,8 +68,8 @@ package com.sundaytoz.st2D.display
                 uploadTextureWithMipmaps(_texture, bitmap.bitmapData);                
             }
             
-            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/8, 8); 
-            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/8);
+            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/12, 12); 
+            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
             
             _indexBuffer = context.createIndexBuffer(_meshIndexData.length);
             _indexBuffer.uploadFromVector(_meshIndexData, 0, _meshIndexData.length);
@@ -227,6 +228,12 @@ package com.sundaytoz.st2D.display
         {
             return _textureData.height;
         }
+        
+        public function get textureData():Bitmap
+        {
+            return _textureData;
+        }
+            
         
     }
 }
