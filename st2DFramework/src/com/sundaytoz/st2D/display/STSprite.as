@@ -122,19 +122,22 @@ package com.sundaytoz.st2D.display
          */
         public function setUVCoord(u:Number, v:Number, width:Number, height:Number):void
         {
-            _meshVertexData[3] = u;
-            _meshVertexData[4] = v;
-            
-            _meshVertexData[3+12] = u+width;
-            _meshVertexData[4+12] = v;
-            
-            _meshVertexData[3+12*2] = u+width;
-            _meshVertexData[4+12*2] = v+height;
-            
-            _meshVertexData[3+12*3] = u;
-            _meshVertexData[4+12*3] = v+height;
-            
-            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
+            if(_vertexBuffer != null)
+            {
+                _meshVertexData[3] = u;
+                _meshVertexData[4] = v;
+                
+                _meshVertexData[3+12] = u+width;
+                _meshVertexData[4+12] = v;
+                
+                _meshVertexData[3+12*2] = u+width;
+                _meshVertexData[4+12*2] = v+height;
+                
+                _meshVertexData[3+12*3] = u;
+                _meshVertexData[4+12*3] = v+height;
+                
+                _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
+            }
         }
         
         /**
