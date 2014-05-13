@@ -15,6 +15,8 @@ package com.sundaytoz.st2D.display
     import flash.geom.Matrix3D;
     import flash.geom.Vector3D;
     
+    
+    ///* fix me _textureData값이 null입니다. @구현모
     public class STSprite
     {
         private var _globalPosition:Vector2D = new Vector2D();
