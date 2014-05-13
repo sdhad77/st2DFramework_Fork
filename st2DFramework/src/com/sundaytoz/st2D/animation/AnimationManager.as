@@ -19,9 +19,6 @@ package com.sundaytoz.st2D.animation
     //애니메이션을 사용할 경우 ,초기화해주는 함수 호출
     _animation.initAnimationManager();
     
-    //xml파일에서 읽어온 프레임 정보들을 매니져에 저장
-    _animation.setAnimationFrame(animationFrame);
-    
     //원하는 애니메이션 자유롭게 설정.  이름              프레임 호출 순서                                                                                         각 프레임 별 대기 시간(프레임) 다음 애니메이션
     _animation.setAnimation("up",    new Array("up0","up1","up2","up1"),             new Array(8,8,8,8), "right");
     _animation.setAnimation("right", new Array("right0","right1","right2","right1"), new Array(8,8,8,8), "down");
@@ -161,7 +158,7 @@ package com.sundaytoz.st2D.animation
                     _pauseFrameCnt = 0;
                     _nowAnimationFlowIdx++;
                 }
-                    //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
+                //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
                 else
                 {
                     setPlayAnimation(_animation[_nowPlayAnimationName].nextAnimationName);
