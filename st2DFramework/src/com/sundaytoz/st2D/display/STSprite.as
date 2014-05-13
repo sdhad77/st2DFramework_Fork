@@ -55,6 +55,8 @@ package com.sundaytoz.st2D.display
          */
         public function setTextureWithBitmap(bitmap:Bitmap, useMipMap:Boolean=true):void
         {
+            _textureData = bitmap;
+            
             var context:Context3D = StageContext.instance.context; 
             if( context == null )
             {
@@ -139,7 +141,9 @@ package com.sundaytoz.st2D.display
             var tmp:BitmapData;
             var transform:Matrix = new Matrix();
             
-            tmp = new BitmapData(src.width, src.height, true, 0x00000000);
+            var fillColor:uint = 0xaa000000;
+            
+            tmp = new BitmapData(src.width, src.height, true, fillColor);
             
             while ( ws >= 1 && hs >= 1 )
             { 
@@ -152,7 +156,7 @@ package com.sundaytoz.st2D.display
                 if (hs && ws) 
                 {
                     tmp.dispose();
-                    tmp = new BitmapData(ws, hs, true, 0x00000000);
+                    tmp = new BitmapData(ws, hs, true, fillColor);
                 }
             }
             tmp.dispose();
