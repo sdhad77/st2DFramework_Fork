@@ -1,5 +1,7 @@
 package com.sundaytoz.st2D.animation
 {
+    import flash.events.Event;
+    
     /* 애니메이션 매니져 사용 방법입니다.
     1  initAnimationManager - 매니져 객체 초기화
     2  setAnimationFrame    - 애니메이션 프레임 저장
@@ -10,26 +12,6 @@ package com.sundaytoz.st2D.animation
     5~6 반복
     
     skel.png 파일을 이용한 클래스 사용 예시입니다.
-    
-    //XML파일 로드가 담당해야할 부분========================================================
-    var animationFrame:Object = new Object;
-    
-    animationFrame["up0"] = new AnimationFrame("up0",0,0,32,32,0,0,32,32);
-    animationFrame["up1"] = new AnimationFrame("up1",32,0,32,32,0,0,32,32);
-    animationFrame["up2"] = new AnimationFrame("up2",64,0,32,32,0,0,32,32);
-    
-    animationFrame["right0"] = new AnimationFrame("right0",0,32,32,32,0,0,32,32);
-    animationFrame["right1"] = new AnimationFrame("right1",32,32,32,32,0,0,32,32);
-    animationFrame["right2"] = new AnimationFrame("right2",64,32,32,32,0,0,32,32);
-    
-    animationFrame["down0"] = new AnimationFrame("down0",0,64,32,32,0,0,32,32);
-    animationFrame["down1"] = new AnimationFrame("down1",32,64,32,32,0,0,32,32);
-    animationFrame["down2"] = new AnimationFrame("down2",64,64,32,32,0,0,32,32);
-    
-    animationFrame["left0"] = new AnimationFrame("left0",0,96,32,32,0,0,32,32);
-    animationFrame["left1"] = new AnimationFrame("left1",32,96,32,32,0,0,32,32);
-    animationFrame["left2"] = new AnimationFrame("left2",64,96,32,32,0,0,32,32);
-    //============================================================================
     
     //애니메이션 매니져 생성
     _animation = new AnimationManager();
@@ -49,11 +31,11 @@ package com.sundaytoz.st2D.animation
     //up 애니메이션 시작
     _animation.setPlayAnimation("up");
     
-         이후 
+    이후 
     _animation.nextFrame(); 으로 다음 프레임으로 이동시키고,
     _animation.getFrame(); 으로 얻은 animationFrame을 이용해서 화면에 그려주면 됩니다.
     
-         애니메이션 프레임은 SpriteSheet와 함께 존재하는 XML파일에서 읽어온 정보들 입니다.
+    애니메이션 프레임은 SpriteSheet와 함께 존재하는 XML파일에서 읽어온 정보들 입니다.
     getFrame 함수를 호출할 때 마다 다음 frame으로 애니메이션이 넘어가는 형태이므로 getFrame 함수는 매 프레임마다 호출되게끔 하여야 합니다.
     getFrame 함수가 반환하는 animationFrame에는 XML파일에서 읽어온 정보가 그대로 저장되어있으니, 반환된 Frame객체를 이용하여 Sprite에 그려주면 됩니다.
     */
@@ -73,6 +55,9 @@ package com.sundaytoz.st2D.animation
         private var _nowPlayAnimationName:String;
         private var _nowAnimationFlowIdx:int;
         private var _pauseFrameCnt:int;
+        private var _isAvailable:Boolean;
+        
+        private var xmlLoader:XmlLoader;
         
         /**
          * AnimationManager 생성자 
@@ -80,7 +65,7 @@ package com.sundaytoz.st2D.animation
         public function AnimationManager():void
         {
         }
-        
+
         /**
          * AnimationManager 초기화 함수
          */
@@ -90,7 +75,12 @@ package com.sundaytoz.st2D.animation
             _animationFrame = new Object;
             _frameWidth = 0;
             _frameHeight = 0;
+            _isAvailable= false;
             reset();
+            
+            xmlLoader = new XmlLoader("res/atlas.xml");
+            xmlLoader.addEventListener("xmlLoadComplete", xmlLoaderCompleteListener);
+            xmlLoader.load();
         }
         
         /**
@@ -101,7 +91,7 @@ package com.sundaytoz.st2D.animation
         {
             _animationFrame = animationFrame;
         }
-             
+        
         /**
          * 애니메이션을 설정하는 함수 
          * @param name 애니메이션의 이름
@@ -126,9 +116,17 @@ package com.sundaytoz.st2D.animation
             //매개변수로 애니메이션 이름 설정
             _nowPlayAnimationName = name;
             
-            //애니메이션이 그려지는 Sprite의 가로 세로 길이로 사용될것입니다.
-            _frameWidth  = _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]].frameWidth;
-            _frameHeight = _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]].frameHeight;
+            if(isAvailable)
+            {
+                //애니메이션이 그려지는 Sprite의 가로 세로 길이로 사용될것입니다.
+                _frameWidth  = _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]].frameWidth;
+                _frameHeight = _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]].frameHeight;
+            }
+            else
+            {
+                _frameWidth = 32;
+                _frameHeight = 32;
+            }
         }
         
         /**
@@ -153,7 +151,7 @@ package com.sundaytoz.st2D.animation
             {
                 _pauseFrameCnt++;
             }
-            //유지 시간(pauseFrameCnt)이 다되서 다음 프레임으로 넘어갈 때
+                //유지 시간(pauseFrameCnt)이 다되서 다음 프레임으로 넘어갈 때
             else
             {
                 //FlowIdx 가 0부터 시작이라서 -1을 해줘야 합니다.
@@ -181,10 +179,19 @@ package com.sundaytoz.st2D.animation
             return _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]];
         }
         
-        public function get frameWidth():int  {return _frameWidth;}
-        public function get frameHeight():int {return _frameHeight;}
+        public function xmlLoaderCompleteListener(event:Event):void
+        {
+            xmlLoader.removeEventListener("xmlLoadComplete", xmlLoaderCompleteListener);
+            setAnimationFrame(xmlLoader.animationFrameObject);
+            _isAvailable = true;
+        }
         
-        public function set frameWidth(value:int):void  {_frameWidth  = value;}
-        public function set frameHeight(value:int):void {_frameHeight = value;}
+        public function get frameWidth():int      {return _frameWidth;}
+        public function get frameHeight():int     {return _frameHeight;}
+        public function get isAvailable():Boolean {return _isAvailable;}
+        
+        public function set frameWidth(value:int):void      {_frameWidth  = value;}
+        public function set frameHeight(value:int):void     {_frameHeight = value;}
+        public function set isAvailable(value:Boolean):void {_isAvailable = value;}
     }
 }
