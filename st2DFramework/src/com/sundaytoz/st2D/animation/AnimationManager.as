@@ -111,8 +111,7 @@ package com.sundaytoz.st2D.animation
         }
         
         /**
-         * 플레이할 애니메이션을 설정합니다.</br>
-         * 현재는 int 형으로 매개변수를 받지만 String타입의 애니메이션 이름을 받도록 수정할것입니다.
+         * 플레이할 애니메이션을 설정합니다
          * @param name 재생할 애니메이션의 이름
          */
         public function setPlayAnimation(name:String):void
@@ -141,7 +140,7 @@ package com.sundaytoz.st2D.animation
         }
         
         /**
-         * 스프라이트 시트 상에서 현재 애니메이션 Frame의 좌표를 가져오는 함수입니다. 
+         * 현재 애니메이션 Frame의 정보를 가져오고, 다음 프레임으로 이동하게 하는 함수입니다. 
          * @return Frame 좌표가 저장되어있는 object를 반환합니다.
          */
         public function getFrame():AnimationFrame
