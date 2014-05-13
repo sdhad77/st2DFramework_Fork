@@ -105,7 +105,7 @@ package com.sundaytoz.st2D.display
         
         internal function update():void
         {
-           // _modelMatrix.identity();
+            _modelMatrix.identity();
             
             // scale
             _modelMatrix.appendScale(_textureData.width, _textureData.height, 1);
