@@ -47,6 +47,11 @@ package com.sundaytoz.st2D.display
         {
         }
 
+        /**
+         * Bitmap 객체를 통해서 텍스쳐를 입힙니다. 
+         * @param bitmap 입힐 비트맵 객체
+         * @param useMipMap MipMap 을 생성 여부
+         */
         public function setTextureWithBitmap(bitmap:Bitmap, useMipMap:Boolean=true):void
         {
             var context:Context3D = StageContext.instance.context; 
@@ -71,6 +76,9 @@ package com.sundaytoz.st2D.display
             STSpriteManager.instance.addSprite( this );
         }
         
+        /**
+         * 이미지의 파일 경로명으로 텍스쳐를 입힙니다. 
+         */
         public function setTextureWithString(path:String):void
         {
             var context:Context3D = StageContext.instance.context; 
@@ -88,7 +96,7 @@ package com.sundaytoz.st2D.display
             }
         }
         
-        public function update():void
+        internal function update():void
         {
             _modelMatrix.identity();
             
@@ -101,19 +109,22 @@ package com.sundaytoz.st2D.display
             
         }
         
-        public function setUVCoord(x:Number, y:Number, width:Number, height:Number):void
+        /**
+         * UV 좌표값을 입력합니다. 
+         */
+        public function setUVCoord(u:Number, v:Number, width:Number, height:Number):void
         {
-            _meshVertexData[3] = x;
-            _meshVertexData[4] = y;
+            _meshVertexData[3] = u;
+            _meshVertexData[4] = v;
             
-            _meshVertexData[3+8] = x+width;
-            _meshVertexData[4+8] = y;
+            _meshVertexData[3+8] = u+width;
+            _meshVertexData[4+8] = v;
             
-            _meshVertexData[3+8*2] = x+width;
-            _meshVertexData[4+8*2] = y+height;
+            _meshVertexData[3+8*2] = u+width;
+            _meshVertexData[4+8*2] = v+height;
             
-            _meshVertexData[3+8*3] = x;
-            _meshVertexData[4+8*3] = y+height;
+            _meshVertexData[3+8*3] = u;
+            _meshVertexData[4+8*3] = v+height;
         }
         
         /**
@@ -184,15 +195,6 @@ package com.sundaytoz.st2D.display
             _tag = tag;
         }
         
-        public function get translation():Vector3D
-        {
-            return _translation;
-        }
-        public function set translation(translation:Vector3D):void
-        {
-            _translation = translation;
-        }
-        
         public function get position():Vector2D
         {
             return _globalPosition;
@@ -209,6 +211,21 @@ package com.sundaytoz.st2D.display
         public function set zOrder(zOrder:int):void
         {
             _zOrder = zOrder;
+        }
+        
+        /**
+         * 텍스쳐의 가로 길이를 리턴합니다. 
+         */
+        public function get width():Number
+        {
+            return _textureData.width;
+        }
+        /**
+         * 텍스쳐의 세로 길이를 리턴합니다. 
+         */
+        public function get height():Number
+        {
+            return _textureData.height;
         }
         
     }
