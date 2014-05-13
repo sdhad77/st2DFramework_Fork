@@ -2,6 +2,7 @@ package com.sundaytoz.st2D.display
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.utils.AssetLoader;
+    import com.sundaytoz.st2D.utils.Vector2D;
     
     import flash.display.Bitmap;
     import flash.display.BitmapData;
@@ -16,7 +17,7 @@ package com.sundaytoz.st2D.display
     
     public class STSprite
     {
-        private var _globalPosition:Vector3D = new Vector3D();
+        private var _globalPosition:Vector2D = new Vector2D();
         private var _zOrder:int;
         
         private var _texture:Texture;
@@ -27,6 +28,7 @@ package com.sundaytoz.st2D.display
         private var _tag:int;
         
         private var _rotation:Vector3D = new Vector3D();
+        private var _translation:Vector3D = new Vector3D();
         
         private static var _meshIndexData:Vector.<uint> = Vector.<uint>  ([ 0, 1, 2, 0, 2, 3, ]);
         private var _meshVertexData:Vector.<Number> = Vector.<Number>([
@@ -96,18 +98,19 @@ package com.sundaytoz.st2D.display
             // scale
             
             // rotate
-            _modelMatrix.appendRotation(_rotation.x, Vector3D.Y_AXIS);
-            _rotation.x += 1.0;
+//            _modelMatrix.appendRotation(_rotation.x, Vector3D.Y_AXIS);
+//            _rotation.x += 1.0;
             
             // translate
-            _modelMatrix.appendTranslation(_globalPosition.x, _globalPosition.y, _globalPosition.z);
+            _modelMatrix.appendTranslation(_globalPosition.x, _globalPosition.y, 0);
             
         }
 
-        public function setPosition(position:Vector3D):void
+        public function move(direction:Vector2D):void
         {
-            _globalPosition = position;
+            
         }
+        
         
         public function setUVCoord(x:Number, y:Number, width:Number, height:Number):void
         {
@@ -190,6 +193,24 @@ package com.sundaytoz.st2D.display
         public function set tag(tag:int):void
         {
             _tag = tag;
+        }
+        
+        public function get translation():Vector3D
+        {
+            return _translation;
+        }
+        public function set translation(translation:Vector3D):void
+        {
+            _translation = translation;
+        }
+        
+        public function get position():Vector2D
+        {
+            return _globalPosition;
+        }
+        public function set position(position:Vector2D):void
+        {
+            _globalPosition = position;
         }
         
         public function get zOrder():int
