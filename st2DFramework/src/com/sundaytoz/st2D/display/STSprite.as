@@ -15,8 +15,6 @@ package com.sundaytoz.st2D.display
     import flash.geom.Matrix3D;
     import flash.geom.Vector3D;
     
-    
-    ///* fix me _textureData값이 null입니다. @구현모
     public class STSprite
     {
         private var _globalPosition:Vector2D = new Vector2D();
@@ -71,6 +69,10 @@ package com.sundaytoz.st2D.display
             {
                 uploadTextureWithMipmaps(_texture, bitmap.bitmapData);                
             }
+            else
+            {
+                _texture.uploadFromBitmapData(bitmap.bitmapData);
+            }
             
             _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/12, 12); 
             _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
@@ -106,6 +108,7 @@ package com.sundaytoz.st2D.display
             _modelMatrix.identity();
             
             // scale
+            _modelMatrix.appendScale(_textureData.width, _textureData.height, 1);
             
             // rotate
             
@@ -224,7 +227,7 @@ package com.sundaytoz.st2D.display
          * 텍스쳐의 가로 길이를 리턴합니다. 
          */
         public function get width():Number
-        {
+        {            
             return _textureData.width;
         }
         /**
