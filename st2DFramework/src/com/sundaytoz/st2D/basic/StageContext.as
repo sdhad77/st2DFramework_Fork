@@ -44,6 +44,7 @@ package com.sundaytoz.st2D.basic
         
         public function init(stage:Stage, onInited:Function):void
         {
+            stage.frameRate = 60;
             stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
             
@@ -61,36 +62,47 @@ package com.sundaytoz.st2D.basic
                 }
                 
                 _context3D.enableErrorChecking = true;
-                _context3D.configureBackBuffer(stage.fullScreenWidth, stage.fullScreenHeight, 0, true);
+                _context3D.configureBackBuffer(stage.fullScreenWidth, stage.fullScreenHeight, 2, true); //(2=antialiased)
                 
-                var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
-                vertexShaderAssembler.assemble
-                    ( 
-                        Context3DProgramType.VERTEX,
-                        "m44 op, va0, vc0\n" +
-                        "mov v0, va0\n" +
-                        "mov v1, va1\n"
-                    );			
-                
-                var fragmentShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
-                fragmentShaderAssembler.assemble
-                    ( 
-                        Context3DProgramType.FRAGMENT,	
-                        "tex ft0, v1, fs0 <2d,repeat,miplinear>\n" +	
-                        "mov oc, ft0\n"									
-                    );
-                
-                _shaderProgram = _context3D.createProgram();
-                _shaderProgram.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
+                initShaders();
                 
                 _projectionMatrix.identity();
-                _projectionMatrix.perspectiveFieldOfViewRH(45.0, stage.fullScreenWidth / stage.fullScreenHeight, 0.01, 100.0);
+                _projectionMatrix.orthoRH(stage.fullScreenWidth/50, stage.fullScreenHeight/50, 0.01, 10.0);
+                //_projectionMatrix.perspectiveFieldOfViewRH(45.0, stage.fullScreenWidth / stage.fullScreenHeight, 0.01, 100.0);
                 
                 _viewMatrix.identity();
-                _viewMatrix.appendTranslation(0,0,-20);
+                _viewMatrix.appendTranslation(0,0,-2);
                 
                 onInited();
             }
+        }
+        
+        private function initShaders():void
+        {
+            var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
+            vertexShaderAssembler.assemble
+                ( 
+                    Context3DProgramType.VERTEX,
+                    // 4x4 matrix multiply to get camera angle	
+                    "m44 op, va0, vc0\n" +
+                    // tell fragment shader about XYZ
+                    "mov v0, va0\n" +
+                    // tell fragment shader about UV
+                    "mov v1, va1\n" +
+                    // tell fragment shader about RGBA
+                    "mov v2, va2\n"
+                );			
+            
+            var fragmentShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
+            fragmentShaderAssembler.assemble
+                ( 
+                    Context3DProgramType.FRAGMENT,	
+                    "tex ft0, v1, fs0 <2d,linear,repeat,miplinear>\n" +	
+                    "mov oc, ft0\n"									
+                );
+            
+            _shaderProgram = _context3D.createProgram();
+            _shaderProgram.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
         }
         
         /** property */

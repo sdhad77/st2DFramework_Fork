@@ -1,12 +1,14 @@
 package com.sundaytoz.st2D.display
 {
+    import com.adobe.utils.PerspectiveMatrix3D;
     import com.sundaytoz.st2D.basic.StageContext;
     
     import flash.display3D.Context3D;
+    import flash.display3D.Context3DBlendFactor;
+    import flash.display3D.Context3DCompareMode;
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.geom.Matrix3D;
-    import com.adobe.utils.PerspectiveMatrix3D;
     
 
     public class STSpriteManager
@@ -51,35 +53,43 @@ package com.sundaytoz.st2D.display
             var context:Context3D = StageContext.instance.context;
             
             context.clear(0, 0, 0);
-            context.setProgram( StageContext.instance.shaderProgram );
             
-            for(var i:uint=0; i<_sprites.length; ++i)
+            
+            context.setDepthTest(true, Context3DCompareMode.LESS);
+            
+            for each( var sprite:STSprite in _sprites )
             {
                 // 화면 밖의 스프라이트 인지 검사
                 
                 // 화면 안의 스프라이트인 경우 출력
                 
-                _sprites[i].update();
                 
+                context.setProgram( StageContext.instance.shaderProgram );
+                context.setTextureAt(0, sprite.texture);
+                context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
+                
+                sprite.update();
                 
                 modelViewProjection.identity();
-                modelViewProjection.append(_sprites[i].modelMatrix );
+                modelViewProjection.append(sprite.modelMatrix );
                 modelViewProjection.append(StageContext.instance.viewMatrix);
                 modelViewProjection.append(StageContext.instance.projectionMatrix);
                 
                 context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, modelViewProjection, true);
-                context.setVertexBufferAt(0, _sprites[i].vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3); //Position
-                context.setVertexBufferAt(1, _sprites[i].vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_3); //Tex coord
                 
-                context.setTextureAt(0, _sprites[i].texture);
-                context.drawTriangles(_sprites[i].indexBuffer, 0, _sprites[i].numTriangle);
+                // position
+                context.setVertexBufferAt(0, sprite.vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
+                // tex coord
+                context.setVertexBufferAt(1, sprite.vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
+                // vertex rgba
+                context.setVertexBufferAt(2, sprite.vertexBuffer, 8, Context3DVertexBufferFormat.FLOAT_4);
+                
+                
+                context.drawTriangles(sprite.indexBuffer, 0, sprite.numTriangle);
                 
             }
-            
             context.present();
-            
         }
         
-            
     }
 }

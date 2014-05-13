@@ -15,6 +15,8 @@ package com.sundaytoz.st2D.display
     import flash.geom.Matrix3D;
     import flash.geom.Vector3D;
     
+    
+    ///* fix me _textureData값이 null입니다. @구현모
     public class STSprite
     {
         private var _globalPosition:Vector2D = new Vector2D();
@@ -22,7 +24,7 @@ package com.sundaytoz.st2D.display
         
         private var _texture:Texture;
         private var _textureData:Bitmap;
-        
+
         private var _modelMatrix:Matrix3D = new Matrix3D();
         
         private var _tag:int;
@@ -31,13 +33,14 @@ package com.sundaytoz.st2D.display
         private var _translation:Vector3D = new Vector3D();
         
         private static var _meshIndexData:Vector.<uint> = Vector.<uint>  ([ 0, 1, 2, 0, 2, 3, ]);
-        private var _meshVertexData:Vector.<Number> = Vector.<Number>([
-                            //X,  Y,  Z,   U, V,   nX, nY, nZ		
-                            -1, -1,  1,   0, 0,   0,  0,  1,
-                            1, -1,  1,   1, 0,   0,  0,  1,
-                            1,  1,  1,   1, 1,   0,  0,  1,
-                            -1,  1,  1,   0, 1,   0,  0,  1
-                        ]);
+        private var _meshVertexData:Vector.<Number> = Vector.<Number>
+                                ([
+                                //X, Y, Z,      U, V,       nX, nY, nZ,     R,  G, B, A
+                                -1, -1, 1,      0,  0,      0, 0, 1,        1.0,0.0,0.0,1.0,
+                                1,  -1, 1,      1,  0,      0, 0, 1,        0.0,1.0,0.0,1.0,
+                                1,  1,  1,      1,  1,      0, 0, 1,        0.0,0.0,1.0,1.0,
+                                -1, 1,  1,      0,  1,      0, 0, 1,        1.0,1.0,1.0,1.0
+                                ]);
                         
         
         private var _vertexBuffer:VertexBuffer3D;
@@ -54,6 +57,8 @@ package com.sundaytoz.st2D.display
          */
         public function setTextureWithBitmap(bitmap:Bitmap, useMipMap:Boolean=true):void
         {
+            _textureData = bitmap;
+            
             var context:Context3D = StageContext.instance.context; 
             if( context == null )
             {
@@ -67,8 +72,8 @@ package com.sundaytoz.st2D.display
                 uploadTextureWithMipmaps(_texture, bitmap.bitmapData);                
             }
             
-            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/8, 8); 
-            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/8);
+            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/12, 12); 
+            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
             
             _indexBuffer = context.createIndexBuffer(_meshIndexData.length);
             _indexBuffer.uploadFromVector(_meshIndexData, 0, _meshIndexData.length);
@@ -138,7 +143,9 @@ package com.sundaytoz.st2D.display
             var tmp:BitmapData;
             var transform:Matrix = new Matrix();
             
-            tmp = new BitmapData(src.width, src.height, true, 0x00000000);
+            var fillColor:uint = 0xaa000000;
+            
+            tmp = new BitmapData(src.width, src.height, true, fillColor);
             
             while ( ws >= 1 && hs >= 1 )
             { 
@@ -151,7 +158,7 @@ package com.sundaytoz.st2D.display
                 if (hs && ws) 
                 {
                     tmp.dispose();
-                    tmp = new BitmapData(ws, hs, true, 0x00000000);
+                    tmp = new BitmapData(ws, hs, true, fillColor);
                 }
             }
             tmp.dispose();
@@ -227,6 +234,12 @@ package com.sundaytoz.st2D.display
         {
             return _textureData.height;
         }
+        
+        public function get textureData():Bitmap
+        {
+            return _textureData;
+        }
+            
         
     }
 }
