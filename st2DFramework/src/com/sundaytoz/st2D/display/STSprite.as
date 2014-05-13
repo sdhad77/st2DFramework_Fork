@@ -45,9 +45,6 @@ package com.sundaytoz.st2D.display
                
         public function STSprite()
         {
-            _meshVertexData 
-            
-            trace(_meshVertexData[0]);
         }
 
         public function setTextureWithBitmap(bitmap:Bitmap, useMipMap:Boolean=true):void
@@ -98,19 +95,11 @@ package com.sundaytoz.st2D.display
             // scale
             
             // rotate
-//            _modelMatrix.appendRotation(_rotation.x, Vector3D.Y_AXIS);
-//            _rotation.x += 1.0;
             
             // translate
             _modelMatrix.appendTranslation(_globalPosition.x, _globalPosition.y, 0);
             
         }
-
-        public function move(direction:Vector2D):void
-        {
-            
-        }
-        
         
         public function setUVCoord(x:Number, y:Number, width:Number, height:Number):void
         {
