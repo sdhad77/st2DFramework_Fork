@@ -66,11 +66,13 @@ package com.sundaytoz.st2D.basic
                 
                 initShaders();
                 
+                // 투영 행렬 설정
                 _projectionMatrix.identity();
                 _projectionMatrix.orthoRH(stage.fullScreenWidth, stage.fullScreenHeight, -1024, 1024);
                 
+                // 뷰 행렬 설정
                 _viewMatrix.identity();
-                _viewMatrix.appendTranslation(-stage.fullScreenWidth/2, -stage.fullScreenHeight/2, 0);
+                _viewMatrix.appendTranslation(-stage.fullScreenWidth*0.5, -stage.fullScreenHeight*0.5, 0);
                 
                 onInited();
             }

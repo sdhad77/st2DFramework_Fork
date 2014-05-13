@@ -17,7 +17,7 @@ package com.sundaytoz.st2D.display
     
     public class STSprite
     {
-        private var _globalPosition:Vector2D = new Vector2D();
+        private var _globalPosition:Vector2D;
         private var _zOrder:int;
         
         private var _texture:Texture;
@@ -33,7 +33,7 @@ package com.sundaytoz.st2D.display
         private static var _meshIndexData:Vector.<uint> = Vector.<uint>  ([ 0, 1, 2, 0, 2, 3, ]);
         private var _meshVertexData:Vector.<Number> = Vector.<Number>
                                 ([
-                                //X, Y, Z,      U, V,       nX, nY, nZ,     R,  G, B, A
+                                //X, Y, Z,              U, V,       nX, nY, nZ,     R,  G, B, A
                                 -0.5, -0.5, 0.5,      0,  0,      0, 0, 1,        1.0,0.0,0.0,1.0,
                                 0.5,  -0.5, 0.5,      1,  0,      0, 0, 1,        0.0,1.0,0.0,1.0,
                                 0.5,  0.5,  0.5,      1,  1,      0, 0, 1,        0.0,0.0,1.0,1.0,
@@ -46,6 +46,7 @@ package com.sundaytoz.st2D.display
                
         public function STSprite()
         {
+            _globalPosition = new Vector2D(0.0, 0.0);
         }
 
         /**
@@ -125,14 +126,14 @@ package com.sundaytoz.st2D.display
             _meshVertexData[3] = u;
             _meshVertexData[4] = v;
             
-            _meshVertexData[3+8] = u+width;
-            _meshVertexData[4+8] = v;
+            _meshVertexData[3+12] = u+width;
+            _meshVertexData[4+12] = v;
             
-            _meshVertexData[3+8*2] = u+width;
-            _meshVertexData[4+8*2] = v+height;
+            _meshVertexData[3+12*2] = u+width;
+            _meshVertexData[4+12*2] = v+height;
             
-            _meshVertexData[3+8*3] = u;
-            _meshVertexData[4+8*3] = v+height;
+            _meshVertexData[3+12*3] = u;
+            _meshVertexData[4+12*3] = v+height;
         }
         
         /**
