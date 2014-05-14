@@ -1,194 +1,129 @@
 package com.sundaytoz.st2D.animation
 {
-    import flash.events.Event;
+    import com.sundaytoz.st2D.animation.datatype.Animation;
+    import com.sundaytoz.st2D.animation.datatype.AnimationFrame;
+    import com.sundaytoz.st2D.animation.datatype.AnimationPlayData;
+    import com.sundaytoz.st2D.display.STSprite;
     
-    /* 애니메이션 매니져 사용 방법입니다.
-    1  initAnimationManager - 매니져 객체 초기화
-    2  setAnimationFrame    - 애니메이션 프레임 저장
-    3  setAnimation         - 원하는 애니메이션 추가
-    4  setPlayAnimation     - 재생하고 싶은 애니메이션 이름 설정
-    5  nextFrame            - 다음 frame으로 이동
-    6  getFrame             - 이번에 그릴 frame 정보
-    5~6 반복
-    
-    skel.png 파일을 이용한 클래스 사용 예시입니다.
-    
-    //애니메이션 매니져 생성
-    _animation = new AnimationManager();
-    
-    //애니메이션을 사용할 경우 ,초기화해주는 함수 호출
-    _animation.initAnimationManager();
-    
-    //원하는 애니메이션 자유롭게 설정.  이름              프레임 호출 순서                                                                                         각 프레임 별 대기 시간(프레임) 다음 애니메이션
-    _animation.setAnimation("up",    new Array("up0","up1","up2","up1"),             new Array(8,8,8,8), "right");
-    _animation.setAnimation("right", new Array("right0","right1","right2","right1"), new Array(8,8,8,8), "down");
-    _animation.setAnimation("down",  new Array("down0","down1","down2","down1"),     new Array(8,8,8,8), "left");
-    _animation.setAnimation("left",  new Array("left0","left1","left2","left1"),     new Array(8,8,8,8), "up");
-    
-    //up 애니메이션 시작
-    _animation.setPlayAnimation("up");
-    
-    이후 
-    _animation.nextFrame(); 으로 다음 프레임으로 이동시키고,
-    _animation.getFrame(); 으로 얻은 animationFrame을 이용해서 화면에 그려주면 됩니다.
-    
-    애니메이션 프레임은 SpriteSheet와 함께 존재하는 XML파일에서 읽어온 정보들 입니다.
-    getFrame 함수를 호출할 때 마다 다음 frame으로 애니메이션이 넘어가는 형태이므로 getFrame 함수는 매 프레임마다 호출되게끔 하여야 합니다.
-    getFrame 함수가 반환하는 animationFrame에는 XML파일에서 읽어온 정보가 그대로 저장되어있으니, 반환된 Frame객체를 이용하여 Sprite에 그려주면 됩니다.
-    */
-    
+    import flash.utils.Dictionary;
+
     /**
-     * 여러개의 애니메이션을 관리하는 클래스입니다
+     * 재생중인 애니메이션 전체를 관리하는 클래스입니다.
      * @author 신동환
      */
     public class AnimationManager
     {
-        private var _frameWidth:int;
-        private var _frameHeight:int;
+        // 싱글톤 관련 변수들
+        private static var _instance:AnimationManager;
+        private static var _creatingSingleton:Boolean = false;
         
-        private var _animation:Object;
-        private var _animationFrame:Object;
+        private var _playSprite:Vector.<STSprite> = new Vector.<STSprite>; //sprite의 uv좌표를 바꿔주기 위해 sprite를 저장해 두어야 합니다.
+        private var _playAnimationData:Vector.<AnimationPlayData> = new Vector.<AnimationPlayData>; //재생중인 애니메이션들의 데이터 입니다.
+        private var _spriteName:Dictionary = new Dictionary; //sprite의 이름(path)을 저장하는 Dictionary입니다.
+        private var _spriteIdx:int = 0; //addSprite함수에서 나중에 사용될 예정인 변수입니다.
         
-        private var _nowPlayAnimationName:String;
-        private var _nowAnimationFlowIdx:int;
-        private var _pauseFrameCnt:int;
-        private var _isAvailable:Boolean;
+        // 이미지 Dictionary
+        private var _imageMap:Dictionary = new Dictionary(); 
         
-        private var xmlLoader:XmlLoader;
-        
-        /**
-         * AnimationManager 생성자 
-         */
-        public function AnimationManager():void
+        public function AnimationManager()
         {
+            if (!_creatingSingleton){
+                throw new Error("[AnimationManager] 싱글톤 클래스 - new 연산자를 통해 생성 불가");
+            }
+        }
+        
+        public static function get instance():AnimationManager
+        {
+            if (!_instance){
+                _creatingSingleton = true;
+                _instance = new AnimationManager();
+                _creatingSingleton = false;
+            }
+            return _instance;
         }
 
         /**
-         * AnimationManager 초기화 함수
+         * 애니메이션을 사용하겠다고 Sprite를 등록하는 함수입니다. 
+         * @param sprite 애니메이션을 사용하고 싶은 Sprite
+         * @param animationName 사용할 애니메이션의 이름
          */
-        public function initAnimationManager():void
+        public function addSprite(sprite:STSprite, animationName:String):void
         {
-            _animation = new Object;
-            _animationFrame = new Object;
-            _frameWidth = 0;
-            _frameHeight = 0;
-            _isAvailable= false;
-            reset();
-            
-            xmlLoader = new XmlLoader("res/atlas.xml");
-            xmlLoader.addEventListener("xmlLoadComplete", xmlLoaderCompleteListener);
-            xmlLoader.load();
-        }
-        
-        /**
-         * 애니메이션 프레임을 저장하는 함수 
-         * @param animationFrame 애니메이션 프레임이 저장되있는 벡터
-         */
-        public function setAnimationFrame(animationFrame:Object):void
-        {
-            _animationFrame = animationFrame;
-        }
-        
-        /**
-         * 애니메이션을 설정하는 함수 
-         * @param name 애니메이션의 이름
-         * @param animationFlow 애니메이션 장면의 순서
-         * @param framePauseNum 한 장면에서 몇프레임을 소비할 것인지(멈춰있을 것인지)
-         * @param nextAnimationName 다음 애니메이션의 이름
-         */
-        public function setAnimation(name:String, animationFlow:Array, framePauseNum:Array, nextAnimationName:String):void
-        {
-            _animation[name] = new Animation(name, animationFlow, framePauseNum, nextAnimationName);
-        }
-        
-        /**
-         * 플레이할 애니메이션을 설정합니다
-         * @param name 재생할 애니메이션의 이름
-         */
-        public function setPlayAnimation(name:String):void
-        {
-            //애니메이션 초기화
-            reset();
-            
-            //매개변수로 애니메이션 이름 설정
-            _nowPlayAnimationName = name;
-            
-            if(isAvailable)
+            if(sprite.path in _spriteName)
             {
-                //애니메이션이 그려지는 Sprite의 가로 세로 길이로 사용될것입니다.
-                _frameWidth  = _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]].frameWidth;
-                _frameHeight = _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]].frameHeight;
+                _playAnimationData[_spriteName[sprite.path]] = new AnimationPlayData(AnimationData.instance.animationData[sprite.path], animationName);
             }
             else
             {
-                _frameWidth = 32;
-                _frameHeight = 32;
+                _spriteName[sprite.path] = _spriteIdx++;
+                _playSprite.push(sprite);
+                _playAnimationData.push(new AnimationPlayData(AnimationData.instance.animationData[sprite.path], animationName));
             }
-        }
-        
-        /**
-         * 애니메이션을 처음 상태로 돌립니다. 
-         */
-        public function reset():void
-        {
-            //애니메이션의 첫번째 동작으로 설정합니다.
-            _nowAnimationFlowIdx = 0;
-            
-            //프레임 반복 횟수 카운터를 0으로 설정합니다.
-            _pauseFrameCnt = 0;
         }
         
         /**
          * 애니메이션을 다음 프레임으로 이동 시킵니다. 
          */
-        public function nextFrame():void
+        public function nextFrame(idx:int):AnimationFrame
         {
+            var playAnimation:Animation = _playAnimationData[idx].getPlayAnimation(_playAnimationData[idx].playAnimationName);
+           
             //현재 애니메이션 프레임 유지할 경우.
-            if(_pauseFrameCnt < _animation[_nowPlayAnimationName].framePauseNum[_nowAnimationFlowIdx])
+            if(_playAnimationData[idx].delayCnt < playAnimation.delayNum[_playAnimationData[idx].playAnimationFlowIdx])
             {
-                _pauseFrameCnt++;
+                _playAnimationData[idx].delayCnt++;
+                
+                return AnimationData.instance.animationData[_playSprite[idx].path]["frame"][playAnimation.animationFlow[_playAnimationData[idx].playAnimationFlowIdx]];
             }
-                //유지 시간(pauseFrameCnt)이 다되서 다음 프레임으로 넘어갈 때
+            //유지 시간(pauseFrameCnt)이 다되서 다음 프레임으로 넘어갈 때
             else
             {
                 //FlowIdx 가 0부터 시작이라서 -1을 해줘야 합니다.
                 //아직 다음으로 넘어갈 프레임이 존재하는 경우. 즉 애니메이션이 종료되지 않았을때
-                if(_nowAnimationFlowIdx < (_animation[_nowPlayAnimationName].animationFlow.length-1))
+                if(_playAnimationData[idx].playAnimationFlowIdx < (playAnimation.animationFlow.length-1))
                 {
-                    _pauseFrameCnt = 0;
-                    _nowAnimationFlowIdx++;
+                    _playAnimationData[idx].delayCnt = 0;
+                    _playAnimationData[idx].playAnimationFlowIdx++;
+                    
+                    return AnimationData.instance.animationData[_playSprite[idx].path]["frame"][playAnimation.animationFlow[_playAnimationData[idx].playAnimationFlowIdx]];
                 }
                 //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
                 else
                 {
-                    setPlayAnimation(_animation[_nowPlayAnimationName].nextAnimationName);
+                    _playAnimationData[idx].playAnimationName = playAnimation.nextAnimationName;
+                    _playAnimationData[idx].delayCnt = 0;
+                    _playAnimationData[idx].playAnimationFlowIdx = 0;
+                    
+                    return nextFrame(idx);
                 }
-                nextFrame();
             }
+            //여기까진 절대 오지 말아야 하며 오면 무조건 에러입니다.
+            return null;
         }
         
         /**
-         * 현재 애니메이션 Frame의 정보를 가져오는 함수입니다.
-         * @return Frame 좌표가 저장되어있는 object를 반환합니다.
+         * 애니메이션을 업데이트 하는 함수입니다.<br> 
+         * 애니메이션이 현재 사용가능한지 확인하고, 사용가능하면 다음 Frame으로 이동시킵니다.
          */
-        public function getFrame():AnimationFrame
+        public function update():void
         {
-            return _animationFrame[_animation[_nowPlayAnimationName].animationFlow[_nowAnimationFlowIdx]];
+            var playFrame:AnimationFrame;
+            
+            if(_playSprite.length)
+            {
+                for(var i:int = 0; i< _playSprite.length; i++)
+                {
+                    //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
+                    if(_playAnimationData[i].animationData["available"] == 2)
+                    {
+                        //다음 프레임으로 이동
+                        playFrame = nextFrame(i);
+
+                        //얻은 프레임 정보로 uv좌표를 설정
+                        _playSprite[i].setUVCoord(playFrame.x/_playSprite[i].width, playFrame.y/_playSprite[i].height, playFrame.width/_playSprite[i].width, playFrame.height/_playSprite[i].height);
+                    }
+                }
+            }
         }
-        
-        public function xmlLoaderCompleteListener(event:Event):void
-        {
-            xmlLoader.removeEventListener("xmlLoadComplete", xmlLoaderCompleteListener);
-            setAnimationFrame(xmlLoader.animationFrameObject);
-            _isAvailable = true;
-        }
-        
-        public function get frameWidth():int      {return _frameWidth;}
-        public function get frameHeight():int     {return _frameHeight;}
-        public function get isAvailable():Boolean {return _isAvailable;}
-        
-        public function set frameWidth(value:int):void      {_frameWidth  = value;}
-        public function set frameHeight(value:int):void     {_frameHeight = value;}
-        public function set isAvailable(value:Boolean):void {_isAvailable = value;}
     }
 }
