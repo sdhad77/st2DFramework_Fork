@@ -6,6 +6,7 @@ package com.sundaytoz.st2D.animation
     import flash.net.URLLoader;
     import flash.net.URLRequest;
     import flash.utils.Dictionary;
+    import com.sundaytoz.st2D.animation.datatype.AnimationFrame;
 
     /**
      * 
