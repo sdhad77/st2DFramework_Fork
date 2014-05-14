@@ -43,7 +43,6 @@ package com.sundaytoz.st2D.display
         public function addSprite(sprite:STSprite):void
         {
             // zOrder 에 맞게 추가
-
             
             _sprites.push(sprite);
         }
@@ -52,19 +51,18 @@ package com.sundaytoz.st2D.display
         {
             var context:Context3D = StageContext.instance.context;
             
-            context.clear(0, 0, 0);
+            context.clear(1, 1, 1);
             
-            
-            context.setDepthTest(true, Context3DCompareMode.LESS);
+            context.setDepthTest(false, Context3DCompareMode.LESS);            
+            context.setProgram( StageContext.instance.shaderProgram );
             
             for each( var sprite:STSprite in _sprites )
             {
                 // 화면 밖의 스프라이트 인지 검사
+                sprite.rect
                 
                 // 화면 안의 스프라이트인 경우 출력
                 
-                
-                context.setProgram( StageContext.instance.shaderProgram );
                 context.setTextureAt(0, sprite.texture);
                 context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
                 
@@ -76,19 +74,39 @@ package com.sundaytoz.st2D.display
                 modelViewProjection.append(StageContext.instance.projectionMatrix);
                 
                 context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, modelViewProjection, true);
-                
-                // position
-                context.setVertexBufferAt(0, sprite.vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
-                // tex coord
-                context.setVertexBufferAt(1, sprite.vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
-                // vertex rgba
-                context.setVertexBufferAt(2, sprite.vertexBuffer, 8, Context3DVertexBufferFormat.FLOAT_4);
-                
+               
+                context.setVertexBufferAt(0, sprite.vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);       // position
+                context.setVertexBufferAt(1, sprite.vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
+                context.setVertexBufferAt(2, sprite.vertexBuffer, 8, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
                 
                 context.drawTriangles(sprite.indexBuffer, 0, sprite.numTriangle);
                 
             }
+            
             context.present();
+        }
+        
+        /**
+         * 모든 스프라이트가 담긴 벡터를 반환합니다. 
+         */
+        public function getAllSprites():Vector.<STSprite>
+        {
+            return _sprites;
+        }
+        
+        /**
+         * 스프라이트 벡터에서 스프라이트를 삭제합니다.  
+         * @param sprite    삭제할 스프라이트
+         */
+        internal function removeSprite(sprite:STSprite):void
+        {
+            for( var i:uint = 0; i<_sprites.length; ++i)
+            {
+                if( _sprites[i] == sprite )
+                {
+                    _sprites.splice(i, 1);
+                }
+            }
         }
         
     }
