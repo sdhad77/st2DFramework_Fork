@@ -13,6 +13,7 @@ package com.sundaytoz.st2D.display
     import flash.display3D.textures.Texture;
     import flash.geom.Matrix;
     import flash.geom.Matrix3D;
+    import flash.geom.Rectangle;
     import flash.geom.Vector3D;
     
     public class STSprite
@@ -143,6 +144,24 @@ package com.sundaytoz.st2D.display
             }
         }
         
+        
+        /**
+         * 사용한 자원을 해제합니다. 
+         */
+        public function clean():void
+        {
+            STSpriteManager.instance.removeSprite(this);
+            
+             _modelMatrix = null;
+            _rotation = null;
+            _translation = null;
+            
+            _globalPosition = null;
+            _texture.dispose();
+            _textureData.bitmapData.dispose();                
+        }
+        
+        
         /**
          * 밉맵을 만듭니다. 
          */
@@ -174,7 +193,7 @@ package com.sundaytoz.st2D.display
             }
             tmp.dispose();
         }
-        
+
         /** Property */
         public function get numTriangle():int
         {
@@ -213,15 +232,6 @@ package com.sundaytoz.st2D.display
             _tag = tag;
         }
         
-        public function get position():Vector2D
-        {
-            return _globalPosition;
-        }
-        public function set position(position:Vector2D):void
-        {
-            _globalPosition = position;
-        }
-        
         public function get zOrder():int
         {
             return _zOrder;
@@ -229,21 +239,6 @@ package com.sundaytoz.st2D.display
         public function set zOrder(zOrder:int):void
         {
             _zOrder = zOrder;
-        }
-        
-        /**
-         * 텍스쳐의 가로 길이를 리턴합니다. 
-         */
-        public function get width():Number
-        {            
-            return _textureData.width;
-        }
-        /**
-         * 텍스쳐의 세로 길이를 리턴합니다. 
-         */
-        public function get height():Number
-        {
-            return _textureData.height;
         }
         
         public function get textureData():Bitmap
@@ -260,6 +255,52 @@ package com.sundaytoz.st2D.display
             _path = path;
         }
         
+        
+        public function get left():Number
+        {
+            return _globalPosition.x - _textureData.width * 0.5;
+        }
+        public function get right():Number
+        {
+            return _globalPosition.x + _textureData.width * 0.5;
+        }
+        public function get top():Number
+        {
+            return _globalPosition.y + _textureData.height * 0.5;
+        }
+        public function get bottom():Number
+        {
+            return _globalPosition.y - _textureData.height * 0.5;
+        }
+        
+        public function get rect():Rectangle
+        {
+            return new Rectangle(this.left, this.top, this.width, this.height);
+        }
+        
+        public function get position():Vector2D
+        {
+            return _globalPosition;
+        }
+        public function set position(position:Vector2D):void
+        {
+            _globalPosition = position;
+        }
+        
+        /**
+         * 텍스쳐의 가로 길이를 리턴합니다. 
+         */
+        public function get width():Number
+        {            
+            return _textureData.width;
+        }
+        /**
+         * 텍스쳐의 세로 길이를 리턴합니다. 
+         */
+        public function get height():Number
+        {
+            return _textureData.height;
+        }
         
     }
 }
