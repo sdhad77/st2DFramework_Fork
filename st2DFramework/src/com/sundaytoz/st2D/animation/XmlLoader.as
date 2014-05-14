@@ -5,15 +5,16 @@ package com.sundaytoz.st2D.animation
     import flash.events.ProgressEvent;
     import flash.net.URLLoader;
     import flash.net.URLRequest;
+    import flash.utils.Dictionary;
 
     /**
      * 
      * @author 구현모
-     * XML파일을 Load하여 animationFrame으로 구성된 animationFrameObject을 반환합니다.
+     * XML파일을 Load하여 animationFrame으로 구성된 animationFrameDictionary을 반환합니다.
      * XML파일은 <atlasItem name="" x="" y="" width="" height="" frameX="" frameY="" frameWidth="" frameHeight="" />
      * 의 구조로 작성되어야 함.
      * load(xmlPath onComplete) 호출로 Xml파일을 가져옵니다. load 완료 후에 실행될 구문을 onComplete에 구현합니다. 
-     * XmlLoader.animationFrameObject을 통해 반환됩니다.
+     * XmlLoader.animationFrameDictionary을 통해 반환됩니다.
      */
     public class XmlLoader
     {
@@ -22,14 +23,13 @@ package com.sundaytoz.st2D.animation
         private static var _creatingSingleton:Boolean = false;
         
         private var _xml:XML = new XML();
-        private var _animationFrameObject:Object = new Object();
+        private var _animationFrameDictionary:Dictionary = new Dictionary();
         
         /**
          * @param xmlPath Xml문서 Path
-         * @example xmlLoader = XmlLoader.instance();
-         *           xmlLoader.load("./res/atlas.xml", onComplete);
+         * @example  XmlLoader.instance.load("./res/atlas.xml", onComplete);
          *   
-         *           function onComplete(object:Object):void
+         *           function onComplete(dictionary:Dictionary):void
          *           {
          *           }
          */
@@ -40,7 +40,7 @@ package com.sundaytoz.st2D.animation
             }
         }
         
-        public static function instance():XmlLoader
+        public static function get instance():XmlLoader
         {
             if (!_instance){
                 _creatingSingleton = true;
@@ -48,7 +48,7 @@ package com.sundaytoz.st2D.animation
                 _creatingSingleton = false;
             }
             return _instance;
-        }
+        }        
 
         /**
          * 
@@ -75,9 +75,9 @@ package com.sundaytoz.st2D.animation
                 xmlLoader.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
                 
                 _xml = XML(xmlLoader.data);
-                createAnimationFrameObject();
+                createAnimationFrameDictionary();
                 
-                onComplete(_animationFrameObject as Object);
+                onComplete(_animationFrameDictionary as Dictionary);
             }
             
             function xmlLoadProgress(event:ProgressEvent):void
@@ -98,7 +98,7 @@ package com.sundaytoz.st2D.animation
             }
         }
         
-        private function createAnimationFrameObject():void
+        private function createAnimationFrameDictionary():void
         {
             var nameList:XMLList = _xml.child("atlasItem").attribute("name");
             var xList:XMLList = _xml.child("atlasItem").attribute("x");
@@ -116,7 +116,7 @@ package com.sundaytoz.st2D.animation
                 fileName = fileName.substr(0, fileName.indexOf("."));
                 
                 trace("fileName : " + fileName);
-                animationFrameObject[fileName] = new AnimationFrame(fileName, xList[i], yList[i], widthList[i], heightList[i], frameXList[i], frameYList[i], frameWidthList[i], frameHeightList[i]);
+                _animationFrameDictionary[fileName] = new AnimationFrame(fileName, xList[i], yList[i], widthList[i], heightList[i], frameXList[i], frameYList[i], frameWidthList[i], frameHeightList[i]);
             }
         }
         
@@ -128,16 +128,16 @@ package com.sundaytoz.st2D.animation
             _instance = null;
             _creatingSingleton = false;
             _xml = new XML();
-            _animationFrameObject = new Object();
+            _animationFrameDictionary = new Dictionary();
         
         }
         
         /**
-         * @return animationFrame이 저장되어 있는 animationFrameObject를 반환합니다.
+         * @return animationFrame이 저장되어 있는 animationFrameDictionary를 반환합니다.
          */
-        public function get animationFrameObject():Object
+        public function get animationFrameDictionary():Dictionary
         {
-            return _animationFrameObject;
+            return _animationFrameDictionary;
         }
 
     }
