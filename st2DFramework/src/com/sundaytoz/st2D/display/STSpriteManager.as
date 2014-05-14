@@ -17,7 +17,8 @@ package com.sundaytoz.st2D.display
         private static var _instance:STSpriteManager;
         private static var _creatingSingleton:Boolean = false;
         
-        private var _sprites:Vector.<STSprite> = new Vector.<STSprite>;
+        //private var _sprites:Vector.<STSprite> = new Vector.<STSprite>;
+        private var _sprites:Array = new Array();
         
         private var modelViewProjection:Matrix3D = new Matrix3D();
         private var viewMatrix:Matrix3D = new Matrix3D();
@@ -40,11 +41,11 @@ package com.sundaytoz.st2D.display
             return _instance;
         }
         
-        public function addSprite(sprite:STSprite):void
+        public function addSprite(sprite:STSprite, index:uint):void
         {
             // zOrder 에 맞게 추가
             
-            _sprites.push(sprite);
+            _sprites[index] = sprite;
         }
         
         public function drawAllSprites():void
@@ -104,7 +105,7 @@ package com.sundaytoz.st2D.display
         /**
          * 모든 스프라이트가 담긴 벡터를 반환합니다. 
          */
-        public function getAllSprites():Vector.<STSprite>
+        public function getAllSprites():Array
         {
             return _sprites;
         }

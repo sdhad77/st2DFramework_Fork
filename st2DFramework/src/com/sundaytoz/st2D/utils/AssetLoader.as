@@ -1,6 +1,7 @@
 package com.sundaytoz.st2D.utils
 {
     import flash.display.Bitmap;
+    import flash.display.BitmapData;
     import flash.display.Loader;
     import flash.display.LoaderInfo;
     import flash.events.Event;
@@ -24,6 +25,7 @@ package com.sundaytoz.st2D.utils
         
         // 이미지 Dictionary
         private var _imageMap:Dictionary = new Dictionary(); 
+        private var _imageCount:uint = 0;
         
         public function AssetLoader()
         {
@@ -79,8 +81,12 @@ package com.sundaytoz.st2D.utils
          * 
          * </listing>
          */
+        
         public function loadImageTexture( path:String, onComplete:Function, onProgress:Function = null ):void
         {
+            var imageCount:uint = _imageCount;
+            _imageCount++;
+            
             // 이미 불러온 이미지가 있을 경우에는 로드하지 않고 바로 보냄
             if( path in _imageMap )
             {
@@ -96,6 +102,8 @@ package com.sundaytoz.st2D.utils
             urlLoader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
             urlLoader.load(new URLRequest(path));
             
+            trace(path);
+            
             function onUrlLoaderProgress(event:ProgressEvent):void
             {
                 if( onProgress != null )
@@ -106,6 +114,8 @@ package com.sundaytoz.st2D.utils
             
             function onUrlLoaderComplete(event:Object):void
             {
+                trace("onUrlLoaderComplete" + path);
+                
                 urlLoader.removeEventListener(ProgressEvent.PROGRESS, onUrlLoaderProgress);
                 urlLoader.removeEventListener(Event.COMPLETE, onUrlLoaderComplete);
                 urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
@@ -118,14 +128,16 @@ package com.sundaytoz.st2D.utils
             
             function onLoaderComplete(event:Event):void
             {
+                trace("onLoaderComplete" + path);
+                
                 urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
                 urlLoader.removeEventListener(Event.COMPLETE, onUrlLoaderComplete);
                 
-                onComplete( LoaderInfo(event.target).content as Bitmap );
+                onComplete( LoaderInfo(event.target).content as Bitmap, imageCount );
                 
                 // dictionary 에 불러온 이미지 저장
                 _imageMap[path] = LoaderInfo(event.target).content as Bitmap;
-               
+                               
             }
             
             function ioErrorHandler(event:IOErrorEvent):void
@@ -136,6 +148,27 @@ package com.sundaytoz.st2D.utils
                 
                 trace("Image Load error: " + event.target + " _ " + event.text );                  
             }
+        }
+        
+        public function removeImage(path:String):void
+        {
+            var bmpData:BitmapData = (_imageMap[path] as Bitmap).bitmapData;
+            if( bmpData != null )
+            {
+                bmpData.dispose();
+            }
+            
+            _imageMap[path] = null;
+        }
+        
+        public function get imageCount():uint
+        {
+            return _imageCount;
+        }
+        
+        public function increaseImageNo():void
+        {
+            _imageCount++;
         }
       
     }

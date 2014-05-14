@@ -19,6 +19,10 @@ package com.sundaytoz.st2D.display
     public class STSprite
     {
         private var _position:Vector2D;
+        private var _scale:Vector2D;
+        private var _rotate:Vector2D;
+        
+        private var _depth:Number;
         private var _zOrder:int;
         
         private var _texture:Texture;
@@ -46,10 +50,18 @@ package com.sundaytoz.st2D.display
         
         private var _vertexBuffer:VertexBuffer3D;
         private var _indexBuffer:IndexBuffer3D;
+        
+        /**
+        *  이미지를 연속해서 생성할 때 AssetLoader 가 이미지를 비동기적으로 불러오면서 용량이 작아 먼저 불려진 이미지가 
+        *  STSpriteManager 의 STSprite 컨테이너에 먼저 추가되서 출력 시 먼저 그려질 수 가 있기 때문에 이를 방지하기 위해
+        *  Sprite 를 생성한 순서를 가짐
+         */
+        private var _imageNo:int = -1;  // 이미지가 생성된 순서 
                
         public function STSprite()
         {
             _position = new Vector2D(0.0, 0.0);
+            _depth = 0;
         }
 
         /**
@@ -60,6 +72,12 @@ package com.sundaytoz.st2D.display
         public function setTextureWithBitmap(bitmap:Bitmap, useMipMap:Boolean=true):void
         {
             _textureData = bitmap;
+            
+            if( _imageNo == -1 )
+            {
+                _imageNo = AssetLoader.instance.imageCount;
+                AssetLoader.instance.increaseImageNo();
+            }
             
             var context:Context3D = StageContext.instance.context; 
             if( context == null )
@@ -84,7 +102,7 @@ package com.sundaytoz.st2D.display
             _indexBuffer = context.createIndexBuffer(_meshIndexData.length);
             _indexBuffer.uploadFromVector(_meshIndexData, 0, _meshIndexData.length);
             
-            STSpriteManager.instance.addSprite( this );
+            STSpriteManager.instance.addSprite( this, _imageNo );
         }
         
         /**
@@ -93,6 +111,7 @@ package com.sundaytoz.st2D.display
         public function setTextureWithString(path:String):void
         {
             _path = path;
+            
             var context:Context3D = StageContext.instance.context; 
             if( context == null )
             {
@@ -101,13 +120,14 @@ package com.sundaytoz.st2D.display
             }
             
             AssetLoader.instance.loadImageTexture(path, onComplete);
-            function onComplete(object:Object):void
+            function onComplete(object:Object, imageNo:uint):void
             {
+                _imageNo = imageNo;
                 setTextureWithBitmap(object as Bitmap);
             }
         }
         
-        internal function update():void
+        public function update():void
         {
             _modelMatrix.identity();
             
@@ -117,7 +137,7 @@ package com.sundaytoz.st2D.display
             // rotate
             
             // translate
-            _modelMatrix.appendTranslation(_position.x, _position.y, 0);
+            _modelMatrix.appendTranslation(_position.x, _position.y, _depth);
             
         }
         
@@ -151,14 +171,21 @@ package com.sundaytoz.st2D.display
         public function clean():void
         {
             STSpriteManager.instance.removeSprite(this);
+            AssetLoader.instance.removeImage(_path);
             
-             _modelMatrix = null;
+            if( _texture != null )
+                _texture.dispose();
+            _texture = null;
+            
+            if( _textureData.bitmapData != null )
+                _textureData.bitmapData.dispose(); 
+            _textureData.bitmapData = null;
+            
+            _modelMatrix = null;
             _rotation = null;
             _translation = null;
             
             _position = null;
-            _texture.dispose();
-            _textureData.bitmapData.dispose();                
         }
         
         
@@ -230,6 +257,15 @@ package com.sundaytoz.st2D.display
         public function set tag(tag:int):void
         {
             _tag = tag;
+        }
+        
+        public function get depth():Number
+        {
+            return _depth;
+        }
+        public function set depth(depth:Number):void
+        {
+            _depth = depth;
         }
         
         public function get zOrder():int

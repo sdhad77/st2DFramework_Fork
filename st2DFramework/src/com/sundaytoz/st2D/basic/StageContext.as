@@ -2,6 +2,7 @@ package com.sundaytoz.st2D.basic
 {
     import com.adobe.utils.AGALMiniAssembler;
     import com.adobe.utils.PerspectiveMatrix3D;
+    import com.sundaytoz.st2D.utils.Resources;
     
     import flash.display.Stage;
     import flash.display.Stage3D;
@@ -76,11 +77,11 @@ package com.sundaytoz.st2D.basic
                 
                 // 투영 행렬 설정
                 _projectionMatrix.identity();
-                _projectionMatrix.orthoRH(_screenWidth, _screenHeight, -1024, 1024);
+                _projectionMatrix.orthoRH(_screenWidth, _screenHeight, Resources.MIN_DEPTH, Resources.MAX_DEPTH);
                 
                 // 뷰 행렬 설정
                 _viewMatrix.identity();
-                _viewMatrix.appendTranslation(-_screenWidth*0.5, -_screenHeight*0.5, -10);
+                _viewMatrix.appendTranslation(-_screenWidth*0.5, -_screenHeight*0.5, 0);
                 
                 onInited();
             }
