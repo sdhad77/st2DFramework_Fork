@@ -26,6 +26,9 @@ package com.sundaytoz.st2D.basic
         private var _projectionMatrix:PerspectiveMatrix3D = new PerspectiveMatrix3D();
         private var _viewMatrix:Matrix3D = new Matrix3D();
         
+        private var _screenWidth:uint;
+        private var _screenHeight:uint;
+        
         public function StageContext()
         {
             if (!_creatingSingleton){
@@ -52,6 +55,9 @@ package com.sundaytoz.st2D.basic
             
             stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, onContext3DCreate);
             stage.stage3Ds[0].requestContext3D();
+            
+            _screenWidth = stage.fullScreenWidth;
+            _screenHeight = stage.fullScreenHeight;
                 
             function onContext3DCreate(event:Event):void 
             {
@@ -64,17 +70,17 @@ package com.sundaytoz.st2D.basic
                 }
                 
                 _context3D.enableErrorChecking = true;
-                _context3D.configureBackBuffer(stage.fullScreenWidth, stage.fullScreenHeight, 2, true); //(2=antialiased)
+                _context3D.configureBackBuffer(_screenWidth, _screenHeight, 2, true); //(2=antialiased)
                 
                 initShaders();
                 
                 // 투영 행렬 설정
                 _projectionMatrix.identity();
-                _projectionMatrix.orthoRH(stage.fullScreenWidth, stage.fullScreenHeight, -1024, 1024);
+                _projectionMatrix.orthoRH(_screenWidth, _screenHeight, -1024, 1024);
                 
                 // 뷰 행렬 설정
                 _viewMatrix.identity();
-                _viewMatrix.appendTranslation(-stage.fullScreenWidth*0.5, -stage.fullScreenHeight*0.5, 0);
+                _viewMatrix.appendTranslation(-_screenWidth*0.5, -_screenHeight*0.5, -10);
                 
                 onInited();
             }
@@ -128,6 +134,15 @@ package com.sundaytoz.st2D.basic
         public function get viewMatrix():Matrix3D
         {
             return _viewMatrix;
+        }
+        
+        public function get screenWidth():uint
+        {
+            return _screenWidth;
+        }
+        public function get screenHeight():uint
+        {
+            return _screenHeight;
         }
 
     }
