@@ -27,6 +27,8 @@ package com.sundaytoz.st2D.display
         
         private var _tag:int;
         
+        private var _path:String;
+        
         private var _rotation:Vector3D = new Vector3D();
         private var _translation:Vector3D = new Vector3D();
         
@@ -89,6 +91,7 @@ package com.sundaytoz.st2D.display
          */
         public function setTextureWithString(path:String):void
         {
+            _path = path;
             var context:Context3D = StageContext.instance.context; 
             if( context == null )
             {
@@ -246,6 +249,15 @@ package com.sundaytoz.st2D.display
         public function get textureData():Bitmap
         {
             return _textureData;
+        }
+        
+        public function get path():String
+        {
+            return _path;
+        }
+        public function set path(path:String):void
+        {
+            _path = path;
         }
         
         
