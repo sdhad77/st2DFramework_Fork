@@ -18,7 +18,7 @@ package com.sundaytoz.st2D.display
     
     public class STSprite
     {
-        private var _globalPosition:Vector2D;
+        private var _position:Vector2D;
         private var _zOrder:int;
         
         private var _texture:Texture;
@@ -49,7 +49,7 @@ package com.sundaytoz.st2D.display
                
         public function STSprite()
         {
-            _globalPosition = new Vector2D(0.0, 0.0);
+            _position = new Vector2D(0.0, 0.0);
         }
 
         /**
@@ -117,7 +117,7 @@ package com.sundaytoz.st2D.display
             // rotate
             
             // translate
-            _modelMatrix.appendTranslation(_globalPosition.x, _globalPosition.y, 0);
+            _modelMatrix.appendTranslation(_position.x, _position.y, 0);
             
         }
         
@@ -156,7 +156,7 @@ package com.sundaytoz.st2D.display
             _rotation = null;
             _translation = null;
             
-            _globalPosition = null;
+            _position = null;
             _texture.dispose();
             _textureData.bitmapData.dispose();                
         }
@@ -258,19 +258,19 @@ package com.sundaytoz.st2D.display
         
         public function get left():Number
         {
-            return _globalPosition.x - _textureData.width * 0.5;
+            return _position.x - _textureData.width * 0.5;
         }
         public function get right():Number
         {
-            return _globalPosition.x + _textureData.width * 0.5;
+            return _position.x + _textureData.width * 0.5;
         }
         public function get top():Number
         {
-            return _globalPosition.y + _textureData.height * 0.5;
+            return _position.y + _textureData.height * 0.5;
         }
         public function get bottom():Number
         {
-            return _globalPosition.y - _textureData.height * 0.5;
+            return _position.y - _textureData.height * 0.5;
         }
         
         public function get rect():Rectangle
@@ -280,11 +280,11 @@ package com.sundaytoz.st2D.display
         
         public function get position():Vector2D
         {
-            return _globalPosition;
+            return _position;
         }
         public function set position(position:Vector2D):void
         {
-            _globalPosition = position;
+            _position = position;
         }
         
         /**
