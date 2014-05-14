@@ -58,9 +58,9 @@ package com.sundaytoz.st2D.display
             
             for each( var sprite:STSprite in _sprites )
             {
-                // 화면 밖의 스프라이트 인지 검사
-                
-                // 화면 안의 스프라이트인 경우 출력
+                // 화면 밖의 스프라이트 인지 검사후 화면 밖이면 그리지 않음
+                if( isInScreen(sprite) == false )
+                    continue;
                 
                 context.setTextureAt(0, sprite.texture);
                 context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
@@ -83,6 +83,22 @@ package com.sundaytoz.st2D.display
             }
             
             context.present();
+        }
+        
+        /**
+         * 스프라이트가 현재 스크린 안에 있는지 확인합니다. 
+         */
+        private function isInScreen(sprite:STSprite):Boolean
+        {
+            if( sprite.right < 0 || 
+                sprite.top < 0 || 
+                sprite.left > StageContext.instance.screenWidth || 
+                sprite.bottom > StageContext.instance.screenHeight)
+            {
+                return false;
+            }
+            
+            return true;
         }
         
         /**
