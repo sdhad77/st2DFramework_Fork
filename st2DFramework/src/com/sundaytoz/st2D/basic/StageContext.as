@@ -6,6 +6,7 @@ package com.sundaytoz.st2D.basic
     import flash.display.Stage;
     import flash.display.Stage3D;
     import flash.display.StageAlign;
+    import flash.display.StageDisplayState;
     import flash.display.StageScaleMode;
     import flash.display3D.Context3D;
     import flash.display3D.Context3DProgramType;
@@ -47,6 +48,7 @@ package com.sundaytoz.st2D.basic
             stage.frameRate = 60;
             stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
+            stage.displayState = StageDisplayState.FULL_SCREEN;
             
             stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, onContext3DCreate);
             stage.stage3Ds[0].requestContext3D();
@@ -54,7 +56,7 @@ package com.sundaytoz.st2D.basic
             function onContext3DCreate(event:Event):void 
             {
                 var t:Stage3D = event.target as Stage3D;					
-                _context3D = t.context3D; 	
+                _context3D = t.context3D;
                 
                 if (_context3D == null) 
                 {
