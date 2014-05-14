@@ -59,7 +59,6 @@ package com.sundaytoz.st2D.display
             for each( var sprite:STSprite in _sprites )
             {
                 // 화면 밖의 스프라이트 인지 검사
-                sprite.rect
                 
                 // 화면 안의 스프라이트인 경우 출력
                 
