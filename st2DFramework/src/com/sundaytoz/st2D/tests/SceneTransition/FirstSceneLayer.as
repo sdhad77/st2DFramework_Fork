@@ -14,7 +14,7 @@ package com.sundaytoz.st2D.tests.SceneTransition
         {
             STSprite.createSpriteWithPath("res/test.png", onCreated, null, StageContext.instance.screenWidth * 0.5, StageContext.instance.screenHeight * 0.5);
             
-            StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onTouch);
+            StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
         override public function update():void
@@ -31,12 +31,14 @@ package com.sundaytoz.st2D.tests.SceneTransition
         private function onTouch(event:MouseEvent):void
         {
             // 이곳에 맨 처음으로 사용할 레이어를 부릅니다.
-            var secondScene:SecondSceneLayer = new SecondSceneLayer();
-            
             var scene:Scene = new Scene();
-            scene.addLayer(secondScene);
+            var secondSceneLayer:SecondSceneLayer = new SecondSceneLayer();
+            scene.addLayer(secondSceneLayer);
             
             SceneManager.instance.pushScene(scene);
+            
+            StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, onTouch);
+            
         }
     }
 }

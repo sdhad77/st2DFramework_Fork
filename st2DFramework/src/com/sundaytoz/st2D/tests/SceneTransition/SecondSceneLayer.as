@@ -13,7 +13,7 @@ package com.sundaytoz.st2D.tests.SceneTransition
         {
             STSprite.createSpriteWithPath("res/star.png", onCreated, null, StageContext.instance.screenWidth * 0.5, StageContext.instance.screenHeight * 0.5);
                 
-            StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onTouch);
+            StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
         override public function update():void
@@ -30,6 +30,8 @@ package com.sundaytoz.st2D.tests.SceneTransition
         private function onTouch(event:MouseEvent):void
         {
             SceneManager.instance.popScene();
+            
+            StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, onTouch);
         }
     }
 }
