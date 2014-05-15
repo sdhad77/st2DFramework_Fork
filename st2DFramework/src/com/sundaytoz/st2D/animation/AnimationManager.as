@@ -4,8 +4,6 @@ package com.sundaytoz.st2D.animation
     import com.sundaytoz.st2D.animation.datatype.AnimationFrame;
     import com.sundaytoz.st2D.animation.datatype.AnimationPlayData;
     import com.sundaytoz.st2D.display.STSprite;
-    
-    import flash.utils.Dictionary;
 
     /**
      * 재생중인 애니메이션 전체를 관리하는 클래스입니다.
@@ -20,10 +18,7 @@ package com.sundaytoz.st2D.animation
         private var _playSprite:Vector.<STSprite> = new Vector.<STSprite>; //sprite의 uv좌표를 바꿔주기 위해 sprite를 저장해 두어야 합니다.
         private var _playAnimationData:Vector.<AnimationPlayData> = new Vector.<AnimationPlayData>; //재생중인 애니메이션들의 데이터 입니다.
         
-        // 이미지 Dictionary
-        private var _imageMap:Dictionary = new Dictionary(); 
         private var _picked:STSprite = null;
-        
         
         public function AnimationManager()
         {
@@ -32,7 +27,6 @@ package com.sundaytoz.st2D.animation
             }
         }
         
-
         public static function get instance():AnimationManager
         {
             if (!_instance){
@@ -94,8 +88,6 @@ package com.sundaytoz.st2D.animation
             return null;
         }
         
-        
-        
         /**
          * 애니메이션을 업데이트 하는 함수입니다.<br> 
          * 애니메이션이 현재 사용가능한지 확인하고, 사용가능하면 다음 Frame으로 이동시킵니다.
@@ -104,19 +96,21 @@ package com.sundaytoz.st2D.animation
         {
             var playFrame:AnimationFrame;
             
-            if(_playSprite.length)
+            for(var i:int = 0; i< _playSprite.length; i++)
             {
-                for(var i:int = 0; i< _playSprite.length; i++)
+                //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
+                if(_playAnimationData[i].animationData["available"] == 2)
                 {
-                    //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
-                    if(_playAnimationData[i].animationData["available"] == 2)
+                    if(_playSprite[i] != _picked)
                     {
-                        if(_playSprite[i] != _picked){
                         //다음 프레임으로 이동
-                            playFrame = nextFrame(i);
-                        //얻은 프레임 정보로 uv좌표를 설정
-                            _playSprite[i].setUVCoord(playFrame.x/_playSprite[i].width, playFrame.y/_playSprite[i].height, playFrame.width/_playSprite[i].width, playFrame.height/_playSprite[i].height);
-                        }
+                        playFrame = nextFrame(i);
+                        
+                        //uv좌표 변경하는 방식
+           //             _playSprite[i].setUVCoord(playFrame.x/_playSprite[i].width, playFrame.y/_playSprite[i].height, playFrame.width/_playSprite[i].width, playFrame.height/_playSprite[i].height);
+                        
+                        //bitmap 전달하는 방식
+                        _playSprite[i].initTexture(playFrame.bitmap);
                     }
                 }
             }

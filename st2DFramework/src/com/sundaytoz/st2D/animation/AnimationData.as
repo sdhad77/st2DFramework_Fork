@@ -1,9 +1,13 @@
 package com.sundaytoz.st2D.animation
 {
     import com.sundaytoz.st2D.animation.datatype.Animation;
+    import com.sundaytoz.st2D.animation.datatype.AnimationFrame;
     import com.sundaytoz.st2D.utils.AssetLoader;
     
     import flash.display.Bitmap;
+    import flash.display.BitmapData;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
     import flash.utils.Dictionary;
     
     /**
@@ -75,6 +79,7 @@ package com.sundaytoz.st2D.animation
                 _animationData[pathTexture]["bitmap"] = object as Bitmap;
                 //이미지 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
                 _animationData[pathTexture]["available"]++;
+                if(_animationData[pathTexture]["available"] == 2)frameSetting();
             }
             function onXmlLoaderComplete(dictionary:Dictionary):void
             {
@@ -82,6 +87,17 @@ package com.sundaytoz.st2D.animation
                 _animationData[pathTexture]["frame"] = dictionary;
                 //xml파일 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
                 _animationData[pathTexture]["available"]++;
+                if(_animationData[pathTexture]["available"] == 2)frameSetting();
+            }
+            function frameSetting():void
+            {
+                //스프라이트 시트에서 개별 이미지의 bitmap정보를 따로따로 잘라내어 저장합니다
+                for each( var frame:AnimationFrame in _animationData[pathTexture]["frame"] )
+                {
+                    var croppedBD:BitmapData = new BitmapData(frame.width, frame.height);
+                    croppedBD.copyPixels(AnimationData.instance.animationData[pathTexture]["bitmap"].bitmapData, new Rectangle(frame.x, frame.y, frame.width, frame.height), new Point(0, 0));
+                    frame.bitmap = new Bitmap(croppedBD);
+                }
             }
         }
         
