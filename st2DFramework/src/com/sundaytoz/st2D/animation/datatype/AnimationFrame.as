@@ -1,5 +1,7 @@
 package com.sundaytoz.st2D.animation.datatype
 {
+    import flash.display.Bitmap;
+
     /**
      * 스프라이트 시트에 존재 하는 각각의 이미지들을 Frame 단위로 나눠서 저장하기 위한 클래스입니다. 
      * @author 신동환
@@ -15,6 +17,7 @@ package com.sundaytoz.st2D.animation.datatype
         private var _frameY:int;
         private var _frameWidth:int;
         private var _frameHeight:int;
+        private var _bitmap:Bitmap;
         
         /**
          * Frame 생성자입니다.
@@ -50,6 +53,7 @@ package com.sundaytoz.st2D.animation.datatype
         public function get frameY():int      {return _frameY;}
         public function get frameWidth():int  {return _frameWidth;}
         public function get frameHeight():int {return _frameHeight;}
+        public function get bitmap():Bitmap   {return _bitmap;}
         
         public function set name(value:String):void     {_name        = value;}
         public function set x(value:int):void           {_x           = value;}
@@ -60,5 +64,6 @@ package com.sundaytoz.st2D.animation.datatype
         public function set frameY(value:int):void      {_frameY      = value;}
         public function set frameWidth(value:int):void  {_frameWidth  = value;}
         public function set frameHeight(value:int):void {_frameHeight = value;}
+        public function set bitmap(value:Bitmap):void   {_bitmap      = value;}
     }
 }
