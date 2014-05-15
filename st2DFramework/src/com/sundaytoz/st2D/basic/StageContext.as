@@ -52,6 +52,11 @@ package com.sundaytoz.st2D.basic
             return _instance;
         }
         
+        /**
+         * Stage3D 를 초기화하고 그릴 준비를 합니다. 
+         * @param stage Application 의 stage 객체
+         * @param onInited 초기화 후 불려질 콜백 함수
+         */
         public function init(stage:Stage, onInited:Function):void
         {
             _stage = stage;
@@ -122,6 +127,9 @@ package com.sundaytoz.st2D.basic
             _shaderProgram.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
         }
         
+        /**
+         * 현재 Scene 에 있는 레이어의 순서에 따라 레이어를 출력합니다. 
+         */
         public function draw():void
         {
             context.clear(1, 1, 1);
