@@ -60,7 +60,6 @@ package com.sundaytoz.st2D.display
                 context.drawTriangles(sprite.indexBuffer, 0, sprite.numTriangle);
             }
             
-            context.present();
         }
         
         /**
