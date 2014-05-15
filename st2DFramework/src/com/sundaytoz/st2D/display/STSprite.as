@@ -61,10 +61,13 @@ package com.sundaytoz.st2D.display
             _depth = 0;
         }
         
-        public static function createSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null):void
+        public static function createSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null,  x:Number=0, y:Number=0 ):void
         {
             var sprite:STSprite = new STSprite();
             sprite.path = path;
+            
+            sprite.position.x = x;
+            sprite.position.y = y;
                         
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
             function onComplete(object:Object, zOrder:uint):void
