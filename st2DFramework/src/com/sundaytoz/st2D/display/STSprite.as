@@ -19,20 +19,19 @@ package com.sundaytoz.st2D.display
     
     public class STSprite extends STObject 
     {
-        private var _position:Vector2D;
-        private var _scale:Vector2D = new Vector2D();
-        private var _rotation:Vector3D = new Vector3D();
-        
-        private var _depth:Number;
-        
-        private var _texture:Texture;
-        private var _textureData:Bitmap;
-
-        private var _modelMatrix:Matrix3D = new Matrix3D();
-        
         private var _path:String;
         
-        private var _translation:Vector3D = new Vector3D();
+        private var _position:Vector2D = new Vector2D(0.0, 0.0);
+        private var _scale:Vector2D = new Vector2D(1.0, 1.0);
+        private var _rotateAxis:Vector3D = new Vector3D(0.0, 0.0, 0.0);
+        private var _rotateDegree:Number = 0;
+        
+        private var _depth:Number = 0;
+        
+        private var _texture:Texture = null;
+        private var _textureData:Bitmap = null;
+
+        private var _modelMatrix:Matrix3D = new Matrix3D();
         
         private static var _meshIndexData:Vector.<uint> = Vector.<uint>  ([ 0, 1, 2, 0, 2, 3, ]);
         private var _meshVertexData:Vector.<Number> = Vector.<Number>
@@ -58,10 +57,16 @@ package com.sundaytoz.st2D.display
                
         public function STSprite()
         {
-            _position = new Vector2D(0.0, 0.0);
-            _depth = 0;
         }
         
+        /**
+         * 파일 경로를 이용해서 스프라이트를 생성합니다.  
+         * @param path  이미지 경로
+         * @param onCreated 스프라이트가 생성된 후 불려질 콜백 함수
+         * @param onProgress 스프라이트가 생성되는 과정에서 불려질 콜백 함수
+         * @param x 스프라이트를 처음에 위치시킬 X 좌표
+         * @param y 스프라이트를 처음에 위치시킬 Y 좌표
+         */
         public static function createSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null,  x:Number=0, y:Number=0 ):void
         {
             var sprite:STSprite = new STSprite();
@@ -82,6 +87,11 @@ package com.sundaytoz.st2D.display
             }
         }
                 
+        /**
+         * 스프라이트에 사용할 텍스쳐를 초기화합니다. 
+         * @param bitmap 텍스쳐에 사용할 비트맵객체
+         * @param useMipMap 비트맵 밉맵을 생성할 지 여부
+         */
         public function initTexture(bitmap:Bitmap, useMipMap:Boolean=true):void
         {
             textureData = bitmap;
@@ -98,14 +108,18 @@ package com.sundaytoz.st2D.display
             }
         }
         
-        public function update():void
+        /**
+         * 스프라이트의 Scale, Rotation, Translation 을 변경합니다. 
+         */
+        internal function update():void
         {
             _modelMatrix.identity();
             
             // scale
-            _modelMatrix.appendScale(_textureData.width, _textureData.height, 1);
+            _modelMatrix.appendScale(_textureData.width * scale.x, _textureData.height * scale.y, 1);
             
             // rotate
+            _modelMatrix.appendRotation( _rotateDegree, _rotateAxis );
             
             // translate
             _modelMatrix.appendTranslation(_position.x, _position.y, _depth);
@@ -135,15 +149,33 @@ package com.sundaytoz.st2D.display
             }
         }
         
-        private function initBuffer():void
+        /**
+         * 스프라이트를 확대 및 축소 시킵니다.  <br/>
+         * 사용한 파라미터 axis 는 값을 복사한 뒤 null 로 셋팅됩니다.
+         * @param scale 확대 및 축소 시킬 비율
+         */
+        public function setScale(scale:Vector2D):void
         {
-            var context:Context3D = StageContext.instance.context; 
+            _scale.x = scale.x;
+            _scale.y = scale.y;
             
-            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/12, 12); 
-            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
+            scale = null;
+        }
+        
+        /**
+         * 스프라이트를 회전시킵니다. <br/>
+         * 사용한 파라미터 axis 는 값을 복사한 뒤 null 로 셋팅됩니다.
+         * @param degree 회전할 각도
+         * @param axis 회전 축
+         */
+        public function setRotate(degree:Number, axis:Vector3D):void
+        {
+            _rotateDegree = degree;
+            _rotateAxis.x = axis.x;
+            _rotateAxis.y = axis.y;
+            _rotateAxis.z = axis.z;
             
-            _indexBuffer = context.createIndexBuffer(_meshIndexData.length);
-            _indexBuffer.uploadFromVector(_meshIndexData, 0, _meshIndexData.length);
+            axis = null;
         }
         
         
@@ -163,12 +195,28 @@ package com.sundaytoz.st2D.display
             _textureData.bitmapData = null;
             
             _modelMatrix = null;
-            _rotation = null;
-            _translation = null;
+            _rotateAxis = null;
+            
+            _scale = null;
+            _position = null;
+            _rotateAxis = null;
             
             _position = null;
         }
         
+        /**
+         * 스프라이트 출력에 필요한 버퍼를 초기화합니다. 
+         */
+        private function initBuffer():void
+        {
+            var context:Context3D = StageContext.instance.context; 
+            
+            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/12, 12); 
+            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
+            
+            _indexBuffer = context.createIndexBuffer(_meshIndexData.length);
+            _indexBuffer.uploadFromVector(_meshIndexData, 0, _meshIndexData.length);
+        }
         
         /**
          * 밉맵을 만듭니다. 
@@ -201,6 +249,9 @@ package com.sundaytoz.st2D.display
             }
             tmp.dispose();
         }
+        
+        
+        
 
         /** Property */
         public function get numTriangle():int
@@ -298,19 +349,7 @@ package com.sundaytoz.st2D.display
         {
             return _scale;
         }
-        public function set scale(scale:Vector2D):void
-        {
-            _scale = scale;
-        }
-        
-        public function get rotation():Vector3D
-        {
-            return _rotation;
-        }
-        public function set rotation(rotation:Vector3D):void
-        {
-            _rotation = rotation;
-        }
+
         
         /**
          * 텍스쳐의 가로 길이를 리턴합니다. 
