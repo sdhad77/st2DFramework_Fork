@@ -1,6 +1,6 @@
 package com.sundaytoz.st2D.display
 {
-    public class Scene
+    public class Scene extends STObject
     {
         private var _layerArray:Array = new Array();
         
