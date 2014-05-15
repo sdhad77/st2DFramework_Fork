@@ -8,6 +8,11 @@ package com.sundaytoz.st2D.display
         {
         }
         
+        public function update():void
+        {
+            throw new Error("Layer 클래스는 update()추상함수를 포함합니다. 오버라이딩 해주세요 ");
+        }
+        
         public function addSprite(sprite:STSprite):void
         {
             spriteManager.addSprite(sprite);
@@ -27,5 +32,7 @@ package com.sundaytoz.st2D.display
         {
             return spriteManager.getAllSprites();
         }
+        
+        
     }
 }

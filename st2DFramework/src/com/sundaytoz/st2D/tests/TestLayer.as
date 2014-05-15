@@ -16,6 +16,11 @@ package com.sundaytoz.st2D.tests
             STSprite.createSpriteWithPath("res/star.png", onCreated2);
         }
         
+        override public function update():void
+        {
+            
+        }
+        
         private function onCreated(sprite:STSprite):void
         {
             sprite1 = sprite;

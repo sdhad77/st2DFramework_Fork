@@ -25,6 +25,14 @@ package com.sundaytoz.st2D.display
             return _instance;
         }
         
+        public function updateLayers():void
+        {
+            for(var i:uint=0; i<_layers.length; ++i)
+            {
+                (_layers[i] as Layer).update();
+            }
+        }
+        
         public function addLayer(layer:Layer):void
         {
             _layers.push(layer);
