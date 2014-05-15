@@ -3,14 +3,18 @@ package com.sundaytoz.st2D.tests.Animation
     import com.sundaytoz.st2D.animation.AnimationData;
     import com.sundaytoz.st2D.animation.AnimationManager;
     import com.sundaytoz.st2D.animation.datatype.Animation;
+    import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
     import com.sundaytoz.st2D.display.STSprite;
+    import com.sundaytoz.st2D.utils.Picking;
     
-    public class AnimationLayer extends Layer
+    import flash.events.MouseEvent;
+    
+    public class AnimationChangeLayer extends Layer
     {
         private var spriteAnimation:STSprite = new STSprite();
         
-        public function AnimationLayer()
+        public function AnimationChangeLayer()
         {
             AnimationData.instance.setAnimationData("res/atlas.png", "res/atlas.xml");
             
@@ -27,6 +31,8 @@ package com.sundaytoz.st2D.tests.Animation
                     STSprite.createSpriteWithPath("res/atlas.png", onCreated, null, i*32 + 100, j*32 + 100);
                 }
             }
+            
+            StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
         override public function update():void
@@ -41,6 +47,11 @@ package com.sundaytoz.st2D.tests.Animation
             
             this.addSprite(spriteAnimation);
             AnimationManager.instance.addSprite(spriteAnimation, "down");
+        }
+        
+        private function onTouch(event:MouseEvent):void
+        {
+            AnimationManager.instance.setAnimation(Picking.pick(StageContext.instance.stage, getAllSprites(), event.stageX, event.stageY), "up");
         }
     }
 }
