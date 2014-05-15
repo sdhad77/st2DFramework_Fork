@@ -4,6 +4,8 @@ package com.sundaytoz.st2D.animation
     import com.sundaytoz.st2D.animation.datatype.AnimationFrame;
     import com.sundaytoz.st2D.animation.datatype.AnimationPlayData;
     import com.sundaytoz.st2D.display.STSprite;
+    
+    import flash.utils.Dictionary;
 
     /**
      * 재생중인 애니메이션 전체를 관리하는 클래스입니다.
@@ -15,10 +17,8 @@ package com.sundaytoz.st2D.animation
         private static var _instance:AnimationManager;
         private static var _creatingSingleton:Boolean = false;
         
-        private var _playSprite:Vector.<STSprite> = new Vector.<STSprite>; //sprite의 uv좌표를 바꿔주기 위해 sprite를 저장해 두어야 합니다.
-        private var _playAnimationData:Vector.<AnimationPlayData> = new Vector.<AnimationPlayData>; //재생중인 애니메이션들의 데이터 입니다.
-        
-        private var _picked:STSprite = null;
+        private var _playSprite:Dictionary = new Dictionary; //sprite의 uv좌표를 바꿔주기 위해 sprite를 저장해 두어야 합니다.
+        private var _playAnimationData:Dictionary = new Dictionary; //재생중인 애니메이션들의 데이터 입니다.
         
         public function AnimationManager()
         {
@@ -44,14 +44,14 @@ package com.sundaytoz.st2D.animation
          */
         public function addSprite(sprite:STSprite, animationName:String):void
         {
-            _playSprite.push(sprite);
-            _playAnimationData.push(new AnimationPlayData(AnimationData.instance.animationData[sprite.path], animationName));
+            _playSprite[sprite] = sprite;
+            _playAnimationData[sprite] = new AnimationPlayData(AnimationData.instance.animationData[sprite.path], animationName);
         }
         
         /**
          * 애니메이션을 다음 프레임으로 이동 시킵니다. 
          */
-        public function nextFrame(idx:int):AnimationFrame
+        public function nextFrame(idx:STSprite):AnimationFrame
         {
             var playAnimation:Animation = _playAnimationData[idx].getPlayAnimation(_playAnimationData[idx].playAnimationName);
            
@@ -96,34 +96,26 @@ package com.sundaytoz.st2D.animation
         {
             var playFrame:AnimationFrame;
             
-            for(var i:int = 0; i< _playSprite.length; i++)
+            for each( var sprite:STSprite in _playSprite )
             {
                 //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
-                if(_playAnimationData[i].animationData["available"] == 2)
+                if(_playAnimationData[sprite].animationData["available"] == 2)
                 {
-                    if(_playSprite[i] != _picked)
-                    {
-                        //다음 프레임으로 이동
-                        playFrame = nextFrame(i);
-                        
-                        //uv좌표 변경하는 방식
-           //             _playSprite[i].setUVCoord(playFrame.x/_playSprite[i].width, playFrame.y/_playSprite[i].height, playFrame.width/_playSprite[i].width, playFrame.height/_playSprite[i].height);
-                        
-                        //bitmap 전달하는 방식
-                        _playSprite[i].initTexture(playFrame.bitmap);
-                    }
+                    //다음 프레임으로 이동
+                    playFrame = nextFrame(sprite);
+                    
+                    //uv좌표 변경하는 방식
+                    //sprite.setUVCoord(playFrame.x/sprite.width, playFrame.y/sprite.height, playFrame.width/sprite.width, playFrame.height/sprite.height);
+                    
+                    //bitmap 전달하는 방식
+                    sprite.initTexture(playFrame.bitmap);
                 }
             }
         }
         
-        public function set picked(value:STSprite):void
+        public function setAnimation(idx:STSprite, name:String):void
         {
-            _picked = value;
-        }
-        
-        public function get picked():STSprite
-        {
-            return _picked;
+            _playAnimationData[idx].setPlayAnimation(name);
         }
     }
 }
