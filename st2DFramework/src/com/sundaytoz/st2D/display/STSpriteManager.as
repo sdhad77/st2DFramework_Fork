@@ -54,7 +54,7 @@ package com.sundaytoz.st2D.display
             
             context.clear(1, 1, 1);
             
-            context.setDepthTest(false, Context3DCompareMode.LESS);            
+            context.setDepthTest(true, Context3DCompareMode.LESS);            
             context.setProgram( StageContext.instance.shaderProgram );
             
             for each( var sprite:STSprite in _sprites )
