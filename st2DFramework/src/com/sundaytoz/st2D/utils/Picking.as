@@ -1,12 +1,12 @@
 package com.sundaytoz.st2D.utils
 {
+	import com.sundaytoz.st2D.basic.StageContext;
 	import com.sundaytoz.st2D.display.STSprite;
 	
-	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.geom.Rectangle;
 	
-	public class Picking extends Sprite
+	public class Picking
 	{
 		public function Picking()
 		{
@@ -40,5 +40,15 @@ package com.sundaytoz.st2D.utils
 			}
 			return picked;
 		}
+        
+        public static function touchPosition(x:Number, y:Number):Vector2D
+        {
+            var stage = StageContext.instance.stage;
+            
+            var xUnit:Number = x;
+            var yUnit:Number = Math.abs(y - stage.stageHeight);     //stage좌표와 context3d좌표 차이 수정
+            
+            return new Vector2D(xUnit, yUnit)
+        }
 	}
 }
