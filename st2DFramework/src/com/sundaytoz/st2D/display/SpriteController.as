@@ -22,7 +22,7 @@ package com.sundaytoz.st2D.display
         public function addSprite(sprite:STSprite):void
         {
             // zOrder 에 맞게 추가
-            _sprites[sprite.imageNo] = sprite;
+            _sprites[sprite.zOrder] = sprite;
         }
        
         public function drawAllSprites():void
@@ -32,6 +32,9 @@ package com.sundaytoz.st2D.display
             for each( var sprite:STSprite in _sprites )
             {
                 if( sprite.textureData == null )
+                    continue;
+                
+                if( sprite.isVisible == false )
                     continue;
                 
                 // 화면 밖의 스프라이트 인지 검사후 화면 밖이면 그리지 않음

@@ -23,7 +23,6 @@ package com.sundaytoz.st2D.display
         private var _rotate:Vector2D;
         
         private var _depth:Number;
-        private var _zOrder:int;
         
         private var _texture:Texture;
         private var _textureData:Bitmap;
@@ -54,7 +53,7 @@ package com.sundaytoz.st2D.display
         *  STSpriteManager 의 STSprite 컨테이너에 먼저 추가되서 출력 시 먼저 그려질 수 가 있기 때문에 이를 방지하기 위해
         *  Sprite 를 생성한 순서를 가짐
          */
-        private var _imageNo:int = -1;  // 이미지가 생성된 순서 
+        private var _zOrder:int = -1;  // 이미지가 생성된 순서 
                
         public function STSprite()
         {
@@ -68,9 +67,9 @@ package com.sundaytoz.st2D.display
             sprite.path = path;
                         
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
-            function onComplete(object:Object, imageNo:uint):void
+            function onComplete(object:Object, zOrder:uint):void
             {
-                sprite.imageNo = imageNo;
+                sprite.zOrder = zOrder;
                 
                 sprite.initBuffer();
                 sprite.initTexture(sprite, (object as Bitmap));
@@ -241,15 +240,6 @@ package com.sundaytoz.st2D.display
             _depth = depth;
         }
         
-        public function get zOrder():int
-        {
-            return _zOrder;
-        }
-        public function set zOrder(zOrder:int):void
-        {
-            _zOrder = zOrder;
-        }
-        
         public function get textureData():Bitmap
         {
             return _textureData;
@@ -315,13 +305,13 @@ package com.sundaytoz.st2D.display
             return _textureData.height;
         }
         
-        public function get imageNo():int
+        public function get zOrder():int
         {
-            return _imageNo;
+            return _zOrder;
         }
-        public function set imageNo(imageNo:int):void
+        public function set zOrder(zOrder:int):void
         {
-            _imageNo = imageNo;
+            _zOrder = zOrder;
         }
             
         
