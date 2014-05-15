@@ -1,4 +1,4 @@
-package com.sundaytoz.st2D.tests.LayerTransition
+package com.sundaytoz.st2D.tests.SceneTransition
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
