@@ -90,7 +90,7 @@ package com.sundaytoz.st2D.utils
             // 이미 불러온 이미지가 있을 경우에는 로드하지 않고 바로 보냄
             if( path in _imageMap )
             {
-                onComplete(_imageMap[path]);
+                onComplete(_imageMap[path], imageCount);
                 return;
             }
             
