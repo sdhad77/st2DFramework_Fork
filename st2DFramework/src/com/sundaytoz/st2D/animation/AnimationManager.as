@@ -22,6 +22,8 @@ package com.sundaytoz.st2D.animation
         
         // 이미지 Dictionary
         private var _imageMap:Dictionary = new Dictionary(); 
+        private var _picked:STSprite = null;
+        
         
         public function AnimationManager()
         {
@@ -30,6 +32,7 @@ package com.sundaytoz.st2D.animation
             }
         }
         
+
         public static function get instance():AnimationManager
         {
             if (!_instance){
@@ -91,6 +94,8 @@ package com.sundaytoz.st2D.animation
             return null;
         }
         
+        
+        
         /**
          * 애니메이션을 업데이트 하는 함수입니다.<br> 
          * 애니메이션이 현재 사용가능한지 확인하고, 사용가능하면 다음 Frame으로 이동시킵니다.
@@ -106,14 +111,25 @@ package com.sundaytoz.st2D.animation
                     //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
                     if(_playAnimationData[i].animationData["available"] == 2)
                     {
+                        if(_playSprite[i] != _picked){
                         //다음 프레임으로 이동
-                        playFrame = nextFrame(i);
-
+                            playFrame = nextFrame(i);
                         //얻은 프레임 정보로 uv좌표를 설정
-                        _playSprite[i].setUVCoord(playFrame.x/_playSprite[i].width, playFrame.y/_playSprite[i].height, playFrame.width/_playSprite[i].width, playFrame.height/_playSprite[i].height);
+                            _playSprite[i].setUVCoord(playFrame.x/_playSprite[i].width, playFrame.y/_playSprite[i].height, playFrame.width/_playSprite[i].width, playFrame.height/_playSprite[i].height);
+                        }
                     }
                 }
             }
+        }
+        
+        public function set picked(value:STSprite):void
+        {
+            _picked = value;
+        }
+        
+        public function get picked():STSprite
+        {
+            return _picked;
         }
     }
 }
