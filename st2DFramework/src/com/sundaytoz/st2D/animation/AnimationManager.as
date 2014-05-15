@@ -19,8 +19,6 @@ package com.sundaytoz.st2D.animation
         
         private var _playSprite:Vector.<STSprite> = new Vector.<STSprite>; //sprite의 uv좌표를 바꿔주기 위해 sprite를 저장해 두어야 합니다.
         private var _playAnimationData:Vector.<AnimationPlayData> = new Vector.<AnimationPlayData>; //재생중인 애니메이션들의 데이터 입니다.
-        private var _spriteName:Dictionary = new Dictionary; //sprite의 이름(path)을 저장하는 Dictionary입니다.
-        private var _spriteIdx:int = 0; //addSprite함수에서 나중에 사용될 예정인 변수입니다.
         
         // 이미지 Dictionary
         private var _imageMap:Dictionary = new Dictionary(); 
@@ -49,16 +47,8 @@ package com.sundaytoz.st2D.animation
          */
         public function addSprite(sprite:STSprite, animationName:String):void
         {
-            if(sprite.path in _spriteName)
-            {
-                _playAnimationData[_spriteName[sprite.path]] = new AnimationPlayData(AnimationData.instance.animationData[sprite.path], animationName);
-            }
-            else
-            {
-                _spriteName[sprite.path] = _spriteIdx++;
-                _playSprite.push(sprite);
-                _playAnimationData.push(new AnimationPlayData(AnimationData.instance.animationData[sprite.path], animationName));
-            }
+            _playSprite.push(sprite);
+            _playAnimationData.push(new AnimationPlayData(AnimationData.instance.animationData[sprite.path], animationName));
         }
         
         /**
