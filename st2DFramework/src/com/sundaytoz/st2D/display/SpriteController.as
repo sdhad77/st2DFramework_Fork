@@ -20,9 +20,14 @@ package com.sundaytoz.st2D.display
         
        
         public function addSprite(sprite:STSprite):void
-        {
-            // zOrder 에 맞게 추가
-            _sprites[sprite.zOrder] = sprite;
+        {            
+            _sprites.push(sprite);
+            
+            // depth 로 sorting ( depth가 같으면 zOrder 로 Sorting )
+            if( _sprites.length >= 2)
+            {
+                _sprites.sort(sortingWithDepth);
+            }
         }
        
         public function drawAllSprites():void
@@ -97,6 +102,33 @@ package com.sundaytoz.st2D.display
                 if( _sprites[i] == sprite )
                 {
                     _sprites.splice(i, 1);
+                }
+            }
+        }
+        
+        private function sortingWithDepth(lhs:STSprite, rhs:STSprite):int
+        {
+            if( lhs.depth < rhs.depth )
+            {
+                return -1;
+            }
+            else if( lhs.depth > rhs.depth )
+            {
+                return 1;
+            }
+            else
+            {
+                if( lhs.zOrder < rhs.zOrder )
+                {
+                    return -1;
+                }
+                else if( lhs.zOrder > rhs.zOrder )
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
                 }
             }
         }
