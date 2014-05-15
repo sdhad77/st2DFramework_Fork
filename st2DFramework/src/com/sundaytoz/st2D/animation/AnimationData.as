@@ -21,7 +21,7 @@ package com.sundaytoz.st2D.animation
         // 모든 데이터가 저장되는 Dictionary입니다
         // path(SpriteSheet의 경로)를 key로 하여 이 SpriteSheet와 관련된 모든 정보들을 저장합니다.
         // 이 Dinctionary의 구조는 다음과 같습니다.
-        // animationData[path][texture] = bitmap
+        // animationData[path][bitmap] = bitmap
         //                    [frame][frameName] = AnimationFrame
         //                    [animation] = Animation
         //                    [available] = 사용 가능 여부(int type, [0,1 == false][2 == true])
