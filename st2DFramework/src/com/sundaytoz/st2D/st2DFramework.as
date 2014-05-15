@@ -33,7 +33,7 @@ package com.sundaytoz.st2D
         
         private function update():void
         {
-            Scene.instance.updateLayers();
+            Scene.instance.updateAllLayers();
         }
         
         private function draw():void

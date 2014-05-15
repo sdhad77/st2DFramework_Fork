@@ -72,25 +72,25 @@ package com.sundaytoz.st2D.display
                 sprite.zOrder = zOrder;
                 
                 sprite.initBuffer();
-                sprite.initTexture(sprite, (object as Bitmap));
+                sprite.initTexture((object as Bitmap));
                 
                 onCreated(sprite);
             }
         }
                 
-        public function initTexture(sprite:STSprite, bitmap:Bitmap, useMipMap:Boolean=true):void
+        public function initTexture(bitmap:Bitmap, useMipMap:Boolean=true):void
         {
-            sprite.textureData = bitmap;
+            textureData = bitmap;
             
             var context:Context3D = StageContext.instance.context; 
-            sprite.texture = context.createTexture(bitmap.width, bitmap.height, Context3DTextureFormat.BGRA, false);
+            texture = context.createTexture(bitmap.width, bitmap.height, Context3DTextureFormat.BGRA, false);
             if( useMipMap )
             {
-                sprite.uploadTextureWithMipmaps(sprite.texture, bitmap.bitmapData);                
+                uploadTextureWithMipmaps(texture, bitmap.bitmapData);                
             }
             else
             {
-                sprite.texture.uploadFromBitmapData(bitmap.bitmapData);
+                texture.uploadFromBitmapData(bitmap.bitmapData);
             }
         }
         
