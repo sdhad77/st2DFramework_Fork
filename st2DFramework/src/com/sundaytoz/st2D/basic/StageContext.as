@@ -33,6 +33,8 @@ package com.sundaytoz.st2D.basic
         private var _screenWidth:uint;
         private var _screenHeight:uint;
         
+        private var _stage:Stage;
+        
         public function StageContext()
         {
             if (!_creatingSingleton){
@@ -52,6 +54,8 @@ package com.sundaytoz.st2D.basic
         
         public function init(stage:Stage, onInited:Function):void
         {
+            _stage = stage;
+            
             stage.frameRate = 60;
             stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
@@ -161,6 +165,11 @@ package com.sundaytoz.st2D.basic
         public function get screenHeight():uint
         {
             return _screenHeight;
+        }
+        
+        public function get stage():Stage
+        {
+            return _stage;
         }
 
     }
