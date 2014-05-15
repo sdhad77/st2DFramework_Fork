@@ -43,7 +43,7 @@ package com.sundaytoz.st2D.utils
         
         public static function touchPosition(x:Number, y:Number):Vector2D
         {
-            var stage = StageContext.instance.stage;
+            var stage:Stage = StageContext.instance.stage;
             
             var xUnit:Number = x;
             var yUnit:Number = Math.abs(y - stage.stageHeight);     //stage좌표와 context3d좌표 차이 수정
