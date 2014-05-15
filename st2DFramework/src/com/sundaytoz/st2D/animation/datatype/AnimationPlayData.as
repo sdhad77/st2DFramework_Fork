@@ -31,6 +31,13 @@ package com.sundaytoz.st2D.animation.datatype
         {
             return _animationData["animation"][name];
         }
+        
+        public function setPlayAnimation(name:String):void
+        {
+            _playAnimationName = name;
+            _playAnimationFlowIdx = 0;
+            _delayCnt = 0;
+        }
 
         //get set함수들
         public function get animationData():Dictionary {return _animationData;}

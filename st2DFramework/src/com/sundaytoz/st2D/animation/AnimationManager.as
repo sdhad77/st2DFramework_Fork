@@ -20,8 +20,6 @@ package com.sundaytoz.st2D.animation
         private var _playSprite:Dictionary = new Dictionary; //sprite의 uv좌표를 바꿔주기 위해 sprite를 저장해 두어야 합니다.
         private var _playAnimationData:Dictionary = new Dictionary; //재생중인 애니메이션들의 데이터 입니다.
         
-        private var _picked:STSprite = null;
-        
         public function AnimationManager()
         {
             if (!_creatingSingleton){
@@ -115,14 +113,9 @@ package com.sundaytoz.st2D.animation
             }
         }
         
-        public function set picked(value:STSprite):void
+        public function setAnimation(idx:STSprite, name:String):void
         {
-            _picked = value;
-        }
-        
-        public function get picked():STSprite
-        {
-            return _picked;
+            _playAnimationData[idx].setPlayAnimation(name);
         }
     }
 }
