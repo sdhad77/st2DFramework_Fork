@@ -69,7 +69,7 @@ package com.sundaytoz.st2D.animation
             //xml파일을 읽어옵니다.
             XmlLoader.instance.load(pathXML, onXmlLoaderComplete);
             
-            function onLoadImageTextureComplete(object:Object):void
+            function onLoadImageTextureComplete(object:Object, imageNo:uint):void
             {
                 //이미지를 읽어온 후 저장합니다.
                 _animationData[pathTexture]["bitmap"] = object as Bitmap;
