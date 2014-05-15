@@ -3,7 +3,7 @@ package com.sundaytoz.st2D.basic
     import com.adobe.utils.AGALMiniAssembler;
     import com.adobe.utils.PerspectiveMatrix3D;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.Scene;
+    import com.sundaytoz.st2D.display.SceneManager;
     import com.sundaytoz.st2D.utils.Resources;
     
     import flash.display.Stage;
@@ -129,7 +129,7 @@ package com.sundaytoz.st2D.basic
             context.setDepthTest(true, Context3DCompareMode.LESS);            
             context.setProgram( StageContext.instance.shaderProgram );
             
-            var layers:Array = Scene.instance.layerArray;
+            var layers:Array = SceneManager.instance.getCurrentScene().layerArray
             for( var i:uint=0; i<layers.length; ++i)
             {
                 (layers[i] as Layer).drawAllSprites();

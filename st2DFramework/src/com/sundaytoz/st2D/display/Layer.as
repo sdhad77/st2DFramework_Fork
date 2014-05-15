@@ -1,6 +1,6 @@
 package com.sundaytoz.st2D.display
 {
-    public class Layer extends STObject
+    public class Layer extends STObject  
     {
         private var spriteManager:SpriteController = new SpriteController();
         
