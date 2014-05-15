@@ -2,6 +2,8 @@ package com.sundaytoz.st2D.basic
 {
     import com.adobe.utils.AGALMiniAssembler;
     import com.adobe.utils.PerspectiveMatrix3D;
+    import com.sundaytoz.st2D.display.Layer;
+    import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.utils.Resources;
     
     import flash.display.Stage;
@@ -10,6 +12,7 @@ package com.sundaytoz.st2D.basic
     import flash.display.StageDisplayState;
     import flash.display.StageScaleMode;
     import flash.display3D.Context3D;
+    import flash.display3D.Context3DCompareMode;
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Program3D;
     import flash.events.Event;
@@ -113,6 +116,20 @@ package com.sundaytoz.st2D.basic
             
             _shaderProgram = _context3D.createProgram();
             _shaderProgram.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
+        }
+        
+        public function draw():void
+        {
+            context.clear(1, 1, 1);
+            
+            context.setDepthTest(true, Context3DCompareMode.LESS);            
+            context.setProgram( StageContext.instance.shaderProgram );
+            
+            var layers:Array = Scene.instance.layerArray;
+            for( var i:uint=0; i<layers.length; ++i)
+            {
+                (layers[i] as Layer).drawAllSprites();
+            }
         }
         
         /** property */

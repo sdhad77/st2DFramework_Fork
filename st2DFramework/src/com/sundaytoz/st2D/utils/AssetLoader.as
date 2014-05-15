@@ -152,6 +152,8 @@ package com.sundaytoz.st2D.utils
         
         public function removeImage(path:String):void
         {
+            var bmp:Bitmap = _imageMap[path];
+            
             var bmpData:BitmapData = (_imageMap[path] as Bitmap).bitmapData;
             if( bmpData != null )
             {

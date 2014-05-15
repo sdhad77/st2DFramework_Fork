@@ -16,7 +16,7 @@ package com.sundaytoz.st2D.display
     import flash.geom.Rectangle;
     import flash.geom.Vector3D;
     
-    public class STSprite
+    public class STSprite extends STObject
     {
         private var _position:Vector2D;
         private var _scale:Vector2D;
@@ -29,8 +29,6 @@ package com.sundaytoz.st2D.display
         private var _textureData:Bitmap;
 
         private var _modelMatrix:Matrix3D = new Matrix3D();
-        
-        private var _tag:int;
         
         private var _path:String;
         
@@ -63,67 +61,37 @@ package com.sundaytoz.st2D.display
             _position = new Vector2D(0.0, 0.0);
             _depth = 0;
         }
-
-        /**
-         * Bitmap 객체를 통해서 텍스쳐를 입힙니다. 
-         * @param bitmap 입힐 비트맵 객체
-         * @param useMipMap MipMap 을 생성 여부
-         */
-        public function setTextureWithBitmap(bitmap:Bitmap, useMipMap:Boolean=true):void
+        
+        public static function createSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null):void
         {
-            _textureData = bitmap;
-            
-            if( _imageNo == -1 )
+            var sprite:STSprite = new STSprite();
+            sprite.path = path;
+                        
+            AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
+            function onComplete(object:Object, imageNo:uint):void
             {
-                _imageNo = AssetLoader.instance.imageCount;
-                AssetLoader.instance.increaseImageNo();
+                sprite.imageNo = imageNo;
+                
+                sprite.initBuffer();
+                sprite.initTexture(sprite, (object as Bitmap));
+                
+                onCreated(sprite);
             }
+        }
+                
+        public function initTexture(sprite:STSprite, bitmap:Bitmap, useMipMap:Boolean=true):void
+        {
+            sprite.textureData = bitmap;
             
             var context:Context3D = StageContext.instance.context; 
-            if( context == null )
-            {
-                throw new Error("먼저 StageContext 를 초기화 한뒤 사용해주세요");
-                return ;
-            }
-            
-            _texture = context.createTexture(bitmap.width, bitmap.height, Context3DTextureFormat.BGRA, false);
+            sprite.texture = context.createTexture(bitmap.width, bitmap.height, Context3DTextureFormat.BGRA, false);
             if( useMipMap )
             {
-                uploadTextureWithMipmaps(_texture, bitmap.bitmapData);                
+                sprite.uploadTextureWithMipmaps(sprite.texture, bitmap.bitmapData);                
             }
             else
             {
-                _texture.uploadFromBitmapData(bitmap.bitmapData);
-            }
-            
-            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/12, 12); 
-            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
-            
-            _indexBuffer = context.createIndexBuffer(_meshIndexData.length);
-            _indexBuffer.uploadFromVector(_meshIndexData, 0, _meshIndexData.length);
-            
-            STSpriteManager.instance.addSprite( this, _imageNo );
-        }
-        
-        /**
-         * 이미지의 파일 경로명으로 텍스쳐를 입힙니다. 
-         */
-        public function setTextureWithString(path:String):void
-        {
-            _path = path;
-            
-            var context:Context3D = StageContext.instance.context; 
-            if( context == null )
-            {
-                throw new Error("먼저 StageContext 를 초기화 한뒤 사용해주세요");
-                return ;
-            }
-            
-            AssetLoader.instance.loadImageTexture(path, onComplete);
-            function onComplete(object:Object, imageNo:uint):void
-            {
-                _imageNo = imageNo;
-                setTextureWithBitmap(object as Bitmap);
+                sprite.texture.uploadFromBitmapData(bitmap.bitmapData);
             }
         }
         
@@ -164,13 +132,23 @@ package com.sundaytoz.st2D.display
             }
         }
         
+        private function initBuffer():void
+        {
+            var context:Context3D = StageContext.instance.context; 
+            
+            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/12, 12); 
+            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/12);
+            
+            _indexBuffer = context.createIndexBuffer(_meshIndexData.length);
+            _indexBuffer.uploadFromVector(_meshIndexData, 0, _meshIndexData.length);
+        }
+        
         
         /**
          * 사용한 자원을 해제합니다. 
          */
         public function clean():void
         {
-            STSpriteManager.instance.removeSprite(this);
             AssetLoader.instance.removeImage(_path);
             
             if( _texture != null )
@@ -240,6 +218,10 @@ package com.sundaytoz.st2D.display
         {
             return _texture;
         }
+        public function set texture(texture:Texture):void
+        {
+            _texture = texture;
+        }
         
         public function get modelMatrix():Matrix3D
         {
@@ -249,16 +231,7 @@ package com.sundaytoz.st2D.display
         {
             _modelMatrix = modelMatrix;
         }
-        
-        public function get tag():int
-        {
-            return _tag;
-        }
-        public function set tag(tag:int):void
-        {
-            _tag = tag;
-        }
-        
+       
         public function get depth():Number
         {
             return _depth;
@@ -280,6 +253,10 @@ package com.sundaytoz.st2D.display
         public function get textureData():Bitmap
         {
             return _textureData;
+        }
+        public function set textureData(bitmap:Bitmap):void
+        {
+            _textureData = bitmap;
         }
         
         public function get path():String
@@ -337,6 +314,16 @@ package com.sundaytoz.st2D.display
         {
             return _textureData.height;
         }
+        
+        public function get imageNo():int
+        {
+            return _imageNo;
+        }
+        public function set imageNo(imageNo:int):void
+        {
+            _imageNo = imageNo;
+        }
+            
         
     }
 }
