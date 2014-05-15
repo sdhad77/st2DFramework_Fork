@@ -12,6 +12,9 @@ package com.sundaytoz.st2D.animation.datatype
         private var _playAnimationName:String; //현재 재생중인 애니메이션의 이름
         private var _playAnimationFlowIdx:int; //현재 재생중인 애니메이션의 Frame 인덱스
         private var _delayCnt:int;             //frame delay를 위한 카운트 변수
+        private var _isMoving:Boolean;         //지금 움직이는지?
+        private var _moveX:int;                //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
+        private var _moveY:int;                //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
         
         public function AnimationPlayData(animationData:Dictionary, playAnimationName:String)
         {
@@ -19,6 +22,9 @@ package com.sundaytoz.st2D.animation.datatype
             _playAnimationName = playAnimationName;
             _playAnimationFlowIdx = 0;
             _delayCnt = 0;
+            _isMoving = false;
+            _moveX = 0;
+            _moveY = 0;
         }
         
         /**
@@ -37,6 +43,9 @@ package com.sundaytoz.st2D.animation.datatype
             _playAnimationName = name;
             _playAnimationFlowIdx = 0;
             _delayCnt = 0;
+            _isMoving = false;
+            _moveX = 0;
+            _moveY = 0;
         }
 
         //get set함수들
@@ -44,10 +53,16 @@ package com.sundaytoz.st2D.animation.datatype
         public function get playAnimationName():String {return _playAnimationName;}
         public function get playAnimationFlowIdx():int {return _playAnimationFlowIdx;}
         public function get delayCnt():int             {return _delayCnt;}
+        public function get isMoving():Boolean         {return _isMoving;}
+        public function get moveX():int                {return _moveX;}
+        public function get moveY():int                {return _moveY;}
         
         public function set animationData(value:Dictionary):void {_animationData        = value;}
         public function set playAnimationName(value:String):void {_playAnimationName    = value;}       
         public function set playAnimationFlowIdx(value:int):void {_playAnimationFlowIdx = value;}
         public function set delayCnt(value:int):void             {_delayCnt             = value;}
-    } 
+        public function set isMoving(value:Boolean):void         {_isMoving             = value;}
+        public function set moveX(value:int):void                {_moveX                = value;}
+        public function set moveY(value:int):void                {_moveY                = value;}
+    }
 }

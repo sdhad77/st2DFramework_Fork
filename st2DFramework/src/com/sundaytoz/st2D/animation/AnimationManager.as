@@ -101,6 +101,12 @@ package com.sundaytoz.st2D.animation
                 //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
                 if(_playAnimationData[sprite].animationData["available"] == 2)
                 {
+                    if(_playAnimationData[sprite].isMoving)
+                    {
+                        sprite.position.x += _playAnimationData[sprite].moveX;
+                        sprite.position.y += _playAnimationData[sprite].moveY;
+                    }
+                    
                     //다음 프레임으로 이동
                     playFrame = nextFrame(sprite);
                     
@@ -115,7 +121,18 @@ package com.sundaytoz.st2D.animation
         
         public function setAnimation(idx:STSprite, name:String):void
         {
-            _playAnimationData[idx].setPlayAnimation(name);
+            if(idx != null) _playAnimationData[idx].setPlayAnimation(name);
+        }
+        
+        
+        public function moveTo(idx:STSprite, x:int, y:int, time:int):void
+        {
+            if(idx != null)
+            {
+                _playAnimationData[idx].isMoving = true;
+                _playAnimationData[idx].moveX = Math.floor((x - idx.position.x)/time);
+                _playAnimationData[idx].moveY = Math.floor((y - idx.position.y)/time);
+            }
         }
     }
 }
