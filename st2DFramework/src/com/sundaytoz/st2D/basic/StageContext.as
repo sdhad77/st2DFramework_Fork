@@ -126,7 +126,7 @@ package com.sundaytoz.st2D.basic
         {
             context.clear(1, 1, 1);
             
-            context.setDepthTest(true, Context3DCompareMode.LESS);            
+            context.setDepthTest(false, Context3DCompareMode.LESS);            
             context.setProgram( StageContext.instance.shaderProgram );
             
             var layers:Array = SceneManager.instance.getCurrentScene().layerArray
@@ -134,6 +134,8 @@ package com.sundaytoz.st2D.basic
             {
                 (layers[i] as Layer).drawAllSprites();
             }
+            
+            context.present();
         }
         
         /** property */
