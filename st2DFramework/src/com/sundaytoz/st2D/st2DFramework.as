@@ -4,6 +4,7 @@ package com.sundaytoz.st2D
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
     import com.sundaytoz.st2D.tests.TestLayer;
+    import com.sundaytoz.st2D.tests.SceneTransition.FirstSceneLayer;
     
     import flash.display.Sprite;
     import flash.events.Event;
@@ -17,13 +18,17 @@ package com.sundaytoz.st2D
             StageContext.instance.init(stage, onInited);
         }
         
+        /**
+         * Stage3D 를 초기화 하고 불려지는 함수입니다.  
+         * 이곳에서 가장 처음으로 불려질 Scene 과 Layer 를 생성하세요.
+         */
         private function onInited():void
         {
-            // 이곳에 맨 처음으로 사용할 레이어를 부릅니다.
-            var testLayer:TestLayer = new TestLayer();
-
             var scene:Scene = new Scene();
+            
+            var testLayer:TestLayer = new TestLayer();
             scene.addLayer(testLayer);
+            
             SceneManager.instance.pushScene(scene);
             
             addEventListener(Event.ENTER_FRAME, enterFrame);

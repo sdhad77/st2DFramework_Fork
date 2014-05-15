@@ -42,6 +42,9 @@ package com.sundaytoz.st2D.display
          */
         public function pushScene(scene:Scene):void
         {
+            if( _sceneVector.length != 0 && _sceneVector[_sceneVector.length-1] == scene )
+                return;
+            
             _sceneVector.push(scene);
         }
         
@@ -64,6 +67,14 @@ package com.sundaytoz.st2D.display
         public function getCurrentScene():Scene
         {
             return _sceneVector[_sceneVector.length-1];
+        }
+        
+        /**
+         * 현재 저장되어 있는 Scene 의 개수를 반환합니다. 
+         */
+        public function getSceneCount():uint
+        {
+            return _sceneVector.length;
         }
     }
 }

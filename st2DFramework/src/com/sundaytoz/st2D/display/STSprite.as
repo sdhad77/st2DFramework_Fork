@@ -11,16 +11,17 @@ package com.sundaytoz.st2D.display
     import flash.display3D.IndexBuffer3D;
     import flash.display3D.VertexBuffer3D;
     import flash.display3D.textures.Texture;
+    import flash.events.IEventDispatcher;
     import flash.geom.Matrix;
     import flash.geom.Matrix3D;
     import flash.geom.Rectangle;
     import flash.geom.Vector3D;
     
-    public class STSprite extends STObject
+    public class STSprite extends STObject 
     {
         private var _position:Vector2D;
-        private var _scale:Vector2D;
-        private var _rotate:Vector2D;
+        private var _scale:Vector2D = new Vector2D();
+        private var _rotation:Vector3D = new Vector3D();
         
         private var _depth:Number;
         
@@ -31,7 +32,6 @@ package com.sundaytoz.st2D.display
         
         private var _path:String;
         
-        private var _rotation:Vector3D = new Vector3D();
         private var _translation:Vector3D = new Vector3D();
         
         private static var _meshIndexData:Vector.<uint> = Vector.<uint>  ([ 0, 1, 2, 0, 2, 3, ]);
@@ -54,6 +54,7 @@ package com.sundaytoz.st2D.display
         *  Sprite 를 생성한 순서를 가짐
          */
         private var _zOrder:int = -1;  // 이미지가 생성된 순서 
+        public var dispatcher:IEventDispatcher;
                
         public function STSprite()
         {
@@ -293,6 +294,24 @@ package com.sundaytoz.st2D.display
             _position = position;
         }
         
+        public function get scale():Vector2D
+        {
+            return _scale;
+        }
+        public function set scale(scale:Vector2D):void
+        {
+            _scale = scale;
+        }
+        
+        public function get rotation():Vector3D
+        {
+            return _rotation;
+        }
+        public function set rotation(rotation:Vector3D):void
+        {
+            _rotation = rotation;
+        }
+        
         /**
          * 텍스쳐의 가로 길이를 리턴합니다. 
          */
@@ -316,7 +335,6 @@ package com.sundaytoz.st2D.display
         {
             _zOrder = zOrder;
         }
-            
         
     }
 }
