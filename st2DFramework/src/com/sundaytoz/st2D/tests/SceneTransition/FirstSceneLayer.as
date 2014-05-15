@@ -8,9 +8,9 @@ package com.sundaytoz.st2D.tests.SceneTransition
     
     import flash.events.MouseEvent;
 
-    public class FirstScene extends Layer
+    public class FirstSceneLayer extends Layer
     {
-        public function FirstScene()
+        public function FirstSceneLayer()
         {
             STSprite.createSpriteWithPath("res/test.png", onCreated, null, StageContext.instance.screenWidth * 0.5, StageContext.instance.screenHeight * 0.5);
             
@@ -31,7 +31,7 @@ package com.sundaytoz.st2D.tests.SceneTransition
         private function onTouch(event:MouseEvent):void
         {
             // 이곳에 맨 처음으로 사용할 레이어를 부릅니다.
-            var secondScene:SecondScene = new SecondScene();
+            var secondScene:SecondSceneLayer = new SecondSceneLayer();
             
             var scene:Scene = new Scene();
             scene.addLayer(secondScene);

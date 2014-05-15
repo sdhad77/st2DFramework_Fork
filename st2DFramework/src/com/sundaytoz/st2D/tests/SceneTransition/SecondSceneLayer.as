@@ -7,9 +7,9 @@ package com.sundaytoz.st2D.tests.SceneTransition
     
     import flash.events.MouseEvent;
 
-    public class SecondScene extends Layer
+    public class SecondSceneLayer extends Layer
     {
-        public function SecondScene()
+        public function SecondSceneLayer()
         {
             STSprite.createSpriteWithPath("res/star.png", onCreated, null, StageContext.instance.screenWidth * 0.5, StageContext.instance.screenHeight * 0.5);
                 
