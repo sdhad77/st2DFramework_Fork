@@ -20,8 +20,10 @@ package com.sundaytoz.st2D.utils
         private var _fpsLast:uint = 0;
         
         private var _isFPSVisible:Boolean = true;       // FPS 를 출력하지 않으려면 false 로 두면 됩니다.
-        private var _fpsTextField:TextField;
+        private var _statusTextField:TextField;
         
+        private var _fps:Number = 0.0;
+        private var _memory:Number = 0.0;
         private var _drawCallCount:uint = 0;
         
         public function GameStatus()
@@ -60,43 +62,35 @@ package com.sundaytoz.st2D.utils
             
             if( dt >= 1000 )
             {
-                var mem:Number = Number((System.totalMemory * 0.000000954).toFixed(1));
-                var fps:Number = _fpsTicks / dt * 1000;
+                _memory = Number((System.totalMemory * 0.000000954).toFixed(1));
+                _fps = _fpsTicks / dt * 1000;
                 
-                show(fps, mem);
+                //show();
                 
                 _fpsTicks = 0;
                 _fpsLast = now;
             }
             
+            displayStatus();
             _drawCallCount = 0;
         }
         
+        /**
+         * Draw call 횟수를 증가시킵니다. 
+         */
         public function increaseDrawCallCount():void
         {
             _drawCallCount++;
         }
         
-        public function resetDrawCallCount():void
-        {
-            _drawCallCount = 0;
-        }
-        
-        public function get drawCallCount():uint
-        {
-            return _drawCallCount;
-        }
-        
         /**
-         * FPS 를 출력합니다. 
-         * @param fps 출력할 FPS 
-         * @param mem   출력할 메모리 사용량
+         * FPS, Memory 사용량, Drawcall 횟수를 출력합니다.
          */
-        private function show(fps:Number, mem:Number):void
+        private function displayStatus():void
         {
-            _fpsTextField.text = fps.toFixed(1) + " fps\n" + "Memory used: " + mem + " MB\n" + "Draw Call Count: " + _drawCallCount;
+            _statusTextField.text = _fps.toFixed(1) + " fps\n" + "Memory used: " + _memory + " MB\n" + "Draw Call Count: " + _drawCallCount; 
             
-            trace(_fpsTextField.text);
+            trace(_statusTextField.text);
         }
 
         
@@ -109,14 +103,22 @@ package com.sundaytoz.st2D.utils
             myFormat.color = 0xFF0000;
             myFormat.size = 16;
             
-            _fpsTextField = new TextField();
-            _fpsTextField.x = 10;
-            _fpsTextField.y = 10;
-            _fpsTextField.selectable = false;
-            _fpsTextField.autoSize = TextFieldAutoSize.LEFT;
-            _fpsTextField.defaultTextFormat = myFormat;
+            _statusTextField = new TextField();
+            _statusTextField.x = 10;
+            _statusTextField.y = 10;
+            _statusTextField.selectable = false;
+            _statusTextField.autoSize = TextFieldAutoSize.LEFT;
+            _statusTextField.defaultTextFormat = myFormat;
             
-            addChild(_fpsTextField);
+            addChild(_statusTextField);
+        }
+        
+        /**
+         * 현재 FPS 를 반환합니다. 
+         */
+        public function fps():Number
+        {
+            return _fps;
         }
 
     }
