@@ -15,6 +15,7 @@ package com.sundaytoz.st2D.animation.datatype
         private var _isMoving:Boolean;         //지금 움직이는지?
         private var _moveX:int;                //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
         private var _moveY:int;                //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
+        private var _isPlaying:Boolean         //지금 재생중인지?
         
         public function AnimationPlayData(animationData:Dictionary, playAnimationName:String)
         {
@@ -25,6 +26,7 @@ package com.sundaytoz.st2D.animation.datatype
             _isMoving = false;
             _moveX = 0;
             _moveY = 0;
+            _isPlaying = false;
         }
         
         /**
@@ -56,6 +58,7 @@ package com.sundaytoz.st2D.animation.datatype
         public function get isMoving():Boolean         {return _isMoving;}
         public function get moveX():int                {return _moveX;}
         public function get moveY():int                {return _moveY;}
+        public function get isPlaying():Boolean        {return _isPlaying;}
         
         public function set animationData(value:Dictionary):void {_animationData        = value;}
         public function set playAnimationName(value:String):void {_playAnimationName    = value;}       
@@ -64,5 +67,6 @@ package com.sundaytoz.st2D.animation.datatype
         public function set isMoving(value:Boolean):void         {_isMoving             = value;}
         public function set moveX(value:int):void                {_moveX                = value;}
         public function set moveY(value:int):void                {_moveY                = value;}
+        public function set isPlaying(value:Boolean):void        {_isPlaying            = value;}
     }
 }
