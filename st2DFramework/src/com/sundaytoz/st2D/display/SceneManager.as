@@ -66,6 +66,11 @@ package com.sundaytoz.st2D.display
          */
         public function getCurrentScene():Scene
         {
+            if( _sceneVector.length == 0 )
+            {
+                throw new Error("현재 생성된 Scene이 없습니다.");
+            }
+            
             return _sceneVector[_sceneVector.length-1];
         }
         
