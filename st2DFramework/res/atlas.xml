@@ -27,4 +27,13 @@
 <atlasItem name="left1.png" x="32" y="226" width="32" height="32" frameX="0" frameY="0" frameWidth="32" frameHeight="32" />
 <atlasItem name="left2.png" x="64" y="226" width="32" height="32" frameX="0" frameY="0" frameWidth="32" frameHeight="32" />
 
+<atlasItem name="fire0.png" x="322" y="0" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="fire1.png" x="322" y="64" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="fire2.png" x="322" y="128" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="fire3.png" x="322" y="192" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="fire4.png" x="322" y="256" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="fire5.png" x="322" y="320" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="fire6.png" x="322" y="384" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="fire7.png" x="322" y="448" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+
 </atlas>
