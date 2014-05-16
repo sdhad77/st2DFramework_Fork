@@ -158,9 +158,6 @@ package com.sundaytoz.st2D.animation
                     sprite.frame.width = 32;
                     sprite.frame.height = 32;
                     sprite.setUVCoord(playFrame.x/sprite.textureWidth, playFrame.y/sprite.textureHeight, playFrame.width/sprite.textureWidth, playFrame.height/sprite.textureHeight);
-                    
-                    //bitmap 전달하는 방식
-    //                sprite.initTexture(playFrame.bitmap);
                 }
             }
         }
