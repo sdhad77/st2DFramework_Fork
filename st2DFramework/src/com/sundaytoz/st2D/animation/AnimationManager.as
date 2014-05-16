@@ -4,7 +4,6 @@ package com.sundaytoz.st2D.animation
     import com.sundaytoz.st2D.animation.datatype.AnimationFrame;
     import com.sundaytoz.st2D.animation.datatype.AnimationPlayData;
     import com.sundaytoz.st2D.display.STSprite;
-    import com.sundaytoz.st2D.utils.Vector2D;
     
     import flash.utils.Dictionary;
 
