@@ -178,6 +178,19 @@ package com.sundaytoz.st2D.display
             axis = null;
         }
         
+        /**
+         * 스프라이트를 이동시킵니다. <br/>
+         * 사용한 파라미터 translation 는 값을 복사한 뒤 null 로 셋팅됩니다.
+         * @param translation 이동할 지점
+         */
+        public function setTranslation(translation:Vector2D):void
+        {
+            _position.x = translation.x;
+            _position.y = translation.y;
+            
+            translation = null;
+        }
+        
         
         /**
          * 사용한 자원을 해제합니다. 
