@@ -13,7 +13,6 @@ package com.sundaytoz.st2D
     public class st2DFramework extends Sprite
     {
         private var _timer:GameTimer = new GameTimer();
-        private var _fpsCounter:GameStatus;
         
         public function st2DFramework()
         {
@@ -37,8 +36,8 @@ package com.sundaytoz.st2D
             
             addEventListener(Event.ENTER_FRAME, enterFrame);
             
-            _fpsCounter = new GameStatus();
-            addChild(_fpsCounter);
+            addChild(GameStatus.instance.initFPS());         // FPS 출력을 원하지 않을 경우 주석 처리하십시오
+                
         }
         
         private function enterFrame(e:Event):void 
@@ -49,7 +48,8 @@ package com.sundaytoz.st2D
             
             draw();
             
-            _fpsCounter.updateFPS();    // FPS 출력을 원하지 않을 경우 주석 처리하십시오
+            GameStatus.instance.update();                // FPS 출력을 원하지 않을 경우 주석 처리하십시오
+            
         }
         
         private function update(dt:Number):void
