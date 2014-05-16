@@ -1,8 +1,11 @@
 package com.sundaytoz.st2D.display
 {
+    import com.sundaytoz.st2D.display.batch.BatchSprite;
+
     public class Layer extends STObject  
     {
         private var spriteManager:SpriteController = new SpriteController();
+        private var _batchSprite:BatchSprite;
         
         public function Layer()
         {
@@ -20,6 +23,11 @@ package com.sundaytoz.st2D.display
         public function addSprite(sprite:STSprite):void
         {
             spriteManager.addSprite(sprite);
+        }
+        
+        public function addBatchSprite(batchSprite:BatchSprite):void
+        {
+            _batchSprite = batchSprite;
         }
 
         
@@ -40,6 +48,9 @@ package com.sundaytoz.st2D.display
         public function drawAllSprites():void
         {
             spriteManager.drawAllSprites();
+            
+            if( _batchSprite != null )
+                _batchSprite.draw(null);
         }
         
         /**

@@ -85,6 +85,8 @@ package com.sundaytoz.st2D.display
                 sprite.initBuffer();
                 sprite.initTexture((object as Bitmap));
                 
+                sprite.update();
+                
                 onCreated(sprite);
             }
         }
@@ -416,5 +418,9 @@ package com.sundaytoz.st2D.display
             _zOrder = zOrder;
         }
         
+        public function get vertexData():Vector.<Number>
+        {
+            return _meshVertexData;
+        }
     }
 }
