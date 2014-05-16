@@ -1,45 +1,43 @@
 package com.sundaytoz.st2D.display.batch
 {
     import com.sundaytoz.st2D.basic.StageContext;
+    import com.sundaytoz.st2D.display.BaseSprite;
     import com.sundaytoz.st2D.display.STSprite;
     import com.sundaytoz.st2D.utils.AssetLoader;
     import com.sundaytoz.st2D.utils.GameStatus;
     
     import flash.display.Bitmap;
-    import flash.display.BitmapData;
     import flash.display3D.Context3D;
     import flash.display3D.Context3DBlendFactor;
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DTextureFormat;
     import flash.display3D.Context3DVertexBufferFormat;
-    import flash.display3D.IndexBuffer3D;
-    import flash.display3D.VertexBuffer3D;
-    import flash.display3D.textures.Texture;
-    import flash.geom.Matrix;
     import flash.geom.Matrix3D;
 
-    public class BatchSprite
+    public class BatchSprite extends BaseSprite
     {
-        private var _texture:Texture;
-        private var _textureData:Bitmap;
+        private var _spriteCount:uint = 0;              //BatchSprite에 있는 Sprite 개수
         
-        private var _indexData:Vector.<uint> = Vector.<uint>  ([ ]);
-        private var _vertexData:Vector.<Number> = Vector.<Number> ([ ]);
+        private var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
+        private var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
         
-        private var _vertexBuffer:VertexBuffer3D;
-        private var _indexBuffer:IndexBuffer3D;
-        
-        private var _spriteCount:uint = 0;
-        
-        private var ELEMENT_PER_VERTEX:uint = 9;
-        private var VERTEX_COUNT:uint = 4;
-        
-        private var _syncRequired:Boolean = true;
+        private var _updateRequired:Boolean = true;
         
         public function BatchSprite()
         {
         }
         
+        public function dispose():void
+        {
+            destroyBuffers();
+        }
+        
+        /**
+         * BatchSprite 를 생성합니다. 
+         * @param path BatchSprite 에 사용할 이미지 경로
+         * @param onCreated 생성된 후 호출될 메소드
+         * @param onProgress 생성중 진행 상황을 알 수 있는 메소드
+         */
         public function createBatchSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null ):void
         {
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
@@ -58,44 +56,17 @@ package com.sundaytoz.st2D.display.batch
          */
         public function createBatchSpriteWithBitmap(bitmap:Bitmap):void
         {
-            _textureData = bitmap;
+            this.textureData = bitmap;
             
             var context:Context3D = StageContext.instance.context;
-            _texture = context.createTexture(bitmap.width, bitmap.height, Context3DTextureFormat.BGRA, false);
-            
-            
-            uploadTextureWithMipmaps(_texture, bitmap.bitmapData);      
-        }
-        
-        private function uploadTextureWithMipmaps(dest:Texture, src:BitmapData):void
-        {
-            var ws:int = src.width;
-            var hs:int = src.height;
-            var level:int = 0;
-            var tmp:BitmapData;
-            var transform:Matrix = new Matrix();
-            
-            var fillColor:uint = 0x00000000;
-            
-            tmp = new BitmapData(src.width, src.height, true, fillColor);
-            
-            while ( ws >= 1 && hs >= 1 )
-            { 
-                tmp.draw(src, transform, null, null, null, true); 
-                dest.uploadFromBitmapData(tmp, level);
-                transform.scale(0.5, 0.5);
-                level++;
-                ws >>= 1;
-                hs >>= 1;
-                if (hs && ws) 
-                {
-                    tmp.dispose();
-                    tmp = new BitmapData(ws, hs, true, fillColor);
-                }
-            }
-            tmp.dispose();
+            this.texture = context.createTexture(bitmap.width, bitmap.height, Context3DTextureFormat.BGRA, false);
+            uploadTextureWithMipmaps(this.texture, bitmap.bitmapData);      
         }
             
+        /**
+         * BatchSprite 에 새로운 Sprite 를 추가합니다. 
+         * @param sprite 추가할 Sprite
+         */
         public function addSprite(sprite:STSprite):void
         {
             // BatchSprite 의 텍스쳐에 sprite 의 텍스쳐가 있는지 확인
@@ -104,126 +75,135 @@ package com.sundaytoz.st2D.display.batch
 //                
 //            }
             
-            var x:Number, y:Number, z:Number;
-            var rawMatrixData:Vector.<Number> = sprite.modelMatrix.rawData;
-
-            var targetRawData:Vector.<Number>;
+            var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
+            var spriteVertexData:Vector.<Number> = sprite.vertexData;
             
-            var vertexData:Vector.<Number> = sprite.vertexData;
-            
-            var targetIndex:int = _spriteCount * VERTEX_COUNT * ELEMENT_PER_VERTEX;
+            var targetIndex:int = _spriteCount * VERTEX_COUNT * DATAS_PER_VERTEX;
             var sourceIndex:int = 0;
-            var sourceEnd:int = VERTEX_COUNT * ELEMENT_PER_VERTEX;
+            var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
             
+            // VertexData 를 생성합니다.
             while(sourceIndex < sourceEnd)
             {
-                x = vertexData[sourceIndex++];
-                y = vertexData[sourceIndex++];
-                z = vertexData[sourceIndex++];
+                var x:Number = spriteVertexData[sourceIndex++];
+                var y:Number = spriteVertexData[sourceIndex++];
+                var z:Number = spriteVertexData[sourceIndex++];
                 
-                _vertexData[targetIndex++] =   rawMatrixData[0] * x + rawMatrixData[1] * y + rawMatrixData[2] * z + sprite.modelMatrix.position.x ;         // x
-                _vertexData[targetIndex++] =   rawMatrixData[4] * x + rawMatrixData[5] * y + rawMatrixData[6] * z + sprite.modelMatrix.position.y;         // y
-                _vertexData[targetIndex++] =   rawMatrixData[8] * x + rawMatrixData[9] * y + rawMatrixData[10] * z + sprite.modelMatrix.position.z;       // z
+                vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
+                vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
+                vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
                 
-                _vertexData[targetIndex++] = vertexData[sourceIndex++];   // u 
-                _vertexData[targetIndex++] = vertexData[sourceIndex++];   // v
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // u 
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // v
                 
-                _vertexData[targetIndex++] = vertexData[sourceIndex++];   // r
-                _vertexData[targetIndex++] = vertexData[sourceIndex++];   // g
-                _vertexData[targetIndex++] = vertexData[sourceIndex++];   // b
-                _vertexData[targetIndex++] = vertexData[sourceIndex++];   // a
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // r
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // g
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // b
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // a
             }
             
+            // IndexData 를 생성합니다.
             for(var i:uint=_spriteCount; i<_spriteCount+1; ++i)
             {
-                _indexData.push(0 + i * VERTEX_COUNT);  
-                _indexData.push(1 + i * VERTEX_COUNT);
-                _indexData.push(2 + i * VERTEX_COUNT);
-                _indexData.push(0 + i * VERTEX_COUNT);
-                _indexData.push(2 + i * VERTEX_COUNT);
-                _indexData.push(3 + i * VERTEX_COUNT);
+                indexData.push(0 + i * VERTEX_COUNT);  
+                indexData.push(1 + i * VERTEX_COUNT);
+                indexData.push(2 + i * VERTEX_COUNT);
+                indexData.push(0 + i * VERTEX_COUNT);
+                indexData.push(2 + i * VERTEX_COUNT);
+                indexData.push(3 + i * VERTEX_COUNT);
             }
             
             _spriteCount++;
-            _syncRequired = true;
+            _updateRequired = true;
         }
 
-        public function draw(mvpMatrix:Matrix3D):void
+        /**
+         * BatchSprite 를 출력합니다. 
+         */
+        public function draw():void
         {
             if( _spriteCount == 0 )
                 return;
             
-            if( _syncRequired )
-                syncBuffers();
+            if( _updateRequired )
+                updateBuffers();
             
             var context:Context3D = StageContext.instance.context;
             
-            context.setTextureAt(0, _texture);
+            context.setTextureAt(0, this.texture);
             context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
             
             var mat:Matrix3D = new Matrix3D();
             mat.identity();
-            //mat.append(sprite.modelMatrix );
             mat.append(StageContext.instance.viewMatrix);
             mat.append(StageContext.instance.projectionMatrix);
             
             context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, mat, true);
             
-            context.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);       // position
-            context.setVertexBufferAt(1, _vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
-            context.setVertexBufferAt(2, _vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
+            context.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);       // position
+            context.setVertexBufferAt(1, vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
+            context.setVertexBufferAt(2, vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
                         
-            context.drawTriangles(_indexBuffer, 0, _spriteCount * 2);
+            context.drawTriangles(indexBuffer, 0, _spriteCount * 2);
             
             GameStatus.instance.increaseDrawCallCount();
-            
         }
         
-        private function syncBuffers():void
+        /**
+         * 새로운 스프라이트를 추가하였을 때 버퍼를 갱신합니다. 
+         */
+        private function updateBuffers():void
         {
-            if (_vertexBuffer == null)
+            if (vertexBuffer == null)
             {
                 createBuffers();
             }
             else
             {
-                _vertexBuffer.uploadFromVector(_vertexData, 0, _vertexData.length);
-                _indexBuffer.uploadFromVector(_indexData, 0, _indexData.length);
-                _syncRequired = false;
+                vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length);
+                indexBuffer.uploadFromVector(indexData, 0, indexData.length);
+                _updateRequired = false;
             }
         }
         
+        /**
+         * 버퍼를 새롭게 생성합니다. 
+         */
         private function createBuffers():void
         {
             destroyBuffers();
             
-            var numVertices:int = _vertexData.length;
-            var numIndices:int = _indexData.length;
+            var numVertices:int = vertexData.length;
+            var numIndices:int = indexData.length;
             var context:Context3D = StageContext.instance.context;
             
-            if (numVertices == 0) return;
+            if (numVertices == 0) 
+                return;
             
-            _vertexBuffer = context.createVertexBuffer(numVertices/ELEMENT_PER_VERTEX, ELEMENT_PER_VERTEX);
-            _vertexBuffer.uploadFromVector(_vertexData, 0, numVertices/ELEMENT_PER_VERTEX);
+            vertexBuffer = context.createVertexBuffer(numVertices/DATAS_PER_VERTEX, DATAS_PER_VERTEX);
+            vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
             
-            _indexBuffer = context.createIndexBuffer(numIndices);
-            _indexBuffer.uploadFromVector(_indexData, 0, numIndices);
+            indexBuffer = context.createIndexBuffer(numIndices);
+            indexBuffer.uploadFromVector(indexData, 0, numIndices);
             
-            _syncRequired = false;
+            _updateRequired = false;
         }
         
+        /**
+         * 버퍼를 삭제합니다. 
+         */
         private function destroyBuffers():void
         {
-            if (_vertexBuffer)
+            if (vertexBuffer)
             {
-                _vertexBuffer.dispose();
-                _vertexBuffer = null;
+                vertexBuffer.dispose();
+                vertexBuffer = null;
             }
             
-            if (_indexBuffer)
+            if (indexBuffer)
             {
-                _indexBuffer.dispose();
-                _indexBuffer = null;
+                indexBuffer.dispose();
+                indexBuffer = null;
             }
         }
 

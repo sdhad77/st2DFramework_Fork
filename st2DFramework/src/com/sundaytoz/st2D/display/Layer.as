@@ -50,7 +50,7 @@ package com.sundaytoz.st2D.display
             spriteManager.drawAllSprites();
             
             if( _batchSprite != null )
-                _batchSprite.draw(null);
+                _batchSprite.draw();
         }
         
         /**
