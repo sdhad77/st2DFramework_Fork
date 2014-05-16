@@ -52,6 +52,22 @@ package com.sundaytoz.st2D.animation
         }
         
         /**
+         * AnimationManager에서 원하는 STSprite를 제거하는 기능입니다.</br>
+         * 정확히 말하면 key 값을 제거 하여 더이상 애니메이션 되지 않게 할 뿐이고, 원본 데이터는 그대로 남아있습니다.
+         * @param sprite 애니메이션을 제거할 STSprite
+         */
+        public function removeSprite(sprite:STSprite):void
+        {
+            if(sprite in _playSprite)
+            {
+                _playAnimationData[sprite].clear();
+                delete _playAnimationData[sprite];
+                delete _playSprite[sprite];
+            }
+            else trace("존재하지 않는 STSprite에 대한 삭제 시도입니다.");
+        }
+        
+        /**
          * 애니메이션을 다음 프레임으로 이동 시킵니다. 
          */
         private function nextFrame(idx:STSprite):AnimationFrame

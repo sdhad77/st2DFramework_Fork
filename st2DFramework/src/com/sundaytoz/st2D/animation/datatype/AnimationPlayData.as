@@ -55,6 +55,11 @@ package com.sundaytoz.st2D.animation.datatype
             _playAnimationFlowIdx = 0;
             _delayCnt = 0;
         }
+        
+        public function clear():void
+        {
+           _animationData = null;
+        }
 
         //get set함수들
         public function get animationData():Dictionary {return _animationData;}
