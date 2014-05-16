@@ -1,5 +1,7 @@
 package com.sundaytoz.st2D.animation.datatype
 {
+    import com.sundaytoz.st2D.animation.AnimationData;
+    
     import flash.utils.Dictionary;
 
     /**
@@ -39,14 +41,30 @@ package com.sundaytoz.st2D.animation.datatype
         }
         
         /**
-         * AnimationManager 작성시 편의를 위해 만든 함수입니다.</br>
-         * 매개변수로 받은 애니메이션을 반환합니다. 
-         * @param name 얻고 싶은 애니메이션의 이름
+         * 이 PlayData를 소유한 STSprite의 플레이 중인 애니메이션을 반환하는 함수입니다.
          * @return 얻어낸 애니메이션
          */
-        public function getPlayAnimation(name:String):Animation
+        public function getPlayAnimation():Animation
         {
-            return _animationData["animation"][name];
+            return _animationData["animation"][_playAnimationName];
+        }
+        
+        /**
+         * 이 PlayData를 소유한 STSprite의 플레이 중인 애니메이션 프레임을 반환하는 함수입니다.
+         * @return 현재 선택되어있는 애니메이션 프레임
+         */
+        public function getPlayAnimationFrame():AnimationFrame
+        {
+            return _animationData["frame"][getPlayAnimation().animationFlow[_playAnimationFlowIdx]];
+        }
+        
+        /**
+         * 이 프레임이 반복되어야 하는 횟수를 반환합니다.
+         * @return 반복해야 될 횟수
+         */
+        public function getDelayNum():int
+        {
+            return getPlayAnimation().delayNum[_playAnimationFlowIdx];
         }
         
         public function setPlayAnimation(name:String):void
