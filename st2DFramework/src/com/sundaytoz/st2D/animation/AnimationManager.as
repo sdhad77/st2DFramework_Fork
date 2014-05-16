@@ -4,6 +4,7 @@ package com.sundaytoz.st2D.animation
     import com.sundaytoz.st2D.animation.datatype.AnimationFrame;
     import com.sundaytoz.st2D.animation.datatype.AnimationPlayData;
     import com.sundaytoz.st2D.display.STSprite;
+    import com.sundaytoz.st2D.utils.GameStatus;
     
     import flash.utils.Dictionary;
 
@@ -61,8 +62,6 @@ package com.sundaytoz.st2D.animation
             if(_playAnimationData[idx].delayCnt < playAnimation.delayNum[_playAnimationData[idx].playAnimationFlowIdx])
             {
                 _playAnimationData[idx].delayCnt++;
-                
-                return AnimationData.instance.animationData[_playSprite[idx].path]["frame"][playAnimation.animationFlow[_playAnimationData[idx].playAnimationFlowIdx]];
             }
             //유지 시간(pauseFrameCnt)이 다되서 다음 프레임으로 넘어갈 때
             else
@@ -73,8 +72,6 @@ package com.sundaytoz.st2D.animation
                 {
                     _playAnimationData[idx].delayCnt = 0;
                     _playAnimationData[idx].playAnimationFlowIdx++;
-                    
-                    return AnimationData.instance.animationData[_playSprite[idx].path]["frame"][playAnimation.animationFlow[_playAnimationData[idx].playAnimationFlowIdx]];
                 }
                 //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
                 else
@@ -83,11 +80,11 @@ package com.sundaytoz.st2D.animation
                     _playAnimationData[idx].delayCnt = 0;
                     _playAnimationData[idx].playAnimationFlowIdx = 0;
                     
-                    return nextFrame(idx);
+                    nextFrame(idx);
                 }
             }
-            //여기까진 절대 오지 말아야 하며 오면 무조건 에러입니다.
-            return null;
+            //현재 애니메이션의 프레임을 반환합니다.
+            return AnimationData.instance.animationData[idx.path]["frame"][playAnimation.animationFlow[_playAnimationData[idx].playAnimationFlowIdx]];
         }
         
         /**
@@ -159,6 +156,8 @@ package com.sundaytoz.st2D.animation
                     sprite.setUVCoord(playFrame.x/sprite.textureWidth, playFrame.y/sprite.textureHeight, playFrame.width/sprite.textureWidth, playFrame.height/sprite.textureHeight);
                 }
             }
+            
+            playFrame = null;
         }
         
         /**
@@ -178,7 +177,7 @@ package com.sundaytoz.st2D.animation
          * @param idx 이동시킬 STSprite
          * @param x 이동할 좌표 x
          * @param y 이동할 좌표 y
-         * @param time 몇 번의 프레임에 걸쳐서 이동시킬것인지
+         * @param time 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
          */
         public function moveTo(idx:STSprite, x:int, y:int, second:int):void
         {
@@ -187,8 +186,23 @@ package com.sundaytoz.st2D.animation
                 _playAnimationData[idx].isMoving = true;
                 _playAnimationData[idx].destX = x;
                 _playAnimationData[idx].destY = y;
-                _playAnimationData[idx].increaseX = (x - idx.position.x)/(second*60);
-                _playAnimationData[idx].increaseY = (y - idx.position.y)/(second*60);
+                _playAnimationData[idx].increaseX = (x - idx.position.x)/(second*GameStatus.instance.fps);
+                _playAnimationData[idx].increaseY = (y - idx.position.y)/(second*GameStatus.instance.fps);
+            }
+        }
+        
+        /**
+         * STSprite의 현재 위치에서 x,y만큼 이동 시키는 함수입니다.
+         * @param idx 이동시킬 STSprite
+         * @param x 현재 좌표에 더할 좌표
+         * @param y 현재 좌표에 더할 좌표
+         * @param second 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
+         */
+        public function moveBy(idx:STSprite, x:int, y:int, second:int):void
+        {
+            if(idx != null)
+            {
+                moveTo(idx, idx.position.x + x, idx.position.y + y, second);
             }
         }
         
