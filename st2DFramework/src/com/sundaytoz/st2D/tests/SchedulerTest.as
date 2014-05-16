@@ -35,7 +35,7 @@ package com.sundaytoz.st2D.tests
             this.addSprite(sprite1);
         }
         
-        override public function update():void
+        override public function update(dt:Number):void
         {
             AnimationManager.instance.update();
         }
