@@ -89,8 +89,6 @@ package com.sundaytoz.st2D.utils
         private function displayStatus():void
         {
             _statusTextField.text = _fps.toFixed(1) + " fps\n" + "Memory used: " + _memory + " MB\n" + "Draw Call Count: " + _drawCallCount; 
-            
-            trace(_statusTextField.text);
         }
 
         

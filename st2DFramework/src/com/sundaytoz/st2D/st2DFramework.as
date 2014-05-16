@@ -37,7 +37,6 @@ package com.sundaytoz.st2D
             addEventListener(Event.ENTER_FRAME, enterFrame);
             
             addChild(GameStatus.instance.initFPS());         // FPS 출력을 원하지 않을 경우 주석 처리하십시오
-                
         }
         
         private function enterFrame(e:Event):void 

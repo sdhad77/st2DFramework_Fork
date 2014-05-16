@@ -61,7 +61,7 @@ package com.sundaytoz.st2D.display
                
                 context.setVertexBufferAt(0, sprite.vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);       // position
                 context.setVertexBufferAt(1, sprite.vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
-                context.setVertexBufferAt(2, sprite.vertexBuffer, 8, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
+                context.setVertexBufferAt(2, sprite.vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
                 
                 context.drawTriangles(sprite.indexBuffer, 0, sprite.numTriangle);
                 
