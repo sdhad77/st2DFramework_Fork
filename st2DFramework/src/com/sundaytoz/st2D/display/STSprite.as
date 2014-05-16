@@ -26,6 +26,8 @@ package com.sundaytoz.st2D.display
         private var _rotateAxis:Vector3D = new Vector3D(0.0, 0.0, 0.0);
         private var _rotateDegree:Number = 0;
         
+        private var _frame:Rectangle = new Rectangle(0, 0, 0, 0);
+        
         private var _depth:Number = 0;
         
         private var _texture:Texture = null;
@@ -58,7 +60,7 @@ package com.sundaytoz.st2D.display
         public function STSprite()
         {
         }
-        
+
         /**
          * 파일 경로를 이용해서 스프라이트를 생성합니다.  
          * @param path  이미지 경로
@@ -95,6 +97,8 @@ package com.sundaytoz.st2D.display
         public function initTexture(bitmap:Bitmap, useMipMap:Boolean=true):void
         {
             textureData = bitmap;
+            _frame.width = textureData.width;
+            _frame.height = textureData.height;
             
             var context:Context3D = StageContext.instance.context; 
             texture = context.createTexture(bitmap.width, bitmap.height, Context3DTextureFormat.BGRA, false);
@@ -116,7 +120,7 @@ package com.sundaytoz.st2D.display
             _modelMatrix.identity();
             
             // scale
-            _modelMatrix.appendScale(_textureData.width * scale.x, _textureData.height * scale.y, 1);
+            _modelMatrix.appendScale(_frame.width * scale.x, _frame.height * scale.y, 1);
             
             // rotate
             _modelMatrix.appendRotation( _rotateDegree, _rotateAxis );
@@ -362,21 +366,45 @@ package com.sundaytoz.st2D.display
         {
             return _scale;
         }
-
         
+        public function get frame():Rectangle
+        {
+            return _frame;
+        }
+        
+        public function set frame(value:Rectangle):void
+        {
+            _frame = value;
+        }
+
         /**
          * 텍스쳐의 가로 길이를 리턴합니다. 
          */
-        public function get width():Number
+        public function get textureWidth():Number
         {            
             return _textureData.width;
         }
         /**
          * 텍스쳐의 세로 길이를 리턴합니다. 
          */
-        public function get height():Number
+        public function get textureHeight():Number
         {
             return _textureData.height;
+        }
+        
+        /**
+         * 프레임의 가로 길이를 리턴합니다. 
+         */
+        public function get width():Number
+        {            
+            return _frame.width;
+        }
+        /**
+         * 프레임의 세로 길이를 리턴합니다. 
+         */
+        public function get height():Number
+        {
+            return _frame.height;
         }
         
         public function get zOrder():int
