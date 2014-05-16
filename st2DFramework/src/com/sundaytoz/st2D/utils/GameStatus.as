@@ -10,7 +10,7 @@ package com.sundaytoz.st2D.utils
     /**
      * FPS 를 계산하고 출력합니다. 
      */
-    public class FPSCounter extends Sprite
+    public class GameStatus extends Sprite
     {
         private var _fpsTicks:uint = 0;
         private var _fpsLast:uint = 0;
@@ -18,7 +18,7 @@ package com.sundaytoz.st2D.utils
         private var _isFPSVisible:Boolean = true;       // FPS 를 출력하지 않으려면 false 로 두면 됩니다.
         private var _fpsTextField:TextField;
         
-        public function FPSCounter()
+        public function GameStatus()
         {
             initFPSTextField();
         }

@@ -49,7 +49,6 @@ package com.sundaytoz.st2D.display
         {
             return spriteManager.getAllSprites();
         }
-        
-        
+                
     }
 }
