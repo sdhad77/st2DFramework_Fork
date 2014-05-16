@@ -72,35 +72,51 @@ package com.sundaytoz.st2D.animation
          */
         private function nextFrame(idx:STSprite):AnimationFrame
         {
-            var playAnimation:Animation = _playAnimationData[idx].getPlayAnimation(_playAnimationData[idx].playAnimationName);
+            var playAnimation:Animation = _playAnimationData[idx].getPlayAnimation();
            
-            //현재 애니메이션 프레임 유지할 경우.
-            if(_playAnimationData[idx].delayCnt < playAnimation.delayNum[_playAnimationData[idx].playAnimationFlowIdx])
+            if(_playAnimationData[idx].isPlaying)
             {
-                _playAnimationData[idx].delayCnt++;
-            }
-            //유지 시간(pauseFrameCnt)이 다되서 다음 프레임으로 넘어갈 때
-            else
-            {
-                //FlowIdx 가 0부터 시작이라서 -1을 해줘야 합니다.
-                //아직 다음으로 넘어갈 프레임이 존재하는 경우. 즉 애니메이션이 종료되지 않았을때
-                if(_playAnimationData[idx].playAnimationFlowIdx < (playAnimation.animationFlow.length-1))
+                //현재 애니메이션 프레임 유지할 경우.
+                if(_playAnimationData[idx].delayCnt < _playAnimationData[idx].getDelayNum())
                 {
-                    _playAnimationData[idx].delayCnt = 0;
-                    _playAnimationData[idx].playAnimationFlowIdx++;
+                    _playAnimationData[idx].delayCnt++;
                 }
-                //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
+                //유지 시간(pauseFrameCnt)이 다되서 다음 프레임으로 넘어갈 때
                 else
                 {
-                    _playAnimationData[idx].playAnimationName = playAnimation.nextAnimationName;
-                    _playAnimationData[idx].delayCnt = 0;
-                    _playAnimationData[idx].playAnimationFlowIdx = 0;
-                    
-                    nextFrame(idx);
+                    //FlowIdx 가 0부터 시작이라서 -1을 해줘야 합니다.
+                    //아직 다음으로 넘어갈 프레임이 존재하는 경우. 즉 애니메이션이 종료되지 않았을때
+                    if(_playAnimationData[idx].playAnimationFlowIdx < (playAnimation.animationFlow.length-1))
+                    {
+                        _playAnimationData[idx].delayCnt = 0;
+                        _playAnimationData[idx].playAnimationFlowIdx++;
+                    }
+                    //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
+                    else
+                    {
+                        //다음 애니메이션이 존재할경우
+                        if(playAnimation.nextAnimationName != null)
+                        {
+                            _playAnimationData[idx].playAnimationName = playAnimation.nextAnimationName;
+                            _playAnimationData[idx].delayCnt = 0;
+                            _playAnimationData[idx].playAnimationFlowIdx = 0;
+                            
+                            nextFrame(idx);
+                        }
+                        //다음 애니메이션이 존재하지 않을경우
+                        else
+                        {
+                            idx.isVisible = false;
+                            _playAnimationData[idx].isMoving = false;
+                            _playAnimationData[idx].isPlaying = false;
+                            _playAnimationData[idx].delayCnt = 0;
+                            _playAnimationData[idx].playAnimationFlowIdx = 0;
+                        }
+                    }
                 }
             }
             //현재 애니메이션의 프레임을 반환합니다.
-            return AnimationData.instance.animationData[idx.path]["frame"][playAnimation.animationFlow[_playAnimationData[idx].playAnimationFlowIdx]];
+            return _playAnimationData[idx].getPlayAnimationFrame();
         }
         
         /**
@@ -154,9 +170,6 @@ package com.sundaytoz.st2D.animation
             
             for each( var sprite:STSprite in _playSprite )
             {
-                //현재 재생중인 상태가 아니면 업데이트 안함
-                if(_playAnimationData[sprite].isPlaying == false) continue;
-                
                 //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
                 if(_playAnimationData[sprite].animationData["available"] == 2)
                 {
@@ -167,8 +180,8 @@ package com.sundaytoz.st2D.animation
                     playFrame = nextFrame(sprite);
                     
                     //uv좌표 변경하는 방식
-                    sprite.frame.width = 32;
-                    sprite.frame.height = 32;
+                    sprite.frame.width = playFrame.width;
+                    sprite.frame.height = playFrame.height;
                     sprite.setUVCoord(playFrame.x/sprite.textureWidth, playFrame.y/sprite.textureHeight, playFrame.width/sprite.textureWidth, playFrame.height/sprite.textureHeight);
                 }
             }
@@ -228,7 +241,10 @@ package com.sundaytoz.st2D.animation
          */
         public function pauseAnimation(idx:STSprite):void
         {
-            _playAnimationData[idx].isPlaying = false;
+            if(idx != null)
+            {
+                _playAnimationData[idx].isPlaying = false;
+            }
         }
 
         /**
@@ -237,7 +253,10 @@ package com.sundaytoz.st2D.animation
          */
         public function playAnimation(idx:STSprite):void
         {
-            _playAnimationData[idx].isPlaying = true;
+            if(idx != null)
+            {
+                _playAnimationData[idx].isPlaying = true;
+            }
         }
         
         /**
