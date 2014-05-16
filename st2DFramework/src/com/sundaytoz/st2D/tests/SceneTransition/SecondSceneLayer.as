@@ -16,7 +16,7 @@ package com.sundaytoz.st2D.tests.SceneTransition
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
-        override public function update():void
+        override public function update(dt:Number):void
         {
             
         }

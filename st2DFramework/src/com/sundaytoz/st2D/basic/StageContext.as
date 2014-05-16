@@ -5,6 +5,7 @@ package com.sundaytoz.st2D.basic
     import com.sundaytoz.st2D.display.Layer;
     import com.sundaytoz.st2D.display.SceneManager;
     import com.sundaytoz.st2D.utils.Resources;
+    import com.sundaytoz.st2D.utils.Vector2D;
     
     import flash.display.Stage;
     import flash.display.Stage3D;
@@ -144,6 +145,11 @@ package com.sundaytoz.st2D.basic
             }
             
             context.present();
+        }
+        
+        public function translateCamera(translate:Vector2D):void
+        {
+            _viewMatrix.appendTranslation(translate.x, translate.y, 0);
         }
         
         /** property */

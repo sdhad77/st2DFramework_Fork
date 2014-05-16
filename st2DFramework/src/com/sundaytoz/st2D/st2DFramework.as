@@ -4,13 +4,17 @@ package com.sundaytoz.st2D
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
     import com.sundaytoz.st2D.tests.TestLayer;
-    import com.sundaytoz.st2D.tests.SceneTransition.FirstSceneLayer;
+    import com.sundaytoz.st2D.utils.FPSCounter;
+    import com.sundaytoz.st2D.utils.timer.GameTimer;
     
     import flash.display.Sprite;
     import flash.events.Event;
     
     public class st2DFramework extends Sprite
     {
+        private var _timer:GameTimer = new GameTimer();
+        private var _fpsCounter:FPSCounter;
+        
         public function st2DFramework()
         {
             super();
@@ -32,24 +36,32 @@ package com.sundaytoz.st2D
             SceneManager.instance.pushScene(scene);
             
             addEventListener(Event.ENTER_FRAME, enterFrame);
+            
+            _fpsCounter = new FPSCounter();
+            addChild(_fpsCounter);
         }
         
         private function enterFrame(e:Event):void 
         {
-            update();
+            _timer.tick();
+            
+            update(_timer.deltaTime);
             
             draw();
+            
+            _fpsCounter.updateFPS();    // FPS 출력을 원하지 않을 경우 주석 처리하십시오
         }
         
-        private function update():void
+        private function update(dt:Number):void
         {
-            SceneManager.instance.getCurrentScene().updateAllLayers();
+            SceneManager.instance.getCurrentScene().updateAllLayers(dt);
         }
         
         private function draw():void
         {
             StageContext.instance.draw();
         }
+        
         
     }
 }
