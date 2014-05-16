@@ -35,7 +35,7 @@ package com.sundaytoz.st2D.tests.Animation
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
-        override public function update():void
+        override public function update(dt:Number):void
         {
             AnimationManager.instance.update();
         }
@@ -51,7 +51,7 @@ package com.sundaytoz.st2D.tests.Animation
         
         private function onTouch(event:MouseEvent):void
         {
-            AnimationManager.instance.moveTo(Picking.pick(StageContext.instance.stage, getAllSprites(), event.stageX, event.stageY), 700, 700, 500);
+            AnimationManager.instance.moveTo(Picking.pick(StageContext.instance.stage, getAllSprites(), event.stageX, event.stageY), 700, 700, 3);
         }
     }
 }
