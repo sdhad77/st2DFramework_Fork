@@ -5,7 +5,7 @@ package com.sundaytoz.st2D
     import com.sundaytoz.st2D.display.SceneManager;
     import com.sundaytoz.st2D.tests.TestLayer;
     import com.sundaytoz.st2D.utils.FPSCounter;
-    import com.sundaytoz.st2D.utils.timer.GameTimer;
+    import com.sundaytoz.st2D.utils.GameTimer;
     
     import flash.display.Sprite;
     import flash.events.Event;

@@ -1,6 +1,8 @@
 package com.sundaytoz.st2D.display
 {
-    public class STObject
+    
+
+    public class STObject 
     {
         private var _tag:int;
         private var _name:String;
@@ -9,6 +11,7 @@ package com.sundaytoz.st2D.display
         
         public function STObject()
         {
+            super();
             _isVisible = true;
         }
         

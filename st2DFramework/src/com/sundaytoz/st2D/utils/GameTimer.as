@@ -1,4 +1,4 @@
-package com.sundaytoz.st2D.utils.timer
+package com.sundaytoz.st2D.utils
 {
     import flash.utils.getTimer;
 
