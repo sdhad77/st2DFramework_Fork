@@ -116,7 +116,7 @@ package com.sundaytoz.st2D.utils
         /**
          * 현재 FPS 를 반환합니다. 
          */
-        public function fps():Number
+        public function get fps():Number
         {
             return _fps;
         }
