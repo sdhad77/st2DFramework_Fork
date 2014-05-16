@@ -22,9 +22,9 @@ package com.sundaytoz.st2D.animation
         // path(SpriteSheet의 경로)를 key로 하여 이 SpriteSheet와 관련된 모든 정보들을 저장합니다.
         // 이 Dinctionary의 구조는 다음과 같습니다.
         // animationData[path][bitmap] = bitmap
-        //                    [frame][frameName] = AnimationFrame
-        //                    [animation] = Animation
-        //                    [available] = 사용 가능 여부(int type, [0,1 == false][2 == true])
+        //                               [frame][frameName] = AnimationFrame
+        //                              [animation] = Animation
+        //                              [available] = 사용 가능 여부(int type, [0,1 == false][2 == true])
         // available은 xml파일, img 파일등을 읽어 올때 발생하는 비동기 상황 때문에 로딩이 완료된것인지 판별하기 위해 넣었습니다.
         // 현재는 테스트하기 위해 숫자로 넣어놨지만, 문자열로 바꿀 예정입니다.
         private var _animationData:Dictionary = new Dictionary;

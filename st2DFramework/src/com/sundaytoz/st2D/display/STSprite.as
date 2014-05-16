@@ -5,49 +5,24 @@ package com.sundaytoz.st2D.display
     import com.sundaytoz.st2D.utils.Vector2D;
     
     import flash.display.Bitmap;
-    import flash.display.BitmapData;
     import flash.display3D.Context3D;
     import flash.display3D.Context3DTextureFormat;
-    import flash.display3D.IndexBuffer3D;
-    import flash.display3D.VertexBuffer3D;
-    import flash.display3D.textures.Texture;
     import flash.events.IEventDispatcher;
-    import flash.geom.Matrix;
     import flash.geom.Matrix3D;
     import flash.geom.Rectangle;
     import flash.geom.Vector3D;
     
-    public class STSprite extends STObject 
+    public class STSprite extends BaseSprite 
     {
-        private var _path:String;
-        
         private var _position:Vector2D = new Vector2D(0.0, 0.0);
         private var _scale:Vector2D = new Vector2D(1.0, 1.0);
         private var _rotateAxis:Vector3D = new Vector3D(0.0, 0.0, 0.0);
         private var _rotateDegree:Number = 0;
         
         private var _frame:Rectangle = new Rectangle(0, 0, 0, 0);
-        
         private var _depth:Number = 0;
-        
-        private var _texture:Texture = null;
-        private var _textureData:Bitmap = null;
 
         private var _modelMatrix:Matrix3D = new Matrix3D();
-        
-        private static var _meshIndexData:Vector.<uint> = Vector.<uint>  ([ 0, 1, 2, 0, 2, 3, ]);
-        private var _meshVertexData:Vector.<Number> = Vector.<Number>
-                                ([
-                                //X, Y, Z,              U, V,            R,  G, B, A
-                                -0.5, 0.5,  0.5,      0,  0,              1.0,1.0,1.0,1.0,
-                                0.5,  0.5,  0.5,      1,  0,             0.0,0.0,1.0,1.0,
-                                0.5,  -0.5, 0.5,      1,  1,             0.0,1.0,0.0,1.0,
-                                -0.5, -0.5, 0.5,      0,  1,             1.0,0.0,0.0,1.0
-                                ]);
-                        
-        
-        private var _vertexBuffer:VertexBuffer3D;
-        private var _indexBuffer:IndexBuffer3D;
         
         /**
         *  이미지를 연속해서 생성할 때 AssetLoader 가 이미지를 비동기적으로 불러오면서 용량이 작아 먼저 불려진 이미지가 
@@ -59,6 +34,16 @@ package com.sundaytoz.st2D.display
                
         public function STSprite()
         {
+            super();
+            
+            indexData.push( 0, 1, 2, 0, 2, 3 );
+            vertexData.push(
+                    //X, Y, Z,              U, V,            R,  G, B, A
+                    -0.5, 0.5,  0.5,      0,  0,              1.0,1.0,1.0,1.0,
+                    0.5,  0.5,  0.5,      1,  0,             0.0,0.0,1.0,1.0,
+                    0.5,  -0.5, 0.5,      1,  1,             0.0,1.0,0.0,1.0,
+                    -0.5, -0.5, 0.5,      0,  1,             1.0,0.0,0.0,1.0
+                );
         }
         
         /**
@@ -84,6 +69,8 @@ package com.sundaytoz.st2D.display
                 
                 sprite.initBuffer();
                 sprite.initTexture((object as Bitmap));
+                
+                sprite.update();
                 
                 onCreated(sprite);
             }
@@ -135,21 +122,21 @@ package com.sundaytoz.st2D.display
          */
         public function setUVCoord(u:Number, v:Number, width:Number, height:Number):void
         {
-            if(_vertexBuffer != null)
+            if(vertexBuffer != null)
             {
-                _meshVertexData[3] = u;
-                _meshVertexData[4] = v;
+                vertexData[3] = u;
+                vertexData[4] = v;
                 
-                _meshVertexData[3+9] = u+width;
-                _meshVertexData[4+9] = v;
+                vertexData[3+9] = u+width;
+                vertexData[4+9] = v;
                 
-                _meshVertexData[3+9*2] = u+width;
-                _meshVertexData[4+9*2] = v+height;
+                vertexData[3+9*2] = u+width;
+                vertexData[4+9*2] = v+height;
                 
-                _meshVertexData[3+9*3] = u;
-                _meshVertexData[4+9*3] = v+height;
+                vertexData[3+9*3] = u;
+                vertexData[4+9*3] = v+height;
                 
-                _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/9);
+                vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length/9);
             }
         }
         
@@ -201,15 +188,15 @@ package com.sundaytoz.st2D.display
          */
         public function clean():void
         {
-            AssetLoader.instance.removeImage(_path);
+            AssetLoader.instance.removeImage(path);
             
-            if( _texture != null )
-                _texture.dispose();
-            _texture = null;
+            if( texture != null )
+                texture.dispose();
+            texture = null;
             
-            if( _textureData.bitmapData != null )
-                _textureData.bitmapData.dispose(); 
-            _textureData.bitmapData = null;
+            if( textureData.bitmapData != null )
+                textureData.bitmapData.dispose(); 
+            textureData.bitmapData = null;
             
             _modelMatrix = null;
             _rotateAxis = null;
@@ -228,70 +215,17 @@ package com.sundaytoz.st2D.display
         {
             var context:Context3D = StageContext.instance.context; 
             
-            _vertexBuffer = context.createVertexBuffer(_meshVertexData.length/9, 9); 
-            _vertexBuffer.uploadFromVector(_meshVertexData, 0, _meshVertexData.length/9);
+            vertexBuffer = context.createVertexBuffer(vertexData.length/9, 9); 
+            vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length/9);
             
-            _indexBuffer = context.createIndexBuffer(_meshIndexData.length);
-            _indexBuffer.uploadFromVector(_meshIndexData, 0, _meshIndexData.length);
+            indexBuffer = context.createIndexBuffer(indexData.length);
+            indexBuffer.uploadFromVector(indexData, 0, indexData.length);
         }
-        
-        /**
-         * 밉맵을 만듭니다. 
-         */
-        private function uploadTextureWithMipmaps(dest:Texture, src:BitmapData):void
-        {
-            var ws:int = src.width;
-            var hs:int = src.height;
-            var level:int = 0;
-            var tmp:BitmapData;
-            var transform:Matrix = new Matrix();
-            
-            var fillColor:uint = 0x00000000;
-            
-            tmp = new BitmapData(src.width, src.height, true, fillColor);
-            
-            while ( ws >= 1 && hs >= 1 )
-            { 
-                tmp.draw(src, transform, null, null, null, true); 
-                dest.uploadFromBitmapData(tmp, level);
-                transform.scale(0.5, 0.5);
-                level++;
-                ws >>= 1;
-                hs >>= 1;
-                if (hs && ws) 
-                {
-                    tmp.dispose();
-                    tmp = new BitmapData(ws, hs, true, fillColor);
-                }
-            }
-            tmp.dispose();
-        }
-        
-        
-        
 
         /** Property */
         public function get numTriangle():int
         {
-            return _meshIndexData.length/3;
-        }
-        public function get vertexBuffer():VertexBuffer3D
-        {
-            return _vertexBuffer;
-        }
-        
-        public function get indexBuffer():IndexBuffer3D
-        {
-            return _indexBuffer;
-        }
-        
-        public function get texture():Texture
-        {
-            return _texture;
-        }
-        public function set texture(texture:Texture):void
-        {
-            _texture = texture;
+            return indexData.length/3;
         }
         
         public function get modelMatrix():Matrix3D
@@ -312,40 +246,21 @@ package com.sundaytoz.st2D.display
             _depth = depth;
         }
         
-        public function get textureData():Bitmap
-        {
-            return _textureData;
-        }
-        public function set textureData(bitmap:Bitmap):void
-        {
-            _textureData = bitmap;
-        }
-        
-        public function get path():String
-        {
-            return _path;
-        }
-        public function set path(path:String):void
-        {
-            _path = path;
-        }
-        
-        
         public function get left():Number
         {
-            return _position.x - _textureData.width * 0.5;
+            return _position.x - this.textureData.width * 0.5;
         }
         public function get right():Number
         {
-            return _position.x + _textureData.width * 0.5;
+            return _position.x + this.textureData.width * 0.5;
         }
         public function get top():Number
         {
-            return _position.y + _textureData.height * 0.5;
+            return _position.y + this.textureData.height * 0.5;
         }
         public function get bottom():Number
         {
-            return _position.y - _textureData.height * 0.5;
+            return _position.y - this.textureData.height * 0.5;
         }
         
         public function get rect():Rectangle
@@ -382,14 +297,14 @@ package com.sundaytoz.st2D.display
          */
         public function get textureWidth():Number
         {            
-            return _textureData.width;
+            return this.textureData.width;
         }
         /**
          * 텍스쳐의 세로 길이를 리턴합니다. 
          */
         public function get textureHeight():Number
         {
-            return _textureData.height;
+            return this.textureData.height;
         }
         
         /**
@@ -415,6 +330,6 @@ package com.sundaytoz.st2D.display
         {
             _zOrder = zOrder;
         }
-        
+
     }
 }
