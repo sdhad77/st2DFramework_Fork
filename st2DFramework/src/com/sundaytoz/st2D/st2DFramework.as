@@ -4,7 +4,7 @@ package com.sundaytoz.st2D
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
     import com.sundaytoz.st2D.tests.TestLayer;
-    import com.sundaytoz.st2D.utils.FPSCounter;
+    import com.sundaytoz.st2D.utils.GameStatus;
     import com.sundaytoz.st2D.utils.GameTimer;
     
     import flash.display.Sprite;
@@ -13,7 +13,7 @@ package com.sundaytoz.st2D
     public class st2DFramework extends Sprite
     {
         private var _timer:GameTimer = new GameTimer();
-        private var _fpsCounter:FPSCounter;
+        private var _fpsCounter:GameStatus;
         
         public function st2DFramework()
         {
@@ -37,7 +37,7 @@ package com.sundaytoz.st2D
             
             addEventListener(Event.ENTER_FRAME, enterFrame);
             
-            _fpsCounter = new FPSCounter();
+            _fpsCounter = new GameStatus();
             addChild(_fpsCounter);
         }
         
