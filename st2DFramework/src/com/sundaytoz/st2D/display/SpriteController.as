@@ -2,6 +2,7 @@ package com.sundaytoz.st2D.display
 {
     import com.adobe.utils.PerspectiveMatrix3D;
     import com.sundaytoz.st2D.basic.StageContext;
+    import com.sundaytoz.st2D.utils.GameStatus;
     
     import flash.display3D.Context3D;
     import flash.display3D.Context3DBlendFactor;
@@ -63,6 +64,8 @@ package com.sundaytoz.st2D.display
                 context.setVertexBufferAt(2, sprite.vertexBuffer, 8, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
                 
                 context.drawTriangles(sprite.indexBuffer, 0, sprite.numTriangle);
+                
+                GameStatus.instance.increaseDrawCallCount();
             }
             
         }
