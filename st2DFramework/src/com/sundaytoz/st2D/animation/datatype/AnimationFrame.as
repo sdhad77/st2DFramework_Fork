@@ -1,7 +1,5 @@
 package com.sundaytoz.st2D.animation.datatype
 {
-    import flash.display.Bitmap;
-
     /**
      * 스프라이트 시트에 존재 하는 각각의 이미지들을 Frame 단위로 나눠서 저장하기 위한 클래스입니다. 
      * @author 신동환
