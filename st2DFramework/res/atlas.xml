@@ -36,4 +36,8 @@
 <atlasItem name="fire6.png" x="322" y="384" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
 <atlasItem name="fire7.png" x="322" y="448" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
 
+<atlasItem name="dung0.png" x="0" y="0" width="64" height="64" />
+<atlasItem name="char0.png" x="66" y="0" width="64" height="64" />
+<atlasItem name="char1.png" x="132" y="0" width="64" height="64" />
+
 </atlas>
