@@ -5,7 +5,7 @@ package com.sundaytoz.st2D.tests
     import com.sundaytoz.st2D.display.STSprite;
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
-    import com.sundaytoz.st2D.tests.SceneTransition.FirstSceneLayer;
+    import com.sundaytoz.st2D.tests.sceneTransition.FirstSceneLayer;
     
     import flash.events.MouseEvent;
     
