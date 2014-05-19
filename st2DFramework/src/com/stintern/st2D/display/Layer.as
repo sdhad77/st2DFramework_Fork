@@ -15,6 +15,11 @@ package com.stintern.st2D.display
      * 
      * BatchSprite 배열을 이용하여 화면 출력의 효율을 높일 수도 있습니다.
      * 
+     * <br/>
+     * 
+     * Layer의 dispose 함수를 이용해서 Layer가 사용한 자원을 해제할 경우에는
+     * Layer가 포함되었던 Scene에서 Layer를 삭제해주십시오
+     * 
      * @see also BatchSprite   
      * @author 이종민
      * 
@@ -35,6 +40,8 @@ package com.stintern.st2D.display
         
         /**
          * 레이어를 삭제하면서 사용한 자원을 해제합니다.
+         * <b>반드시 삭제한 레이어를 현재 레이어가 포함된 Scene 에서 제거해주십시오.</b>
+         * 
          * (Bitmap 관련 데이터는 AsserLoader 객체에 남아있으니 필요없으면 AsserLoader 를 통해서 삭제해주십시오.) 
          */
         public function dispose():void
@@ -102,6 +109,9 @@ package com.stintern.st2D.display
          */
         public function getAllSprites():Array
         {
+            if( _spriteManager == null )
+                return null;
+            
             return _spriteManager.getAllSprites();
         }
         

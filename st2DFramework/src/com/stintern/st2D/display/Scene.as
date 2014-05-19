@@ -27,6 +27,18 @@ package com.stintern.st2D.display
             _layerArray.push(layer);
         }
         
+        public function removeLayer(layer:Layer):void
+        {
+            for(var i:uint=0; i<_layerArray.length; ++i)
+            {
+                if( (_layerArray[i] as Layer) == layer )
+                {
+                    _layerArray.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        
         public function get layerArray():Array
         {
             return _layerArray;
