@@ -2,13 +2,11 @@ package com.stintern.st2D.display.sprite
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.utils.AssetLoader;
-    import com.stintern.st2D.utils.GameStatus;
     import com.stintern.st2D.utils.Vector2D;
     
     import flash.display.Bitmap;
     import flash.display3D.Context3D;
     import flash.display3D.Context3DTextureFormat;
-    import flash.events.IEventDispatcher;
     import flash.geom.Matrix3D;
     import flash.geom.Rectangle;
     import flash.geom.Vector3D;
