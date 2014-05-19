@@ -5,7 +5,6 @@ package com.stintern.st2D.utils
     import flash.display.Loader;
     import flash.display.LoaderInfo;
     import flash.events.Event;
-    import flash.events.EventDispatcher;
     import flash.events.IOErrorEvent;
     import flash.events.ProgressEvent;
     import flash.net.URLLoader;
@@ -17,7 +16,7 @@ package com.stintern.st2D.utils
      * Asset 파일들을 불러옵니다. 
      * @author 이종민
      */
-    public class AssetLoader extends EventDispatcher
+    public class AssetLoader
     {
         // 싱글톤 관련 변수들
         private static var _instance:AssetLoader;
