@@ -7,9 +7,13 @@ package com.stintern.st2D.utils
     import flash.events.Event;
     import flash.events.IOErrorEvent;
     import flash.events.ProgressEvent;
+    import flash.filesystem.File;
+    import flash.filesystem.FileMode;
+    import flash.filesystem.FileStream;
     import flash.net.URLLoader;
     import flash.net.URLLoaderDataFormat;
     import flash.net.URLRequest;
+    import flash.utils.ByteArray;
     import flash.utils.Dictionary;
 
     /**
@@ -80,7 +84,6 @@ package com.stintern.st2D.utils
          * 
          * </listing>
          */
-        
         public function loadImageTexture( path:String, onComplete:Function, onProgress:Function = null ):void
         {
             var imageCount:uint = _imageCount;
@@ -93,17 +96,22 @@ package com.stintern.st2D.utils
                 return;
             }
             
-            var urlLoader:URLLoader = new URLLoader();
+            var file:File = findFile(path);
+            var fileStream:FileStream = new FileStream(); 
+            fileStream.open(file, FileMode.READ);
             
-            urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
-            urlLoader.addEventListener(ProgressEvent.PROGRESS, onUrlLoaderProgress);
-            urlLoader.addEventListener(Event.COMPLETE, onUrlLoaderComplete);
-            urlLoader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-            urlLoader.load(new URLRequest(path));
+            var bytes:ByteArray = new ByteArray();
+            fileStream.readBytes(bytes);
             
-            trace(path);
+            fileStream.close();
             
-            function onUrlLoaderProgress(event:ProgressEvent):void
+            var loader:Loader = new Loader();
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoaderComplete);
+            loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoaderProgress);
+            loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+            loader.loadBytes(bytes);
+                                    
+            function onLoaderProgress(event:ProgressEvent):void
             {
                 if( onProgress != null )
                 {
@@ -111,26 +119,9 @@ package com.stintern.st2D.utils
                 }
             }
             
-            function onUrlLoaderComplete(event:Object):void
-            {
-                trace("onUrlLoaderComplete" + path);
-                
-                urlLoader.removeEventListener(ProgressEvent.PROGRESS, onUrlLoaderProgress);
-                urlLoader.removeEventListener(Event.COMPLETE, onUrlLoaderComplete);
-                urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-                
-                var loader:Loader = new Loader();
-                loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoaderComplete);
-                loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-                loader.loadBytes(URLLoader(event.target).data);
-            }
-            
             function onLoaderComplete(event:Event):void
             {
                 trace("onLoaderComplete" + path);
-                
-                urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-                urlLoader.removeEventListener(Event.COMPLETE, onUrlLoaderComplete);
                 
                 onComplete( LoaderInfo(event.target).content as Bitmap, imageCount );
                 
@@ -141,14 +132,29 @@ package com.stintern.st2D.utils
             
             function ioErrorHandler(event:IOErrorEvent):void
             {
-                urlLoader.removeEventListener(ProgressEvent.PROGRESS, onUrlLoaderProgress);
-                urlLoader.removeEventListener(Event.COMPLETE, onUrlLoaderComplete);
-                urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-                
                 trace("Image Load error: " + event.target + " _ " + event.text );                  
             }
         }
         
+        /**
+         * 디바이스 내부 저장소를 확인하여 File 객체를 리턴합니다. 
+         */
+        private function findFile(path:String):File
+        {
+            var file:File = File.applicationDirectory.resolvePath(path);
+            if( file.exists )
+                return file;
+            
+            file = File.applicationStorageDirectory.resolvePath(path);
+            if( file.exists )
+                return file;
+            
+            return null;
+        }
+        
+        /**
+         * AssetLoader 에 저장되어 있는 이미지를 삭제하면서 자원을 해제합니다. 
+         */
         public function removeImage(path:String):void
         {
             var bmp:Bitmap = _imageMap[path];
