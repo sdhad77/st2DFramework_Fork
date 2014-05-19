@@ -35,7 +35,8 @@ package com.stintern.st2D.tests.batch
                 var x:Number = Math.ceil(Math.random() * StageContext.instance.screenWidth);
                 var y:Number = Math.ceil(Math.random() * StageContext.instance.screenHeight);
                 
-                STSprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, x, y);
+                var sprite:STSprite = new STSprite();
+                sprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, x, y);
             }
         }
         

@@ -1,5 +1,7 @@
 package com.stintern.st2D.display.sprite
 {
+    import com.stintern.st2D.animation.AnimationData;
+    import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.utils.AssetLoader;
     import com.stintern.st2D.utils.Vector2D;
@@ -81,8 +83,64 @@ package com.stintern.st2D.display.sprite
                 
                 update();
                 
-                onCreated();
+                onCreated(this);
             }
+        }
+        
+        public function createSpriteWithBatchSprite(batchSprite:BatchSprite, imageName:String, onCreated:Function, x:Number = 0, y:Number=0):void
+        {
+            if( batchSprite == null )
+            {
+                throw new Error("batchSprite is null");
+            }
+            
+            // BatchSprite 에서 사용할 이미지의 UV 좌표를 읽어옵니다.
+            var uvCoord:Array = getUVCoord(imageName);
+            if( uvCoord == null )
+            {
+                throw new Error("아직 애니메이션 데이터가 로딩중입니다.");  
+            }
+            
+            this.path = path;
+            
+            position.x = x;
+            position.y = y;
+            
+            this.zOrder = AssetLoader.instance.increaseImageNo();
+            
+            
+
+        }
+        
+        /**
+         * Batchsprite 이미지에서 스프라이트가 사용할 이미지의 uv 좌표를 알아옵니다. 
+         * @param imageName xml 상에 기입된 이미지의 이름
+         * @return uv 좌표
+         */
+        private function getUVCoord(imageName:String):Array
+        {
+            var uvCoord:Array = new Array();
+            
+            if(AnimationData.instance.animationData[path]["available"] == 2)
+            {
+                //현재 프레임 정보
+                var tempFrame:AnimationFrame = AnimationData.instance.animationData[path]["frame"][imageName];
+                
+                //uv좌표 변경하는 방식
+                frame.width = tempFrame.width;
+                frame.height = tempFrame.height;
+                
+                uvCoord.push(tempFrame.x/textureWidth, tempFrame.y/textureHeight);                                                              //left top
+                uvCoord.push(tempFrame.x/textureWidth + tempFrame.width/textureWidth, tempFrame.y/textureHeight);           //right top
+                uvCoord.push(tempFrame.x/textureWidth + tempFrame.width/textureWidth, tempFrame.y/textureHeight + tempFrame.height/textureHeight);           //right bottom
+                uvCoord.push(tempFrame.x/textureWidth, tempFrame.y/textureHeight + tempFrame.height/textureHeight);           //left bottom
+                
+                tempFrame = null;
+                
+                return uvCoord;
+            }
+            
+            return null;
         }
                 
         /**

@@ -173,9 +173,10 @@ package com.stintern.st2D.utils
             return _imageCount;
         }
         
-        public function increaseImageNo():void
+        public function increaseImageNo():uint
         {
             _imageCount++;
+            return _imageCount;
         }
       
     }
