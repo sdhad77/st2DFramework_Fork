@@ -46,13 +46,22 @@ package com.stintern.st2D.display
          */
         public function dispose():void
         {
-            _spriteManager.dispose();
+            if( _spriteManager != null )
+            {
+                _spriteManager.dispose();
+            }
             _spriteManager = null;
             
-            for each(var batchSprite:BatchSprite in _batchSpriteArray)
+            if( _batchSpriteArray != null )
             {
-                batchSprite.dispose();
-                _batchSpriteArray.splice(batchSprite, 1);
+                for each(var batchSprite:BatchSprite in _batchSpriteArray)
+                {
+                    if( batchSprite != null )
+                    {
+                        batchSprite.dispose();
+                    }
+                    _batchSpriteArray.splice(batchSprite, 1);
+                }
             }
             
             _batchSpriteArray = null;

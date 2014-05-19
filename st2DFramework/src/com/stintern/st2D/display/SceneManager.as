@@ -32,7 +32,7 @@ package com.stintern.st2D.display
          */
         public function changeCurrentScene(scene:Scene):void
         {
-            _sceneVector.pop().clean();
+            _sceneVector.pop().dispose();
             _sceneVector.push(scene);
         }
         
