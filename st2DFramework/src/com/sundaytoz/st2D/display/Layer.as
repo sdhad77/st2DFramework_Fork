@@ -4,7 +4,7 @@ package com.sundaytoz.st2D.display
 
     public class Layer extends STObject  
     {
-        private var spriteManager:SpriteController = new SpriteController();
+        private var _spriteManager:SpriteController = new SpriteController();
         private var _batchSprite:BatchSprite;
         
         public function Layer()
@@ -16,13 +16,19 @@ package com.sundaytoz.st2D.display
             throw new Error("Layer 클래스는 update()추상함수를 포함합니다. 오버라이딩 해주세요 ");
         }
         
+        public function dispose():void
+        {
+            _spriteManager.dispose();
+            _spriteManager = null;
+        }
+        
         /**
          * 레이어에 새로운 스프라이트를 추가합니다. 
          * @param sprite 새롭게 추가할 스프라이트
          */
         public function addSprite(sprite:STSprite):void
         {
-            spriteManager.addSprite(sprite);
+            _spriteManager.addSprite(sprite);
         }
         
         public function addBatchSprite(batchSprite:BatchSprite):void
@@ -37,8 +43,8 @@ package com.sundaytoz.st2D.display
          */
         public function removeSprite(sprite:STSprite):void
         {
-            spriteManager.removeSprite(sprite);
-            sprite.clean();
+            _spriteManager.removeSprite(sprite);
+            sprite.dispose();
         }  
     
         
@@ -47,7 +53,7 @@ package com.sundaytoz.st2D.display
          */
         public function drawAllSprites():void
         {
-            spriteManager.drawAllSprites();
+            _spriteManager.drawAllSprites();
             
             if( _batchSprite != null )
                 _batchSprite.draw();
@@ -58,7 +64,7 @@ package com.sundaytoz.st2D.display
          */
         public function getAllSprites():Array
         {
-            return spriteManager.getAllSprites();
+            return _spriteManager.getAllSprites();
         }
                 
     }

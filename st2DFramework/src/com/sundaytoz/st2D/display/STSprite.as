@@ -186,7 +186,7 @@ package com.sundaytoz.st2D.display
         /**
          * 사용한 자원을 해제합니다. 
          */
-        public function clean():void
+        public function dispose():void
         {
             AssetLoader.instance.removeImage(path);
             

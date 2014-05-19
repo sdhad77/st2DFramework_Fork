@@ -1,6 +1,5 @@
 package com.sundaytoz.st2D.display
 {
-    import com.adobe.utils.PerspectiveMatrix3D;
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.utils.GameStatus;
     
@@ -11,15 +10,31 @@ package com.sundaytoz.st2D.display
     import flash.geom.Matrix3D;
     
 
+    /**
+     * 스프라이트들을 관리하고 화면에 출력합니다. 
+     */
     public class SpriteController
     {        
         private var _sprites:Array = new Array();
+        private var _modelViewProjection:Matrix3D = new Matrix3D();
         
-        private var modelViewProjection:Matrix3D = new Matrix3D();
-        private var viewMatrix:Matrix3D = new Matrix3D();
-        private var projectionMatrix:PerspectiveMatrix3D = new PerspectiveMatrix3D();
-        
+        /**
+         * 사용한 자원을 해제합니다. 
+         */
+        public function dispose():void
+        {
+            for each( var sprite:STSprite in _sprites )
+            {
+                (sprite as STSprite).dispose();
+                sprite = null;
+            }
+            
+            _modelViewProjection = null;
+        }
        
+        /**
+         * 화면에 출력할 스프라이트를 추가합니다. 
+         */
         public function addSprite(sprite:STSprite):void
         {            
             _sprites.push(sprite);
@@ -31,6 +46,9 @@ package com.sundaytoz.st2D.display
             }
         }
        
+        /**
+         * 레이어에 등록한 모든 스프라이트들을 출력합니다. 
+         */
         public function drawAllSprites():void
         {
             var context:Context3D = StageContext.instance.context;
@@ -52,12 +70,12 @@ package com.sundaytoz.st2D.display
                 
                 sprite.update();
                 
-                modelViewProjection.identity();
-                modelViewProjection.append(sprite.modelMatrix );
-                modelViewProjection.append(StageContext.instance.viewMatrix);
-                modelViewProjection.append(StageContext.instance.projectionMatrix);
+                _modelViewProjection.identity();
+                _modelViewProjection.append(sprite.modelMatrix );
+                _modelViewProjection.append(StageContext.instance.viewMatrix);
+                _modelViewProjection.append(StageContext.instance.projectionMatrix);
                 
-                context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, modelViewProjection, true);
+                context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, _modelViewProjection, true);
                
                 context.setVertexBufferAt(0, sprite.vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);       // position
                 context.setVertexBufferAt(1, sprite.vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
