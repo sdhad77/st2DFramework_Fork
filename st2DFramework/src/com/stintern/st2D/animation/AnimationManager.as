@@ -107,7 +107,6 @@ package com.stintern.st2D.animation
                         else
                         {
                             idx.isVisible = false;
-                            _playAnimationData[idx].isMoving = false;
                             _playAnimationData[idx].isPlaying = false;
                             _playAnimationData[idx].delayCnt = 0;
                             _playAnimationData[idx].playAnimationFlowIdx = 0;
