@@ -48,7 +48,6 @@ package com.stintern.st2D.animation
         {
             _playSprite[sprite] = sprite;
             _playAnimationData[sprite] = new AnimationPlayData(AnimationData.instance.animationData[sprite.path], animationName);
-            _playAnimationData[sprite].isPlaying = true;
             _playSprite[sprite].frame.width = _playAnimationData[sprite].getPlayAnimationFrame().width;
             _playSprite[sprite].frame.height = _playAnimationData[sprite].getPlayAnimationFrame().height;
         }
