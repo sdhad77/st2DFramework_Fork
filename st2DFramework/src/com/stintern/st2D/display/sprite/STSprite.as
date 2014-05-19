@@ -2,6 +2,7 @@ package com.stintern.st2D.display.sprite
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.utils.AssetLoader;
+    import com.stintern.st2D.utils.GameStatus;
     import com.stintern.st2D.utils.Vector2D;
     
     import flash.display.Bitmap;
@@ -30,7 +31,12 @@ package com.stintern.st2D.display.sprite
         *  Sprite 를 생성한 순서를 가짐
          */
         private var _zOrder:int = -1;  // 이미지가 생성된 순서 
-        public var dispatcher:IEventDispatcher;
+        
+        private var _isMoving:Boolean;
+        private var _increaseX:Number;         //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
+        private var _increaseY:Number;         //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
+        private var _destX:int;                //이동중일때 목적지의 좌표
+        private var _destY:int;                //이동중일때 목적지의 좌표
                
         public function STSprite()
         {
@@ -44,6 +50,12 @@ package com.stintern.st2D.display.sprite
                     0.5,  -0.5, 0.5,      1,  1,             0.0,1.0,0.0,1.0,
                     -0.5, -0.5, 0.5,      0,  1,             1.0,0.0,0.0,1.0
                 );
+            
+            _isMoving = false;
+            _increaseX = 0;
+            _increaseY = 0;
+            _destX = 0;
+            _destY = 0;
         }
         
         /**
@@ -104,6 +116,9 @@ package com.stintern.st2D.display.sprite
          */
         public function update():void
         {
+            //스프라이트가 이동중이면 이동시킵니다.
+            move();
+            
             _modelMatrix.identity();
             
             // scale
@@ -220,6 +235,55 @@ package com.stintern.st2D.display.sprite
             
             indexBuffer = context.createIndexBuffer(indexData.length);
             indexBuffer.uploadFromVector(indexData, 0, indexData.length);
+        }
+        
+        /**
+         * update에서 호출되는 함수로, STSprite를 이동시켜야 할 경우 이동시키는 함수입니다. 
+         */
+        private function move():void
+        {
+            //움직이는 중이면
+            if(_isMoving)
+            {
+                //원하는 지점에 도달 하였으면
+                if((Math.abs(_destX - _position.x) <= 1) && (Math.abs(_destY - _position.y) <= 1)) 
+                {
+                    _isMoving = false;
+                }
+                //원하는 지점에 아직 도달하지 못했으면
+                else
+                {
+                    _position.x += _increaseX;
+                    _position.y += _increaseY;
+                }
+            }
+        }
+        
+        /**
+         * 특정 좌표로 STSprite를 이동시키는 함수입니다.</br>
+         * time으로 이동 거리를 나눈값을 더해서 이동합니다. 
+         * @param x 이동할 좌표 x
+         * @param y 이동할 좌표 y
+         * @param time 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
+         */
+        public function moveTo(x:int, y:int, second:int):void
+        {
+            _isMoving = true;
+            _destX = x;
+            _destY = y;
+            _increaseX = (x - _position.x)/(second*60);
+            _increaseY = (y - _position.y)/(second*60);
+        }
+        
+        /**
+         * STSprite의 현재 위치에서 x,y만큼 이동 시키는 함수입니다.
+         * @param x 현재 좌표에 더할 좌표
+         * @param y 현재 좌표에 더할 좌표
+         * @param second 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
+         */
+        public function moveBy(x:int, y:int, second:int):void
+        {
+            moveTo(_position.x + x, _position.y + y, second);
         }
 
         /** Property */

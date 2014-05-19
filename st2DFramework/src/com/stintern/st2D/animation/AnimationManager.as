@@ -121,44 +121,6 @@ package com.stintern.st2D.animation
         }
         
         /**
-         * update에서 호출되는 함수로, STSprite를 이동시켜야 할 경우 이동시키는 함수입니다. 
-         * @param idx 이동시켜야할지 검사할 STSprite입니다.
-         */
-        private function move(idx:STSprite):void
-        {
-            //움직이는 중이면
-            if(_playAnimationData[idx].isMoving)
-            {
-                //원하는 지점에 도달 하였으면
-                if((Math.abs(_playAnimationData[idx].destX - idx.position.x) <= 1) && (Math.abs(_playAnimationData[idx].destY - idx.position.y) <= 1)) 
-                {
-                    _playAnimationData[idx].isMoving = false;
-                }
-                //원하는 지점에 아직 도달하지 못했으면
-                else
-                {
-                    //매 프레임 움직여야하는 양인 increase를 move에 더해주고,
-                    _playAnimationData[idx].moveX += _playAnimationData[idx].increaseX;
-                    _playAnimationData[idx].moveY += _playAnimationData[idx].increaseY;
-                    
-                    //move의 값이 int 타입으로 계산 가능할 때 sprite의 위치를 변경시켜줍니다.
-                    //int로 하는 이유는 sprite의 좌표를 정수로 유지하기 위해서 입니다.
-                    //bitmap 이미지를 이용해서 애니메이션 하기 때문에 그려지는 좌표가 실수일 경우 그림이 비정상적으로 출력됩니다.(약간 번진듯한 느낌?)
-                    if(Math.abs(_playAnimationData[idx].moveX) >= 1)
-                    {
-                        idx.position.x += Math.floor(_playAnimationData[idx].moveX);
-                        _playAnimationData[idx].moveX -= Math.floor(_playAnimationData[idx].moveX);
-                    }
-                    if(Math.abs(_playAnimationData[idx].moveY) >= 1)
-                    {
-                        idx.position.y += Math.floor(_playAnimationData[idx].moveY);
-                        _playAnimationData[idx].moveY -= Math.floor(_playAnimationData[idx].moveY);
-                    }
-                }
-            }
-        }
-        
-        /**
          * 애니메이션을 업데이트 하는 함수입니다.<br> 
          * 애니메이션이 현재 사용가능한지 확인하고, 사용가능하면 다음 Frame으로 이동시킵니다.
          */
@@ -174,9 +136,6 @@ package com.stintern.st2D.animation
                 //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
                 if(_playAnimationData[sprite].animationData["available"] == 2)
                 {
-                    //sprite가 이동중이면 이동시킴
-                    move(sprite);
-                    
                     //다음 프레임으로 이동
                     playFrame = nextFrame(sprite);
                     
@@ -199,41 +158,6 @@ package com.stintern.st2D.animation
         public function setAnimation(idx:STSprite, name:String):void
         {
             if(idx != null) _playAnimationData[idx].setPlayAnimation(name);
-        }
-           
-        /**
-         * 특정 좌표로 STSprite를 이동시키는 함수입니다.</br>
-         * time으로 이동 거리를 나눈값을 더해서 이동합니다. 
-         * @param idx 이동시킬 STSprite
-         * @param x 이동할 좌표 x
-         * @param y 이동할 좌표 y
-         * @param time 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
-         */
-        public function moveTo(idx:STSprite, x:int, y:int, second:int):void
-        {
-            if(idx != null)
-            {
-                _playAnimationData[idx].isMoving = true;
-                _playAnimationData[idx].destX = x;
-                _playAnimationData[idx].destY = y;
-                _playAnimationData[idx].increaseX = (x - idx.position.x)/(second*GameStatus.instance.fps);
-                _playAnimationData[idx].increaseY = (y - idx.position.y)/(second*GameStatus.instance.fps);
-            }
-        }
-        
-        /**
-         * STSprite의 현재 위치에서 x,y만큼 이동 시키는 함수입니다.
-         * @param idx 이동시킬 STSprite
-         * @param x 현재 좌표에 더할 좌표
-         * @param y 현재 좌표에 더할 좌표
-         * @param second 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
-         */
-        public function moveBy(idx:STSprite, x:int, y:int, second:int):void
-        {
-            if(idx != null)
-            {
-                moveTo(idx, idx.position.x + x, idx.position.y + y, second);
-            }
         }
         
         /**
