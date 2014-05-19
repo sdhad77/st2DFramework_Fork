@@ -23,8 +23,6 @@ package com.stintern.st2D.tests.batch
         
         public function BatchSpriteLayer()
         {
-            _batchSprite = new BatchSprite();
-            
             AnimationData.instance.setAnimationData("res/atlas.png", "res/atlas.xml", onCompleted );
         }
         
@@ -40,6 +38,7 @@ package com.stintern.st2D.tests.batch
         
         private function onCompleted():void
         {
+            _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/atlas.png", onCreated);
             addBatchSprite(_batchSprite);
         }
@@ -60,7 +59,6 @@ package com.stintern.st2D.tests.batch
                 _sprites.push(sprite);
                 
                 sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated, x, y ); 
-                //sprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, x, y);
             }
         }
                 
