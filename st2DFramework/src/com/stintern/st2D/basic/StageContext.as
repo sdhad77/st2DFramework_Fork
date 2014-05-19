@@ -2,9 +2,6 @@ package com.stintern.st2D.basic
 {
     import com.adobe.utils.AGALMiniAssembler;
     import com.adobe.utils.PerspectiveMatrix3D;
-    import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.SceneManager;
-    import com.stintern.st2D.utils.Resources;
     import com.stintern.st2D.utils.Vector2D;
     
     import flash.display.Stage;
@@ -13,7 +10,6 @@ package com.stintern.st2D.basic
     import flash.display.StageDisplayState;
     import flash.display.StageScaleMode;
     import flash.display3D.Context3D;
-    import flash.display3D.Context3DCompareMode;
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Program3D;
     import flash.events.Event;
@@ -27,6 +23,8 @@ package com.stintern.st2D.basic
         
         private var _context3D:Context3D;
         private var _shaderProgram:Program3D;
+        
+        private var _mainCamera:Camera = new Camera();
         
         private var _projectionMatrix:PerspectiveMatrix3D = new PerspectiveMatrix3D();
         private var _viewMatrix:Matrix3D = new Matrix3D();
@@ -89,13 +87,7 @@ package com.stintern.st2D.basic
                 
                 initShaders();
                 
-                // 투영 행렬 설정
-                _projectionMatrix.identity();
-                _projectionMatrix.orthoRH(_screenWidth, _screenHeight, Resources.MIN_DEPTH, Resources.MAX_DEPTH);
-                
-                // 뷰 행렬 설정
-                _viewMatrix.identity();
-                _viewMatrix.appendTranslation(-_screenWidth*0.5, -_screenHeight*0.5, 0);
+                _mainCamera.init(-_screenWidth*0.5, -_screenHeight*0.5, _screenWidth, _screenHeight);
                 
                 onInited();
             }
@@ -131,7 +123,7 @@ package com.stintern.st2D.basic
         
         public function translateCamera(translate:Vector2D):void
         {
-            _viewMatrix.appendTranslation(translate.x, translate.y, 0);
+            _viewMatrix.appendTranslation(translate.x + -_screenWidth*0.5, translate.y + -_screenHeight*0.5, 0);
         }
         
         /** property */
@@ -141,6 +133,11 @@ package com.stintern.st2D.basic
             return _context3D;
         }
         
+        public function get mainCamera():Camera
+        {
+            return _mainCamera;
+        }
+        
         public function get shaderProgram():Program3D
         {
             return _shaderProgram;
@@ -148,12 +145,12 @@ package com.stintern.st2D.basic
 
         public function get projectionMatrix():Matrix3D
         {
-            return _projectionMatrix;
+            return _mainCamera.projection;
         }
         
         public function get viewMatrix():Matrix3D
         {
-            return _viewMatrix;
+            return _mainCamera.view;
         }
         
         public function get screenWidth():uint
