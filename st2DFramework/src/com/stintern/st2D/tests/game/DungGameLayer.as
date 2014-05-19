@@ -16,7 +16,7 @@ package com.stintern.st2D.tests.game
     public class DungGameLayer extends Layer
     {
         private var _dung:STAnimation = new STAnimation();
-        private var _person:STAnimation;
+        private var _person:STAnimation = new STAnimation();;
         private var _i:int=1;
         private var _translation:Number = 0.0;
         private var _sign:int = 1;
@@ -37,9 +37,9 @@ package com.stintern.st2D.tests.game
             
             function createStar():void
             {
-                STAnimation.createSpriteWithPath("res/dungGame.png", "dung", dungCreated, null, Math.floor(Math.random(  ) * StageContext.instance.screenWidth), StageContext.instance.screenHeight);
+                _dung.createAnimationSpriteWithPath("res/dungGame.png", "dung", dungCreated, null, Math.floor(Math.random(  ) * StageContext.instance.screenWidth), StageContext.instance.screenHeight);
             }
-            STAnimation.createSpriteWithPath("res/dungGame.png", "char", personCreated, null, Math.floor(Math.random(  ) * StageContext.instance.screenWidth), StageContext.instance.screenHeight);
+            _person.createAnimationSpriteWithPath("res/dungGame.png", "char", personCreated, null, Math.floor(Math.random(  ) * StageContext.instance.screenWidth), StageContext.instance.screenHeight);
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
@@ -85,23 +85,22 @@ package com.stintern.st2D.tests.game
             }
         }
         
-        private function dungCreated(sprite:STAnimation):void
+        private function dungCreated():void
         {
-            _dung = sprite;
             _dung.setScale(new Vector2D(2,2));
-            _dungVector.push(sprite);
+            
+            _dungVector.push(_dung);
             this.addSprite(_dung);
-            sprite.playAnimation();
+            _dung.playAnimation();
             _dung.moveTo(_dung.position.x, -_person.position.y*2, Math.floor(Math.random(  ) * 3)+3);
         }
         
-        private function personCreated(sprite:STAnimation):void
+        private function personCreated():void
         {
-            sprite.position = new Vector2D( StageContext.instance.screenWidth * 0.5, 100);
-            _person = sprite;
+            _person.position = new Vector2D( StageContext.instance.screenWidth * 0.5, 100);
             _person.setScale(new Vector2D(2,2));
             this.addSprite(_person);
-            sprite.playAnimation();
+            _person.playAnimation();
         }
         
         private function onTouch(event:MouseEvent):void

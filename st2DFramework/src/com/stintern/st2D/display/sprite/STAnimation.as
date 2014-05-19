@@ -34,29 +34,29 @@ package com.stintern.st2D.display.sprite
          * @param x 스프라이트를 처음에 위치시킬 X 좌표
          * @param y 스프라이트를 처음에 위치시킬 Y 좌표
          */
-        public static function createSpriteWithPath(path:String, animationName:String, onCreated:Function, onProgress:Function = null,  x:Number=0, y:Number=0 ):void
+        public function createAnimationSpriteWithPath(path:String, animationName:String, onCreated:Function, onProgress:Function = null,  x:Number=0, y:Number=0 ):void
         {
-            var sprite:STAnimation = new STAnimation();
-            sprite.path = path;
+            this.path = path;
             
-            sprite.position.x = x;
-            sprite.position.y = y;
+            position.x = x;
+            position.y = y;
             
-            sprite.playAnimationName = animationName;
+            playAnimationName = animationName;
             
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
             function onComplete(object:Object, zOrder:uint):void
             {
-                sprite.zOrder = zOrder;
+                this.zOrder = zOrder;
                 
-                sprite.initBuffer();
-                sprite.initTexture((object as Bitmap));
+                initBuffer();
+                initTexture((object as Bitmap));
                 
-                sprite.update();
+                update();
                 
-                onCreated(sprite);
+                onCreated();
             }
         }
+
         
         /**
          * 스프라이트 출력에 필요한 버퍼를 초기화합니다. 

@@ -2,10 +2,10 @@ package com.stintern.st2D.tests
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.STSprite;
-    import com.stintern.st2D.tests.translate_rotate_scale.TRSLayer;
+    import com.stintern.st2D.tests.batch.BatchSpriteLayer;
+    import com.stintern.st2D.utils.Vector2D;
     
     import flash.events.MouseEvent;
     
@@ -15,16 +15,18 @@ package com.stintern.st2D.tests
         private var sprite2:STSprite;
         
         public function TestLayer()
-        {
-            STSprite.createSpriteWithPath("res/test.png", onCreated, null, 200, 200);
-            STSprite.createSpriteWithPath("res/star.png", onCreated2, null, 250, 250);
+        {            
+            var testLayer:BatchSpriteLayer = new BatchSpriteLayer();
+            testLayer.tag = 1;
+            
+            
+            SceneManager.instance.getCurrentScene().addLayer(testLayer);
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
         override public function update(dt:Number):void
         {
-            
         }
         
         private function onCreated(sprite:STSprite):void
@@ -41,15 +43,17 @@ package com.stintern.st2D.tests
         
         private function onTouch(event:MouseEvent):void
         {
-            // 이곳에 맨 처음으로 사용할 레이어를 부릅니다.
-            var testLayer:TRSLayer = new TRSLayer();
             
-            var scene:Scene = new Scene();
-            scene.addLayer(testLayer);
+            //SceneManager.instance.getCurrentScene().getLayerByTag(2).isVisible = false;
             
-            SceneManager.instance.pushScene(scene);
-            
-            StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, onTouch);
+            //            var testLayer:TRSLayer = new TRSLayer();
+//            
+//            var scene:Scene = new Scene();
+//            scene.addLayer(testLayer);
+//            
+//            SceneManager.instance.pushScene(scene);
+//            
+//            StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, onTouch);
         }
         
     }

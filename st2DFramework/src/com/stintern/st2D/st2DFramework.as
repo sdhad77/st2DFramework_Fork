@@ -46,19 +46,19 @@ package com.stintern.st2D
             addChild(GameStatus.instance.initFPS());         // FPS 출력을 원하지 않을 경우 주석 처리하십시오
         }
         
-		/**
-		 *	게임 메인 루프 
-		 */
+        /**
+         *	게임 메인 루프 
+         */
         private function enterFrame(e:Event):void 
         {
-			//delta time 을 계산
+            //delta time 을 계산
             _timer.tick();
             
             update(_timer.deltaTime);
             
             draw();
             
-			// FPS 출력을 원하지 않을 경우 주석 처리하십시오
+            // FPS 출력을 원하지 않을 경우 주석 처리하십시오
             GameStatus.instance.update();                
             
         }

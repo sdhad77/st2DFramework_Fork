@@ -10,12 +10,11 @@ package com.stintern.st2D.tests.game
     
     public class EndLayer extends Layer
     {
-        private var sprite1:STSprite;
-        private var sprite2:STSprite;
+        private var sprite1:STSprite = new STSprite();;
         
         public function EndLayer()
         {
-            STSprite.createSpriteWithPath("res/gameover.jpg", onCreated, null, StageContext.instance.screenWidth/2, StageContext.instance.screenHeight/2);
+            sprite1.createSpriteWithPath("res/gameover.jpg", onCreated, null, StageContext.instance.screenWidth/2, StageContext.instance.screenHeight/2);
             
         }
         
@@ -24,9 +23,8 @@ package com.stintern.st2D.tests.game
             
         }
         
-        private function onCreated(sprite:STSprite):void
+        private function onCreated():void
         {
-            sprite1 = sprite;
             this.addSprite(sprite1);
         }
         

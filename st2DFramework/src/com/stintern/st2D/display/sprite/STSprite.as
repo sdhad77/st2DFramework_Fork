@@ -64,25 +64,24 @@ package com.stintern.st2D.display.sprite
          * @param x 스프라이트를 처음에 위치시킬 X 좌표
          * @param y 스프라이트를 처음에 위치시킬 Y 좌표
          */
-        public static function createSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null,  x:Number=0, y:Number=0 ):void
+        public function createSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null,  x:Number=0, y:Number=0 ):void
         {
-            var sprite:STSprite = new STSprite();
-            sprite.path = path;
+            this.path = path;
             
-            sprite.position.x = x;
-            sprite.position.y = y;
+            position.x = x;
+            position.y = y;
                         
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
             function onComplete(object:Object, zOrder:uint):void
             {
-                sprite.zOrder = zOrder;
+                this.zOrder = zOrder;
                 
-                sprite.initBuffer();
-                sprite.initTexture((object as Bitmap));
+                initBuffer();
+                initTexture((object as Bitmap));
                 
-                sprite.update();
+                update();
                 
-                onCreated(sprite);
+                onCreated();
             }
         }
                 
