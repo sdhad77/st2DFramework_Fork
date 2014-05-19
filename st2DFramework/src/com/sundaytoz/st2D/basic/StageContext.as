@@ -129,25 +129,6 @@ package com.sundaytoz.st2D.basic
             _shaderProgram.upload(vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
         }
         
-        /**
-         * 현재 Scene 에 있는 레이어의 순서에 따라 레이어를 출력합니다. 
-         */
-        public function draw():void
-        {
-            context.clear(1, 1, 1);
-            
-            context.setDepthTest(false, Context3DCompareMode.LESS);            
-            context.setProgram( StageContext.instance.shaderProgram );
-            
-            var layers:Array = SceneManager.instance.getCurrentScene().layerArray
-            for( var i:uint=0; i<layers.length; ++i)
-            {
-                (layers[i] as Layer).drawAllSprites();
-            }
-            
-            context.present();
-        }
-        
         public function translateCamera(translate:Vector2D):void
         {
             _viewMatrix.appendTranslation(translate.x, translate.y, 0);

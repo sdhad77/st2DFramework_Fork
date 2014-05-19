@@ -46,18 +46,6 @@ package com.sundaytoz.st2D.display
             _spriteManager.removeSprite(sprite);
             sprite.dispose();
         }  
-    
-        
-        /**
-         * 레이어에 있는 모든 스프라이트를 그립니다. 
-         */
-        public function drawAllSprites():void
-        {
-            _spriteManager.drawAllSprites();
-            
-            if( _batchSprite != null )
-                _batchSprite.draw();
-        }
         
         /**
          * 레이어의 스프라이트 배열을 반환합니다.
@@ -65,6 +53,14 @@ package com.sundaytoz.st2D.display
         public function getAllSprites():Array
         {
             return _spriteManager.getAllSprites();
+        }
+        
+        /**
+         * 레이어에 사용중인 batchSprite 를 리턴합니다. 
+         */
+        public function get batchSprite():BatchSprite
+        {
+            return _batchSprite;
         }
                 
     }

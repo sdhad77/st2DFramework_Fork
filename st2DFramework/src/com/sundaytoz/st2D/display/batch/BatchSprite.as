@@ -14,14 +14,17 @@ package com.sundaytoz.st2D.display.batch
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.geom.Matrix3D;
 
+    /**
+     * 하나의 텍스쳐를 이용하는 스프라이트의 경우 BatchSprite 를 이용하여 
+     * 효율적으로 화면에 출력할 수 있습니다.  
+     */
     public class BatchSprite extends BaseSprite
     {
-        private var _spriteCount:uint = 0;              //BatchSprite에 있는 Sprite 개수
+        private var _spriteCount:uint = 0;                      //BatchSprite에 있는 Sprite 개수
+        private var _updateRequired:Boolean = true;     //Vertex, Index Buffer 를 그리기 전에 갱신해야 하는 여부
         
         private var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
         private var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
-        
-        private var _updateRequired:Boolean = true;
         
         public function BatchSprite()
         {

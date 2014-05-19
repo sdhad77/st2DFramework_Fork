@@ -1,6 +1,7 @@
 package com.sundaytoz.st2D
 {
     import com.sundaytoz.st2D.basic.StageContext;
+    import com.sundaytoz.st2D.display.DrawManager;
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
     import com.sundaytoz.st2D.tests.TestLayer;
@@ -13,6 +14,7 @@ package com.sundaytoz.st2D
     public class st2DFramework extends Sprite
     {
         private var _timer:GameTimer = new GameTimer();
+        private var _drawManager:DrawManager = new DrawManager();
         
         public function st2DFramework()
         {
@@ -63,9 +65,8 @@ package com.sundaytoz.st2D
         
         private function draw():void
         {
-            StageContext.instance.draw();
+            _drawManager.draw();
         }
-        
         
     }
 }
