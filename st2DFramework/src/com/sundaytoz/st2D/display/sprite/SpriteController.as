@@ -1,7 +1,5 @@
-package com.sundaytoz.st2D.display
+package com.sundaytoz.st2D.display.sprite
 {
-    import flash.geom.Matrix3D;
-    
 
     /**
      * 스프라이트들을 관리하고 화면에 출력합니다. 
@@ -48,7 +46,7 @@ package com.sundaytoz.st2D.display
          * 스프라이트 벡터에서 스프라이트를 삭제합니다.  
          * @param sprite    삭제할 스프라이트
          */
-        internal function removeSprite(sprite:STSprite):void
+        public function removeSprite(sprite:STSprite):void
         {
             for( var i:uint = 0; i<_sprites.length; ++i)
             {

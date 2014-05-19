@@ -1,6 +1,6 @@
 import com.sundaytoz.st2D.animation.AnimationManager;
 import com.sundaytoz.st2D.display.Layer;
-import com.sundaytoz.st2D.display.STSprite;
+import com.sundaytoz.st2D.display.sprite.STSprite;
 
 class GameObject
 {
@@ -43,7 +43,7 @@ package com.sundaytoz.st2D.tests.game
     import com.sundaytoz.st2D.animation.datatype.Animation;
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.STSprite;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
     import com.sundaytoz.st2D.utils.CollisionDetection;
     import com.sundaytoz.st2D.utils.Picking;
     import com.sundaytoz.st2D.utils.scheduler.Scheduler;

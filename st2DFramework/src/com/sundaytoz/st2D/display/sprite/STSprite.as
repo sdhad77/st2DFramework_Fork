@@ -1,4 +1,4 @@
-package com.sundaytoz.st2D.display
+package com.sundaytoz.st2D.display.sprite
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.utils.AssetLoader;
@@ -102,7 +102,7 @@ package com.sundaytoz.st2D.display
         /**
          * 스프라이트의 Scale, Rotation, Translation 을 변경합니다. 
          */
-        internal function update():void
+        public function update():void
         {
             _modelMatrix.identity();
             

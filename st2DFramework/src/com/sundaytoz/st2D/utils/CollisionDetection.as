@@ -1,6 +1,6 @@
 package com.sundaytoz.st2D.utils
 {
-    import com.sundaytoz.st2D.display.STSprite;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
     
     import flash.display.Bitmap;
     import flash.geom.Point;

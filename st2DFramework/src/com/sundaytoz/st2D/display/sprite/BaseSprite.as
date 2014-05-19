@@ -1,4 +1,4 @@
-package com.sundaytoz.st2D.display
+package com.sundaytoz.st2D.display.sprite
 {
     import flash.display.Bitmap;
     import flash.display.BitmapData;

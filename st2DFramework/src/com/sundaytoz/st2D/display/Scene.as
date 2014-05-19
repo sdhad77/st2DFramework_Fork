@@ -1,5 +1,7 @@
 package com.sundaytoz.st2D.display
 {
+    import com.sundaytoz.st2D.display.sprite.STObject;
+
     public class Scene extends STObject
     {
         private var _layerArray:Array = new Array();

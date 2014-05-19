@@ -1,6 +1,9 @@
 package com.sundaytoz.st2D.display
 {
-    import com.sundaytoz.st2D.display.batch.BatchSprite;
+    import com.sundaytoz.st2D.display.sprite.BatchSprite;
+    import com.sundaytoz.st2D.display.sprite.STObject;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
+    import com.sundaytoz.st2D.display.sprite.SpriteController;
 
     public class Layer extends STObject  
     {

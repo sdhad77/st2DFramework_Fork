@@ -2,7 +2,7 @@ package com.sundaytoz.st2D.tests.sceneTransition
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.STSprite;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
     

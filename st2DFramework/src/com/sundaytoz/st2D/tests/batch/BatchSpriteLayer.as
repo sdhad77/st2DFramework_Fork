@@ -2,14 +2,16 @@ package com.sundaytoz.st2D.tests.batch
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.STSprite;
-    import com.sundaytoz.st2D.display.batch.BatchSprite;
+    import com.sundaytoz.st2D.display.sprite.BatchSprite;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
+    import com.sundaytoz.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
     
     public class BatchSpriteLayer extends Layer
     {
         private var batchSprite:BatchSprite;
+        private var _scheduler:Scheduler = new Scheduler();
         
         public function BatchSpriteLayer()
         {
@@ -17,6 +19,17 @@ package com.sundaytoz.st2D.tests.batch
             batchSprite.createBatchSpriteWithPath("res/star.png", onCreated);
             
             addBatchSprite(batchSprite);
+            
+            _scheduler.addFunc(200, createStar, 0);
+            _scheduler.startScheduler();
+            
+            function createStar():void
+            {            
+                var x:Number = Math.ceil(Math.random() * StageContext.instance.screenWidth);
+                var y:Number = Math.ceil(Math.random() * StageContext.instance.screenHeight);
+                
+                STSprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, x, y);
+            }
         }
         
         override public function update(dt:Number):void
@@ -26,30 +39,17 @@ package com.sundaytoz.st2D.tests.batch
         private function onCreated():void
         {
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onTouch);
-            
-            STSprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, 100, 100);
-            STSprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, 300, 300);
-            STSprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, StageContext.instance.screenWidth * 0.5, StageContext.instance.screenHeight * 0.5);
         }
                 
         private function onTouch(event:MouseEvent):void
         {            
-            var x:Number = Math.ceil(Math.random() * StageContext.instance.screenWidth);
-            var y:Number = Math.ceil(Math.random() * StageContext.instance.screenHeight);
-            
-            trace(x, y);
-            
-            STSprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, x, y);
+            _scheduler.stopScheduler();
         }
         
         private function onSpriteCreated(sprite:STSprite):void
         {
             batchSprite.addSprite(sprite);
         }
-        
-
-        
-
         
     }
 }

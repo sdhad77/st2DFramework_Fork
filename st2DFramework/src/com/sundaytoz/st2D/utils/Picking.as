@@ -1,7 +1,7 @@
 package com.sundaytoz.st2D.utils
 {
 	import com.sundaytoz.st2D.basic.StageContext;
-	import com.sundaytoz.st2D.display.STSprite;
+	import com.sundaytoz.st2D.display.sprite.STSprite;
 	
 	import flash.display.Stage;
 	import flash.geom.Rectangle;

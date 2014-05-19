@@ -2,7 +2,7 @@ package com.sundaytoz.st2D.tests
 {
     import com.sundaytoz.st2D.animation.AnimationManager;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.STSprite;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
     import com.sundaytoz.st2D.utils.scheduler.Scheduler;
 
     /**
