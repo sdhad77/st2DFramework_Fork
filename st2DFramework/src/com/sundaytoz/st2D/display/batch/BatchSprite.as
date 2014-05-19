@@ -154,23 +154,6 @@ package com.sundaytoz.st2D.display.batch
          */
         private function updateBuffers():void
         {
-            if (vertexBuffer == null)
-            {
-                createBuffers();
-            }
-            else
-            {
-                vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length);
-                indexBuffer.uploadFromVector(indexData, 0, indexData.length);
-                _updateRequired = false;
-            }
-        }
-        
-        /**
-         * 버퍼를 새롭게 생성합니다. 
-         */
-        private function createBuffers():void
-        {
             destroyBuffers();
             
             var numVertices:int = vertexData.length;
