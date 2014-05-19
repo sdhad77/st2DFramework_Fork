@@ -4,7 +4,6 @@ package com.stintern.st2D.animation
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.animation.datatype.AnimationPlayData;
     import com.stintern.st2D.display.sprite.STSprite;
-    import com.stintern.st2D.utils.GameStatus;
     
     import flash.utils.Dictionary;
 
