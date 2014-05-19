@@ -5,10 +5,24 @@ package com.stintern.st2D.display
     import com.stintern.st2D.display.sprite.STSprite;
     import com.stintern.st2D.display.sprite.SpriteController;
 
+    /**
+     * 하나의 층을 나타내는 Layer 클래스입니다. 
+     * 사용자는 Layer 클래스를 상속받아 사용자 만의 Layer를 만들고
+     * 스프라이트를 생성하여 상속받은 Layer클래스의 addSprite() 를 사용하여
+     * Layer 객체에 추가하면 다음 프레임 때부터 스프라이트가 화면에 출력됩니다.
+     * 
+     * <br/>
+     * 
+     * BatchSprite 배열을 이용하여 화면 출력의 효율을 높일 수도 있습니다.
+     * 
+     * @see also BatchSprite   
+     * @author 이종민
+     * 
+     */
     public class Layer extends STObject  
     {
         private var _spriteManager:SpriteController = new SpriteController();
-        private var _batchSprite:BatchSprite;
+        private var _batchSpriteArray:Array = new Array();
         
         public function Layer()
         {
@@ -19,10 +33,22 @@ package com.stintern.st2D.display
             throw new Error("Layer 클래스는 update()추상함수를 포함합니다. 오버라이딩 해주세요 ");
         }
         
+        /**
+         * 레이어를 삭제하면서 사용한 자원을 해제합니다.
+         * (Bitmap 관련 데이터는 AsserLoader 객체에 남아있으니 필요없으면 AsserLoader 를 통해서 삭제해주십시오.) 
+         */
         public function dispose():void
         {
             _spriteManager.dispose();
             _spriteManager = null;
+            
+            for each(var batchSprite:BatchSprite in _batchSpriteArray)
+            {
+                batchSprite.dispose();
+                _batchSpriteArray.splice(batchSprite, 1);
+            }
+            
+            _batchSpriteArray = null;
         }
         
         /**
@@ -34,9 +60,30 @@ package com.stintern.st2D.display
             _spriteManager.addSprite(sprite);
         }
         
+        /**
+         * BatchSprite 를 추가합니다. 
+         */
         public function addBatchSprite(batchSprite:BatchSprite):void
         {
-            _batchSprite = batchSprite;
+            _batchSpriteArray.push(batchSprite);
+        }
+        
+        /**
+         * 추가된 BatchSprite 를 제거합니다. 
+         * BatchSprite 객체가 사용한 자원도 해제됩니다.
+         * (AssetLoader 에 저장되어 있는 Bitmap 관련 데이터는 남아있습니다.)
+         */
+        public function removeBatchSprite(batchSprite:BatchSprite):void
+        {
+            for(var i:uint=0; i<_batchSpriteArray.length; ++i)
+            {
+                if( _batchSpriteArray[i] == batchSprite )
+                {
+                    (_batchSpriteArray[i] as BatchSprite).dispose();
+                    _batchSpriteArray.splice(i, 1);
+                    break;
+                }
+            }
         }
 
         
@@ -59,11 +106,11 @@ package com.stintern.st2D.display
         }
         
         /**
-         * 레이어에 사용중인 batchSprite 를 리턴합니다. 
+         * 레이어에 사용중인 batchSprite 배열을 리턴합니다. 
          */
-        public function get batchSprite():BatchSprite
+        public function get batchSpriteArray():Array
         {
-            return _batchSprite;
+            return _batchSpriteArray;
         }
                 
     }

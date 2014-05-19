@@ -4,7 +4,7 @@ package com.stintern.st2D.display.sprite
 
     public class STObject 
     {
-        private var _tag:int;
+        private var _tag:uint;
         private var _name:String;
         
         private var _isVisible:Boolean;
@@ -24,11 +24,11 @@ package com.stintern.st2D.display.sprite
             _name = name;
         }
         
-        public function get tag():int
+        public function get tag():uint
         {
             return _tag;
         }
-        public function set tag(tag:int):void
+        public function set tag(tag:uint):void
         {
             _tag = tag;
         }

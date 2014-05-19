@@ -32,6 +32,22 @@ package com.stintern.st2D.display
             return _layerArray;
         }
         
+        /**
+         * 태그를 통해서 특정 레이어를 반환합니다. 
+         * @param tag 찾을 레이어의 태그
+         * @return 태그를 가진 레이어 ( 없을 경우 null 리턴 )
+         */
+        public function getLayerByTag(tag:uint):Layer
+        {
+            for each(var layer:Layer in _layerArray)
+            {
+                if( layer.tag == tag )
+                    return layer;
+            }
+            
+            return null;
+        }
+        
         public function clean():void
         {
             

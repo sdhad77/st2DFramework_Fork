@@ -1,6 +1,8 @@
 package com.stintern.st2D.display
 {
     import com.stintern.st2D.basic.StageContext;
+    import com.stintern.st2D.display.sprite.BatchSprite;
+    import com.stintern.st2D.display.sprite.STSprite;
     import com.stintern.st2D.utils.GameStatus;
     
     import flash.display3D.Context3D;
@@ -9,7 +11,6 @@ package com.stintern.st2D.display
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.geom.Matrix3D;
-    import com.stintern.st2D.display.sprite.STSprite;
 
 
     public class DrawManager
@@ -36,12 +37,20 @@ package com.stintern.st2D.display
             for( var i:uint=0; i<layers.length; ++i)
             {
                 var layer:Layer = layers[i] as Layer;
+                if( layer.isVisible == false )
+                    continue;
+                
                 drawSprites( layer.getAllSprites() );
                 
-                if( layer.batchSprite != null )
+                for(var spriteIdx:uint=0; spriteIdx<layer.batchSpriteArray.length; ++spriteIdx)
                 {
-                    layer.batchSprite.draw();
+                    (layer.batchSpriteArray[spriteIdx] as BatchSprite).draw();
                 }
+                
+//                if( layer.batchSpriteArray.length != 0 )
+//                {
+//                    layer.batchSprite.draw();
+//                }
             }
             
             context.present();
