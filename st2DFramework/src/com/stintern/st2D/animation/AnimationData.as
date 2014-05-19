@@ -76,7 +76,9 @@ package com.stintern.st2D.animation
                 _animationData[pathTexture]["available"]++;
                 
                 if( _animationData[pathTexture]["available"] == 2 )
-                    onCompleted();
+                {
+                    if(onCompleted != null) onCompleted();
+                }    
             }
             function onXmlLoaderComplete(dictionary:Dictionary):void
             {
@@ -86,7 +88,9 @@ package com.stintern.st2D.animation
                 _animationData[pathTexture]["available"]++;
                 
                 if( _animationData[pathTexture]["available"] == 2 )
-                    onCompleted();
+                {
+                    if(onCompleted != null) onCompleted();
+                }  
             }
         }
         
