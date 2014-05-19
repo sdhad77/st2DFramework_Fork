@@ -47,7 +47,7 @@ package com.stintern.st2D.tests.batch
         {
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onTouch);
             
-            _scheduler.addFunc(200, createStar, 0);
+            _scheduler.addFunc(50, createStar, 0);
             _scheduler.startScheduler();
             
             function createStar():void
@@ -58,7 +58,16 @@ package com.stintern.st2D.tests.batch
                 var sprite:STSprite = new STSprite();
                 _sprites.push(sprite);
                 
-                sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated, x, y ); 
+                if( _sprites.length % 2 == 0 )
+                {
+                    sprite.createSpriteWithBatchSprite(_batchSprite, "fire4", onSpriteCreated, x, y );    
+                }
+                else
+                {
+                    sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated, x, y );
+                }
+                
+                trace(_sprites.length);
             }
         }
                 
