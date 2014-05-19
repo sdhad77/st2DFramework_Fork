@@ -83,7 +83,7 @@ package com.stintern.st2D.display.sprite
                 
                 update();
                 
-                onCreated(this);
+                onCreated();
             }
         }
         
@@ -100,6 +100,7 @@ package com.stintern.st2D.display.sprite
             {
                 throw new Error("아직 애니메이션 데이터가 로딩중입니다.");  
             }
+            updateUVCoord(uvCoord);
             
             this.path = path;
             
@@ -108,6 +109,7 @@ package com.stintern.st2D.display.sprite
             
             this.zOrder = AssetLoader.instance.increaseImageNo();
             
+            initBuffer();
             
 
         }
@@ -141,6 +143,20 @@ package com.stintern.st2D.display.sprite
             }
             
             return null;
+        }
+        
+        /**
+         * 스프라이트의 VertexData UV 좌표를 갱신합니다. 
+         * @param uvCoord 갱신할 UV 좌표
+         */
+        private function updateUVCoord(uvCoord:Array):void
+        {
+            var uvIndex:uint = 0;
+            for(var i:uint=0; i<VERTEX_COUNT; i++)
+            {
+                vertexData[3 + i * DATAS_PER_VERTEX] = uvCoord[uvIndex++];
+                vertexData[4 + i * DATAS_PER_VERTEX] = uvCoord[uvIndex++];
+            }
         }
                 
         /**

@@ -20,6 +20,9 @@ package com.stintern.st2D.display.sprite
         private var _vertexBuffer:VertexBuffer3D;
         private var _indexBuffer:IndexBuffer3D;
         
+        protected var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
+        protected var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
+        
         public function BaseSprite()
         {
             super();

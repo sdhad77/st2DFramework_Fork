@@ -23,9 +23,6 @@ package com.stintern.st2D.display.sprite
         private var _sprites:Array = new Array();
         private var _updateRequired:Boolean = true;     //Vertex, Index Buffer 를 그리기 전에 갱신해야 하는 여부
         
-        private var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
-        private var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
-        
         public function BatchSprite()
         {
         }
