@@ -6,9 +6,9 @@ package com.sundaytoz.st2D.tests.game
     import com.sundaytoz.st2D.animation.datatype.AnimationFrame;
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.sprite.STSprite;
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
     import com.sundaytoz.st2D.tests.Animation.STSpriteMoveToLayer;
     import com.sundaytoz.st2D.utils.CollisionDetection;
     import com.sundaytoz.st2D.utils.Vector2D;
@@ -35,7 +35,7 @@ package com.sundaytoz.st2D.tests.game
             AnimationData.instance.setAnimation("res/dungGame.png", new Animation("char",  new Array("char0", "char1"),     new Array(8, 8), "char"));
             
             var dungScheduler:Scheduler = new Scheduler();
-            dungScheduler.addFunc((Math.floor(Math.random() * 3)+1) * 550, createStar, 0);
+            dungScheduler.addFunc((Math.floor(Math.random() * 4)+1) * 400, createStar, 0);
             dungScheduler.startScheduler();
             
             function createStar():void
@@ -59,8 +59,10 @@ package com.sundaytoz.st2D.tests.game
                 var popCheckNum:uint = 0;
                 for(var i:uint=0; i<_dungVector.length; i++)
                 {
-                    if(0 < _dungVector[i].position.y && _dungVector[i].position.y < _person.position.y)
+                    trace("_dungVector.length : " + _dungVector.length);
+                    if(0 < _dungVector[i].position.y && _dungVector[i].position.y < _person.position.y + _person.height * 1.8)
                     {
+                        trace(0 + "    <    " + _dungVector[i].position.y  + "    <    " + ( _person.position.y + _person.height));
                         if(CollisionDetection.collisionCheck(_dungVector[i], _person))
                         {
                             AnimationManager.instance.allPause();
@@ -91,16 +93,14 @@ package com.sundaytoz.st2D.tests.game
                     }
                 }
         
-                for(var j:uint=0; j<popCheckNum; j++)
-                {
-                    _dungVector.pop();
-                }
+                    
             }
         }
         
         private function dungCreated(sprite:STSprite):void
         {
             _dung = sprite;
+            _dung.setScale(new Vector2D(2,2));
             _dungVector.push(sprite);
             this.addSprite(_dung);
             AnimationManager.instance.addSprite(_dung, "dung");
@@ -112,6 +112,7 @@ package com.sundaytoz.st2D.tests.game
         {
             sprite.position = new Vector2D( StageContext.instance.screenWidth * 0.5, 100);
             _person = sprite;
+            _person.setScale(new Vector2D(2,2));
             this.addSprite(_person);
             AnimationManager.instance.addSprite(_person, "char");
         }
