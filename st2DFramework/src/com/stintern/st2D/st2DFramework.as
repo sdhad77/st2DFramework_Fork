@@ -10,7 +10,9 @@ package com.stintern.st2D
     
     import flash.desktop.NativeApplication;
     import flash.display.Sprite;
+    import flash.display.StageOrientation;
     import flash.events.Event;
+    import flash.events.StageOrientationEvent;
     
     public class st2DFramework extends Sprite
     {
@@ -23,6 +25,7 @@ package com.stintern.st2D
             
             StageContext.instance.init(stage, onInited);
             stage.addEventListener(Event.DEACTIVATE, deactivate);
+            stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGING, orientationChanging);
         }
         
         /**
@@ -74,6 +77,12 @@ package com.stintern.st2D
         {  
             // auto-close  
             NativeApplication.nativeApplication.exit();  
+        }
+        
+        private function orientationChanging(e:StageOrientationEvent):void {
+            if (e.afterOrientation == StageOrientation.DEFAULT || e.afterOrientation == StageOrientation.UPSIDE_DOWN) {
+                e.preventDefault();
+            }
         }
     }
 }
