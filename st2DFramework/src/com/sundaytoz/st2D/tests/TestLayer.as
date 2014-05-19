@@ -2,10 +2,10 @@ package com.sundaytoz.st2D.tests
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.STSprite;
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
-    import com.sundaytoz.st2D.tests.sceneTransition.FirstSceneLayer;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
+    import com.sundaytoz.st2D.tests.translate_rotate_scale.TRSLayer;
     
     import flash.events.MouseEvent;
     
@@ -42,10 +42,10 @@ package com.sundaytoz.st2D.tests
         private function onTouch(event:MouseEvent):void
         {
             // 이곳에 맨 처음으로 사용할 레이어를 부릅니다.
-            var aniLayer:FirstSceneLayer = new FirstSceneLayer();
+            var testLayer:TRSLayer = new TRSLayer();
             
             var scene:Scene = new Scene();
-            scene.addLayer(aniLayer);
+            scene.addLayer(testLayer);
             
             SceneManager.instance.pushScene(scene);
             

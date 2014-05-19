@@ -2,8 +2,10 @@ package com.sundaytoz.st2D.tests.batch
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
+    import com.sundaytoz.st2D.display.SceneManager;
     import com.sundaytoz.st2D.display.sprite.BatchSprite;
     import com.sundaytoz.st2D.display.sprite.STSprite;
+    import com.sundaytoz.st2D.utils.Vector2D;
     import com.sundaytoz.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
@@ -12,6 +14,11 @@ package com.sundaytoz.st2D.tests.batch
     {
         private var batchSprite:BatchSprite;
         private var _scheduler:Scheduler = new Scheduler();
+        
+        private var _sprites:Array = new Array();
+        private var _translation:Number = 0.0;
+        
+        private var _touchCount:uint = 0;
         
         public function BatchSpriteLayer()
         {
@@ -34,6 +41,12 @@ package com.sundaytoz.st2D.tests.batch
         
         override public function update(dt:Number):void
         {
+            for each( var sprite:STSprite in _sprites)
+            {
+                sprite.setTranslation( new Vector2D( (Math.sin(_translation) ) + sprite.position.x , sprite.position.y ) );    
+            }
+            
+            _translation += 0.05;
         }
         
         private function onCreated():void
@@ -43,12 +56,21 @@ package com.sundaytoz.st2D.tests.batch
                 
         private function onTouch(event:MouseEvent):void
         {            
+            if( _touchCount > 0 )
+            {
+                SceneManager.instance.popScene();
+                StageContext.instance.stage.removeEventListener(MouseEvent.MOUSE_UP, onTouch);
+                return;
+            }
+            
             _scheduler.stopScheduler();
+            _touchCount++;
         }
         
         private function onSpriteCreated(sprite:STSprite):void
         {
             batchSprite.addSprite(sprite);
+            _sprites.push(sprite);
         }
         
     }
