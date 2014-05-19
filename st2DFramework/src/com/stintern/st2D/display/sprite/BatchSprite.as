@@ -40,6 +40,8 @@ package com.stintern.st2D.display.sprite
          */
         public function createBatchSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null ):void
         {
+            this.path = path;
+            
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
             function onComplete(object:Object, zOrder:uint):void
             {

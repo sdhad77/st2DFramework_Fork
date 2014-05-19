@@ -52,7 +52,7 @@ package com.stintern.st2D.animation
          * @param pathTexture SpriteSheet의 경로
          * @param pathXML SpriteSheet의 Atlas 정보들이 들어있는 xml파일
          */
-        public function setAnimationData(pathTexture:String, pathXML:String):void
+        public function setAnimationData(pathTexture:String, pathXML:String, onCompleted:Function):void
         {
             //이 path가 아직 key로 등록 되어있지 않다면, 초기화를 해줍니다.
             if(!(pathTexture in _animationData))
@@ -74,6 +74,9 @@ package com.stintern.st2D.animation
                 _animationData[pathTexture]["bitmap"] = object as Bitmap;
                 //이미지 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
                 _animationData[pathTexture]["available"]++;
+                
+                if( _animationData[pathTexture]["available"] == 2 )
+                    onCompleted();
             }
             function onXmlLoaderComplete(dictionary:Dictionary):void
             {
@@ -81,6 +84,9 @@ package com.stintern.st2D.animation
                 _animationData[pathTexture]["frame"] = dictionary;
                 //xml파일 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
                 _animationData[pathTexture]["available"]++;
+                
+                if( _animationData[pathTexture]["available"] == 2 )
+                    onCompleted();
             }
         }
         

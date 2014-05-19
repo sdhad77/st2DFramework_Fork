@@ -87,6 +87,14 @@ package com.stintern.st2D.display.sprite
             }
         }
         
+        /**
+         * 생성한 BatchSprite 를 통해서 새로운 Sprite를 만듭니다.  
+         * @param batchSprite 사용할 Batch sprite
+         * @param imageName 스프라이트 이미지에서 사용할 이미지 이름
+         * @param onCreated 생성 후 호출될 콜백 함수
+         * @param x 새로운 Sprite 의 초기 X 위치
+         * @param y 새로운 Sprite 의 초기 Y 위치
+         */
         public function createSpriteWithBatchSprite(batchSprite:BatchSprite, imageName:String, onCreated:Function, x:Number = 0, y:Number=0):void
         {
             if( batchSprite == null )
@@ -95,14 +103,14 @@ package com.stintern.st2D.display.sprite
             }
             
             // BatchSprite 에서 사용할 이미지의 UV 좌표를 읽어옵니다.
-            var uvCoord:Array = getUVCoord(imageName);
+            var uvCoord:Array = getUVCoord(batchSprite, imageName);
             if( uvCoord == null )
             {
                 throw new Error("아직 애니메이션 데이터가 로딩중입니다.");  
             }
             updateUVCoord(uvCoord);
             
-            this.path = path;
+            this.path = batchSprite.path;
             
             position.x = x;
             position.y = y;
@@ -111,7 +119,9 @@ package com.stintern.st2D.display.sprite
             
             initBuffer();
             
-
+            update();
+            
+            onCreated();
         }
         
         /**
@@ -119,23 +129,26 @@ package com.stintern.st2D.display.sprite
          * @param imageName xml 상에 기입된 이미지의 이름
          * @return uv 좌표
          */
-        private function getUVCoord(imageName:String):Array
+        private function getUVCoord(batchSprite:BatchSprite, imageName:String):Array
         {
             var uvCoord:Array = new Array();
             
-            if(AnimationData.instance.animationData[path]["available"] == 2)
+            if(AnimationData.instance.animationData[batchSprite.path]["available"] == 2)
             {
                 //현재 프레임 정보
-                var tempFrame:AnimationFrame = AnimationData.instance.animationData[path]["frame"][imageName];
+                var tempFrame:AnimationFrame = AnimationData.instance.animationData[batchSprite.path]["frame"][imageName];
                 
                 //uv좌표 변경하는 방식
                 frame.width = tempFrame.width;
                 frame.height = tempFrame.height;
                 
-                uvCoord.push(tempFrame.x/textureWidth, tempFrame.y/textureHeight);                                                              //left top
-                uvCoord.push(tempFrame.x/textureWidth + tempFrame.width/textureWidth, tempFrame.y/textureHeight);           //right top
-                uvCoord.push(tempFrame.x/textureWidth + tempFrame.width/textureWidth, tempFrame.y/textureHeight + tempFrame.height/textureHeight);           //right bottom
-                uvCoord.push(tempFrame.x/textureWidth, tempFrame.y/textureHeight + tempFrame.height/textureHeight);           //left bottom
+                var width:uint = batchSprite.textureWidth;
+                var height:uint = batchSprite.textureHeight;
+                
+                uvCoord.push(tempFrame.x/width, tempFrame.y/height);                                                                                            //left top
+                uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height);                                                    //right top
+                uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height + tempFrame.height/height);             //right bottom
+                uvCoord.push(tempFrame.x/width, tempFrame.y/height + tempFrame.height/height);                                                  //left bottom
                 
                 tempFrame = null;
                 
@@ -193,6 +206,7 @@ package com.stintern.st2D.display.sprite
             _modelMatrix.identity();
             
             // scale
+            //_modelMatrix.appendScale(_frame.width * scale.x, _frame.height * scale.y, 1);
             _modelMatrix.appendScale(_frame.width * scale.x, _frame.height * scale.y, 1);
             
             // rotate
@@ -426,21 +440,7 @@ package com.stintern.st2D.display.sprite
         {
             _frame = value;
          }
-        
-        /**
-         * 텍스쳐의 가로 길이를 리턴합니다. 
-         */
-        public function get textureWidth():Number
-        {            
-            return this.textureData.width;
-        }
-        /**
-         * 텍스쳐의 세로 길이를 리턴합니다. 
-         */
-        public function get textureHeight():Number
-        {
-            return this.textureData.height;
-        }
+
         
         /**
         * 프레임의 가로 길이를 리턴합니다. 

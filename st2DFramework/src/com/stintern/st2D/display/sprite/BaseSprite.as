@@ -88,6 +88,21 @@ package com.stintern.st2D.display.sprite
             _textureData = bitmap;
         }
         
+        /**
+         * 텍스쳐의 가로 길이를 리턴합니다. 
+         */
+        public function get textureWidth():Number
+        {            
+            return _textureData.width;
+        }
+        /**
+         * 텍스쳐의 세로 길이를 리턴합니다. 
+         */
+        public function get textureHeight():Number
+        {
+            return _textureData.height;
+        }
+        
         public function get vertexData():Vector.<Number>
         {
             return _vertexData;

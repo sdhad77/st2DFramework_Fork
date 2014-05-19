@@ -1,5 +1,6 @@
 package com.stintern.st2D.tests.batch
 {
+    import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
@@ -12,7 +13,7 @@ package com.stintern.st2D.tests.batch
     
     public class BatchSpriteLayer extends Layer
     {
-        private var batchSprite:BatchSprite;
+        private var _batchSprite:BatchSprite;
         private var _scheduler:Scheduler = new Scheduler();
         
         private var _sprites:Array = new Array();
@@ -22,22 +23,9 @@ package com.stintern.st2D.tests.batch
         
         public function BatchSpriteLayer()
         {
-            batchSprite = new BatchSprite();
-            batchSprite.createBatchSpriteWithPath("res/star.png", onCreated);
+            _batchSprite = new BatchSprite();
             
-            addBatchSprite(batchSprite);
-            
-            _scheduler.addFunc(200, createStar, 0);
-            _scheduler.startScheduler();
-            
-            function createStar():void
-            {            
-                var x:Number = Math.ceil(Math.random() * StageContext.instance.screenWidth);
-                var y:Number = Math.ceil(Math.random() * StageContext.instance.screenHeight);
-                
-                var sprite:STSprite = new STSprite();
-                sprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, x, y);
-            }
+            AnimationData.instance.setAnimationData("res/atlas.png", "res/atlas.xml", onCompleted );
         }
         
         override public function update(dt:Number):void
@@ -50,9 +38,30 @@ package com.stintern.st2D.tests.batch
             _translation += 0.05;
         }
         
+        private function onCompleted():void
+        {
+            _batchSprite.createBatchSpriteWithPath("res/atlas.png", onCreated);
+            addBatchSprite(_batchSprite);
+        }
+        
         private function onCreated():void
         {
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onTouch);
+            
+            _scheduler.addFunc(200, createStar, 0);
+            _scheduler.startScheduler();
+            
+            function createStar():void
+            {            
+                var x:Number = Math.ceil(Math.random() * StageContext.instance.screenWidth);
+                var y:Number = Math.ceil(Math.random() * StageContext.instance.screenHeight);
+                
+                var sprite:STSprite = new STSprite();
+                _sprites.push(sprite);
+                
+                sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated, x, y ); 
+                //sprite.createSpriteWithPath("res/star.png", onSpriteCreated, null, x, y);
+            }
         }
                 
         private function onTouch(event:MouseEvent):void
@@ -68,10 +77,9 @@ package com.stintern.st2D.tests.batch
             _touchCount++;
         }
         
-        private function onSpriteCreated(sprite:STSprite):void
+        private function onSpriteCreated():void
         {
-            batchSprite.addSprite(sprite);
-            _sprites.push(sprite);
+            _batchSprite.addSprite(_sprites[_sprites.length-1]);
         }
         
     }
