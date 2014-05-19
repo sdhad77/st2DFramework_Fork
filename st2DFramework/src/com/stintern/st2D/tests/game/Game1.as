@@ -55,6 +55,7 @@ package com.stintern.st2D.tests.game
     {
         private var gameObject:Vector.<GameObject> = new Vector.<GameObject>;
         private var effectSprite:STSprite;
+        private var testSprite:STSprite;
         private var sch:Scheduler = new Scheduler();
         private var gameStart:Boolean = false;
         
@@ -106,6 +107,16 @@ package com.stintern.st2D.tests.game
             AnimationManager.instance.pauseAnimation(effectSprite);
         }
         
+        public function onCreated2(sprite:STSprite):void
+        {
+            testSprite = sprite;
+            testSprite.depth = 5;
+            this.addSprite(testSprite);
+            testSprite.isVisible = true;
+            
+            testSprite.moveBy(300,300,30);
+        }
+        
         private function init():void
         {
             AnimationData.instance.setAnimationData("res/atlas.png", "res/atlas.xml");
@@ -126,6 +137,7 @@ package com.stintern.st2D.tests.game
             }
             
             STSprite.createSpriteWithPath("res/atlas.png", onCreated);
+            STSprite.createSpriteWithPath("res/star.png", onCreated2, null, 512, 384);
             
             sch.addFunc(2000, gameSetting, 0);
             sch.startScheduler();
@@ -171,7 +183,7 @@ package com.stintern.st2D.tests.game
             for(var i:int=0; i < 20; i++)
             {
                 AnimationManager.instance.playAnimation(gameObject[i]._sprite);
-                if(gameObject[i]._info._party == "ENEMY") AnimationManager.instance.moveBy(gameObject[i]._sprite, -600, 0, 20);
+                if(gameObject[i]._info._party == "ENEMY") gameObject[i]._sprite.moveBy(-600, 0, 20);
             }
             
             gameStart = true;

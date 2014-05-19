@@ -51,7 +51,7 @@ package com.stintern.st2D.tests.Animation
         
         private function onTouch(event:MouseEvent):void
         {
-            AnimationManager.instance.moveTo(Picking.pick(StageContext.instance.stage, getAllSprites(), event.stageX, event.stageY), 700, 700, 3);
+            Picking.pick(StageContext.instance.stage, getAllSprites(), event.stageX, event.stageY).moveTo(700, 700, 3);
         }
     }
 }

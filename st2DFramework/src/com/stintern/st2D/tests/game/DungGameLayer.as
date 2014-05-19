@@ -103,7 +103,7 @@ package com.stintern.st2D.tests.game
             this.addSprite(_dung);
             AnimationManager.instance.addSprite(_dung, "dung");
             AnimationManager.instance.pauseAnimation(_dung);
-            AnimationManager.instance.moveTo(_dung, _dung.position.x, -_person.position.y*2, Math.floor(Math.random(  ) * 3)+3);
+            _dung.moveTo(_dung.position.x, -_person.position.y*2, Math.floor(Math.random(  ) * 3)+3);
         }
         
         private function personCreated(sprite:STSprite):void
