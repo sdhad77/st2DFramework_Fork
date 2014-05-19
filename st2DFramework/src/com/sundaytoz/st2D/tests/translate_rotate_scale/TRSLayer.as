@@ -2,8 +2,10 @@ package com.sundaytoz.st2D.tests.translate_rotate_scale
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.sprite.STSprite;
+    import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
+    import com.sundaytoz.st2D.tests.batch.BatchSpriteLayer;
     import com.sundaytoz.st2D.utils.Vector2D;
     
     import flash.events.MouseEvent;
@@ -55,7 +57,13 @@ package com.sundaytoz.st2D.tests.translate_rotate_scale
         
         private function onTouch(event:MouseEvent):void
         {
-            SceneManager.instance.popScene();
+            var testLayer:BatchSpriteLayer = new BatchSpriteLayer();
+            
+            var scene:Scene = new Scene();
+            scene.addLayer(testLayer);
+            
+            SceneManager.instance.pushScene(scene);
+            
             StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, onTouch);
         }
     }

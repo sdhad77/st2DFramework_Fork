@@ -20,7 +20,7 @@ package com.sundaytoz.st2D.display.sprite
      */
     public class BatchSprite extends BaseSprite
     {
-        private var _spriteCount:uint = 0;                      //BatchSprite에 있는 Sprite 개수
+        private var _sprites:Array = new Array();
         private var _updateRequired:Boolean = true;     //Vertex, Index Buffer 를 그리기 전에 갱신해야 하는 여부
         
         private var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
@@ -81,7 +81,7 @@ package com.sundaytoz.st2D.display.sprite
             var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
             var spriteVertexData:Vector.<Number> = sprite.vertexData;
             
-            var targetIndex:int = _spriteCount * VERTEX_COUNT * DATAS_PER_VERTEX;
+            var targetIndex:int = _sprites.length * VERTEX_COUNT * DATAS_PER_VERTEX;
             var sourceIndex:int = 0;
             var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
             
@@ -106,7 +106,7 @@ package com.sundaytoz.st2D.display.sprite
             }
             
             // IndexData 를 생성합니다.
-            for(var i:uint=_spriteCount; i<_spriteCount+1; ++i)
+            for(var i:uint=_sprites.length; i<_sprites.length+1; ++i)
             {
                 indexData.push(0 + i * VERTEX_COUNT);  
                 indexData.push(1 + i * VERTEX_COUNT);
@@ -116,7 +116,7 @@ package com.sundaytoz.st2D.display.sprite
                 indexData.push(3 + i * VERTEX_COUNT);
             }
             
-            _spriteCount++;
+            _sprites.push(sprite);
             _updateRequired = true;
         }
 
@@ -125,11 +125,13 @@ package com.sundaytoz.st2D.display.sprite
          */
         public function draw():void
         {
-            if( _spriteCount == 0 )
+            if( _sprites.length == 0 )
                 return;
             
             if( _updateRequired )
                 updateBuffers();
+            
+            updateSpriteMatrix();
             
             var context:Context3D = StageContext.instance.context;
             
@@ -147,7 +149,7 @@ package com.sundaytoz.st2D.display.sprite
             context.setVertexBufferAt(1, vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
             context.setVertexBufferAt(2, vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
                         
-            context.drawTriangles(indexBuffer, 0, _spriteCount * 2);
+            context.drawTriangles(indexBuffer, 0, _sprites.length * 2);
             
             GameStatus.instance.increaseDrawCallCount();
         }
@@ -191,6 +193,46 @@ package com.sundaytoz.st2D.display.sprite
                 indexBuffer.dispose();
                 indexBuffer = null;
             }
+        }
+        
+        private function updateSpriteMatrix():void
+        {
+            for(var i:uint=0; i<_sprites.length; ++i)
+            {
+                var sprite:STSprite = _sprites[i];
+                
+                sprite.update();
+                
+                var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
+                var spriteVertexData:Vector.<Number> = sprite.vertexData;
+                
+                var targetIndex:int = i * VERTEX_COUNT * DATAS_PER_VERTEX;
+                var sourceIndex:int = 0;
+                var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
+                
+                while(sourceIndex < sourceEnd)
+                {
+                    var x:Number = spriteVertexData[sourceIndex++];
+                    var y:Number = spriteVertexData[sourceIndex++];
+                    var z:Number = spriteVertexData[sourceIndex++];
+                    
+                    vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
+                    vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
+                    vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
+                    
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // u 
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // v
+                    
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // r
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // g
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // b
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // a
+                }
+            }
+            
+            var numVertices:int = vertexData.length;
+            vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
+            
         }
 
     }
