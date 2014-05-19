@@ -110,11 +110,11 @@ package com.stintern.st2D.tests.game
         {
             AnimationData.instance.setAnimationData("res/atlas.png", "res/atlas.xml");
             
-            //원하는 애니메이션 자유롭게 설정.              사용할 텍스쳐 이름                                         애니메이션 이름                    프레임 호출 순서                                                                      각 프레임 별 대기 시간(프레임) 다음 애니메이션
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("right", new Array("right0","right1","right2","right1"), new Array(8,8,8,8), "right"));
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("left",  new Array("left0","left1","left2","left1"),     new Array(8,8,8,8), "left")); 
+            //원하는 애니메이션 자유롭게 설정.              사용할 텍스쳐 이름                                         애니메이션 이름                    프레임 호출 순서                                각 프레임 별 대기 시간(프레임) 다음 애니메이션
+            AnimationData.instance.setAnimation("res/atlas.png", new Animation("right", new Array("right0","right1","right2","right1"), 8, "right"));
+            AnimationData.instance.setAnimation("res/atlas.png", new Animation("left",  new Array("left0","left1","left2","left1"),     8, "left")); 
             AnimationData.instance.setAnimation("res/atlas.png", new Animation("fire",  new Array("fire0","fire1","fire2","fire3",
-                                                                                                  "fire4","fire5","fire6","fire7"),     new Array(6,6,6,6,6,6,6,6), null)); 
+                                                                                                  "fire4","fire5","fire6","fire7"),     6, null)); 
             
             for(var i:int=0; i< 10; i++)
             {

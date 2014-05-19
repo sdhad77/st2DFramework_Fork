@@ -3,13 +3,11 @@ package com.stintern.st2D.tests.game
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.animation.AnimationManager;
     import com.stintern.st2D.animation.datatype.Animation;
-    import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.STSprite;
-    import com.stintern.st2D.tests.Animation.STSpriteMoveToLayer;
     import com.stintern.st2D.utils.CollisionDetection;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
@@ -31,8 +29,8 @@ package com.stintern.st2D.tests.game
             
             AnimationData.instance.setAnimationData("res/dungGame.png", "res/atlas.xml");
             
-            AnimationData.instance.setAnimation("res/dungGame.png", new Animation("dung",  new Array("dung0"),     new Array(8), "dung"));
-            AnimationData.instance.setAnimation("res/dungGame.png", new Animation("char",  new Array("char0", "char1"),     new Array(8, 8), "char"));
+            AnimationData.instance.setAnimation("res/dungGame.png", new Animation("dung",  new Array("dung0"),          8, "dung"));
+            AnimationData.instance.setAnimation("res/dungGame.png", new Animation("char",  new Array("char0", "char1"), 8, "char"));
             
             var dungScheduler:Scheduler = new Scheduler();
             dungScheduler.addFunc((Math.floor(Math.random() * 4)+1) * 400, createStar, 0);

@@ -64,7 +64,7 @@ package com.stintern.st2D.animation.datatype
          */
         public function getDelayNum():int
         {
-            return getPlayAnimation().delayNum[_playAnimationFlowIdx];
+            return getPlayAnimation().delayNum;
         }
         
         public function setPlayAnimation(name:String):void
