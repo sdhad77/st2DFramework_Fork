@@ -2,9 +2,9 @@ package com.sundaytoz.st2D.tests.game
 {
     import com.sundaytoz.st2D.basic.StageContext;
     import com.sundaytoz.st2D.display.Layer;
-    import com.sundaytoz.st2D.display.sprite.STSprite;
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
+    import com.sundaytoz.st2D.display.sprite.STSprite;
     
     import flash.events.MouseEvent;
     
@@ -15,9 +15,8 @@ package com.sundaytoz.st2D.tests.game
         
         public function EndLayer()
         {
-            STSprite.createSpriteWithPath("res/star.png", onCreated, null, 250, 250);
+            STSprite.createSpriteWithPath("res/gameover.jpg", onCreated, null, StageContext.instance.screenWidth/2, StageContext.instance.screenHeight/2);
             
-        //    StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
         override public function update(dt:Number):void
