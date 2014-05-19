@@ -4,10 +4,11 @@ package com.sundaytoz.st2D
     import com.sundaytoz.st2D.display.DrawManager;
     import com.sundaytoz.st2D.display.Scene;
     import com.sundaytoz.st2D.display.SceneManager;
-    import com.sundaytoz.st2D.tests.TestLayer;
+    import com.sundaytoz.st2D.tests.game.DungGameLayer;
     import com.sundaytoz.st2D.utils.GameStatus;
     import com.sundaytoz.st2D.utils.GameTimer;
     
+    import flash.desktop.NativeApplication;
     import flash.display.Sprite;
     import flash.events.Event;
     
@@ -21,6 +22,7 @@ package com.sundaytoz.st2D
             super();
             
             StageContext.instance.init(stage, onInited);
+            stage.addEventListener(Event.DEACTIVATE, deactivate);
         }
         
         /**
@@ -31,7 +33,7 @@ package com.sundaytoz.st2D
         {
             var scene:Scene = new Scene();
             
-            var testLayer:TestLayer = new TestLayer();
+            var testLayer:DungGameLayer = new DungGameLayer();
             scene.addLayer(testLayer);
             
             SceneManager.instance.pushScene(scene);
@@ -68,5 +70,10 @@ package com.sundaytoz.st2D
             _drawManager.draw();
         }
         
+        private function deactivate(e:Event):void   
+        {  
+            // auto-close  
+            NativeApplication.nativeApplication.exit();  
+        }
     }
 }
