@@ -3,11 +3,6 @@ package com.stintern.st2D.display.sprite
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.animation.datatype.AnimationFrame;
-    import com.stintern.st2D.basic.StageContext;
-    import com.stintern.st2D.utils.AssetLoader;
-    
-    import flash.display.Bitmap;
-    import flash.display3D.Context3D;
 
     public class STAnimation extends STSprite
     {
