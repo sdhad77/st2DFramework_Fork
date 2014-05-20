@@ -169,7 +169,7 @@ package com.stintern.st2D.display.sprite
             context.setVertexBufferAt(1, vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
             context.setVertexBufferAt(2, vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
             
-            context.drawTriangles(indexBuffer, 0, _sprites.length * 2);
+            context.drawTriangles(indexBuffer, 0, vertexData.length / (VERTEX_COUNT * DATAS_PER_VERTEX) * 2);
             
             GameStatus.instance.increaseDrawCallCount();
         }
@@ -217,6 +217,9 @@ package com.stintern.st2D.display.sprite
         
         private function updateSpriteMatrix():void
         {
+            vertexData.length = 0;
+            
+            var j:uint=0;
             for(var i:uint=0; i<_sprites.length; ++i)
             {
                 var sprite:Sprite = _sprites[i];
@@ -229,7 +232,7 @@ package com.stintern.st2D.display.sprite
                 var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
                 var spriteVertexData:Vector.<Number> = sprite.vertexData;
                 
-                var targetIndex:int = i * VERTEX_COUNT * DATAS_PER_VERTEX;
+                var targetIndex:int = j++ * VERTEX_COUNT * DATAS_PER_VERTEX;
                 var sourceIndex:int = 0;
                 var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
                 
