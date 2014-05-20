@@ -13,7 +13,8 @@ package com.stintern.st2D.display.sprite
     import flash.display3D.Context3DTextureFormat;
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.geom.Matrix3D;
-
+    import com.stintern.st2D.animation.AnimationData;
+    
     /**
      * 하나의 텍스쳐를 이용하는 스프라이트의 경우 BatchSprite 를 이용하여 
      * 효율적으로 화면에 출력할 수 있습니다.  
@@ -35,19 +36,32 @@ package com.stintern.st2D.display.sprite
         /**
          * BatchSprite 를 생성합니다. 
          * @param path BatchSprite 에 사용할 이미지 경로
+         * @param pathXML path로 읽어온 이미지에서 사용할 frame 정보들을 가져올 xml 경로
          * @param onCreated 생성된 후 호출될 메소드
          * @param onProgress 생성중 진행 상황을 알 수 있는 메소드
          */
-        public function createBatchSpriteWithPath(path:String, onCreated:Function, onProgress:Function = null ):void
+        public function createBatchSpriteWithPath(path:String, pathXML:String, onCreated:Function, onProgress:Function = null ):void
         {
             this.path = path;
             
+            //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
+            AnimationData.instance.createAnimationDictionary(path, pathXML, onCreated);
+            
+            //이미지 파일을 읽어옵니다.
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
+            
             function onComplete(object:Object, zOrder:uint):void
             {
+                //이미지파일을 저장합니다.
                 createBatchSpriteWithBitmap((object as Bitmap));
+                //이미지 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
+                AnimationData.instance.animationData[path]["available"]++;
                 
-                onCreated();
+                //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
+                if( AnimationData.instance.animationData[path]["available"] == 2 )
+                {
+                    if(onCreated != null) onCreated();
+                }
             }
         }
         
@@ -64,7 +78,7 @@ package com.stintern.st2D.display.sprite
             this.texture = context.createTexture(bitmap.width, bitmap.height, Context3DTextureFormat.BGRA, false);
             uploadTextureWithMipmaps(this.texture, bitmap.bitmapData);      
         }
-            
+        
         /**
          * BatchSprite 에 새로운 Sprite 를 추가합니다. 
          * @param sprite 추가할 Sprite
@@ -72,10 +86,10 @@ package com.stintern.st2D.display.sprite
         public function addSprite(sprite:STSprite):void
         {
             // BatchSprite 의 텍스쳐에 sprite 의 텍스쳐가 있는지 확인
-//            if( sprite.textureData != _textureData || )
-//            {
-//                
-//            }
+            //            if( sprite.textureData != _textureData || )
+            //            {
+            //                
+            //            }
             
             var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
             var spriteVertexData:Vector.<Number> = sprite.vertexData;
@@ -118,7 +132,7 @@ package com.stintern.st2D.display.sprite
             _sprites.push(sprite);
             _updateRequired = true;
         }
-
+        
         /**
          * BatchSprite 를 출력합니다. 
          */
@@ -147,7 +161,7 @@ package com.stintern.st2D.display.sprite
             context.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);       // position
             context.setVertexBufferAt(1, vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
             context.setVertexBufferAt(2, vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
-                        
+            
             context.drawTriangles(indexBuffer, 0, _sprites.length * 2);
             
             GameStatus.instance.increaseDrawCallCount();
@@ -233,6 +247,6 @@ package com.stintern.st2D.display.sprite
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
             
         }
-
+        
     }
 }
