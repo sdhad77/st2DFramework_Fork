@@ -23,32 +23,34 @@ package com.stintern.st2D.tests.batch
         
         public function BatchSpriteLayer()
         {
-            AnimationData.instance.setAnimationData("res/atlas.png", "res/atlas.xml", onCompleted );
+            _batchSprite = new BatchSprite();
+            _batchSprite.createBatchSpriteWithPath("res/atlas.png", "res/atlas.xml", onCreated);
+            addBatchSprite(_batchSprite);
         }
         
         override public function update(dt:Number):void
         {
-            for each( var sprite:Sprite in _sprites)
+            if( _sprites.length > 0 )
             {
-                sprite.setTranslation( new Vector2D( (Math.sin(_translation) ) + sprite.position.x , sprite.position.y ) );    
+                _sprites[0].setTranslation( new Vector2D( (Math.sin(_translation) ) + _sprites[0].position.x , _sprites[0].position.y ) );    
             }
             
             _translation += 0.05;
-        }
-        
-        private function onCompleted():void
-        {
-            _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/atlas.png", onCreated);
-            addBatchSprite(_batchSprite);
         }
         
         private function onCreated():void
         {
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onTouch);
             
-            _scheduler.addFunc(50, createStar, 0);
-            _scheduler.startScheduler();
+            var sprite:Sprite = new Sprite();
+            _sprites.push(sprite);
+            sprite.createSpriteWithBatchSprite(_batchSprite, "fire4", onSpriteCreated, 500, 500 );
+            
+            
+            
+                
+            //_scheduler.addFunc(50, createStar, 0);
+            //_scheduler.startScheduler();
             
             function createStar():void
             {            
@@ -87,6 +89,19 @@ package com.stintern.st2D.tests.batch
         private function onSpriteCreated():void
         {
             _batchSprite.addSprite(_sprites[_sprites.length-1]);
+            
+            
+            var sprite:Sprite = new Sprite();
+            _sprites.push(sprite);
+            sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated2, 400, 400 );
+            
+            (_sprites[0] as Sprite).addChild(sprite);
+        }
+        
+        private function onSpriteCreated2():void
+        {
+            _batchSprite.addSprite(_sprites[_sprites.length-1]);
+            
         }
         
     }
