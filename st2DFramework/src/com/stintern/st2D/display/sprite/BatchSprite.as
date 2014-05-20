@@ -1,5 +1,6 @@
 package com.stintern.st2D.display.sprite
 {
+    import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.sprite.DisplayObject;
     import com.stintern.st2D.display.sprite.Sprite;
@@ -13,7 +14,6 @@ package com.stintern.st2D.display.sprite
     import flash.display3D.Context3DTextureFormat;
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.geom.Matrix3D;
-    import com.stintern.st2D.animation.AnimationData;
     
     /**
      * 하나의 텍스쳐를 이용하는 스프라이트의 경우 BatchSprite 를 이용하여 
@@ -92,12 +92,6 @@ package com.stintern.st2D.display.sprite
          */
         public function addSprite(sprite:Sprite):void
         {
-            // BatchSprite 의 텍스쳐에 sprite 의 텍스쳐가 있는지 확인
-            //            if( sprite.textureData != _textureData || )
-            //            {
-            //                
-            //            }
-            
             var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
             var spriteVertexData:Vector.<Number> = sprite.vertexData;
             
@@ -290,6 +284,10 @@ package com.stintern.st2D.display.sprite
             var numVertices:int = vertexData.length;
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
         }
-                
+        
+        public function get spriteArray():Array
+        {
+            return _sprites;
+        }
     }
 }
