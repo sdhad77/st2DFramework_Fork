@@ -46,7 +46,7 @@ package com.stintern.st2D.display.sprite
             //애니메이션이 재생중이면
             if(_isPlaying || _isFirstUpdate)
             {
-                //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
+                //available == true -> 로딩 완료
                 if(AnimationData.instance.animationData[path]["available"] == true)
                 {
                     _isFirstUpdate = false;

@@ -25,7 +25,9 @@ package com.stintern.st2D.animation
         // 구조가 둘로 나뉘게 되며, 이미지내에 이미지가 여러개 존재할 경우의 예시는 다음과 같습니다.
         // animationData[path]["frame"][frameName]         = AnimationFrame
         //                    ["animation"][animationName] = Animation
-        //                    ["available"]                = 사용 가능 여부(int type, [0,1 == false][2 == true])
+        //                    ["available"]                = 이 데이터들의 로딩 완료 여부, xml,이미지 파일로딩이 완료되면 true로 바꿔줍니다.
+        //                    ["xml"]                      = xml파일의 로딩 완료 여부
+        //                    ["image"]                    = 이미지 파일의 로딩 완료 여부
         //                    ["type"]                     = 이 Dictionary의 타입(int type, [0 == 단일 이미지][1 == 복수의 이미지])
         //
         // 다음은 이미지내에 이미지가 하나만 존재 할 경우의 구조 예시 입니다.
@@ -87,9 +89,9 @@ package com.stintern.st2D.animation
                 //xml파일을 읽어옵니다.
                 AssetLoader.instance.loadXML(pathXML, onXmlLoadComplete);
             }
+            //아직 로딩중인경우
             else if(_animationData[path]["available"] == false)
             {
-                trace("로딩중입니다.");
                 _sch.addFunc(0, onCreated, 1);
             }
             //이미 애니메이션 정보가 있는 path일 경우
@@ -102,7 +104,7 @@ package com.stintern.st2D.animation
             {
                 //xml파일을 읽어온 후 저장합니다.
                 _animationData[path]["frame"] = createAnimationFrameDictionary(xml);
-                //xml파일 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
+                //xml파일 로딩이 끝났으니 사용가능하단 의미로 true로 바꿔줍니다.
                 _animationData[path]["xml"] = true;
                 
                 //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.

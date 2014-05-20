@@ -60,7 +60,7 @@ package com.stintern.st2D.display.sprite
                 if(pathXML == null) onCreated();
                 else
                 {
-                    //이미지 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
+                    //이미지 로딩이 끝났으니 사용가능하단 의미로 true로 바꿔줍니다.
                     AnimationData.instance.animationData[path]["image"] = true;
                     
                     //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
