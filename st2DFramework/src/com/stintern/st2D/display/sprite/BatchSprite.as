@@ -221,6 +221,9 @@ package com.stintern.st2D.display.sprite
             {
                 var sprite:Sprite = _sprites[i];
                 
+                if( sprite.isVisible == false )
+                    continue;
+                
                 sprite.update();
                 
                 var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
