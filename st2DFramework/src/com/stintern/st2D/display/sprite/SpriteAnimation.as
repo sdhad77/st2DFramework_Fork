@@ -173,6 +173,7 @@ package com.stintern.st2D.display.sprite
         
         //get set함수들
         public function get playAnimationName():String {return _playAnimationName;}
+        public function get isPlaying():Boolean        {return _isPlaying;}
         
         public function set playAnimationName(value:String):void {_playAnimationName = value;}    
     }

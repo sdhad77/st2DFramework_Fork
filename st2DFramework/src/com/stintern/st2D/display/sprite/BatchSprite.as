@@ -141,6 +141,25 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
+         * 특정 스프라이트를 배치스프라이트에서 삭제합니다. 
+         * 삭제된 스프라이트는 배치스프라이트를 출력할 때 출력되지 않습니다.
+         * 하지만, 스프라이트 자체의 자원은 해제되지 않습니다.
+         *  
+         * @param sprite 삭제할 스프라이트 객체
+         */
+        public function removeSprite(sprite:Sprite):void
+        {
+            for(var i:uint=0; i<_sprites.length; ++i)
+            {
+                if( _sprites[i] == sprite )
+                {
+                    _sprites.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        
+        /**
          * BatchSprite 를 출력합니다. 
          */
         public function draw():void
@@ -148,9 +167,11 @@ package com.stintern.st2D.display.sprite
             if( _sprites.length == 0 )
                 return;
             
+            // 새로운 Sprite 가 추가되었으면 버퍼를 갱신
             if( _updateRequired )
                 updateBuffers();
             
+            // 스프라이트들의 현재 Model Matrix 에 따라서 버퍼를 갱신
             updateSpriteMatrix();
             
             var context:Context3D = StageContext.instance.context;
@@ -169,7 +190,7 @@ package com.stintern.st2D.display.sprite
             context.setVertexBufferAt(1, vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
             context.setVertexBufferAt(2, vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
             
-            context.drawTriangles(indexBuffer, 0, _sprites.length * 2);
+            context.drawTriangles(indexBuffer, 0, vertexData.length / (VERTEX_COUNT * DATAS_PER_VERTEX) * 2);
             
             GameStatus.instance.increaseDrawCallCount();
         }
@@ -215,21 +236,33 @@ package com.stintern.st2D.display.sprite
             }
         }
         
+        /**
+         * 배치스프라이트를 화면에 출력하기 전에 스프라이트들의 모델 매트릭스에 따른
+         * VertexBuffer 를 갱신합니다. 
+         */
         private function updateSpriteMatrix():void
         {
+            // 갱신할 VertexData 초기화
+            vertexData.length = 0;
+            
+            // Visible 속성이 true 인 스프라이트의 객체 개수
+            var visibleSpriteCount:uint=0;
+            
             for(var i:uint=0; i<_sprites.length; ++i)
             {
                 var sprite:Sprite = _sprites[i];
                 
+                // 스프라이트의 isVisible 속성이 false 이면 VertexData 에 넣지 않음
                 if( sprite.isVisible == false )
                     continue;
                 
+                // 스프라이트의 model matrix 갱신
                 sprite.update();
                 
                 var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
                 var spriteVertexData:Vector.<Number> = sprite.vertexData;
                 
-                var targetIndex:int = i * VERTEX_COUNT * DATAS_PER_VERTEX;
+                var targetIndex:int = visibleSpriteCount++ * VERTEX_COUNT * DATAS_PER_VERTEX;
                 var sourceIndex:int = 0;
                 var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
                 
@@ -253,10 +286,10 @@ package com.stintern.st2D.display.sprite
                 }
             }
             
+            // 갱신한 vertexData 에 따라 vertexBuffer 를 갱신
             var numVertices:int = vertexData.length;
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
-            
         }
-        
+                
     }
 }
