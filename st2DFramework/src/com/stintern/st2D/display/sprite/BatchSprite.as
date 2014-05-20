@@ -45,7 +45,8 @@ package com.stintern.st2D.display.sprite
             this.path = path;
             
             //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
-            AnimationData.instance.createAnimationDictionary(path, pathXML, onCreated);
+            if(pathXML != null) AnimationData.instance.createAnimationDictionary(path, pathXML, onCreated);
+            else AnimationData.instance.animationData[path]["available"]++;
             
             //이미지 파일을 읽어옵니다.
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
