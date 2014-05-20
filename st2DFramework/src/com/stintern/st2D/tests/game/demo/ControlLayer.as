@@ -1,11 +1,14 @@
 package com.stintern.st2D.tests.game.demo
 {
+    import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
+    import com.stintern.st2D.utils.CollisionDetection;
     import com.stintern.st2D.utils.Vector2D;
+    import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
     
@@ -17,17 +20,38 @@ package com.stintern.st2D.tests.game.demo
         private var mouseDownFlag:Boolean = false;
         private var prevPoint:Vector2D;
         private var _backGroundLayer:BackGroundLayer;
+        
+        private var _playerCharacterVector:Vector.<CharacterObject>;
+        private var _enemyCharacterVector:Vector.<CharacterObject>;
+        private var enemyScheduler:Scheduler = new Scheduler;
+        
         private static const _MARGIN:uint = 20;
+        
+        
         
         public function ControlLayer()
         {
             _backGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
-            
-            
+            _playerCharacterVector = new Vector.<CharacterObject>();
+            _enemyCharacterVector = new Vector.<CharacterObject>();  
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/dungGame.png", "res/atlas.xml", onCreated);
+            if(!("res/dungGame.png" in AnimationData.instance.animationData))
+            {
+                _batchSprite.createBatchSpriteWithPath("res/dungGame.png", "res/atlas.xml", onCreated);
+            }
             addBatchSprite(_batchSprite);
+            
+            
+            enemyScheduler.addFunc(2000, enemyCreater, 10);
+            enemyScheduler.startScheduler();
+            
+            function enemyCreater():void
+            {
+                var playerCharacterObject:CharacterObject = new CharacterObject("res/dungGame.png", 100, 100, 20, false);
+                _enemyCharacterVector.push(playerCharacterObject);
+            }
+            
             
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
@@ -55,17 +79,29 @@ package com.stintern.st2D.tests.game.demo
         
         override public function update(dt:Number):void
         {
+            for(var i:uint=0; i<_playerCharacterVector.length; i++)
+            {
+                for(var j:uint=0; j<_enemyCharacterVector.length; j++)
+                {
+                    if(CollisionDetection.collisionCheck(_playerCharacterVector[i].sprite , _enemyCharacterVector[j].sprite))
+                    {
+                        _playerCharacterVector[i].info.state = CharacterObject.ATTACK;
+                        _enemyCharacterVector[j].info.state = CharacterObject.ATTACK;
+                        _playerCharacterVector[i].sprite.isMoving = false;
+                        _enemyCharacterVector[j].sprite.isMoving = false;
+                    }
+                }
+            }
         }
         
         private function onTouch(event:MouseEvent):void
         {
-            trace( _MARGIN + "  :  " + event.stageX  + "  :  " +  (_MARGIN + StageContext.instance.screenHeight/8));
-            trace(_MARGIN + "  :  " + event.stageY + "  :  " +  (_MARGIN +  StageContext.instance.screenHeight/8));
             if( _MARGIN < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/8)
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var _player:CharacterObject = new CharacterObject("res/dungGame.png", 100, 100, 20, true);
+                    var playerCharacterObject:CharacterObject = new CharacterObject("res/dungGame.png", 100, 100, 20, true);
+                    _playerCharacterVector.push(playerCharacterObject);
                 }
             }
         }

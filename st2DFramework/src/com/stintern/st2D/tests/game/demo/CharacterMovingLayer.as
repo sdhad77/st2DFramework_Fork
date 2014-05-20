@@ -5,6 +5,7 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
+    import com.stintern.st2D.utils.CollisionDetection;
 
     public class CharacterMovingLayer extends Layer
     {
@@ -19,16 +20,20 @@ package com.stintern.st2D.tests.game.demo
         public function CharacterMovingLayer()
         {
             this.name = "CharacterMovingLayer";
-                
+              
+            
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/dungGame.png", "res/atlas.xml", onCompleted);
             addBatchSprite(_batchSprite);
+           
         }
+        
         
         private function onCompleted():void
         {
             AnimationData.instance.setAnimation("res/dungGame.png", new Animation("char",  new Array("char0", "char1"), 8, "char"));
         }
+
         
         override public function update(dt:Number):void
         {
