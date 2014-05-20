@@ -5,17 +5,11 @@ class GameObject
 {
     public var _sprite:STAnimation = new STAnimation;
     public var _info:ObjectInfo;
-    public static var loadingCnt:int = 0;
     
-    public function GameObject(path:String, animationName:String, hp:Number, power:Number, party:String)
+    public function GameObject(path:String, animationName:String, onCreated:Function, hp:Number, power:Number, party:String)
     {
         _info = new ObjectInfo(hp, power, party);
         _sprite.createAnimationSpriteWithPath(path, animationName, onCreated);
-    }
-    
-    private function onCreated():void
-    {
-        loadingCnt++;
     }
 }
 
@@ -40,9 +34,6 @@ package com.stintern.st2D.tests.game
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.STAnimation;
-    import com.stintern.st2D.utils.scheduler.Scheduler;
-    
-    import flash.events.Event;
     
     public class Game1 extends Layer
     {
@@ -50,7 +41,8 @@ package com.stintern.st2D.tests.game
         private var testSprite:STAnimation = new STAnimation;
         private var gameStart:Boolean = false;
         private var _batchSprite:BatchSprite;
-        private var sch:Scheduler = new Scheduler();
+        private var _loadCompleteObjectCnt:int = 0;
+        private var _totalObjectNum:int = 0;
         
         public function Game1()
         {
@@ -76,29 +68,26 @@ package com.stintern.st2D.tests.game
             AnimationData.instance.setAnimation("res/atlas.png", new Animation("fire",  new Array("fire0","fire1","fire2","fire3",
                 "fire4","fire5","fire6","fire7"),     6, "fire")); 
             
-            testSprite.createAnimationSpriteWithPath("res/atlas.png", "fire", nullFunction, null, 512, 384); 
+            _totalObjectNum = 21;
+            
+            testSprite.createAnimationSpriteWithPath("res/atlas.png", "fire", gameSetting, null, 512, 384);
             
             for(var i:int=0; i< 10; i++)
             {
-                gameObject.push(new GameObject("res/atlas.png", "right", 100, 10, "PLAYER"));
+                gameObject.push(new GameObject("res/atlas.png", "right", gameSetting, 100, 10, "PLAYER"));
             }
             for(i=0; i< 10; i++)
             {
-                gameObject.push(new GameObject("res/atlas.png", "left", 100, 10, "ENEMY"));
+                gameObject.push(new GameObject("res/atlas.png", "left", gameSetting, 100, 10, "ENEMY"));
             }
-            
-            sch.addFunc(300, gameSetting, 0);
-            sch.startScheduler();
-            
-            function nullFunction():void {}
         }
         
-        private function gameSetting(evt:Event):void
+        private function gameSetting():void
         {
-            if(GameObject.loadingCnt != 20) return;
-            else sch.stopScheduler();
+            _loadCompleteObjectCnt++;
+            if(_loadCompleteObjectCnt != _totalObjectNum) return ;
             
-            for(var i:int=0; i < 20; i++)
+            for(var i:int=0; i < 19; i++)
             {
                 if(gameObject[i]._info._party == "PLAYER")
                 {
@@ -123,7 +112,7 @@ package com.stintern.st2D.tests.game
         
         private function startGame():void
         {
-            for(var i:int=0; i < 20; i++)
+            for(var i:int=0; i < 19; i++)
             {
                 gameObject[i]._sprite.playAnimation();
                 if(gameObject[i]._info._party == "ENEMY") gameObject[i]._sprite.moveBy(-600, 0, 20);
