@@ -134,7 +134,7 @@ package com.stintern.st2D.display.sprite
             var uvCoord:Array = new Array();
             
             //Batchsprite 이미지에 이미지가 하나만 존재하여 xml파일을 사용하지 않는 경우
-            if(AnimationData.instance.animationData[batchSprite.path]["available"] == 0)
+            if(AnimationData.instance.animationData[batchSprite.path]["type"] == 0)
             {
                 frame.width = batchSprite.textureData.width;
                 frame.height = batchSprite.textureData.height;
@@ -147,26 +147,29 @@ package com.stintern.st2D.display.sprite
                 return uvCoord;
             }
             //Batchsprite 이미지에 이미지가 여러개 존재하여 xml 파일을 사용하는 경우
-            else if(AnimationData.instance.animationData[batchSprite.path]["available"] == 2)
+            else if(AnimationData.instance.animationData[batchSprite.path]["type"] == 1)
             {
-                //현재 프레임 정보
-                var tempFrame:AnimationFrame = AnimationData.instance.animationData[batchSprite.path]["frame"][imageName];
-                
-                //uv좌표 변경하는 방식
-                frame.width = tempFrame.width;
-                frame.height = tempFrame.height;
-                
-                var width:uint = batchSprite.textureWidth;
-                var height:uint = batchSprite.textureHeight;
-                
-                uvCoord.push(tempFrame.x/width, tempFrame.y/height);                                                                                            //left top
-                uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height);                                                    //right top
-                uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height + tempFrame.height/height);             //right bottom
-                uvCoord.push(tempFrame.x/width, tempFrame.y/height + tempFrame.height/height);                                                  //left bottom
-                
-                tempFrame = null;
-                
-                return uvCoord;
+                if(AnimationData.instance.animationData[batchSprite.path]["available"] == 2)
+                {
+                    //현재 프레임 정보
+                    var tempFrame:AnimationFrame = AnimationData.instance.animationData[batchSprite.path]["frame"][imageName];
+                    
+                    //uv좌표 변경하는 방식
+                    frame.width = tempFrame.width;
+                    frame.height = tempFrame.height;
+                    
+                    var width:uint = batchSprite.textureWidth;
+                    var height:uint = batchSprite.textureHeight;
+                    
+                    uvCoord.push(tempFrame.x/width, tempFrame.y/height);                                                                                            //left top
+                    uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height);                                                    //right top
+                    uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height + tempFrame.height/height);             //right bottom
+                    uvCoord.push(tempFrame.x/width, tempFrame.y/height + tempFrame.height/height);                                                  //left bottom
+                    
+                    tempFrame = null;
+                    
+                    return uvCoord;
+                }
             }
             
             return null;
