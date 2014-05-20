@@ -7,14 +7,16 @@ package com.stintern.st2D.tests.game.demo
 
     public class CharacterObject
     {
-        private var _sprite:SpriteAnimation = new SpriteAnimation();
         private var _info:CharacterInfo;
         private var _characterMovingLayer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
         private var _backGroundLayer:BackGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
         private var _batchSprite:BatchSprite;
-        private var sprite:SpriteAnimation;
+        private var _sprite:SpriteAnimation;
+        
+        public static const RUN:String = "RUN";
+        public static const ATTACK:String = "ATTACK";
          
-            
+        
         public function CharacterObject(path:String, hp:Number, power:Number, speed:Number, ally:Boolean)
         {
             _info = new CharacterInfo(hp, power, speed, ally);
@@ -25,28 +27,49 @@ package com.stintern.st2D.tests.game.demo
 
         private function onCreated():void
         {
-            sprite = new SpriteAnimation();
+            _sprite = new SpriteAnimation();
             var x:Number = 0;
             var y:Number = 0;
-            sprite.createAnimationSpriteWithPath("res/dungGame.png", "char", onSpriteCreated, null, x, y );
+            _sprite.createAnimationSpriteWithPath("res/dungGame.png", "char", onSpriteCreated, null, x, y );
         }
         
         private function onSpriteCreated():void
         {
-            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
-   //         sprite.position.y = sprite.height*3;
-            sprite.position.y = 200;
-            _batchSprite.addSprite(sprite);
-            sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, sprite.height*3, _info.speed);
-            sprite.playAnimation();
+            _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
+            if(_info.ally == true)
+            {
+                _sprite.position.x = 0;
+                _sprite.position.y = _sprite.height*3;
+                _batchSprite.addSprite(_sprite);
+                _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height*3, _info.speed);
+            }
+            else
+            {
+                _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
+                _sprite.position.y = _sprite.height*3;
+                _batchSprite.addSprite(_sprite);
+                _sprite.moveTo(0, _sprite.height*3, _info.speed);
+            }
+            _sprite.playAnimation();
         }
-        
-        private function onCreated1():void
+
+        public function get sprite():SpriteAnimation
         {
-            _characterMovingLayer.addSprite(_sprite);
+            return _sprite;
+        }
+
+        public function get info():CharacterInfo
+        {
+            return _info;
+        }
+
+        public function set info(value:CharacterInfo):void
+        {
+            _info = value;
         }
     }
 }
+import com.stintern.st2D.tests.game.demo.CharacterObject;
 
 
 class CharacterInfo
@@ -55,6 +78,7 @@ class CharacterInfo
     private var _power:Number;
     private var _speed:Number
     private var _ally:Boolean;
+    private var _state:String;
     
     public function CharacterInfo(hp:Number, power:Number, speed:Number, ally:Boolean)
     {
@@ -62,6 +86,7 @@ class CharacterInfo
         _power = power;
         _speed = speed;
         _ally = ally;
+        _state = CharacterObject.RUN;
     }
 
     public function get hp():Number
@@ -82,5 +107,15 @@ class CharacterInfo
     public function get ally():Boolean
     {
         return _ally;
+    }
+
+    public function get state():String
+    {
+        return _state;
+    }
+
+    public function set state(value:String):void
+    {
+        _state = value;
     }
 }
