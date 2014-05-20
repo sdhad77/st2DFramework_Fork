@@ -1,8 +1,8 @@
 package com.stintern.st2D.display.sprite
 {
+    import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.animation.datatype.AnimationFrame;
-    import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.utils.AssetLoader;
     
@@ -15,6 +15,7 @@ package com.stintern.st2D.display.sprite
         private var _playAnimationFlowIdx:int; //현재 재생중인 애니메이션의 Frame 인덱스
         private var _delayCnt:int;             //frame delay를 위한 카운트 변수
         private var _isPlaying:Boolean         //지금 재생중인지?
+        private var _isFirstUpdate:Boolean     //첫번째 업데이트인지. init을 위해 만든 변수
         
         public function STAnimation()
         {
@@ -23,6 +24,7 @@ package com.stintern.st2D.display.sprite
             _playAnimationFlowIdx = 0;
             _delayCnt = 0;
             _isPlaying = false;
+            _isFirstUpdate = true;
         }
         
         /**
@@ -77,21 +79,24 @@ package com.stintern.st2D.display.sprite
          */
         override public function update():void
         {
-            //전체 애니메이션 업데이트 중지
-            if(_isPlaying == false) return;
-            
-            //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
-            if(AnimationData.instance.animationData[path]["available"] == 2)
+            //애니메이션이 재생중이면
+            if(_isPlaying || _isFirstUpdate)
             {
-                //다음 프레임으로 이동
-                var playFrame:AnimationFrame = nextFrame();
-                
-                //uv좌표 변경하는 방식
-                frame.width = playFrame.width;
-                frame.height = playFrame.height;
-                setUVCoord(playFrame.x/textureWidth, playFrame.y/textureHeight, playFrame.width/textureWidth, playFrame.height/textureHeight);
-                
-                playFrame = null;
+                //0,1 -> 현재 이미지,xml 로딩 중, 2 -> 로딩 완료
+                if(AnimationData.instance.animationData[path]["available"] == 2)
+                {
+                    _isFirstUpdate = false;
+                    
+                    //다음 프레임으로 이동
+                    var playFrame:AnimationFrame = nextFrame();
+                    
+                    //uv좌표 변경하는 방식
+                    frame.width = playFrame.width;
+                    frame.height = playFrame.height;
+                    setUVCoord(playFrame.x/textureWidth, playFrame.y/textureHeight, playFrame.width/textureWidth, playFrame.height/textureHeight);
+                    
+                    playFrame = null;
+                }
             }
             
             super.update();
