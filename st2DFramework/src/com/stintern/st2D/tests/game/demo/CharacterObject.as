@@ -1,5 +1,6 @@
 package com.stintern.st2D.tests.game.demo
 {
+    import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
@@ -9,6 +10,7 @@ package com.stintern.st2D.tests.game.demo
         private var _sprite:SpriteAnimation = new SpriteAnimation();
         private var _info:CharacterInfo;
         private var _characterMovingLayer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
+        private var _backGroundLayer:BackGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
         private var _batchSprite:BatchSprite;
         private var sprite:SpriteAnimation;
          
@@ -25,14 +27,17 @@ package com.stintern.st2D.tests.game.demo
         {
             sprite = new SpriteAnimation();
             var x:Number = 0;
-            var y:Number = 100;
+            var y:Number = 0;
             sprite.createAnimationSpriteWithPath("res/dungGame.png", "char", onSpriteCreated, null, x, y );
         }
         
         private function onSpriteCreated():void
         {
+            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
+   //         sprite.position.y = sprite.height*3;
+            sprite.position.y = 200;
             _batchSprite.addSprite(sprite);
-            sprite.moveTo(1024, 60, _info.speed);
+            sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, sprite.height*3, _info.speed);
             sprite.playAnimation();
         }
         
