@@ -136,6 +136,9 @@ package com.stintern.st2D.display.sprite
             //Batchsprite 이미지에 이미지가 하나만 존재하여 xml파일을 사용하지 않는 경우
             if(AnimationData.instance.animationData[batchSprite.path]["available"] == 0)
             {
+                frame.width = batchSprite.textureData.width;
+                frame.height = batchSprite.textureData.height;
+                
                 uvCoord.push(0, 0);   //left top
                 uvCoord.push(1, 0);   //right top
                 uvCoord.push(1, 1);   //right bottom
