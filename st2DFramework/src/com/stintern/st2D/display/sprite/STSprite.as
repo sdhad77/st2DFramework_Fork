@@ -254,6 +254,15 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
+         * 특정 픽셀의 길이로 스프라이트를 확대 및 축소 시킵니다. 
+         */
+        public function setScaleWithWidthHeight(width:uint, height:uint):void
+        {
+            scale.x = width / _frame.width;
+            scale.y = height / _frame.height;
+        }
+        
+        /**
          * 스프라이트를 회전시킵니다. <br/>
          * 사용한 파라미터 axis 는 값을 복사한 뒤 null 로 셋팅됩니다.
          * @param degree 회전할 각도
