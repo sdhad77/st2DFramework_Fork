@@ -46,7 +46,6 @@ package com.stintern.st2D.display.sprite
             
             //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
             if(pathXML != null) AnimationData.instance.createAnimationDictionary(path, pathXML, onCreated);
-            else AnimationData.instance.animationData[path]["available"]++;
             
             //이미지 파일을 읽어옵니다.
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
@@ -55,13 +54,18 @@ package com.stintern.st2D.display.sprite
             {
                 //이미지파일을 저장합니다.
                 createBatchSpriteWithBitmap((object as Bitmap));
-                //이미지 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
-                AnimationData.instance.animationData[path]["available"]++;
                 
-                //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
-                if( AnimationData.instance.animationData[path]["available"] == 2 )
+                if(pathXML == null) onCreated();
+                else
                 {
-                    if(onCreated != null) onCreated();
+                    //이미지 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
+                    AnimationData.instance.animationData[path]["available"]++;
+                    
+                    //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
+                    if( AnimationData.instance.animationData[path]["available"] == 2 )
+                    {
+                        if(onCreated != null) onCreated();
+                    }
                 }
             }
         }
