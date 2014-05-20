@@ -36,10 +36,7 @@ package com.stintern.st2D.tests.game.demo
             _enemyCharacterVector = new Vector.<CharacterObject>();  
             
             _batchSprite = new BatchSprite();
-            if(!("res/dungGame.png" in AnimationData.instance.animationData))
-            {
-                _batchSprite.createBatchSpriteWithPath("res/dungGame.png", "res/atlas.xml", onCreated);
-            }
+            _batchSprite.createBatchSpriteWithPath("res/dungGame.png", "res/atlas.xml", onCreated);
             addBatchSprite(_batchSprite);
             
             
