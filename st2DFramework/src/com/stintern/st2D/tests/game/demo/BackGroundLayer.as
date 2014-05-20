@@ -17,16 +17,11 @@ package com.stintern.st2D.tests.game.demo
         
         public function BackGroundLayer()
         {
-            AnimationData.instance.setAnimationData("res/demo/background.png", "res/atlas.xml", onCompleted );
-        }
-        
-        private function onCompleted():void
-        {
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/background.png", onCreated);
+            _batchSprite.createBatchSpriteWithPath("res/demo/background.png", "res/atlas.xml", onCreated);
             addBatchSprite(_batchSprite);
         }
-        
+
         private function onCreated():void
         {
             var tempFrame:AnimationFrame = AnimationData.instance.animationData["res/demo/background.png"]["frame"]["background0"]

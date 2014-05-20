@@ -13,7 +13,7 @@ package com.stintern.st2D.tests.game.demo
     {
         public function DemoGameLayer()
         {
-            AnimationData.instance.setAnimationData("res/dungGame.png", "res/atlas.xml", null);
+       //     AnimationData.instance.setAnimationData("res/dungGame.png", "char");
             AnimationData.instance.setAnimation("res/dungGame.png", new Animation("char",  new Array("char0", "char1"),  8, "char"));
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);

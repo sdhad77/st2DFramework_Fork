@@ -2,6 +2,7 @@ package com.stintern.st2D.tests.game.demo
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
+    import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.utils.Vector2D;
     
     import flash.events.MouseEvent;
@@ -26,8 +27,8 @@ package com.stintern.st2D.tests.game.demo
         private function onTouch(event:MouseEvent):void
         {
             if(event.stageX < 200)
-            {
-                CharacterMovingLayer.createCharacter(this);
+            {               
+                var _player:CharacterObject = new CharacterObject("res/dungGame.png", 100, 100, 20, true);
             }
             else
             {
