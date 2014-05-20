@@ -4,7 +4,6 @@ package com.stintern.st2D.animation
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.utils.AssetLoader;
     
-    import flash.display.Bitmap;
     import flash.utils.Dictionary;
     
     /**
@@ -19,15 +18,12 @@ package com.stintern.st2D.animation
         private static var _instance:AnimationData;
         private static var _creatingSingleton:Boolean = false;
         
-        // 모든 데이터가 저장되는 Dictionary입니다
-        // path(SpriteSheet의 경로)를 key로 하여 이 SpriteSheet와 관련된 모든 정보들을 저장합니다.
+        // 모든 BatchSprite의 애니메이션 정보가 저장되는 Dictionary입니다
+        // path(SpriteSheet의 경로)를 key로 하여 정보를 저장합니다.
         // 이 Dinctionary의 구조는 다음과 같습니다.
-        // animationData[path][bitmap] = bitmap
-        //                               [frame][frameName] = AnimationFrame
-        //                              [animation] = Animation
-        //                              [available] = 사용 가능 여부(int type, [0,1 == false][2 == true])
-        // available은 xml파일, img 파일등을 읽어 올때 발생하는 비동기 상황 때문에 로딩이 완료된것인지 판별하기 위해 넣었습니다.
-        // 현재는 테스트하기 위해 숫자로 넣어놨지만, 문자열로 바꿀 예정입니다.
+        // animationData[path]["frame"][frameName]         = AnimationFrame
+        //                    ["animation"][animationName] = Animation
+        //                    ["available"]                = 사용 가능 여부(int type, [0,1 == false][2 == true])
         private var _animationData:Dictionary = new Dictionary;
         
         public function AnimationData()
@@ -48,104 +44,58 @@ package com.stintern.st2D.animation
         }
         
         /**
-         * 애니메이션을 사용하기 위해 최초로 호출되어야 하는 함수입니다.</br>
-         * 이미지 경로와 xml 파일 경로를 이용하여 각각 데이터를 읽어와서 Dictionary에 저장합니다. 
-         * @param pathTexture SpriteSheet의 경로
-         * @param pathXML SpriteSheet의 Atlas 정보들이 들어있는 xml파일
+         * 애니메이션 정보들을 저장할 수 있는 Dictionary를 생성하고 초기화 하는 함수입니다.
+         * @param path 이 Dictionary를 사용할 이미지의 경로
+         * @param pathXML 이 Dictionary에서 사용할 Frame정보들이 있는 xml 파일 경로
+         * @param onCreated 이미지파일,xml파일 로딩이 끝났을때 호출할 콜백 함수
          */
-        public function setAnimationData(pathTexture:String, pathXML:String, onCompleted:Function):void
+        public function createAnimationDictionary(path:String, pathXML:String, onCreated:Function):void
         {
-            //이 path가 아직 key로 등록 되어있지 않다면, 초기화를 해줍니다.
-            if(!(pathTexture in _animationData))
+            //애니메이션 정보가 아직 등록되지않은 path 일 경우
+            if(!(path in _animationData))
             {
-                _animationData[pathTexture] = new Dictionary;
-                _animationData[pathTexture]["animation"] = new Dictionary;
-                _animationData[pathTexture]["available"] = 0;
+                //path를 키로 하는 Dictionayr 초기화
+                _animationData[path] = new Dictionary;
+                _animationData[path]["animation"] = new Dictionary;
+                _animationData[path]["available"] = 0;
+            
+                //xml파일을 읽어옵니다.
+                AssetLoader.instance.loadXML(pathXML, onXmlLoadComplete);
             }
+            //이미 애니메이션 정보가 있는 path일 경우
+            else trace("이미 생성되어있는 AnimationData입니다.");
             
-            //이미지를 읽어옵니다.
-            AssetLoader.instance.loadImageTexture(pathTexture, onLoadImageTextureComplete);
-            
-            //xml파일을 읽어옵니다.
-            AssetLoader.instance.loadXML(pathXML, onXmlLoaderComplete);
-            
-            //XmlLoader.instance.load(pathXML, onXmlLoaderComplete);
-            
-            function onLoadImageTextureComplete(object:Object, imageNo:uint):void
+            function onXmlLoadComplete(xml:XML):void
             {
-                //이미지를 읽어온 후 저장합니다.
-                _animationData[pathTexture]["bitmap"] = object as Bitmap;
-                //이미지 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
-                _animationData[pathTexture]["available"]++;
-                
-                if( _animationData[pathTexture]["available"] == 2 )
-                {
-                    if(onCompleted != null) onCompleted();
-                }    
-            }
-            function onXmlLoaderComplete(xml:XML):void
-            {
-                var dictionary:Dictionary = createAnimationFrameDictionary(xml);
-                
                 //xml파일을 읽어온 후 저장합니다.
-                _animationData[pathTexture]["frame"] = dictionary;
+                _animationData[path]["frame"] = createAnimationFrameDictionary(xml);
                 //xml파일 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
-                _animationData[pathTexture]["available"]++;
+                _animationData[path]["available"]++;
                 
-                if( _animationData[pathTexture]["available"] == 2 )
+                //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
+                if( _animationData[path]["available"] == 2 )
                 {
-                    if(onCompleted != null) onCompleted();
+                    if(onCreated != null) onCreated();
                 }  
             }
         }
         
         /**
-         * texture의 연결을 해제합니다. 
-         * @param pathTexture 해제할 Texture의 경로
+         * 특정 sprite sheet 이미지의 애니메이션 정보를 삭제하는 함수입니다.</br>
+         * 내부의 상세한 데이터들도 null을 하도록 보완해야 합니다.
+         * @param path 애니메이션 정보를 삭제할 spriteSheet의 경로
          */
-        public function removeAnimationTexture(pathTexture:String):void
+        public function removeAnimationDictionary(path:String):void
         {
-            if(pathTexture in _animationData)
+            if(path in _animationData)
             {
-                _animationData[pathTexture] = null;
+                _animationData[path]["frame"] = null;
+                _animationData[path]["animation"] = null;
+                _animationData[path]["available"] = null;
+                _animationData[path] = null;
+                delete _animationData[path];
             }
-            else trace("texture가 존재하지 않습니다");
-        }
-        
-        /**
-         * xml 파일을 새로 읽어올 때 사용합니다.
-         * @param pathTexture Data Dictionary의 key
-         * @param pathXML 새로 읽어올 xml 파일
-         */
-        public function setAnimationFrame(pathTexture:String, pathXML:String):void
-        {
-            //path가 key값으로 존재한다면
-            if(pathTexture in _animationData)
-            {
-                _animationData[pathTexture]["available"]--;
-                AssetLoader.instance.loadXML(pathXML, onXmlLoaderComplete);
-            }
-            else trace("texture가 존재하지 않습니다");
-            
-            function onXmlLoaderComplete(xml:XML):void
-            {
-                var aniFrameDic:Dictionary = createAnimationFrameDictionary(xml)
-                _animationData[pathTexture]["frame"] = aniFrameDic;
-                _animationData[pathTexture]["available"]++;
-            }
-        }
-        
-        /**
-         * Xml데이터(frame데이터)를 해제하는 함수입니다.
-         * @param pathTexture frame 데이터를 해제하고 싶은 텍스쳐의 경로
-         */
-        public function removeAnimationFrame(pathTexture:String):void
-        {
-            if(pathTexture in _animationData)
-            {
-                _animationData[pathTexture]["frame"] = null;
-            }
-            else trace("texture가 존재하지 않습니다");
+            else trace("존재하지 않는 AnimationDictionary에 대한 삭제 시도입니다.");
         }
         
         /**
@@ -179,7 +129,8 @@ package com.stintern.st2D.animation
         }
         
         /**
-         * Dictionary 안의 Data를 전부 지우는 함수입니다.
+         * Dictionary 안의 Data를 전부 지우는 함수입니다.</br>
+         * 내부의 상세한 데이터들도 null을 하도록 보완해야 합니다.
          */
         public function clearAnimationData():void
         {
@@ -211,8 +162,7 @@ package com.stintern.st2D.animation
             return animationFrameDictionary;
         }
         
+        //get set 함수입니다.
         public function get animationData():Dictionary {return _animationData;}
-        
-        public function set animationData(value:Dictionary):void {_animationData = value;}
     }
 }
