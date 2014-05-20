@@ -7,7 +7,7 @@ package com.stintern.st2D.display.sprite
     import flash.display3D.textures.Texture;
     import flash.geom.Matrix;
 
-    public class BaseSprite extends STObject
+    public class DisplayObject extends Base
     {
         private var _path:String;
         
@@ -23,7 +23,7 @@ package com.stintern.st2D.display.sprite
         protected var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
         protected var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
         
-        public function BaseSprite()
+        public function DisplayObject()
         {
             super();
         }

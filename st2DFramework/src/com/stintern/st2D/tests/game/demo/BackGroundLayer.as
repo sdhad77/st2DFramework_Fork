@@ -4,7 +4,7 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     
     public class BackGroundLayer extends Layer
     {
@@ -28,7 +28,7 @@ package com.stintern.st2D.tests.game.demo
             
             for(var i:uint = 0; i<_bgPageNum; i++)
             {
-                var sprite:STSprite = new STSprite();
+                var sprite:Sprite = new Sprite();
                 _sprites.push(sprite);
                 var x:Number = tempFrame.width/2 + (tempFrame.width * _bgPageCounter);
                 var y:Number = tempFrame.height/2;

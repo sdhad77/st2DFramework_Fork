@@ -2,7 +2,7 @@ package com.stintern.st2D.display
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.sprite.BatchSprite;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.GameStatus;
     
     import flash.display3D.Context3D;
@@ -63,7 +63,7 @@ package com.stintern.st2D.display
         {
             var context:Context3D = StageContext.instance.context;
             
-            for each( var sprite:STSprite in sprites )
+            for each( var sprite:Sprite in sprites )
             {
                 if( sprite.textureData == null )
                     continue;
@@ -101,7 +101,7 @@ package com.stintern.st2D.display
         /**
          * 스프라이트가 현재 스크린 안에 있는지 확인합니다. 
          */
-        private function isInScreen(sprite:STSprite):Boolean
+        private function isInScreen(sprite:Sprite):Boolean
         {
             if( sprite.right < 0 || 
                 sprite.top < 0 || 

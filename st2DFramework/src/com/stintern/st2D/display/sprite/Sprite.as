@@ -13,7 +13,7 @@ package com.stintern.st2D.display.sprite
     import flash.geom.Rectangle;
     import flash.geom.Vector3D;
     
-    public class STSprite extends BaseSprite 
+    public class Sprite extends DisplayObject 
     {
         private var _position:Vector2D = new Vector2D(0.0, 0.0);
         private var _scale:Vector2D = new Vector2D(1.0, 1.0);
@@ -38,7 +38,7 @@ package com.stintern.st2D.display.sprite
         private var _destX:int;                //이동중일때 목적지의 좌표
         private var _destY:int;                //이동중일때 목적지의 좌표
                
-        public function STSprite()
+        public function Sprite()
         {
             super();
             

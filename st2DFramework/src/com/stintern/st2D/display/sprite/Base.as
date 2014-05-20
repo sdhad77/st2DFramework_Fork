@@ -2,14 +2,14 @@ package com.stintern.st2D.display.sprite
 {
     
 
-    public class STObject 
+    public class Base 
     {
         private var _tag:uint;
         private var _name:String;
         
         private var _isVisible:Boolean;
         
-        public function STObject()
+        public function Base()
         {
             super();
             _isVisible = true;

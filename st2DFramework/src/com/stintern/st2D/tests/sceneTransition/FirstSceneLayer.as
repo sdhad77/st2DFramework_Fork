@@ -2,7 +2,7 @@ package com.stintern.st2D.tests.sceneTransition
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
     
@@ -12,7 +12,7 @@ package com.stintern.st2D.tests.sceneTransition
     {
         public function FirstSceneLayer()
         {
-            STSprite.createSpriteWithPath("res/test.png", onCreated, null, StageContext.instance.screenWidth * 0.5, StageContext.instance.screenHeight * 0.5);
+            Sprite.createSpriteWithPath("res/test.png", onCreated, null, StageContext.instance.screenWidth * 0.5, StageContext.instance.screenHeight * 0.5);
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
@@ -22,9 +22,9 @@ package com.stintern.st2D.tests.sceneTransition
             
         }        
         
-        private function onCreated(sprite:STSprite):void
+        private function onCreated(sprite:Sprite):void
         {
-            var testSprite:STSprite = sprite;
+            var testSprite:Sprite = sprite;
             this.addSprite(testSprite);
         }
         

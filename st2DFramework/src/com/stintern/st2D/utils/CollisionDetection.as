@@ -1,6 +1,6 @@
 package com.stintern.st2D.utils
 {
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     
     import flash.display.Bitmap;
     import flash.geom.Point;
@@ -25,7 +25,7 @@ package com.stintern.st2D.utils
          * @return 두개의 STSprite가 충돌시 true 반환, 비충돌시 false 반환.
          * 
          */
-        public static function collisionCheck(firstSprite:STSprite, secondSprite:STSprite):Boolean
+        public static function collisionCheck(firstSprite:Sprite, secondSprite:Sprite):Boolean
         {
             if(firstSprite.textureData  == null || secondSprite.textureData == null)
                 return false;

@@ -4,7 +4,7 @@ package com.stintern.st2D.tests.translate_rotate_scale
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.tests.batch.BatchSpriteLayer;
     import com.stintern.st2D.utils.Vector2D;
     
@@ -13,7 +13,7 @@ package com.stintern.st2D.tests.translate_rotate_scale
 
     public class TRSLayer extends Layer
     {
-        private var _sprites:Vector.<STSprite> = new Vector.<STSprite>();
+        private var _sprites:Vector.<Sprite> = new Vector.<Sprite>();
         
         private var _translation:Number = 0.0;
         private var _degree:Number = 0.0;
@@ -23,7 +23,7 @@ package com.stintern.st2D.tests.translate_rotate_scale
         {
             for(var i:uint = 0; i<3; ++i)
             {
-                STSprite.createSpriteWithPath("res/star.png", onCreated);
+                Sprite.createSpriteWithPath("res/star.png", onCreated);
             }
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
@@ -43,7 +43,7 @@ package com.stintern.st2D.tests.translate_rotate_scale
             }
         }        
         
-        private function onCreated(sprite:STSprite):void
+        private function onCreated(sprite:Sprite):void
         {
             sprite.position = new Vector2D( StageContext.instance.screenWidth * 0.5, 
                                                             _sprites.length * StageContext.instance.screenHeight * 0.3 + sprite.height );

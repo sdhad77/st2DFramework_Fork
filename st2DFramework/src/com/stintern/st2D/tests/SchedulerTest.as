@@ -2,7 +2,7 @@ package com.stintern.st2D.tests
 {
     import com.stintern.st2D.animation.AnimationManager;
     import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.scheduler.Scheduler;
 
     /**
@@ -12,7 +12,7 @@ package com.stintern.st2D.tests
      */
     public class SchedulerTest extends Layer
     {
-        private var sprite1:STSprite = new STSprite();
+        private var sprite1:Sprite = new Sprite();
         private var _i:int=1;
         
         public function SchedulerTest()
@@ -24,12 +24,12 @@ package com.stintern.st2D.tests
             
             function createStar():void
             {
-                STSprite.createSpriteWithPath("res/star.png", onCreated, null, _i*80, 128);
+                Sprite.createSpriteWithPath("res/star.png", onCreated, null, _i*80, 128);
                 _i++;
             }
         }
         
-        private function onCreated(sprite:STSprite):void
+        private function onCreated(sprite:Sprite):void
         {
             sprite1 = sprite;
             this.addSprite(sprite1);

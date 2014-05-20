@@ -5,14 +5,14 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     
     import flash.events.MouseEvent;
 
     public class CharacterMovingLayer extends Layer
     {
         
-        private var _backGround:STSprite;
+        private var _backGround:Sprite;
         private var _bgPageNum:uint = 0;
         private var _layer:Layer;
         

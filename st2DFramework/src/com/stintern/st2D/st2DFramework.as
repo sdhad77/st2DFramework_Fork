@@ -4,7 +4,7 @@ package com.stintern.st2D
     import com.stintern.st2D.display.DrawManager;
     import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
-    import com.stintern.st2D.tests.game.DungGameLayer;
+    import com.stintern.st2D.tests.game.Game1;
     import com.stintern.st2D.utils.GameStatus;
     import com.stintern.st2D.utils.GameTimer;
     
@@ -36,7 +36,7 @@ package com.stintern.st2D
         {
             var scene:Scene = new Scene();
             
-            var testLayer:DungGameLayer = new DungGameLayer();
+            var testLayer:Game1 = new Game1();
             scene.addLayer(testLayer);
             
             SceneManager.instance.pushScene(scene);

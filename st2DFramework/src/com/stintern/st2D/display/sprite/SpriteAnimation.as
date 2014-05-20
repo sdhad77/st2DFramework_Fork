@@ -4,7 +4,7 @@ package com.stintern.st2D.display.sprite
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.animation.datatype.AnimationFrame;
 
-    public class STAnimation extends STSprite
+    public class SpriteAnimation extends Sprite
     {
         private var _playAnimationName:String; //현재 재생중인 애니메이션의 이름
         private var _playAnimationFlowIdx:int; //현재 재생중인 애니메이션의 Frame 인덱스
@@ -12,7 +12,7 @@ package com.stintern.st2D.display.sprite
         private var _isPlaying:Boolean         //지금 재생중인지?
         private var _isFirstUpdate:Boolean     //첫번째 업데이트인지. init을 위해 만든 변수
         
-        public function STAnimation()
+        public function SpriteAnimation()
         {
             super();
 

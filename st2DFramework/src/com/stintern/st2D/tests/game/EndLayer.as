@@ -4,13 +4,13 @@ package com.stintern.st2D.tests.game
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     
     import flash.events.MouseEvent;
     
     public class EndLayer extends Layer
     {
-        private var sprite1:STSprite = new STSprite();;
+        private var sprite1:Sprite = new Sprite();;
         
         public function EndLayer()
         {

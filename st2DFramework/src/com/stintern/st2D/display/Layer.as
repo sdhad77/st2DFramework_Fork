@@ -1,8 +1,8 @@
 package com.stintern.st2D.display
 {
     import com.stintern.st2D.display.sprite.BatchSprite;
-    import com.stintern.st2D.display.sprite.STObject;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Base;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteController;
 
     /**
@@ -24,7 +24,7 @@ package com.stintern.st2D.display
      * @author 이종민
      * 
      */
-    public class Layer extends STObject  
+    public class Layer extends Base  
     {
         private var _spriteManager:SpriteController = new SpriteController();
         private var _batchSpriteArray:Array = new Array();
@@ -71,7 +71,7 @@ package com.stintern.st2D.display
          * 레이어에 새로운 스프라이트를 추가합니다. 
          * @param sprite 새롭게 추가할 스프라이트
          */
-        public function addSprite(sprite:STSprite):void
+        public function addSprite(sprite:Sprite):void
         {
             _spriteManager.addSprite(sprite);
         }
@@ -107,7 +107,7 @@ package com.stintern.st2D.display
          * 레이어에 있는 스프라이트를 제거합니다. 
          * @param sprite 제거할 스프라이트 객체
          */
-        public function removeSprite(sprite:STSprite):void
+        public function removeSprite(sprite:Sprite):void
         {
             _spriteManager.removeSprite(sprite);
             sprite.dispose();

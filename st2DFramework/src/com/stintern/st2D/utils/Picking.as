@@ -1,7 +1,7 @@
 package com.stintern.st2D.utils
 {
 	import com.stintern.st2D.basic.StageContext;
-	import com.stintern.st2D.display.sprite.STSprite;
+	import com.stintern.st2D.display.sprite.Sprite;
 	
 	import flash.display.Stage;
 	import flash.geom.Rectangle;
@@ -22,13 +22,13 @@ package com.stintern.st2D.utils
          * @return allSprite의 STSprite 중 터치된 좌표상에 있는 STSprite
          * 
          */
-		public static function pick(stage:Stage, allSprite:Array, x:Number, y:Number): STSprite
+		public static function pick(stage:Stage, allSprite:Array, x:Number, y:Number): Sprite
 		{
             var xUnit:Number = x;
             var yUnit:Number = Math.abs(y - stage.stageHeight);     //stage좌표와 context3d좌표 차이 수정
 
-			var picked:STSprite;
-			for each (var sprite:STSprite in allSprite)
+			var picked:Sprite;
+			for each (var sprite:Sprite in allSprite)
 			{
 				var rect:Rectangle = new Rectangle(sprite.position.x - (sprite.width/2), sprite.position.y - (sprite.height/2), sprite.width, sprite.height);
                 

@@ -1,8 +1,8 @@
 package com.stintern.st2D.display.sprite
 {
     import com.stintern.st2D.basic.StageContext;
-    import com.stintern.st2D.display.sprite.BaseSprite;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.DisplayObject;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.AssetLoader;
     import com.stintern.st2D.utils.GameStatus;
     
@@ -19,7 +19,7 @@ package com.stintern.st2D.display.sprite
      * 하나의 텍스쳐를 이용하는 스프라이트의 경우 BatchSprite 를 이용하여 
      * 효율적으로 화면에 출력할 수 있습니다.  
      */
-    public class BatchSprite extends BaseSprite
+    public class BatchSprite extends DisplayObject
     {
         private var _sprites:Array = new Array();
         private var _updateRequired:Boolean = true;     //Vertex, Index Buffer 를 그리기 전에 갱신해야 하는 여부
@@ -88,7 +88,7 @@ package com.stintern.st2D.display.sprite
          * BatchSprite 에 새로운 Sprite 를 추가합니다. 
          * @param sprite 추가할 Sprite
          */
-        public function addSprite(sprite:STSprite):void
+        public function addSprite(sprite:Sprite):void
         {
             // BatchSprite 의 텍스쳐에 sprite 의 텍스쳐가 있는지 확인
             //            if( sprite.textureData != _textureData || )
@@ -217,7 +217,7 @@ package com.stintern.st2D.display.sprite
         {
             for(var i:uint=0; i<_sprites.length; ++i)
             {
-                var sprite:STSprite = _sprites[i];
+                var sprite:Sprite = _sprites[i];
                 
                 sprite.update();
                 

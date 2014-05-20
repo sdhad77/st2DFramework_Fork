@@ -3,7 +3,7 @@ package com.stintern.st2D.tests
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.tests.batch.BatchSpriteLayer;
     import com.stintern.st2D.utils.Vector2D;
     
@@ -11,8 +11,8 @@ package com.stintern.st2D.tests
     
     public class TestLayer extends Layer
     {
-        private var sprite1:STSprite;
-        private var sprite2:STSprite;
+        private var sprite1:Sprite;
+        private var sprite2:Sprite;
         
         public function TestLayer()
         {            
@@ -29,13 +29,13 @@ package com.stintern.st2D.tests
         {
         }
         
-        private function onCreated(sprite:STSprite):void
+        private function onCreated(sprite:Sprite):void
         {
             sprite1 = sprite;
             this.addSprite(sprite1);
         }
         
-        private function onCreated2(sprite:STSprite):void
+        private function onCreated2(sprite:Sprite):void
         {
             sprite2 = sprite;
             this.addSprite(sprite2);

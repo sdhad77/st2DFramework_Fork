@@ -1,9 +1,9 @@
 import com.stintern.st2D.display.Layer;
-import com.stintern.st2D.display.sprite.STAnimation;
+import com.stintern.st2D.display.sprite.SpriteAnimation;
 
 class GameObject
 {
-    public var _sprite:STAnimation = new STAnimation;
+    public var _sprite:SpriteAnimation = new SpriteAnimation;
     public var _info:ObjectInfo;
     
     public function GameObject(path:String, animationName:String, onCreated:Function, hp:Number, power:Number, party:String)
@@ -33,12 +33,12 @@ package com.stintern.st2D.tests.game
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
-    import com.stintern.st2D.display.sprite.STAnimation;
+    import com.stintern.st2D.display.sprite.SpriteAnimation;
     
     public class Game1 extends Layer
     {
         private var gameObject:Vector.<GameObject> = new Vector.<GameObject>;
-        private var testSprite:STAnimation = new STAnimation;
+        private var testSprite:SpriteAnimation = new SpriteAnimation;
         private var gameStart:Boolean = false;
         private var _batchSprite:BatchSprite;
         private var _loadCompleteObjectCnt:int = 0;

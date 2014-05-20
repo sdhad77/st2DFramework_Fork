@@ -3,13 +3,13 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
-    import com.stintern.st2D.display.sprite.STAnimation;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.SpriteAnimation;
+    import com.stintern.st2D.display.sprite.Sprite;
 
     public class CharacterObject
     {
         
-        private var _sprite:STAnimation = new STAnimation();
+        private var _sprite:SpriteAnimation = new SpriteAnimation();
         private var _info:CharacterInfo;
         private var _layer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
         private var _batchSprite:BatchSprite = _layer.batchSprite;
@@ -32,11 +32,11 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite = _layer.batchSprite;
             onCreated();
         }
-        private var sprite:STAnimation;
+        private var sprite:SpriteAnimation;
         private function onCreated():void
         {
             
-            sprite = new STAnimation();
+            sprite = new SpriteAnimation();
             _sprites.push(sprite);
             var x:Number = 0;
             var y:Number = 60;

@@ -5,7 +5,7 @@ package com.stintern.st2D.tests.batch
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
@@ -28,7 +28,7 @@ package com.stintern.st2D.tests.batch
         
         override public function update(dt:Number):void
         {
-            for each( var sprite:STSprite in _sprites)
+            for each( var sprite:Sprite in _sprites)
             {
                 sprite.setTranslation( new Vector2D( (Math.sin(_translation) ) + sprite.position.x , sprite.position.y ) );    
             }
@@ -55,7 +55,7 @@ package com.stintern.st2D.tests.batch
                 var x:Number = Math.ceil(Math.random() * StageContext.instance.screenWidth);
                 var y:Number = Math.ceil(Math.random() * StageContext.instance.screenHeight);
                 
-                var sprite:STSprite = new STSprite();
+                var sprite:Sprite = new Sprite();
                 _sprites.push(sprite);
                 
                 if( _sprites.length % 2 == 0 )

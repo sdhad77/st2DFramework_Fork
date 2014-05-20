@@ -5,14 +5,14 @@ package com.stintern.st2D.tests.Animation
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.sprite.STSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.Picking;
     
     import flash.events.MouseEvent;
     
     public class STSpriteMoveToLayer extends Layer
     {
-        private var spriteAnimation:STSprite = new STSprite();
+        private var spriteAnimation:Sprite = new Sprite();
         
         public function STSpriteMoveToLayer()
         {
@@ -28,7 +28,7 @@ package com.stintern.st2D.tests.Animation
             {
                 for(var i:int=0; i < 20; i++)
                 {
-                    STSprite.createSpriteWithPath("res/atlas.png", onCreated, null, i*32 + 100, j*32 + 100);
+                    Sprite.createSpriteWithPath("res/atlas.png", onCreated, null, i*32 + 100, j*32 + 100);
                 }
             }
             
@@ -40,7 +40,7 @@ package com.stintern.st2D.tests.Animation
             AnimationManager.instance.update();
         }
         
-        private function onCreated(sprite:STSprite):void
+        private function onCreated(sprite:Sprite):void
         {
             spriteAnimation = sprite;
             spriteAnimation.depth = 2;

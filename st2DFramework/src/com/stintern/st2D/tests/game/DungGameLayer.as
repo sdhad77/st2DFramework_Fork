@@ -6,7 +6,7 @@ package com.stintern.st2D.tests.game
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
-    import com.stintern.st2D.display.sprite.STAnimation;
+    import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.utils.CollisionDetection;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
@@ -15,18 +15,18 @@ package com.stintern.st2D.tests.game
     
     public class DungGameLayer extends Layer
     {
-        private var _dung:STAnimation = new STAnimation();
-        private var _person:STAnimation = new STAnimation();;
+        private var _dung:SpriteAnimation = new SpriteAnimation();
+        private var _person:SpriteAnimation = new SpriteAnimation();;
         private var _i:int=1;
         private var _translation:Number = 0.0;
         private var _sign:int = 1;
-        private var _dungVector:Vector.<STAnimation>;
+        private var _dungVector:Vector.<SpriteAnimation>;
         
         public function DungGameLayer()
         {
-            _dungVector = new Vector.<STAnimation>();
+            _dungVector = new Vector.<SpriteAnimation>();
             
-            AnimationData.instance.setAnimationData("res/dungGame.png", "res/atlas.xml");
+            //AnimationData.instance.setAnimationData("res/dungGame.png", "res/atlas.xml");
             
             AnimationData.instance.setAnimation("res/dungGame.png", new Animation("dung",  new Array("dung0"),          8, "dung"));
             AnimationData.instance.setAnimation("res/dungGame.png", new Animation("char",  new Array("char0", "char1"), 8, "char"));

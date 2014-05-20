@@ -1,8 +1,8 @@
 package com.stintern.st2D.display
 {
-    import com.stintern.st2D.display.sprite.STObject;
+    import com.stintern.st2D.display.sprite.Base;
 
-    public class Scene extends STObject
+    public class Scene extends Base
     {
         private var _layerArray:Array = new Array();
         

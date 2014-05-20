@@ -13,9 +13,9 @@ package com.stintern.st2D.display.sprite
          */
         public function dispose():void
         {
-            for each( var sprite:STSprite in _sprites )
+            for each( var sprite:Sprite in _sprites )
             {
-                (sprite as STSprite).dispose();
+                (sprite as Sprite).dispose();
                 sprite = null;
             }
         }
@@ -23,7 +23,7 @@ package com.stintern.st2D.display.sprite
         /**
          * 화면에 출력할 스프라이트를 추가합니다. 
          */
-        public function addSprite(sprite:STSprite):void
+        public function addSprite(sprite:Sprite):void
         {            
             _sprites.push(sprite);
             
@@ -46,7 +46,7 @@ package com.stintern.st2D.display.sprite
          * 스프라이트 벡터에서 스프라이트를 삭제합니다.  
          * @param sprite    삭제할 스프라이트
          */
-        public function removeSprite(sprite:STSprite):void
+        public function removeSprite(sprite:Sprite):void
         {
             for( var i:uint = 0; i<_sprites.length; ++i)
             {
@@ -57,7 +57,7 @@ package com.stintern.st2D.display.sprite
             }
         }
         
-        private function sortingWithDepth(lhs:STSprite, rhs:STSprite):int
+        private function sortingWithDepth(lhs:Sprite, rhs:Sprite):int
         {
             if( lhs.depth < rhs.depth )
             {
