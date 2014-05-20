@@ -10,9 +10,6 @@ package com.stintern.st2D.utils
     import flash.filesystem.File;
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
-    import flash.net.URLLoader;
-    import flash.net.URLLoaderDataFormat;
-    import flash.net.URLRequest;
     import flash.utils.ByteArray;
     import flash.utils.Dictionary;
 
@@ -134,6 +131,22 @@ package com.stintern.st2D.utils
             {
                 trace("Image Load error: " + event.target + " _ " + event.text );                  
             }
+        }
+        
+        public function loadXML(path:String, onComplete:Function, onProgress:Function = null):void
+        {
+            var file:File = findFile(path);
+            var fileStream:FileStream = new FileStream(); 
+            fileStream.addEventListener(Event.COMPLETE, processXMLData); 
+            fileStream.openAsync(file, FileMode.READ); 
+            
+            function processXMLData(event:Event):void  
+            { 
+                var xmlNode:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable)); 
+                fileStream.close(); 
+                
+                onComplete(xmlNode);
+            } 
         }
         
         /**
