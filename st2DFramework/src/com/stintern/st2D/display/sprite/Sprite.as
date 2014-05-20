@@ -133,7 +133,18 @@ package com.stintern.st2D.display.sprite
         {
             var uvCoord:Array = new Array();
             
-            if(AnimationData.instance.animationData[batchSprite.path]["available"] == 2)
+            //Batchsprite 이미지에 이미지가 하나만 존재하여 xml파일을 사용하지 않는 경우
+            if(AnimationData.instance.animationData[batchSprite.path]["available"] == 0)
+            {
+                uvCoord.push(0, 0);   //left top
+                uvCoord.push(1, 0);   //right top
+                uvCoord.push(1, 1);   //right bottom
+                uvCoord.push(0, 1);   //left bottom
+                
+                return uvCoord;
+            }
+            //Batchsprite 이미지에 이미지가 여러개 존재하여 xml 파일을 사용하는 경우
+            else if(AnimationData.instance.animationData[batchSprite.path]["available"] == 2)
             {
                 //현재 프레임 정보
                 var tempFrame:AnimationFrame = AnimationData.instance.animationData[batchSprite.path]["frame"][imageName];
