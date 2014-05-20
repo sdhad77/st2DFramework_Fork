@@ -206,7 +206,6 @@ package com.stintern.st2D.display.sprite
             _modelMatrix.identity();
             
             // scale
-            //_modelMatrix.appendScale(_frame.width * scale.x, _frame.height * scale.y, 1);
             _modelMatrix.appendScale(_frame.width * scale.x, _frame.height * scale.y, 1);
             
             // rotate
