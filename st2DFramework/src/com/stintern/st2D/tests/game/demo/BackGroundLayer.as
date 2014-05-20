@@ -1,7 +1,6 @@
 package com.stintern.st2D.tests.game.demo
 {
-    import com.stintern.st2D.animation.AnimationData;
-    import com.stintern.st2D.animation.datatype.AnimationFrame;
+    import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
@@ -13,7 +12,7 @@ package com.stintern.st2D.tests.game.demo
         private var _sprites:Array = new Array();
         
         private var _bgPageCounter:uint = 0;
-        private var _bgPageNum:uint = 2;
+        private var _bgPageNum:uint = 4;
         
         public function BackGroundLayer()
         {
@@ -24,15 +23,14 @@ package com.stintern.st2D.tests.game.demo
 
         private function onCreated():void
         {
-            var tempFrame:AnimationFrame = AnimationData.instance.animationData["res/demo/background.png"]["frame"]["background0"]
-            
             for(var i:uint = 0; i<_bgPageNum; i++)
             {
                 var sprite:Sprite = new Sprite();
                 _sprites.push(sprite);
-                var x:Number = tempFrame.width/2 + (tempFrame.width * _bgPageCounter);
-                var y:Number = tempFrame.height/2;
+                var x:Number = (StageContext.instance.screenWidth/2) + (StageContext.instance.screenWidth * _bgPageCounter);
+                var y:Number = StageContext.instance.screenHeight/2;
                 sprite.createSpriteWithBatchSprite(_batchSprite, "background0", onSpriteCreated, x, y );
+                sprite.setScaleWithWidthHeight(StageContext.instance.screenWidth, StageContext.instance.screenHeight);
                 _bgPageCounter++;
             }
         }

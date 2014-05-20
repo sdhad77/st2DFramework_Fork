@@ -1,59 +1,44 @@
 package com.stintern.st2D.tests.game.demo
 {
-    import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
-    import com.stintern.st2D.display.sprite.Sprite;
 
     public class CharacterObject
     {
-        
         private var _sprite:SpriteAnimation = new SpriteAnimation();
         private var _info:CharacterInfo;
         private var _layer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
-        private var _batchSprite:BatchSprite = _layer.batchSprite;
-        private var _sprites:Array = _layer.sprites;
+        private var _batchSprite:BatchSprite;
+        private var sprite:SpriteAnimation;
          
             
         public function CharacterObject(path:String, hp:Number, power:Number, speed:Number, ally:Boolean)
         {
-            
             _info = new CharacterInfo(hp, power, speed, ally);
-            
-            onCompleted();
-        }
-        
-        
-        private function onCompleted():void
-        {
-            trace(_layer.name);
-            
             _batchSprite = _layer.batchSprite;
+
             onCreated();
         }
-        private var sprite:SpriteAnimation;
+
         private function onCreated():void
         {
-            
             sprite = new SpriteAnimation();
-            _sprites.push(sprite);
             var x:Number = 0;
             var y:Number = 60;
-            sprite.createSpriteWithBatchSprite(_batchSprite, "char", onSpriteCreated, x, y );
+            sprite.createAnimationSpriteWithPath("res/dungGame.png", "char", onSpriteCreated, null, x, y );
         }
         
         private function onSpriteCreated():void
         {
-            _batchSprite.addSprite(_sprites[_sprites.length-1]);
+            _batchSprite.addSprite(sprite);
             sprite.moveTo(1024, 60, _info.speed);
-//            sprite.playAnimation();
+            sprite.playAnimation();
         }
         
         private function onCreated1():void
         {
             _layer.addSprite(_sprite);
-            
         }
     }
 }

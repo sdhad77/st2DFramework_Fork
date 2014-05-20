@@ -2,7 +2,6 @@ package com.stintern.st2D.tests.game.demo
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.utils.Vector2D;
     
     import flash.events.MouseEvent;
