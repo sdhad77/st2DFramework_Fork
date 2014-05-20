@@ -1,6 +1,7 @@
 package com.stintern.st2D.animation
 {
     import com.stintern.st2D.animation.datatype.Animation;
+    import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.utils.AssetLoader;
     
     import flash.display.Bitmap;
@@ -66,7 +67,9 @@ package com.stintern.st2D.animation
             AssetLoader.instance.loadImageTexture(pathTexture, onLoadImageTextureComplete);
             
             //xml파일을 읽어옵니다.
-            XmlLoader.instance.load(pathXML, onXmlLoaderComplete);
+            AssetLoader.instance.loadXML(pathXML, onXmlLoaderComplete);
+            
+            //XmlLoader.instance.load(pathXML, onXmlLoaderComplete);
             
             function onLoadImageTextureComplete(object:Object, imageNo:uint):void
             {
@@ -80,8 +83,10 @@ package com.stintern.st2D.animation
                     if(onCompleted != null) onCompleted();
                 }    
             }
-            function onXmlLoaderComplete(dictionary:Dictionary):void
+            function onXmlLoaderComplete(xml:XML):void
             {
+                var dictionary:Dictionary = createAnimationFrameDictionary(xml);
+                
                 //xml파일을 읽어온 후 저장합니다.
                 _animationData[pathTexture]["frame"] = dictionary;
                 //xml파일 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
@@ -118,13 +123,14 @@ package com.stintern.st2D.animation
             if(pathTexture in _animationData)
             {
                 _animationData[pathTexture]["available"]--;
-                XmlLoader.instance.load(pathXML, onXmlLoaderComplete);
+                AssetLoader.instance.loadXML(pathXML, onXmlLoaderComplete);
             }
             else trace("texture가 존재하지 않습니다");
             
-            function onXmlLoaderComplete(object:Object):void
+            function onXmlLoaderComplete(xml:XML):void
             {
-                _animationData[pathTexture]["frame"] = object;
+                var aniFrameDic:Dictionary = createAnimationFrameDictionary(xml)
+                _animationData[pathTexture]["frame"] = aniFrameDic;
                 _animationData[pathTexture]["available"]++;
             }
         }
@@ -178,6 +184,31 @@ package com.stintern.st2D.animation
         public function clearAnimationData():void
         {
             for (var key:* in _animationData) delete _animationData[key];
+        }
+        
+        private function createAnimationFrameDictionary(xml:XML):Dictionary
+        {
+            var nameList:XMLList = xml.child("atlasItem").attribute("name");
+            var xList:XMLList = xml.child("atlasItem").attribute("x");
+            var yList:XMLList = xml.child("atlasItem").attribute("y");
+            var widthList:XMLList = xml.child("atlasItem").attribute("width");
+            var heightList:XMLList = xml.child("atlasItem").attribute("height");
+            var frameXList:XMLList = xml.child("atlasItem").attribute("frameX");
+            var frameYList:XMLList = xml.child("atlasItem").attribute("frameY");
+            var frameWidthList:XMLList = xml.child("atlasItem").attribute("frameWidth");
+            var frameHeightList:XMLList = xml.child("atlasItem").attribute("frameHeight");
+            
+            var animationFrameDictionary:Dictionary = new Dictionary();
+            for(var i:uint = 0; i<xml.children().length(); i++)
+            {
+                var fileName:String = nameList[i];
+                fileName = fileName.substr(0, fileName.indexOf("."));
+                
+                trace("fileName : " + fileName);
+                animationFrameDictionary[fileName] = new AnimationFrame(fileName, xList[i], yList[i], widthList[i], heightList[i], frameXList[i], frameYList[i], frameWidthList[i], frameHeightList[i]);
+            }
+            
+            return animationFrameDictionary;
         }
         
         public function get animationData():Dictionary {return _animationData;}
