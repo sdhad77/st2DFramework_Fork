@@ -4,7 +4,6 @@ package com.stintern.st2D.animation
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.utils.AssetLoader;
     
-    import flash.display.Bitmap;
     import flash.utils.Dictionary;
     
     /**
@@ -73,11 +72,11 @@ package com.stintern.st2D.animation
                 _animationData[path] = new Dictionary;
                 _animationData[path]["animation"] = new Dictionary;
                 _animationData[path]["available"] = 0;
-            
+                
                 //xml파일을 읽어옵니다.
                 AssetLoader.instance.loadXML(pathXML, onXmlLoadComplete);
             }
-            //이미 애니메이션 정보가 있는 path일 경우
+                //이미 애니메이션 정보가 있는 path일 경우
             else trace("이미 생성되어있는 AnimationData입니다.");
             
             function onXmlLoadComplete(xml:XML):void
