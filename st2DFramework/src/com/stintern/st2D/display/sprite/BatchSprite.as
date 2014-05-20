@@ -93,12 +93,6 @@ package com.stintern.st2D.display.sprite
          */
         public function addSprite(sprite:Sprite):void
         {
-            // BatchSprite 의 텍스쳐에 sprite 의 텍스쳐가 있는지 확인
-            //            if( sprite.textureData != _textureData || )
-            //            {
-            //                
-            //            }
-            
             var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
             var spriteVertexData:Vector.<Number> = sprite.vertexData;
             
@@ -291,6 +285,10 @@ package com.stintern.st2D.display.sprite
             var numVertices:int = vertexData.length;
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
         }
-                
+        
+        public function get spriteArray():Array
+        {
+            return _sprites;
+        }
     }
 }
