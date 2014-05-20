@@ -3,6 +3,7 @@ package com.stintern.st2D.animation
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.utils.AssetLoader;
+    import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.utils.Dictionary;
     
@@ -31,6 +32,7 @@ package com.stintern.st2D.animation
         // animationData[path]["type"]                     = Dictionary의 타입(int type, [0 == 단일 이미지][1 == 복수의 이미지])
         // 
         private var _animationData:Dictionary = new Dictionary;
+        private var _sch:Scheduler = new Scheduler;
         
         public function AnimationData()
         {
@@ -78,25 +80,37 @@ package com.stintern.st2D.animation
                 _animationData[path] = new Dictionary;
                 _animationData[path]["animation"] = new Dictionary;
                 _animationData[path]["type"] = 1;
-                _animationData[path]["available"] = 0;
+                _animationData[path]["available"] = false;
+                _animationData[path]["xml"] = false;
+                _animationData[path]["image"] = false;
                 
                 //xml파일을 읽어옵니다.
                 AssetLoader.instance.loadXML(pathXML, onXmlLoadComplete);
             }
-                //이미 애니메이션 정보가 있는 path일 경우
-            else trace("이미 생성되어있는 AnimationData입니다.");
+            else if(_animationData[path]["available"] == false)
+            {
+                trace("로딩중입니다.");
+                _sch.addFunc(0, onCreated, 1);
+            }
+            //이미 애니메이션 정보가 있는 path일 경우
+            else
+            {
+                if(onCreated != null) onCreated();
+            }
             
             function onXmlLoadComplete(xml:XML):void
             {
                 //xml파일을 읽어온 후 저장합니다.
                 _animationData[path]["frame"] = createAnimationFrameDictionary(xml);
                 //xml파일 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
-                _animationData[path]["available"]++;
+                _animationData[path]["xml"] = true;
                 
                 //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
-                if( _animationData[path]["available"] == 2 )
+                if( _animationData[path]["image"] == true )
                 {
+                    _animationData[path]["available"] = true;
                     if(onCreated != null) onCreated();
+                    _sch.startScheduler();
                 }  
             }
         }
