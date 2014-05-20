@@ -148,9 +148,11 @@ package com.stintern.st2D.display.sprite
             if( _sprites.length == 0 )
                 return;
             
+            // 새로운 Sprite 가 추가되었으면 버퍼를 갱신
             if( _updateRequired )
                 updateBuffers();
             
+            // 스프라이트들의 현재 Model Matrix 에 따라서 버퍼를 갱신
             updateSpriteMatrix();
             
             var context:Context3D = StageContext.instance.context;
@@ -215,24 +217,33 @@ package com.stintern.st2D.display.sprite
             }
         }
         
+        /**
+         * 배치스프라이트를 화면에 출력하기 전에 스프라이트들의 모델 매트릭스에 따른
+         * VertexBuffer 를 갱신합니다. 
+         */
         private function updateSpriteMatrix():void
         {
+            // 갱신할 VertexData 초기화
             vertexData.length = 0;
             
-            var j:uint=0;
+            // Visible 속성이 true 인 스프라이트의 객체 개수
+            var visibleSpriteCount:uint=0;
+            
             for(var i:uint=0; i<_sprites.length; ++i)
             {
                 var sprite:Sprite = _sprites[i];
                 
+                // 스프라이트의 isVisible 속성이 false 이면 VertexData 에 넣지 않음
                 if( sprite.isVisible == false )
                     continue;
                 
+                // 스프라이트의 model matrix 갱신
                 sprite.update();
                 
                 var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
                 var spriteVertexData:Vector.<Number> = sprite.vertexData;
                 
-                var targetIndex:int = j++ * VERTEX_COUNT * DATAS_PER_VERTEX;
+                var targetIndex:int = visibleSpriteCount++ * VERTEX_COUNT * DATAS_PER_VERTEX;
                 var sourceIndex:int = 0;
                 var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
                 
@@ -256,9 +267,9 @@ package com.stintern.st2D.display.sprite
                 }
             }
             
+            // 갱신한 vertexData 에 따라 vertexBuffer 를 갱신
             var numVertices:int = vertexData.length;
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
-            
         }
         
     }
