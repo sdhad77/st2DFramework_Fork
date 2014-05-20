@@ -25,17 +25,17 @@ package com.stintern.st2D.tests.game.demo
          */
         private function onTouch(event:MouseEvent):void
         {
-            // 이곳에 맨 처음으로 사용할 레이어를 부릅니다.
-            var backGroundLayer:BackGroundLayer = new BackGroundLayer();
-            var characterMovingLayer:CharacterMovingLayer = new CharacterMovingLayer();
-            var controlLayer:ControlLayer = new ControlLayer();
-            
             var scene:Scene = new Scene();
-            scene.addLayer(backGroundLayer);
-            scene.addLayer(characterMovingLayer);
-            scene.addLayer(controlLayer);
-            
             SceneManager.instance.pushScene(scene);
+            
+            var backGroundLayer:BackGroundLayer = new BackGroundLayer();
+            scene.addLayer(backGroundLayer);
+            
+            var characterMovingLayer:CharacterMovingLayer = new CharacterMovingLayer();
+            scene.addLayer(characterMovingLayer);
+            
+            var controlLayer:ControlLayer = new ControlLayer();
+            scene.addLayer(controlLayer);
             
             StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, onTouch);
         }
