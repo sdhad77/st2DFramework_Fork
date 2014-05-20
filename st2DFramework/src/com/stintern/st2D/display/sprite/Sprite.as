@@ -502,5 +502,16 @@ package com.stintern.st2D.display.sprite
             _zOrder = zOrder;
         }
 
+        public function get isMoving():Boolean
+        {
+            return _isMoving;
+        }
+
+        public function set isMoving(value:Boolean):void
+        {
+            _isMoving = value;
+        }
+
+
     }
 }
