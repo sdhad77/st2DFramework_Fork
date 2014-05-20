@@ -148,7 +148,7 @@ package com.stintern.st2D.display.sprite
             //Batchsprite 이미지에 이미지가 여러개 존재하여 xml 파일을 사용하는 경우
             if(AnimationData.instance.animationData[batchSprite.path]["type"] == 1)
             {
-                if(AnimationData.instance.animationData[batchSprite.path]["available"] == 2)
+                if(AnimationData.instance.animationData[batchSprite.path]["available"] == true)
                 {
                     //현재 프레임 정보
                     var tempFrame:AnimationFrame = AnimationData.instance.animationData[batchSprite.path]["frame"][imageName];

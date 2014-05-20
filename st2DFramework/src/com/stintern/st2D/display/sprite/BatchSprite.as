@@ -1,6 +1,5 @@
 package com.stintern.st2D.display.sprite
 {
-    import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.sprite.DisplayObject;
     import com.stintern.st2D.display.sprite.Sprite;
@@ -14,6 +13,7 @@ package com.stintern.st2D.display.sprite
     import flash.display3D.Context3DTextureFormat;
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.geom.Matrix3D;
+    import com.stintern.st2D.animation.AnimationData;
     
     /**
      * 하나의 텍스쳐를 이용하는 스프라이트의 경우 BatchSprite 를 이용하여 
@@ -61,11 +61,12 @@ package com.stintern.st2D.display.sprite
                 else
                 {
                     //이미지 로딩이 끝났다는 의미에서 변수를 1 증가시킵니다.
-                    AnimationData.instance.animationData[path]["available"]++;
+                    AnimationData.instance.animationData[path]["image"] = true;
                     
                     //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
-                    if( AnimationData.instance.animationData[path]["available"] == 2 )
+                    if( AnimationData.instance.animationData[path]["xml"] == true )
                     {
+                        AnimationData.instance.animationData[path]["available"] = true;
                         if(onCreated != null) onCreated();
                     }
                 }
@@ -92,6 +93,12 @@ package com.stintern.st2D.display.sprite
          */
         public function addSprite(sprite:Sprite):void
         {
+            // BatchSprite 의 텍스쳐에 sprite 의 텍스쳐가 있는지 확인
+            //            if( sprite.textureData != _textureData || )
+            //            {
+            //                
+            //            }
+            
             var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
             var spriteVertexData:Vector.<Number> = sprite.vertexData;
             
@@ -284,10 +291,6 @@ package com.stintern.st2D.display.sprite
             var numVertices:int = vertexData.length;
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
         }
-        
-        public function get spriteArray():Array
-        {
-            return _sprites;
-        }
+                
     }
 }
