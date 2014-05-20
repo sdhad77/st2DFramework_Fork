@@ -4,6 +4,7 @@ package com.stintern.st2D.animation
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.utils.AssetLoader;
     
+    import flash.display.Bitmap;
     import flash.utils.Dictionary;
     
     /**
@@ -41,6 +42,20 @@ package com.stintern.st2D.animation
                 _creatingSingleton = false;
             }
             return _instance;
+        }
+        
+        /**
+         * 단일 이미지를 가지는 BatchSprite에서 사용할 dictionary를 생성합니다.
+         * @param path 이 Dictionary를 사용할 이미지의 경로
+         */
+        public function createDictionary(path:String):void
+        {
+            if(!(path in _animationData))
+            {
+                //path를 키로 하는 Dictionayr 초기화
+                _animationData[path] = new Dictionary;
+                _animationData[path]["available"] = 0;
+            }
         }
         
         /**
