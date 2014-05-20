@@ -16,6 +16,7 @@ package com.stintern.st2D.tests.game.demo
         
         public function BackGroundLayer()
         {
+            this.name = "BackGroundLayer";
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/demo/background.png", "res/atlas.xml", onCreated);
             addBatchSprite(_batchSprite);
@@ -43,6 +44,12 @@ package com.stintern.st2D.tests.game.demo
         override public function update(dt:Number):void
         {
         }
+
+        public function get bgPageNum():uint
+        {
+            return _bgPageNum;
+        }
+
     }
 }
 

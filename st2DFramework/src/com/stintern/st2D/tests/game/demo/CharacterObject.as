@@ -8,7 +8,7 @@ package com.stintern.st2D.tests.game.demo
     {
         private var _sprite:SpriteAnimation = new SpriteAnimation();
         private var _info:CharacterInfo;
-        private var _layer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
+        private var _characterMovingLayer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
         private var _batchSprite:BatchSprite;
         private var sprite:SpriteAnimation;
          
@@ -16,7 +16,7 @@ package com.stintern.st2D.tests.game.demo
         public function CharacterObject(path:String, hp:Number, power:Number, speed:Number, ally:Boolean)
         {
             _info = new CharacterInfo(hp, power, speed, ally);
-            _batchSprite = _layer.batchSprite;
+            _batchSprite = _characterMovingLayer.batchSprite;
 
             onCreated();
         }
@@ -25,7 +25,7 @@ package com.stintern.st2D.tests.game.demo
         {
             sprite = new SpriteAnimation();
             var x:Number = 0;
-            var y:Number = 60;
+            var y:Number = 100;
             sprite.createAnimationSpriteWithPath("res/dungGame.png", "char", onSpriteCreated, null, x, y );
         }
         
@@ -38,7 +38,7 @@ package com.stintern.st2D.tests.game.demo
         
         private function onCreated1():void
         {
-            _layer.addSprite(_sprite);
+            _characterMovingLayer.addSprite(_sprite);
         }
     }
 }
