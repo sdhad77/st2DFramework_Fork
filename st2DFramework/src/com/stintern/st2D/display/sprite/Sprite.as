@@ -13,7 +13,7 @@ package com.stintern.st2D.display.sprite
     import flash.geom.Rectangle;
     import flash.geom.Vector3D;
     
-    public class Sprite extends DisplayObject 
+    public class Sprite extends DisplayObjectContainer 
     {
         private var _position:Vector2D = new Vector2D(0.0, 0.0);
         private var _scale:Vector2D = new Vector2D(1.0, 1.0);
@@ -117,8 +117,6 @@ package com.stintern.st2D.display.sprite
             
             this.zOrder = AssetLoader.instance.increaseImageNo();
             
-            initBuffer();
-            
             update();
             
             onCreated();
@@ -134,7 +132,7 @@ package com.stintern.st2D.display.sprite
             var uvCoord:Array = new Array();
             
             //Batchsprite 이미지에 이미지가 하나만 존재하여 xml파일을 사용하지 않는 경우
-            if(AnimationData.instance.animationData[batchSprite.path]["available"] == 0)
+            if(AnimationData.instance.animationData[batchSprite.path]["type"] == 0)
             {
                 frame.width = batchSprite.textureData.width;
                 frame.height = batchSprite.textureData.height;
@@ -146,27 +144,31 @@ package com.stintern.st2D.display.sprite
                 
                 return uvCoord;
             }
+            
             //Batchsprite 이미지에 이미지가 여러개 존재하여 xml 파일을 사용하는 경우
-            else if(AnimationData.instance.animationData[batchSprite.path]["available"] == 2)
+            if(AnimationData.instance.animationData[batchSprite.path]["type"] == 1)
             {
-                //현재 프레임 정보
-                var tempFrame:AnimationFrame = AnimationData.instance.animationData[batchSprite.path]["frame"][imageName];
-                
-                //uv좌표 변경하는 방식
-                frame.width = tempFrame.width;
-                frame.height = tempFrame.height;
-                
-                var width:uint = batchSprite.textureWidth;
-                var height:uint = batchSprite.textureHeight;
-                
-                uvCoord.push(tempFrame.x/width, tempFrame.y/height);                                                                                            //left top
-                uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height);                                                    //right top
-                uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height + tempFrame.height/height);             //right bottom
-                uvCoord.push(tempFrame.x/width, tempFrame.y/height + tempFrame.height/height);                                                  //left bottom
-                
-                tempFrame = null;
-                
-                return uvCoord;
+                if(AnimationData.instance.animationData[batchSprite.path]["available"] == 2)
+                {
+                    //현재 프레임 정보
+                    var tempFrame:AnimationFrame = AnimationData.instance.animationData[batchSprite.path]["frame"][imageName];
+                    
+                    //uv좌표 변경하는 방식
+                    frame.width = tempFrame.width;
+                    frame.height = tempFrame.height;
+                    
+                    var width:uint = batchSprite.textureWidth;
+                    var height:uint = batchSprite.textureHeight;
+                    
+                    uvCoord.push(tempFrame.x/width, tempFrame.y/height);                                                                                            //left top
+                    uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height);                                                    //right top
+                    uvCoord.push(tempFrame.x/width + tempFrame.width/width, tempFrame.y/height + tempFrame.height/height);             //right bottom
+                    uvCoord.push(tempFrame.x/width, tempFrame.y/height + tempFrame.height/height);                                                  //left bottom
+                    
+                    tempFrame = null;
+                    
+                    return uvCoord;
+                }
             }
             
             return null;
@@ -292,16 +294,28 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
-         * 스프라이트를 이동시킵니다. <br/>
-         * 사용한 파라미터 translation 는 값을 복사한 뒤 null 로 셋팅됩니다.
-         * @param translation 이동할 지점
+         * 스프라이트를 목적지로 이동시킵니다. <br/>
+         * 사용한 파라미터 dest 는 값을 복사한 뒤 null 로 셋팅됩니다.
+         * @param dest 이동할 목적지
          */
-        public function setTranslation(translation:Vector2D):void
+        public function setTranslation(dest:Vector2D):void
         {
-            _position.x = translation.x;
-            _position.y = translation.y;
+            //자식이 있을 경우 같이 이동
+            if( hasChild() )
+            {
+                var children:Array = getAllChildren();
+                for(var i:uint=0; i<children.length; ++i)
+                {
+                    var sprite:Sprite = children[i] as Sprite;
+                    
+                    sprite.setTranslation(new Vector2D(dest.x - _position.x + sprite.position.x, dest.y -  _position.y + sprite.position.y));
+                }
+            }
             
-            translation = null;
+            _position.x = dest.x;
+            _position.y = dest.y;
+            
+            dest = null;
         }
         
         

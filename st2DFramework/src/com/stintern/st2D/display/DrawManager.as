@@ -46,11 +46,6 @@ package com.stintern.st2D.display
                 {
                     (layer.batchSpriteArray[spriteIdx] as BatchSprite).draw();
                 }
-                
-//                if( layer.batchSpriteArray.length != 0 )
-//                {
-//                    layer.batchSprite.draw();
-//                }
             }
             
             context.present();
@@ -94,6 +89,12 @@ package com.stintern.st2D.display
                 context.drawTriangles(sprite.indexBuffer, 0, sprite.numTriangle);
                 
                 GameStatus.instance.increaseDrawCallCount();
+                
+                //자식 스프라이트가 있을 경우 그려줍니다.
+                if( sprite.hasChild() )
+                {
+                    drawSprites( sprite.getAllChildren() );
+                }
             }
             
         }

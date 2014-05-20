@@ -18,12 +18,18 @@ package com.stintern.st2D.animation
         private static var _instance:AnimationData;
         private static var _creatingSingleton:Boolean = false;
         
-        // 모든 BatchSprite의 애니메이션 정보가 저장되는 Dictionary입니다
+        // 모든 BatchSprite의 이미지 관련 정보가 저장되는 Dictionary입니다.
         // path(SpriteSheet의 경로)를 key로 하여 정보를 저장합니다.
-        // 이 Dinctionary의 구조는 다음과 같습니다.
+        // 이 Dinctionary의 구조는 BatchSprite의 이미지내에 이미지가 하나만 존재하는지, 여러개 존재하는지에 따라
+        // 구조가 둘로 나뉘게 되며, 이미지내에 이미지가 여러개 존재할 경우의 예시는 다음과 같습니다.
         // animationData[path]["frame"][frameName]         = AnimationFrame
         //                    ["animation"][animationName] = Animation
         //                    ["available"]                = 사용 가능 여부(int type, [0,1 == false][2 == true])
+        //                    ["type"]                     = 이 Dictionary의 타입(int type, [0 == 단일 이미지][1 == 복수의 이미지])
+        //
+        // 다음은 이미지내에 이미지가 하나만 존재 할 경우의 구조 예시 입니다.
+        // animationData[path]["type"]                     = Dictionary의 타입(int type, [0 == 단일 이미지][1 == 복수의 이미지])
+        // 
         private var _animationData:Dictionary = new Dictionary;
         
         public function AnimationData()
@@ -53,7 +59,7 @@ package com.stintern.st2D.animation
             {
                 //path를 키로 하는 Dictionayr 초기화
                 _animationData[path] = new Dictionary;
-                _animationData[path]["available"] = 0;
+                _animationData[path]["type"] = 0;
             }
         }
         
@@ -71,6 +77,7 @@ package com.stintern.st2D.animation
                 //path를 키로 하는 Dictionayr 초기화
                 _animationData[path] = new Dictionary;
                 _animationData[path]["animation"] = new Dictionary;
+                _animationData[path]["type"] = 1;
                 _animationData[path]["available"] = 0;
                 
                 //xml파일을 읽어옵니다.
