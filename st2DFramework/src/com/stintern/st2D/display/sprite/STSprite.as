@@ -319,7 +319,7 @@ package com.stintern.st2D.display.sprite
         /**
          * 스프라이트 출력에 필요한 버퍼를 초기화합니다. 
          */
-        private function initBuffer():void
+        protected function initBuffer():void
         {
             var context:Context3D = StageContext.instance.context; 
             

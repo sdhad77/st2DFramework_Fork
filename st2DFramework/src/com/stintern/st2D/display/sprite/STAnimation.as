@@ -38,40 +38,9 @@ package com.stintern.st2D.display.sprite
          */
         public function createAnimationSpriteWithPath(path:String, animationName:String, onCreated:Function, onProgress:Function = null,  x:Number=0, y:Number=0 ):void
         {
-            this.path = path;
-            
-            position.x = x;
-            position.y = y;
-            
             playAnimationName = animationName;
             
-            AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
-            function onComplete(object:Object, zOrder:uint):void
-            {
-                this.zOrder = zOrder;
-                
-                initBuffer();
-                initTexture((object as Bitmap));
-                
-                update();
-                
-                onCreated();
-            }
-        }
-
-        
-        /**
-         * 스프라이트 출력에 필요한 버퍼를 초기화합니다. 
-         */
-        private function initBuffer():void
-        {
-            var context:Context3D = StageContext.instance.context; 
-            
-            vertexBuffer = context.createVertexBuffer(vertexData.length/9, 9); 
-            vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length/9);
-            
-            indexBuffer = context.createIndexBuffer(indexData.length);
-            indexBuffer.uploadFromVector(indexData, 0, indexData.length);
+            createSpriteWithPath(path, onCreated, onProgress,  x, y );
         }
         
         /**
