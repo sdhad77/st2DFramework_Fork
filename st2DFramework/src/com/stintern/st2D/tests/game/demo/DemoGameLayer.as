@@ -1,7 +1,5 @@
 package com.stintern.st2D.tests.game.demo
 {
-    import com.stintern.st2D.animation.AnimationData;
-    import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.Scene;
@@ -13,9 +11,6 @@ package com.stintern.st2D.tests.game.demo
     {
         public function DemoGameLayer()
         {
-       //     AnimationData.instance.setAnimationData("res/dungGame.png", "char");
-            AnimationData.instance.setAnimation("res/dungGame.png", new Animation("char",  new Array("char0", "char1"),  8, "char"));
-            
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
