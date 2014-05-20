@@ -141,6 +141,25 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
+         * 특정 스프라이트를 배치스프라이트에서 삭제합니다. 
+         * 삭제된 스프라이트는 배치스프라이트를 출력할 때 출력되지 않습니다.
+         * 하지만, 스프라이트 자체의 자원은 해제되지 않습니다.
+         *  
+         * @param sprite 삭제할 스프라이트 객체
+         */
+        public function removeSprite(sprite:Sprite):void
+        {
+            for(var i:uint=0; i<_sprites.length; ++i)
+            {
+                if( _sprites[i] == sprite )
+                {
+                    _sprites.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        
+        /**
          * BatchSprite 를 출력합니다. 
          */
         public function draw():void
@@ -271,6 +290,6 @@ package com.stintern.st2D.display.sprite
             var numVertices:int = vertexData.length;
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
         }
-        
+                
     }
 }
