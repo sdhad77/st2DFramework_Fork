@@ -23,7 +23,7 @@ package com.stintern.st2D.tests.batch
         public function BatchSpriteLayer()
         {
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/atlas.png", "res/atlas.xml", onCreated);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreated);
             addBatchSprite(_batchSprite);
         }
         
@@ -40,11 +40,7 @@ package com.stintern.st2D.tests.batch
         private function onCreated():void
         {
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onTouch);
-            
-            var sprite:Sprite = new Sprite();
-            _sprites.push(sprite);
-            sprite.createSpriteWithBatchSprite(_batchSprite, "fire4", onSpriteCreated, 500, 500 );
-                
+           
             _scheduler.addFunc(50, createStar, 0);
             _scheduler.startScheduler();
             
@@ -58,46 +54,20 @@ package com.stintern.st2D.tests.batch
                 
                 if( _sprites.length % 2 == 0 )
                 {
-                    sprite.createSpriteWithBatchSprite(_batchSprite, "fire4", onSpriteCreated2, x, y );    
+                    sprite.createSpriteWithBatchSprite(_batchSprite, "character_run1",  x, y );    
                 }
                 else
                 {
-                    sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated2, x, y );
+                    sprite.createSpriteWithBatchSprite(_batchSprite, "character_attack1",  x, y );
                 }
                 
-                trace(_sprites.length);
+                _batchSprite.addSprite(sprite);
             }
         }
                 
         private function onTouch(event:MouseEvent):void
         {            
-            if( _touchCount > 0 )
-            {
-                SceneManager.instance.popScene();
-                StageContext.instance.stage.removeEventListener(MouseEvent.MOUSE_UP, onTouch);
-                return;
-            }
-            
-            _scheduler.stopScheduler();
-            _touchCount++;
-        }
-        
-        private function onSpriteCreated():void
-        {
-            _batchSprite.addSprite(_sprites[_sprites.length-1]);
-            
-            
-            var sprite:Sprite = new Sprite();
-            _sprites.push(sprite);
-            sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated2, 400, 400 );
-            
-            (_sprites[0] as Sprite).addChild(sprite);
-        }
-        
-        private function onSpriteCreated2():void
-        {
-            _batchSprite.addSprite(_sprites[_sprites.length-1]);
-            
+
         }
         
     }

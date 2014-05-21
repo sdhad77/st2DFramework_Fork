@@ -468,8 +468,6 @@ package com.stintern.st2D.display.sprite
             return result;
         }
         
-        
-        
 
         /** Property */
         public function getContentWidth():Number
