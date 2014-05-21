@@ -29,6 +29,7 @@ package com.stintern.st2D.animation
         //
         // 다음은 이미지내에 이미지가 하나만 존재 할 경우의 구조 예시 입니다.
         // animationData[path]["type"]                     = Dictionary의 타입(int type, [0 == 단일 이미지][1 == 복수의 이미지])
+        //                    ["available"]                = 이 데이터들의 로딩 완료 여부, 이미지 파일로딩이 완료되면 true로 바꿔줍니다.
         // 
         private var _animationData:Dictionary = new Dictionary;
         
@@ -60,6 +61,7 @@ package com.stintern.st2D.animation
                 //path를 키로 하는 Dictionayr 초기화
                 _animationData[path] = new Dictionary;
                 _animationData[path]["type"] = 0;
+                _animationData[path]["available"] = false;
             }
         }
         
