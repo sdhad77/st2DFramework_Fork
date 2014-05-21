@@ -9,14 +9,14 @@ package com.stintern.st2D.tests.Animation
     
     import flash.events.MouseEvent;
     
-    public class AnimationChangeLayer extends Layer
+    public class SpriteMoveLayer extends Layer
     {
         private var sprite:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
         private var _batchSprite:BatchSprite;
         private var _loadCompleteObjectCnt:int = 0;
         private var _totalObjectNum:int = 0;
         
-        public function AnimationChangeLayer()
+        public function SpriteMoveLayer()
         {
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/atlas.png", "res/atlas.xml", loadCompleted);
@@ -60,8 +60,7 @@ package com.stintern.st2D.tests.Animation
         
         private function onTouch(event:MouseEvent):void
         {
-            if(sprite[0].playAnimationName == "up") sprite[0].setPlayAnimation("down");
-            else sprite[0].setPlayAnimation("up");
+            sprite[0].moveBy(100, 100, 2);
         }
     }
 }

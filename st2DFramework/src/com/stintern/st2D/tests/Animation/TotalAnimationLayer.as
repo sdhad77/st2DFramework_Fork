@@ -46,7 +46,6 @@ package com.stintern.st2D.tests.Animation
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
-    import com.stintern.st2D.utils.CollisionDetection;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     public class TotalAnimationLayer extends Layer
@@ -92,6 +91,7 @@ package com.stintern.st2D.tests.Animation
                                     {
                                         effect[k].position.x = (gameObject[i]._sprite.position.x + gameObject[j]._sprite.position.x)/2;
                                         effect[k].position.y = (gameObject[i]._sprite.position.y + gameObject[j]._sprite.position.y)/2;
+                                        effect[k].setPlayAnimation("fire");
                                         effect[k].isVisible = true;
                                         effect[k].playAnimation();
                                         break;
