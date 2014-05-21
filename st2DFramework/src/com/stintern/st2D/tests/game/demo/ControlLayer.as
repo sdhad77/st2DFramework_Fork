@@ -5,7 +5,6 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
-    import com.stintern.st2D.utils.CollisionDetection;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
@@ -20,9 +19,10 @@ package com.stintern.st2D.tests.game.demo
         private var prevPoint:Vector2D;
         private var _backGroundLayer:BackGroundLayer;
         
-        private var _playerCharacterVector:Vector.<CharacterObject>;
-        private var _enemyCharacterVector:Vector.<CharacterObject>;
-        private var enemyScheduler:Scheduler = new Scheduler;
+        private var _playerCharacterArray:Array;
+        private var _enemyCharacterArray:Array;
+        
+        private var _enemyScheduler:Scheduler = new Scheduler;
         
         private static const _MARGIN:uint = 20;
         
@@ -30,31 +30,53 @@ package com.stintern.st2D.tests.game.demo
         
         public function ControlLayer()
         {
+            this.name = "ControlLayer";
             _backGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
-            _playerCharacterVector = new Vector.<CharacterObject>();
-            _enemyCharacterVector = new Vector.<CharacterObject>();  
+            _playerCharacterArray = new Array();
+            _enemyCharacterArray = new Array();
             
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreated);
             addBatchSprite(_batchSprite);
             
             
-            enemyScheduler.addFunc(2000, enemyCreater, 10);
-            enemyScheduler.startScheduler();
+            _enemyScheduler.addFunc(2000, enemyCreater, 1);
+            _enemyScheduler.startScheduler();
             
             function enemyCreater():void
             {
-                var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 100, 20, false);
-                _enemyCharacterVector.push(playerCharacterObject);
+                var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 1000, 30, 20, false);
+                _enemyCharacterArray.push(playerCharacterObject);
             }
-            
-            
-            
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+        }
+        
+        public function removePlayerCharacterObject(targetObject:CharacterObject):void
+        {
+            for(var i:uint=0; i<_playerCharacterArray.length; ++i)
+            {
+                if( _playerCharacterArray[i] == targetObject )
+                {
+                    _playerCharacterArray.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        
+        public function removeEnemyCharacterObject(targetObject:CharacterObject):void
+        {
+            for(var i:uint=0; i<_enemyCharacterArray.length; ++i)
+            {
+                if( _enemyCharacterArray[i] == targetObject )
+                {
+                    _enemyCharacterArray.splice(i, 1);
+                    break;
+                }
+            }
         }
         
         private function onCreated():void
@@ -63,48 +85,52 @@ package com.stintern.st2D.tests.game.demo
             _sprites.push(sprite);
             var x:Number = 0;
             var y:Number = 0;
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character_run0", onSpriteCreated, x, y );
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character_run0", x, y );
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
             sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
-        }
-        
-        private function onSpriteCreated():void
-        {
-            _batchSprite.addSprite(_sprites[_sprites.length-1]);
+            _batchSprite.addSprite(sprite);
         }
         
         override public function update(dt:Number):void
         {
-            for(var i:uint=0; i<_playerCharacterVector.length; i++)
+            for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
-                for(var j:uint=0; j<_enemyCharacterVector.length; j++)
+                for(var j:uint=0; j<_enemyCharacterArray.length; j++)
                 {
-                    if(_playerCharacterVector[i].sprite .collisionCheck(_enemyCharacterVector[j].sprite))
+                    if(_playerCharacterArray[i].sprite.collisionCheck(_enemyCharacterArray[j].sprite))
                     {
                         
-                        if(_playerCharacterVector[i].info.state != CharacterObject.ATTACK)
-                            _playerCharacterVector[i].sprite.setPlayAnimation("character_attack");
-                        if(_enemyCharacterVector[j].info.state != CharacterObject.ATTACK)
-                            _enemyCharacterVector[j].sprite.setPlayAnimation("character_attack");
-                        
-                        _playerCharacterVector[i].info.state = CharacterObject.ATTACK;
-                        _enemyCharacterVector[j].info.state = CharacterObject.ATTACK;
-                        _playerCharacterVector[i].sprite.isMoving = false;
-                        _enemyCharacterVector[j].sprite.isMoving = false;
+                        if(_playerCharacterArray[i].info.state != CharacterObject.ATTACK)
+                        {
+                            _playerCharacterArray[i].sprite.setPlayAnimation("character_attack");
+                            _playerCharacterArray[i].info.state = CharacterObject.ATTACK;
+                            _playerCharacterArray[i].sprite.isMoving = false;
+                            _playerCharacterArray[i].targetObject = _enemyCharacterArray[j];
+                            _playerCharacterArray[i].attackScheduler.startScheduler();
+                        }
+                        if(_enemyCharacterArray[j].info.state != CharacterObject.ATTACK)
+                        {
+                            _enemyCharacterArray[j].sprite.setPlayAnimation("character_attack");
+                            _enemyCharacterArray[j].info.state = CharacterObject.ATTACK;
+                            _enemyCharacterArray[j].sprite.isMoving = false;
+                            _enemyCharacterArray[j].targetObject = _playerCharacterArray[i];
+                            _enemyCharacterArray[j].attackScheduler.startScheduler();
+                        }
                     }
                 }
             }
         }
         
+
         private function onTouch(event:MouseEvent):void
         {
             if( _MARGIN < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/8)
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 100, 20, true);
-                    _playerCharacterVector.push(playerCharacterObject);
+                    var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 40, 20, true);
+                    _playerCharacterArray.push(playerCharacterObject);
                 }
             }
         }
