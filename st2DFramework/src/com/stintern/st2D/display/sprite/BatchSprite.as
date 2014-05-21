@@ -1,6 +1,8 @@
 package com.stintern.st2D.display.sprite
 {
+    import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;
+    import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.DisplayObject;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.AssetLoader;
@@ -13,7 +15,6 @@ package com.stintern.st2D.display.sprite
     import flash.display3D.Context3DTextureFormat;
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.geom.Matrix3D;
-    import com.stintern.st2D.animation.AnimationData;
     
     /**
      * 하나의 텍스쳐를 이용하는 스프라이트의 경우 BatchSprite 를 이용하여 
@@ -151,7 +152,7 @@ package com.stintern.st2D.display.sprite
         /**
          * BatchSprite 를 출력합니다. 
          */
-        public function draw():void
+        public function draw(layer:Layer):void
         {
             if( _sprites.length == 0 )
                 return;
@@ -170,7 +171,7 @@ package com.stintern.st2D.display.sprite
             
             var mat:Matrix3D = new Matrix3D();
             mat.identity();
-            mat.append(StageContext.instance.viewMatrix);
+            mat.append(layer.viewMatrix);
             mat.append(StageContext.instance.projectionMatrix);
             
             context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, mat, true);

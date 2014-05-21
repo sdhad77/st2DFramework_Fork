@@ -44,7 +44,7 @@ package com.stintern.st2D.display
                 
                 for(var spriteIdx:uint=0; spriteIdx<layer.batchSpriteArray.length; ++spriteIdx)
                 {
-                    (layer.batchSpriteArray[spriteIdx] as BatchSprite).draw();
+                    (layer.batchSpriteArray[spriteIdx] as BatchSprite).draw(layer);
                 }
             }
             

@@ -55,8 +55,6 @@ package com.stintern.st2D.tests.camera
                 _sprites.push(sprite);
                 
                 sprite.createSpriteWithBatchSprite(_batchSprite, "fire4", onSpriteCreated, x, y );    
-                
-                trace(_sprites.length);
             }
         }
                 
