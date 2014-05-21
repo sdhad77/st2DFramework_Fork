@@ -78,7 +78,6 @@ package com.stintern.st2D.animation
                 _animationData[path]["animation"] = new Dictionary;
                 _animationData[path]["type"] = 1;
                 _animationData[path]["available"] = false;
-                _animationData[path]["xml"] = false;
                 
                 //xml파일을 읽어온 후 저장합니다.
                 _animationData[path]["frame"] = createAnimationFrameDictionary(AssetLoader.instance.loadXML(pathXML));
