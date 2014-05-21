@@ -50,7 +50,7 @@ package com.stintern.st2D.tests.game.demo
             
             function enemyCreater():void
             {
-                var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 1000, 30, 20, false);
+                var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 1000, 30, 20, 3000, false);
                 _enemyCharacterArray.push(playerCharacterObject);
             }
             
@@ -134,7 +134,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 40, 20, true);
+                    var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 40, 20, 2000, true);
                     _playerCharacterArray.push(playerCharacterObject);
                 }
             }
