@@ -59,8 +59,9 @@ package com.stintern.st2D.tests.game.demo
             _sec = _currentTime/1000;
             if( _sec >= 60 )
             {
-                _sec++;
-                _min = 0;
+                _min++;
+                _sec = 0;
+                _currentTime = 0;
             }
             
             _batchSprite.removeAllSprites();
