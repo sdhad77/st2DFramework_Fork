@@ -86,6 +86,8 @@ package com.stintern.st2D.tests.game.demo
                         _enemyCharacterVector[j].info.state = CharacterObject.ATTACK;
                         _playerCharacterVector[i].sprite.isMoving = false;
                         _enemyCharacterVector[j].sprite.isMoving = false;
+                        _playerCharacterVector[i].sprite.setPlayAnimation("character_attack");
+                        _enemyCharacterVector[j].sprite.setPlayAnimation("character_attack");
                     }
                 }
             }
