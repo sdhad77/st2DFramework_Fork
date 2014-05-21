@@ -49,11 +49,12 @@ package com.stintern.st2D.display.sprite
             {
                 //이미지파일을 저장합니다.
                 createBatchSpriteWithBitmap((object as Bitmap));
+                //읽어온 데이터들을 이제 사용할 수 있다고 표시해줍니다.
+                AnimationData.instance.animationData[path]["available"] = true;
                 
                 if(pathXML == null) onCreated();
                 else
                 {
-                    AnimationData.instance.animationData[path]["available"] = true;
                     if(onCreated != null)
                         onCreated();
                 }
