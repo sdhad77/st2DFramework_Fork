@@ -1,15 +1,20 @@
 package com.stintern.st2D.display.sprite
 {
+    import com.stintern.st2D.utils.Vector2D;
+    
     import flash.display.Bitmap;
     import flash.display.BitmapData;
     import flash.display3D.IndexBuffer3D;
     import flash.display3D.VertexBuffer3D;
     import flash.display3D.textures.Texture;
     import flash.geom.Matrix;
+    import flash.geom.Rectangle;
 
     public class DisplayObject extends Base
     {
         private var _path:String;
+        
+        private var _position:Vector2D = new Vector2D(0.0, 0.0);
         
         private var _texture:Texture = null;
         private var _textureData:Bitmap = null;
@@ -20,8 +25,8 @@ package com.stintern.st2D.display.sprite
         private var _vertexBuffer:VertexBuffer3D;
         private var _indexBuffer:IndexBuffer3D;
         
-        protected var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
-        protected var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
+        public var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
+        public var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
         
         public function DisplayObject()
         {
@@ -137,6 +142,34 @@ package com.stintern.st2D.display.sprite
         public function set indexBuffer(indexBuffer:IndexBuffer3D):void
         {
             _indexBuffer = indexBuffer;
+        }
+        
+        
+        
+        public function get left():Number
+        {
+            return _position.x - this.textureData.width * 0.5;
+        }
+        public function get right():Number
+        {
+            return _position.x + this.textureData.width * 0.5;
+        }
+        public function get top():Number
+        {
+            return _position.y + this.textureData.height * 0.5;
+        }
+        public function get bottom():Number
+        {
+            return _position.y - this.textureData.height * 0.5;
+        }
+
+        public function get position():Vector2D
+        {
+            return _position;
+        }
+        public function set position(position:Vector2D):void
+        {
+            _position = position;
         }
     }
 }
