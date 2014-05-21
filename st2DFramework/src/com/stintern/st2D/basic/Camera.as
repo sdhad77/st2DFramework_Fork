@@ -90,7 +90,7 @@ package com.stintern.st2D.basic
         {
             return _projectionMatrix;
         }
-        internal function get view():Matrix3D
+        public function get viewMatrix():Matrix3D
         {
             return _viewMatrix;
         }

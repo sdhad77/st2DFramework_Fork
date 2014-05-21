@@ -1,9 +1,13 @@
 package com.stintern.st2D.display
 {
-    import com.stintern.st2D.display.sprite.BatchSprite;
+    import com.stintern.st2D.basic.Camera;
+    import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.sprite.Base;
+    import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteController;
+    
+    import flash.geom.Matrix3D;
 
     /**
      * 하나의 층을 나타내는 Layer 클래스입니다. 
@@ -29,8 +33,11 @@ package com.stintern.st2D.display
         private var _spriteManager:SpriteController = new SpriteController();
         private var _batchSpriteArray:Array = new Array();
         
+        private var _viewMatrix:Matrix3D;
+        
         public function Layer()
         {
+            _viewMatrix = StageContext.instance.viewMatrix;
         }
         
         public function update(dt:Number):void
@@ -124,6 +131,11 @@ package com.stintern.st2D.display
             return _spriteManager.getAllSprites();
         }
         
+        public function setCameraOfLayer(camera:Camera):void
+        {
+            _viewMatrix = camera.viewMatrix;
+        }
+        
         /**
          * 레이어에 사용중인 batchSprite 배열을 리턴합니다. 
          */
@@ -131,6 +143,12 @@ package com.stintern.st2D.display
         {
             return _batchSpriteArray;
         }
+        
+        public function get viewMatrix():Matrix3D
+        {
+            return _viewMatrix;
+        }
+        
                 
     }
 }

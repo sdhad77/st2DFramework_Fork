@@ -51,7 +51,7 @@ package com.stintern.st2D.display.sprite
             
             //이미지 파일을 읽어옵니다.
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
-            
+                        
             function onComplete(object:Object, zOrder:uint):void
             {
                 //이미지파일을 저장합니다.
@@ -67,7 +67,8 @@ package com.stintern.st2D.display.sprite
                     if( AnimationData.instance.animationData[path]["xml"] == true )
                     {
                         AnimationData.instance.animationData[path]["available"] = true;
-                        if(onCreated != null) onCreated();
+                        if(onCreated != null) 
+                            onCreated();
                     }
                 }
             }
