@@ -82,12 +82,16 @@ package com.stintern.st2D.tests.game.demo
                 {
                     if(CollisionDetection.collisionCheck(_playerCharacterVector[i].sprite , _enemyCharacterVector[j].sprite))
                     {
+                        
+                        if(_playerCharacterVector[i].info.state != CharacterObject.ATTACK)
+                            _playerCharacterVector[i].sprite.setPlayAnimation("character_attack");
+                        if(_enemyCharacterVector[j].info.state != CharacterObject.ATTACK)
+                            _enemyCharacterVector[j].sprite.setPlayAnimation("character_attack");
+                        
                         _playerCharacterVector[i].info.state = CharacterObject.ATTACK;
                         _enemyCharacterVector[j].info.state = CharacterObject.ATTACK;
                         _playerCharacterVector[i].sprite.isMoving = false;
                         _enemyCharacterVector[j].sprite.isMoving = false;
-                        _playerCharacterVector[i].sprite.setPlayAnimation("character_attack");
-                        _enemyCharacterVector[j].sprite.setPlayAnimation("character_attack");
                     }
                 }
             }
