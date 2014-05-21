@@ -1,7 +1,6 @@
 package com.stintern.st2D.tests.Animation
 {
     import com.stintern.st2D.animation.AnimationData;
-    import com.stintern.st2D.animation.AnimationManager;
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
