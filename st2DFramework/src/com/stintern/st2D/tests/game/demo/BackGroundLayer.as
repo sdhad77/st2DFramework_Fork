@@ -30,8 +30,9 @@ package com.stintern.st2D.tests.game.demo
                 _sprites.push(sprite);
                 var x:Number = (StageContext.instance.screenWidth/2) + (StageContext.instance.screenWidth * _bgPageCounter);
                 var y:Number = StageContext.instance.screenHeight/2;
-                sprite.createSpriteWithBatchSprite(_batchSprite, "background0", onSpriteCreated, x, y );
+                sprite.createSpriteWithBatchSprite(_batchSprite, "background0", x, y );
                 sprite.setScaleWithWidthHeight(StageContext.instance.screenWidth, StageContext.instance.screenHeight);
+                _batchSprite.addSprite(sprite);
                 _bgPageCounter++;
             }
         }
