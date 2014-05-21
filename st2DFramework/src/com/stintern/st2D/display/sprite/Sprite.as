@@ -95,7 +95,7 @@ package com.stintern.st2D.display.sprite
          * @param x 새로운 Sprite 의 초기 X 위치
          * @param y 새로운 Sprite 의 초기 Y 위치
          */
-        public function createSpriteWithBatchSprite(batchSprite:BatchSprite, imageName:String, onCreated:Function, x:Number = 0, y:Number=0):void
+        public function createSpriteWithBatchSprite(batchSprite:BatchSprite, imageName:String, x:Number = 0, y:Number=0):void
         {
             if( batchSprite == null )
             {
@@ -118,8 +118,6 @@ package com.stintern.st2D.display.sprite
             this.zOrder = AssetLoader.instance.increaseImageNo();
             
             update();
-            
-            onCreated();
         }
         
         /**
