@@ -456,8 +456,6 @@ package com.stintern.st2D.display.sprite
             r1_left_top =  r1_left_bottom = r1_right_top = r1_right_bottom = null;
             r2_left_top = r2_left_bottom = r2_right_top = r2_right_bottom = null;
             
-            dispose();
-
             return result;
         }
         
