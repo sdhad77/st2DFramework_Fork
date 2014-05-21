@@ -133,6 +133,16 @@ package com.stintern.st2D.utils
             }
         }
         
+        public function loadXML(path:String):XML
+        {
+            var file:File = findFile(path);
+            var fileStream:FileStream = new FileStream();
+            fileStream.open(file, FileMode.READ);
+            
+            var xmlNode:XML = new XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+            return xmlNode;
+        }
+        
         public function loadXMLAsync(path:String, onComplete:Function, onProgress:Function = null):void
         {
             var file:File = findFile(path);
