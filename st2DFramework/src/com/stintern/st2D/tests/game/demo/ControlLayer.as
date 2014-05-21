@@ -131,13 +131,19 @@ package com.stintern.st2D.tests.game.demo
         private function onMouseUp(event:MouseEvent):void
         {
             mouseDownFlag = false;
-            if(-(StageContext.instance.screenWidth/2) < StageContext.instance.mainCamera.x)
+            for(var i:uint = 0; i < _batchSprite.spriteArray.length; i++)
             {
-                StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth/2)), 0.0) ;
-            }
-            else if(StageContext.instance.mainCamera.x < -((StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)))
-            {
-                StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)), 0.0) ;
+                var controlSprite:Sprite = _batchSprite.spriteArray[i] as Sprite;
+                if(-(StageContext.instance.screenWidth/2) < StageContext.instance.mainCamera.x)
+                {
+                    controlSprite.position.x += (StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth/2));
+                    StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth/2)), 0.0) ;
+                }
+                else if(StageContext.instance.mainCamera.x < -((StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)))
+                {
+                    controlSprite.position.x += (StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2));
+                    StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)), 0.0) ;
+                }
             }
         }
     }
