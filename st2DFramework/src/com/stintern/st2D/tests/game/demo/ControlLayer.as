@@ -80,7 +80,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 for(var j:uint=0; j<_enemyCharacterVector.length; j++)
                 {
-                    if(CollisionDetection.collisionCheck(_playerCharacterVector[i].sprite , _enemyCharacterVector[j].sprite))
+                    if(_playerCharacterVector[i].sprite .collisionCheck(_enemyCharacterVector[j].sprite))
                     {
                         
                         if(_playerCharacterVector[i].info.state != CharacterObject.ATTACK)

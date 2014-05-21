@@ -57,7 +57,7 @@ package com.stintern.st2D.tests.game
                     if(0 < _dungVector[i].position.y && _dungVector[i].position.y < _person.position.y + _person.height * 1.8)
                     {
                         trace(0 + "    <    " + _dungVector[i].position.y  + "    <    " + ( _person.position.y + _person.height));
-                        if(CollisionDetection.collisionCheck(_dungVector[i], _person))
+                        if(_dungVector[i].collisionCheck(_person))
                         {
 
 

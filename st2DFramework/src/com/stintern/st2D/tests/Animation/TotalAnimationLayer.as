@@ -74,7 +74,7 @@ package com.stintern.st2D.tests.Animation
                     for(var j:int=10; j< 20; j++)
                     {
                         if(gameObject[j]._isCollision) continue;
-                        if(CollisionDetection.collisionCheck(gameObject[i]._sprite, gameObject[j]._sprite))
+                        if(gameObject[i]._sprite.collisionCheck(gameObject[j]._sprite))
                         {
                             gameObject[i]._info._hp -= gameObject[j]._info._power;
                             if(gameObject[i]._info._hp <= 0) gameObject[i]._sprite.isVisible = false;
