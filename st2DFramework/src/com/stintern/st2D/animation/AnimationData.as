@@ -85,7 +85,7 @@ package com.stintern.st2D.animation
                 _animationData[path]["image"] = false;
                 
                 //xml파일을 읽어옵니다.
-                AssetLoader.instance.loadXML(pathXML, onXmlLoadComplete);
+                AssetLoader.instance.loadXMLAsync(pathXML, onXmlLoadComplete);
             }
             //아직 로딩중인경우
             else if(_animationData[path]["available"] == false)

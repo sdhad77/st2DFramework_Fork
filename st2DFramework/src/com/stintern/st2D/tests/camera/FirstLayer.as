@@ -35,7 +35,8 @@ package com.stintern.st2D.tests.camera
             }
             
             _translation += 0.05;
-            //StageContext.instance.translateCamera(_translation, StageContext.instance.mainCamera.y);
+            
+            StageContext.instance.mainCamera.moveCamera( _translation, 0);
         }
         
         private function onCreated():void

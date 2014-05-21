@@ -133,7 +133,7 @@ package com.stintern.st2D.utils
             }
         }
         
-        public function loadXML(path:String, onComplete:Function, onProgress:Function = null):void
+        public function loadXMLAsync(path:String, onComplete:Function, onProgress:Function = null):void
         {
             var file:File = findFile(path);
             var fileStream:FileStream = new FileStream(); 
