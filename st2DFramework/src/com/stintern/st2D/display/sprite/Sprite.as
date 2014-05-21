@@ -367,7 +367,7 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
-         * update에서 호출되는 함수로, STSprite를 이동시켜야 할 경우 이동시키는 함수입니다. 
+         * update에서 호출되는 함수로, 스프라이트를 이동시켜야 할 경우 이동시키는 함수입니다. 
          */
         private function move():void
         {
@@ -389,7 +389,7 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
-         * 특정 좌표로 STSprite를 이동시키는 함수입니다.</br>
+         * 특정 좌표로 스프라이트를 이동시키는 함수입니다.</br>
          * time으로 이동 거리를 나눈값을 더해서 이동합니다. 
          * @param x 이동할 좌표 x
          * @param y 이동할 좌표 y
@@ -405,7 +405,7 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
-         * STSprite의 현재 위치에서 x,y만큼 이동 시키는 함수입니다.
+         * 스프라이트의 현재 위치에서 x,y만큼 이동 시키는 함수입니다.
          * @param x 현재 좌표에 더할 좌표
          * @param y 현재 좌표에 더할 좌표
          * @param second 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
@@ -413,6 +413,18 @@ package com.stintern.st2D.display.sprite
         public function moveBy(x:int, y:int, second:int):void
         {
             moveTo(position.x + x, position.y + y, second);
+        }
+        
+        /**
+         * 스프라이트의 이동을 중지합니다.</br>
+         * 현재 좌표에서 가장가까운 정수 좌표로 이동시키고, 목적지 좌표도 현재 좌표와 동일하도록 변경하여 중지시킵니다.
+         */
+        public function moveStop():void
+        {
+            position.x = Math.floor(position.x);
+            position.y = Math.floor(position.y);
+            _destX = position.x;
+            _destY = position.y;
         }
         
         /**
