@@ -2,6 +2,7 @@ package com.stintern.st2D.display
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.sprite.BatchSprite;
+    import com.stintern.st2D.display.sprite.DisplayObject;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.GameStatus;
     
@@ -42,23 +43,22 @@ package com.stintern.st2D.display
                 
                 drawSprites( layer, layer.getAllSprites() );
                 
-                for(var spriteIdx:uint=0; spriteIdx<layer.batchSpriteArray.length; ++spriteIdx)
-                {
-                    (layer.batchSpriteArray[spriteIdx] as BatchSprite).draw(layer);
-                }
+                drawBatchSprites( layer, layer.batchSpriteArray );
             }
             
             context.present();
         }
-        
+
         /**
-         * 레이어에 등록한 모든 스프라이트들을 출력합니다. 
+         * 레이어에 등록한 모든 스프라이트들을 출력합니다.  
+         * @param layer 스프라이트들이 등록되어 있는 레이어
+         * @param spriteArray 출력할 스프라이트
          */
-        public function drawSprites( layer:Layer, sprites:Array ):void
+        private function drawSprites( layer:Layer, spriteArray:Array ):void
         {
             var context:Context3D = StageContext.instance.context;
                         
-            for each( var sprite:Sprite in sprites )
+            for each( var sprite:Sprite in spriteArray )
             {
                 if( sprite.textureData == null )
                     continue;
@@ -96,13 +96,61 @@ package com.stintern.st2D.display
                     drawSprites( layer, sprite.getAllChildren() );
                 }
             }
-            
         }
+        
+
+        /**
+         * BatchSprite 를 출력합니다. 
+         * @param layer 출력할 BatchSprite 들이 있는 레이어
+         * @param batchSpriteArray 출력할 BatchSprite 들의 배열
+         * 
+         */
+        private function drawBatchSprites(layer, batchSpriteArray:Array):void
+        {
+            for(var spriteIdx:uint=0; spriteIdx<batchSpriteArray.length; ++spriteIdx)
+            {
+                var batchSprite:BatchSprite = (batchSpriteArray[spriteIdx] as BatchSprite);
+                
+                if( batchSprite.spriteArray.length == 0 )
+                    continue;
+                
+                // 화면 밖의 스프라이트 인지 검사후 화면 밖이면 그리지 않음
+                if( isInScreen(batchSprite) == false )
+                    continue;
+                
+                if( batchSprite.updateRequired )
+                    batchSprite.updateBuffers();
+                
+                batchSprite.updateSpriteMatrix();
+                
+                var context:Context3D = StageContext.instance.context;
+                
+                context.setTextureAt(0, batchSprite.texture);
+                context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
+                
+                var mat:Matrix3D = new Matrix3D();
+                mat.identity();
+                mat.append(layer.viewMatrix);
+                mat.append(StageContext.instance.projectionMatrix);
+                
+                context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, mat, true);
+                
+                context.setVertexBufferAt(0, batchSprite.vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);       // position
+                context.setVertexBufferAt(1, batchSprite.vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
+                context.setVertexBufferAt(2, batchSprite.vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
+                
+                context.drawTriangles(batchSprite.indexBuffer, 0, batchSprite.vertexData.length / (batchSprite.VERTEX_COUNT * batchSprite.DATAS_PER_VERTEX) * 2);
+                
+                GameStatus.instance.increaseDrawCallCount();
+            }
+        }
+        
+        
         
         /**
          * 스프라이트가 현재 스크린 안에 있는지 확인합니다. 
          */
-        private function isInScreen(sprite:Sprite):Boolean
+        private function isInScreen(sprite:DisplayObject):Boolean
         {
             if( sprite.right < 0 || 
                 sprite.top < 0 || 

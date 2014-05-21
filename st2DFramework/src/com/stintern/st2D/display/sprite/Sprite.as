@@ -15,7 +15,6 @@ package com.stintern.st2D.display.sprite
     
     public class Sprite extends DisplayObjectContainer 
     {
-        private var _position:Vector2D = new Vector2D(0.0, 0.0);
         private var _scale:Vector2D = new Vector2D(1.0, 1.0);
         private var _rotateAxis:Vector3D = new Vector3D(0.0, 0.0, 0.0);
         private var _rotateDegree:Number = 0;
@@ -228,7 +227,7 @@ package com.stintern.st2D.display.sprite
             _modelMatrix.appendRotation( _rotateDegree, _rotateAxis );
             
             // translate
-            _modelMatrix.appendTranslation(_position.x, _position.y, _depth);
+            _modelMatrix.appendTranslation(position.x, position.y, _depth);
             
         }
         
@@ -308,12 +307,12 @@ package com.stintern.st2D.display.sprite
                 {
                     var sprite:Sprite = children[i] as Sprite;
                     
-                    sprite.setTranslation(new Vector2D(dest.x - _position.x + sprite.position.x, dest.y -  _position.y + sprite.position.y));
+                    sprite.setTranslation(new Vector2D(dest.x - position.x + sprite.position.x, dest.y -  position.y + sprite.position.y));
                 }
             }
             
-            _position.x = dest.x;
-            _position.y = dest.y;
+            position.x = dest.x;
+            position.y = dest.y;
             
             dest = null;
         }
@@ -338,10 +337,10 @@ package com.stintern.st2D.display.sprite
             _rotateAxis = null;
             
             _scale = null;
-            _position = null;
+            position = null;
             _rotateAxis = null;
             
-            _position = null;
+            position = null;
         }
         
         /**
@@ -367,15 +366,15 @@ package com.stintern.st2D.display.sprite
             if(_isMoving)
             {
                 //원하는 지점에 도달 하였으면
-                if((Math.abs(_destX - _position.x) <= 1) && (Math.abs(_destY - _position.y) <= 1)) 
+                if((Math.abs(_destX - position.x) <= 1) && (Math.abs(_destY - position.y) <= 1)) 
                 {
                     _isMoving = false;
                 }
                 //원하는 지점에 아직 도달하지 못했으면
                 else
                 {
-                    _position.x += _increaseX;
-                    _position.y += _increaseY;
+                    position.x += _increaseX;
+                    position.y += _increaseY;
                 }
             }
         }
@@ -392,8 +391,8 @@ package com.stintern.st2D.display.sprite
             _isMoving = true;
             _destX = x;
             _destY = y;
-            _increaseX = (x - _position.x)/(second*60);
-            _increaseY = (y - _position.y)/(second*60);
+            _increaseX = (x - position.x)/(second*60);
+            _increaseY = (y - position.y)/(second*60);
         }
         
         /**
@@ -404,7 +403,7 @@ package com.stintern.st2D.display.sprite
          */
         public function moveBy(x:int, y:int, second:int):void
         {
-            moveTo(_position.x + x, _position.y + y, second);
+            moveTo(position.x + x, position.y + y, second);
         }
 
         /** Property */
@@ -430,37 +429,7 @@ package com.stintern.st2D.display.sprite
         {
             _depth = depth;
         }
-        
-        public function get left():Number
-        {
-            return _position.x - this.textureData.width * 0.5;
-        }
-        public function get right():Number
-        {
-            return _position.x + this.textureData.width * 0.5;
-        }
-        public function get top():Number
-        {
-            return _position.y + this.textureData.height * 0.5;
-        }
-        public function get bottom():Number
-        {
-            return _position.y - this.textureData.height * 0.5;
-        }
-        
-        public function get rect():Rectangle
-        {
-            return new Rectangle(this.left, this.bottom, this.width, this.height);
-        }
-        
-        public function get position():Vector2D
-        {
-            return _position;
-        }
-        public function set position(position:Vector2D):void
-        {
-            _position = position;
-        }
+
         
         public function get scale():Vector2D
         {

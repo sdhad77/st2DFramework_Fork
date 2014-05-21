@@ -2,19 +2,11 @@ package com.stintern.st2D.display.sprite
 {
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;
-    import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.sprite.DisplayObject;
-    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.AssetLoader;
-    import com.stintern.st2D.utils.GameStatus;
     
     import flash.display.Bitmap;
     import flash.display3D.Context3D;
-    import flash.display3D.Context3DBlendFactor;
-    import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DTextureFormat;
-    import flash.display3D.Context3DVertexBufferFormat;
-    import flash.geom.Matrix3D;
     
     /**
      * 하나의 텍스쳐를 이용하는 스프라이트의 경우 BatchSprite 를 이용하여 
@@ -150,45 +142,9 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
-         * BatchSprite 를 출력합니다. 
-         */
-        public function draw(layer:Layer):void
-        {
-            if( _sprites.length == 0 )
-                return;
-            
-            // 새로운 Sprite 가 추가되었으면 버퍼를 갱신
-            if( _updateRequired )
-                updateBuffers();
-            
-            // 스프라이트들의 현재 Model Matrix 에 따라서 버퍼를 갱신
-            updateSpriteMatrix();
-            
-            var context:Context3D = StageContext.instance.context;
-            
-            context.setTextureAt(0, this.texture);
-            context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
-            
-            var mat:Matrix3D = new Matrix3D();
-            mat.identity();
-            mat.append(layer.viewMatrix);
-            mat.append(StageContext.instance.projectionMatrix);
-            
-            context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, mat, true);
-            
-            context.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);       // position
-            context.setVertexBufferAt(1, vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
-            context.setVertexBufferAt(2, vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
-            
-            context.drawTriangles(indexBuffer, 0, vertexData.length / (VERTEX_COUNT * DATAS_PER_VERTEX) * 2);
-            
-            GameStatus.instance.increaseDrawCallCount();
-        }
-        
-        /**
          * 새로운 스프라이트를 추가하였을 때 버퍼를 갱신합니다. 
          */
-        private function updateBuffers():void
+        public function updateBuffers():void
         {
             destroyBuffers();
             
@@ -230,7 +186,7 @@ package com.stintern.st2D.display.sprite
          * 배치스프라이트를 화면에 출력하기 전에 스프라이트들의 모델 매트릭스에 따른
          * VertexBuffer 를 갱신합니다. 
          */
-        private function updateSpriteMatrix():void
+        public function updateSpriteMatrix():void
         {
             // 갱신할 VertexData 초기화
             vertexData.length = 0;
@@ -284,6 +240,11 @@ package com.stintern.st2D.display.sprite
         public function get spriteArray():Array
         {
             return _sprites;
+        }
+        
+        public function get updateRequired():Boolean
+        {
+            return _updateRequired;
         }
     }
 }
