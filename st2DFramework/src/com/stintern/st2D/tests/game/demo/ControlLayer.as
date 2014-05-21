@@ -50,6 +50,7 @@ package com.stintern.st2D.tests.game.demo
             
             
             
+            
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -107,16 +108,22 @@ package com.stintern.st2D.tests.game.demo
             mouseDownFlag = true;
             prevPoint = new Vector2D(event.stageX, event.stageY);
         }
-        
+        private var intervalX:Number;
         private function onMouseMove(event:MouseEvent):void
         {   
             if(mouseDownFlag)
             {
                 if( -(StageContext.instance.screenWidth/2) >= StageContext.instance.mainCamera.x  && StageContext.instance.mainCamera.x >= -((StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)))
                 {
-                    var intervalX:Number = event.stageX - prevPoint.x;
+                    intervalX = event.stageX - prevPoint.x;
                     StageContext.instance.mainCamera.moveCamera(intervalX, 0.0);
                     prevPoint.x = event.stageX;
+                    
+                    for(var i:uint = 0; i < _batchSprite.spriteArray.length; i++)
+                    {
+                        var controlSprite:Sprite = _batchSprite.spriteArray[i] as Sprite;
+                        controlSprite.position.x -= intervalX;
+                    }
                 }
             }
         }
