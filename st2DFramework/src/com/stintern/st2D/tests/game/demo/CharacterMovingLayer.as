@@ -16,12 +16,17 @@ package com.stintern.st2D.tests.game.demo
         private var _batchSprite:BatchSprite;
         private var _sprites:Array = new Array();
         
+        private var _playerCharacterArray:Array;
+        private var _enemyCharacterArray:Array;
+        
         public function CharacterMovingLayer()
         {
             this.name = "CharacterMovingLayer";
               
-            
             _batchSprite = new BatchSprite();
+            _playerCharacterArray = new Array();
+            _enemyCharacterArray = new Array();
+            
             _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCompleted);
             addBatchSprite(_batchSprite);
            
@@ -57,6 +62,26 @@ package com.stintern.st2D.tests.game.demo
         public function set sprites(value:Array):void
         {
             _sprites = value;
+        }
+
+        public function get playerCharacterArray():Array
+        {
+            return _playerCharacterArray;
+        }
+
+        public function set playerCharacterArray(value:Array):void
+        {
+            _playerCharacterArray = value;
+        }
+
+        public function get enemyCharacterArray():Array
+        {
+            return _enemyCharacterArray;
+        }
+
+        public function set enemyCharacterArray(value:Array):void
+        {
+            _enemyCharacterArray = value;
         }
         
         
