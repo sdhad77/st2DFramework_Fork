@@ -30,7 +30,17 @@ package com.stintern.st2D.utils
             if(firstSprite.textureData  == null || secondSprite.textureData == null)
                 return false;
             
-            var firstBitmap:Bitmap = firstSprite.textureData;
+            if(firstSprite.scale.x != 1 || firstSprite.scale.y != 1)
+            {
+                firstSprite.frame.width *= firstSprite.scale.x;
+                firstSprite.frame.height *= firstSprite.scale.y;
+            }
+            if(secondSprite.scale.x != 1 || secondSprite.scale.y != 1)
+            {
+                secondSprite.frame.width *= secondSprite.scale.x;
+                secondSprite.frame.height *= secondSprite.scale.y;
+            }
+            
             var rect1:Rectangle = new Rectangle(firstSprite.position.x - (firstSprite.width/2), firstSprite.position.y - (firstSprite.height/2), firstSprite.width, firstSprite.height);
             var rect2:Rectangle = new Rectangle(secondSprite.position.x - (secondSprite.width/2), secondSprite.position.y - (secondSprite.height/2), secondSprite.width, secondSprite.height);
             
