@@ -97,6 +97,25 @@ package com.stintern.st2D.display.sprite
          */
         public function createSpriteWithBatchSprite(batchSprite:BatchSprite, imageName:String, x:Number = 0, y:Number=0):void
         {
+            getSpriteInBatchSprite(batchSprite, imageName);
+            
+            this.path = batchSprite.path;
+            
+            position.x = x;
+            position.y = y;
+            
+            this.zOrder = AssetLoader.instance.increaseImageNo();
+            
+            update();
+        }
+        
+        /**
+         * 배치스프라이트를 사용하는 Sprite 일 경우 배치스프라이트 내부에 있는 이미지로 변경할 수 있습니다. 
+         * @param batchSprite 사용하고 있는 배치스프라이트
+         * @param imageName 사용할 이미지의 이름
+         */
+        public function getSpriteInBatchSprite(batchSprite, imageName):void
+        {
             if( batchSprite == null )
             {
                 throw new Error("batchSprite is null");
@@ -109,15 +128,6 @@ package com.stintern.st2D.display.sprite
                 throw new Error("아직 애니메이션 데이터가 로딩중입니다.");  
             }
             updateUVCoord(uvCoord);
-            
-            this.path = batchSprite.path;
-            
-            position.x = x;
-            position.y = y;
-            
-            this.zOrder = AssetLoader.instance.increaseImageNo();
-            
-            update();
         }
         
         /**
