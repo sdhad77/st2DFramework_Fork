@@ -1,0 +1,7 @@
+<atlas>
+<atlasItem name="background0.png" x="0" y="0" width="743" height="557" />
+<atlasItem name="character_run1.png" x="745" y="0" width="256" height="256" />
+<atlasItem name="character_attack0.png" x="745" y="258" width="256" height="256" />
+<atlasItem name="character_run0.png" x="0" y="559" width="256" height="256" />
+<atlasItem name="character_attack1.png" x="258" y="559" width="256" height="256" />
+</atlas>
