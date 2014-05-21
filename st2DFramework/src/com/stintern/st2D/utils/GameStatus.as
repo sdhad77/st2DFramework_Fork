@@ -1,5 +1,7 @@
 package com.stintern.st2D.utils
 {
+    import com.stintern.st2D.basic.StageContext;
+    
     import flash.display.Sprite;
     import flash.system.System;
     import flash.text.TextField;
@@ -98,14 +100,14 @@ package com.stintern.st2D.utils
         private function initFPSTextField():void
         {
             var myFormat:TextFormat = new TextFormat();  
-            myFormat.color = 0xFF0000;
-            myFormat.size = 16;
+            myFormat.color = 0xffffff;
+            myFormat.size = 20;
             
             _statusTextField = new TextField();
-            _statusTextField.x = 10;
-            _statusTextField.y = 10;
+            _statusTextField.x = StageContext.instance.screenWidth - _statusTextField.width;
+            _statusTextField.y = StageContext.instance.screenHeight * 0.3;
             _statusTextField.selectable = false;
-            _statusTextField.autoSize = TextFieldAutoSize.LEFT;
+            _statusTextField.autoSize = TextFieldAutoSize.RIGHT;
             _statusTextField.defaultTextFormat = myFormat;
             
             addChild(_statusTextField);
