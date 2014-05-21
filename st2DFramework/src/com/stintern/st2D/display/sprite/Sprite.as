@@ -437,17 +437,6 @@ package com.stintern.st2D.display.sprite
             if(this.textureData  == null || lhs.textureData == null)
                 return false;
             
-            if(this.scale.x != 1 || this.scale.y != 1)
-            {
-                this.frame.width *= this.scale.x;
-                this.frame.height *= this.scale.y;
-            }
-            if(lhs.scale.x != 1 || lhs.scale.y != 1)
-            {
-                lhs.frame.width *= lhs.scale.x;
-                lhs.frame.height *= lhs.scale.y;
-            }
-            
             var rect1:Rectangle = new Rectangle(this.position.x - (this.width/2), this.position.y - (this.height/2), this.width, this.height);
             var rect2:Rectangle = new Rectangle(lhs.position.x - (lhs.width/2), lhs.position.y - (lhs.height/2), lhs.width, lhs.height);
             
@@ -483,6 +472,15 @@ package com.stintern.st2D.display.sprite
         
 
         /** Property */
+        public function getContentWidth():Number
+        {
+            return frame.width * scale.x;
+        }
+        public function getContentHeight():Number
+        {
+            return frame.height * scale.y;
+        }
+        
         public function get numTriangle():int
         {
             return indexData.length/3;
