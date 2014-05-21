@@ -22,13 +22,23 @@ package com.stintern.st2D.tests.game.demo
         public static const ATTACK:String = "ATTACK";
          
         
-        public function CharacterObject(path:String, hp:Number, power:Number, speed:Number, ally:Boolean)
+        /**
+         * 캐릭터 Object를 생성합니다
+         * @param path CharacterObject의 이미지 경로 
+         * @param hp Character의 체력
+         * @param power Character의 파워
+         * @param speed Character의 이동속도
+         * @param attackSpeed Character의 공격 속도
+         * @param ally 아군일 경우 true, 적군일 경우 false 반환
+         * 
+         */
+        public function CharacterObject(path:String, hp:Number, power:Number, speed:Number, attackSpeed:Number, ally:Boolean)
         {
-            _info = new CharacterInfo(hp, power, speed, ally);
+            _info = new CharacterInfo(hp, power, speed, attackSpeed, ally);
             _batchSprite = _characterMovingLayer.batchSprite;
             _targetObject = null;
             
-            _attackScheduler.addFunc(2000, attackFunc, 0);
+            _attackScheduler.addFunc(attackSpeed, attackFunc, 0);
             _attackScheduler.startScheduler();
             function attackFunc():void
             {
