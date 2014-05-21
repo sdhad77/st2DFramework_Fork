@@ -45,7 +45,7 @@ package com.stintern.st2D.display.sprite
             this.path = path;
             
             //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
-            if(pathXML != null) AnimationData.instance.createAnimationDictionary(path, pathXML, onCreated);
+            if(pathXML != null) AnimationData.instance.createAnimationDictionary(path, pathXML);
             //xml파일을 사용하지 않는 단일 이미지 파일 일경우에는 Dictionary를 생성만 합니다.
             else AnimationData.instance.createDictionary(path);
             
@@ -60,16 +60,9 @@ package com.stintern.st2D.display.sprite
                 if(pathXML == null) onCreated();
                 else
                 {
-                    //이미지 로딩이 끝났으니 사용가능하단 의미로 true로 바꿔줍니다.
-                    AnimationData.instance.animationData[path]["image"] = true;
-                    
-                    //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
-                    if( AnimationData.instance.animationData[path]["xml"] == true )
-                    {
-                        AnimationData.instance.animationData[path]["available"] = true;
-                        if(onCreated != null) 
-                            onCreated();
-                    }
+                    AnimationData.instance.animationData[path]["available"] = true;
+                    if(onCreated != null)
+                        onCreated();
                 }
             }
         }

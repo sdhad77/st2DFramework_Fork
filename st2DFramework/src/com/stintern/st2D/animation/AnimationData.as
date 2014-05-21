@@ -9,7 +9,7 @@ package com.stintern.st2D.animation
     /**
      * 애니메이션과 관련된 모든 정적 정보들을 저장하는 클래스입니다.</br>
      * 여기서 정적이라 함은, 현재 재생중인 애니메이션의 정보와 같이 매 프레임마다 바뀌는 값이 아닌</br>
-     * SpriteSheet, 애니메이션 frame의 x,y, width, height 등을 의미합니다. 
+     * 애니메이션 재생정보, 애니메이션 frame의 x,y, width, height 등을 의미합니다. 
      * @author 신동환
      */
     public class AnimationData
@@ -25,8 +25,6 @@ package com.stintern.st2D.animation
         // animationData[path]["frame"][frameName]         = AnimationFrame
         //                    ["animation"][animationName] = Animation
         //                    ["available"]                = 이 데이터들의 로딩 완료 여부, xml,이미지 파일로딩이 완료되면 true로 바꿔줍니다.
-        //                    ["xml"]                      = xml파일의 로딩 완료 여부
-        //                    ["image"]                    = 이미지 파일의 로딩 완료 여부
         //                    ["type"]                     = 이 Dictionary의 타입(int type, [0 == 단일 이미지][1 == 복수의 이미지])
         //
         // 다음은 이미지내에 이미지가 하나만 존재 할 경우의 구조 예시 입니다.
@@ -69,9 +67,8 @@ package com.stintern.st2D.animation
          * 애니메이션 정보들을 저장할 수 있는 Dictionary를 생성하고 초기화 하는 함수입니다.
          * @param path 이 Dictionary를 사용할 이미지의 경로
          * @param pathXML 이 Dictionary에서 사용할 Frame정보들이 있는 xml 파일 경로
-         * @param onCreated 이미지파일,xml파일 로딩이 끝났을때 호출할 콜백 함수
          */
-        public function createAnimationDictionary(path:String, pathXML:String, onCreated:Function):void
+        public function createAnimationDictionary(path:String, pathXML:String):void
         {
             //애니메이션 정보가 아직 등록되지않은 path 일 경우
             if(!(path in _animationData))
@@ -82,10 +79,9 @@ package com.stintern.st2D.animation
                 _animationData[path]["type"] = 1;
                 _animationData[path]["available"] = false;
                 _animationData[path]["xml"] = false;
-                _animationData[path]["image"] = false;
                 
-                //xml파일을 읽어옵니다.
-                AssetLoader.instance.loadXMLAsync(pathXML, onXmlLoadComplete);
+                //xml파일을 읽어온 후 저장합니다.
+                _animationData[path]["frame"] = createAnimationFrameDictionary(AssetLoader.instance.loadXML(pathXML));
             }
             //아직 로딩중인경우
             else if(_animationData[path]["available"] == false)
@@ -96,21 +92,6 @@ package com.stintern.st2D.animation
             else
             {
                 trace("이미 존재하는 path입니다.");
-            }
-            
-            function onXmlLoadComplete(xml:XML):void
-            {
-                //xml파일을 읽어온 후 저장합니다.
-                _animationData[path]["frame"] = createAnimationFrameDictionary(xml);
-                //xml파일 로딩이 끝났으니 사용가능하단 의미로 true로 바꿔줍니다.
-                _animationData[path]["xml"] = true;
-                
-                //모든 로딩이 종료 되었으면 콜백함수를 호출합니다.
-                if( _animationData[path]["image"] == true )
-                {
-                    _animationData[path]["available"] = true;
-                    if(onCreated != null) onCreated();
-                }  
             }
         }
         
