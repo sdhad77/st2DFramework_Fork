@@ -39,7 +39,7 @@ class ObjectInfo
     }
 }
 
-package com.stintern.st2D.tests.game
+package com.stintern.st2D.tests.Animation
 {
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.animation.datatype.Animation;
@@ -49,7 +49,7 @@ package com.stintern.st2D.tests.game
     import com.stintern.st2D.utils.CollisionDetection;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
-    public class Game1 extends Layer
+    public class TotalAnimationLayer extends Layer
     {
         private var gameObject:Vector.<GameObject> = new Vector.<GameObject>;
         private var effect:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
@@ -59,7 +59,7 @@ package com.stintern.st2D.tests.game
         private var _totalObjectNum:int = 0;
         private var _sch:Scheduler = new Scheduler;
         
-        public function Game1()
+        public function TotalAnimationLayer()
         {
             init();
         }
