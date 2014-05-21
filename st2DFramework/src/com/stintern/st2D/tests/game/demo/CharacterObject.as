@@ -70,18 +70,19 @@ package com.stintern.st2D.tests.game.demo
         
         private function onSpriteCreated():void
         {
+            var yPositionRange:uint = (Math.floor(Math.random() * 10)*10);
             _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
             if(_info.ally == true)
             {
                 _sprite.position.x = 0;
-                _sprite.position.y = _sprite.height;
+                _sprite.position.y = _sprite.height/2 + yPositionRange;
                 _batchSprite.addSprite(_sprite);
                 _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height, _info.speed);
             }
             else
             {
                 _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
-                _sprite.position.y = _sprite.height;
+                _sprite.position.y = _sprite.height/2 + yPositionRange;
                 _batchSprite.addSprite(_sprite);
                 _sprite.moveTo(0, _sprite.height, _info.speed);
             }
