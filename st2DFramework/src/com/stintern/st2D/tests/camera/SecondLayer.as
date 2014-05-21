@@ -1,5 +1,6 @@
-package com.stintern.st2D.tests.batch
+package com.stintern.st2D.tests.camera
 {
+    import com.stintern.st2D.basic.Camera;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
@@ -10,7 +11,7 @@ package com.stintern.st2D.tests.batch
     
     import flash.events.MouseEvent;
     
-    public class BatchSpriteLayer extends Layer
+    public class SecondLayer extends Layer
     {
         private var _batchSprite:BatchSprite;
         private var _scheduler:Scheduler = new Scheduler();
@@ -20,8 +21,16 @@ package com.stintern.st2D.tests.batch
         
         private var _touchCount:uint = 0;
         
-        public function BatchSpriteLayer()
+        private var _camera:Camera = new Camera();
+        
+        public function SecondLayer()
         {
+            var width:uint = StageContext.instance.screenWidth;
+            var height:uint = StageContext.instance.screenHeight;
+            
+            _camera.init(-width*0.5, -height*0.5, width, height);  
+            setCameraOfLayer(_camera);
+            
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/atlas.png", "res/atlas.xml", onCreated);
             addBatchSprite(_batchSprite);
@@ -40,11 +49,7 @@ package com.stintern.st2D.tests.batch
         private function onCreated():void
         {
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onTouch);
-            
-            var sprite:Sprite = new Sprite();
-            _sprites.push(sprite);
-            sprite.createSpriteWithBatchSprite(_batchSprite, "fire4", onSpriteCreated, 500, 500 );
-                
+
             _scheduler.addFunc(50, createStar, 0);
             _scheduler.startScheduler();
             
@@ -55,15 +60,8 @@ package com.stintern.st2D.tests.batch
                 
                 var sprite:Sprite = new Sprite();
                 _sprites.push(sprite);
-                
-                if( _sprites.length % 2 == 0 )
-                {
-                    sprite.createSpriteWithBatchSprite(_batchSprite, "fire4", onSpriteCreated2, x, y );    
-                }
-                else
-                {
-                    sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated2, x, y );
-                }
+
+                sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated, x, y );
                 
                 trace(_sprites.length);
             }
@@ -85,19 +83,6 @@ package com.stintern.st2D.tests.batch
         private function onSpriteCreated():void
         {
             _batchSprite.addSprite(_sprites[_sprites.length-1]);
-            
-            
-            var sprite:Sprite = new Sprite();
-            _sprites.push(sprite);
-            sprite.createSpriteWithBatchSprite(_batchSprite, "broken0", onSpriteCreated2, 400, 400 );
-            
-            (_sprites[0] as Sprite).addChild(sprite);
-        }
-        
-        private function onSpriteCreated2():void
-        {
-            _batchSprite.addSprite(_sprites[_sprites.length-1]);
-            
         }
         
     }

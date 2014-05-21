@@ -124,6 +124,7 @@ package com.stintern.st2D.basic
         public function translateCamera(translate:Vector2D):void
         {
             _viewMatrix.appendTranslation(translate.x + -_screenWidth*0.5, translate.y + -_screenHeight*0.5, 0);
+            translate = null;
         }
         
         /** property */
@@ -150,7 +151,7 @@ package com.stintern.st2D.basic
         
         public function get viewMatrix():Matrix3D
         {
-            return _mainCamera.view;
+            return _mainCamera.viewMatrix;
         }
         
         public function get screenWidth():uint

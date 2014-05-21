@@ -3,7 +3,6 @@ package com.stintern.st2D.animation
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.utils.AssetLoader;
-    import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.utils.Dictionary;
     
@@ -34,7 +33,6 @@ package com.stintern.st2D.animation
         // animationData[path]["type"]                     = Dictionary의 타입(int type, [0 == 단일 이미지][1 == 복수의 이미지])
         // 
         private var _animationData:Dictionary = new Dictionary;
-        private var _sch:Scheduler = new Scheduler;
         
         public function AnimationData()
         {
@@ -92,12 +90,12 @@ package com.stintern.st2D.animation
             //아직 로딩중인경우
             else if(_animationData[path]["available"] == false)
             {
-                _sch.addFunc(0, onCreated, 1);
+                trace("로딩중입니다.");
             }
             //이미 애니메이션 정보가 있는 path일 경우
             else
             {
-                if(onCreated != null) onCreated();
+                trace("이미 존재하는 path입니다.");
             }
             
             function onXmlLoadComplete(xml:XML):void
@@ -112,7 +110,6 @@ package com.stintern.st2D.animation
                 {
                     _animationData[path]["available"] = true;
                     if(onCreated != null) onCreated();
-                    _sch.startScheduler();
                 }  
             }
         }

@@ -40,7 +40,7 @@ package com.stintern.st2D.display
                 if( layer.isVisible == false )
                     continue;
                 
-                drawSprites( layer.getAllSprites() );
+                drawSprites( layer, layer.getAllSprites() );
                 
                 for(var spriteIdx:uint=0; spriteIdx<layer.batchSpriteArray.length; ++spriteIdx)
                 {
@@ -54,10 +54,10 @@ package com.stintern.st2D.display
         /**
          * 레이어에 등록한 모든 스프라이트들을 출력합니다. 
          */
-        public function drawSprites(sprites:Array):void
+        public function drawSprites( layer:Layer, sprites:Array ):void
         {
             var context:Context3D = StageContext.instance.context;
-            
+                        
             for each( var sprite:Sprite in sprites )
             {
                 if( sprite.textureData == null )
@@ -77,7 +77,7 @@ package com.stintern.st2D.display
                 
                 _modelViewProjection.identity();
                 _modelViewProjection.append(sprite.modelMatrix );
-                _modelViewProjection.append(StageContext.instance.viewMatrix);
+                _modelViewProjection.append(layer.viewMatrix);
                 _modelViewProjection.append(StageContext.instance.projectionMatrix);
                 
                 context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, _modelViewProjection, true);
@@ -93,7 +93,7 @@ package com.stintern.st2D.display
                 //자식 스프라이트가 있을 경우 그려줍니다.
                 if( sprite.hasChild() )
                 {
-                    drawSprites( sprite.getAllChildren() );
+                    drawSprites( layer, sprite.getAllChildren() );
                 }
             }
             
