@@ -142,6 +142,19 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
+         * 배치스프라이트에 등록된 모든 스프라이트들을 삭제합니다. 
+         */
+        public function removeAllSprites():void
+        {
+            while( _sprites.length )
+            {
+                _sprites.splice(0, 1);
+            }
+            
+            vertexData.length = 0;
+        }
+        
+        /**
          * 새로운 스프라이트를 추가하였을 때 버퍼를 갱신합니다. 
          */
         public function updateBuffers():void
@@ -245,6 +258,24 @@ package com.stintern.st2D.display.sprite
         public function get updateRequired():Boolean
         {
             return _updateRequired;
+        }
+        
+        /**
+         * 현재 배치스프라이트가 이미지를 불러왔는 지 확인합니다. 
+         */
+        public function get imageLoaded():Boolean
+        {
+            if( path == null )
+            {
+                throw new Error("path == null");
+            }
+            
+            if( !(path in AnimationData.instance.animationData) )
+            {
+                throw new Error("아직 배치스프라이트를 생성하지 않았습니다.");
+            }
+                        
+            return AnimationData.instance.animationData[path]["available"];
         }
     }
 }
