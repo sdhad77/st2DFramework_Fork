@@ -11,7 +11,6 @@ package com.stintern.st2D.tests.game.demo
         private var _currentTime:uint;
         
         private var _batchSprite:BatchSprite;
-        private var _spriteNumber:Array = new Array(); 
         
         private var _min:uint = 0;
         private var _sec:uint = 0;
@@ -25,7 +24,7 @@ package com.stintern.st2D.tests.game.demo
         public function TimeLayer()
         {
             super();
-            
+            this.name = "TimeLayer";
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath(Resources.PATH_SPRITE_NUMBER, Resources.PATH_XML_NUMBER, onCreated);
             
@@ -59,8 +58,9 @@ package com.stintern.st2D.tests.game.demo
             _sec = _currentTime/1000;
             if( _sec >= 60 )
             {
-                _sec++;
-                _min = 0;
+                _min++;
+                _sec = 0;
+                _currentTime = 0;
             }
             
             _batchSprite.removeAllSprites();
@@ -80,6 +80,12 @@ package com.stintern.st2D.tests.game.demo
             secSprite2.getSpriteInBatchSprite(_batchSprite, (Math.floor(_sec % 10)).toString());
             _batchSprite.addSprite(secSprite2);
         }
+
+        public function get batchSprite():BatchSprite
+        {
+            return _batchSprite;
+        }
+
         
     }
 }

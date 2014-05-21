@@ -17,8 +17,10 @@ package com.stintern.st2D.tests.game.demo
         
         private var mouseDownFlag:Boolean = false;
         private var prevPoint:Vector2D;
+        
         private var _backGroundLayer:BackGroundLayer;
         private var _characterMovingLayer:CharacterMovingLayer;
+        private var _timeLayer:TimeLayer;
         
         private var _playerCharacterArray:Array;
         private var _enemyCharacterArray:Array;
@@ -34,6 +36,7 @@ package com.stintern.st2D.tests.game.demo
             this.name = "ControlLayer";
             _backGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
             _characterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
+            _timeLayer = SceneManager.instance.getCurrentScene().getLayerByName("TimeLayer") as TimeLayer;
             
             
             
@@ -161,6 +164,12 @@ package com.stintern.st2D.tests.game.demo
                         var controlSprite:Sprite = _batchSprite.spriteArray[i] as Sprite;
                         controlSprite.position.x -= intervalX;
                     }
+                    
+                    for(var j:uint = 0; j < _timeLayer.batchSprite.spriteArray.length; j++)
+                    {
+                        var controlTimeSprite:Sprite = _timeLayer.batchSprite.spriteArray[j] as Sprite;
+                        controlTimeSprite.position.x -= intervalX;
+                    }
                 }
             }
         }
@@ -168,6 +177,19 @@ package com.stintern.st2D.tests.game.demo
         private function onMouseUp(event:MouseEvent):void
         {
             mouseDownFlag = false;
+            for(var j:uint = 0; j < _timeLayer.batchSprite.spriteArray.length; j++)
+            {
+                var controlTimeSprite:Sprite = _timeLayer.batchSprite.spriteArray[j] as Sprite;
+                if(-(StageContext.instance.screenWidth/2) < StageContext.instance.mainCamera.x)
+                {
+                    controlTimeSprite.position.x += (StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth/2));
+                }
+                else if(StageContext.instance.mainCamera.x < -((StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)))
+                {
+                    controlTimeSprite.position.x += (StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2));
+                }
+            }
+            
             for(var i:uint = 0; i < _batchSprite.spriteArray.length; i++)
             {
                 var controlSprite:Sprite = _batchSprite.spriteArray[i] as Sprite;
@@ -182,6 +204,7 @@ package com.stintern.st2D.tests.game.demo
                     StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)), 0.0) ;
                 }
             }
+            
         }
     }
 }

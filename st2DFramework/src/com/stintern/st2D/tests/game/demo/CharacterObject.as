@@ -80,7 +80,7 @@ package com.stintern.st2D.tests.game.demo
         
         private function onSpriteCreated():void
         {
-            var yPositionRange:uint = (Math.floor(Math.random() * 10)*10);
+            var yPositionRange:uint = (Math.floor(Math.random() * 20)*10);
             _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
             if(_info.ally == true)
             {
