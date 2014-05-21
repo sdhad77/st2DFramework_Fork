@@ -70,18 +70,19 @@ package com.stintern.st2D.tests.game.demo
         
         private function onSpriteCreated():void
         {
+            var yPositionRange:uint = (Math.floor(Math.random() * 10)*10);
             _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
             if(_info.ally == true)
             {
                 _sprite.position.x = 0;
-                _sprite.position.y = _sprite.height;
+                _sprite.position.y = _sprite.height/2 + yPositionRange;
                 _batchSprite.addSprite(_sprite);
                 _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height, _info.speed);
             }
             else
             {
                 _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
-                _sprite.position.y = _sprite.height;
+                _sprite.position.y = _sprite.height/2 + yPositionRange;
                 _batchSprite.addSprite(_sprite);
                 _sprite.moveTo(0, _sprite.height, _info.speed);
             }
@@ -121,61 +122,4 @@ package com.stintern.st2D.tests.game.demo
 
 
     }
-}
-import com.stintern.st2D.tests.game.demo.CharacterObject;
-
-
-class CharacterInfo
-{
-    private var _hp:Number;
-    private var _power:Number;
-    private var _speed:Number
-    private var _ally:Boolean;
-    private var _state:String;
-    
-    public function CharacterInfo(hp:Number, power:Number, speed:Number, ally:Boolean)
-    {
-        _hp = hp;
-        _power = power;
-        _speed = speed;
-        _ally = ally;
-        _state = CharacterObject.RUN;
-    }
-
-    public function get hp():Number
-    {
-        return _hp;
-    }
-    
-    public function set hp(value:Number):void
-    {
-        _hp = value;
-    }
-
-    public function get power():Number
-    {
-        return _power;
-    }
-
-    public function get speed():Number
-    {
-        return _speed;
-    }
-
-    public function get ally():Boolean
-    {
-        return _ally;
-    }
-
-    public function get state():String
-    {
-        return _state;
-    }
-
-    public function set state(value:String):void
-    {
-        _state = value;
-    }
-
-
 }

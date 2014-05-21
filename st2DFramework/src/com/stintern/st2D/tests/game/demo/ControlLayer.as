@@ -18,6 +18,7 @@ package com.stintern.st2D.tests.game.demo
         private var mouseDownFlag:Boolean = false;
         private var prevPoint:Vector2D;
         private var _backGroundLayer:BackGroundLayer;
+        private var _characterMovingLayer:CharacterMovingLayer;
         
         private var _playerCharacterArray:Array;
         private var _enemyCharacterArray:Array;
@@ -32,8 +33,12 @@ package com.stintern.st2D.tests.game.demo
         {
             this.name = "ControlLayer";
             _backGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
-            _playerCharacterArray = new Array();
-            _enemyCharacterArray = new Array();
+            _characterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
+            
+            
+            
+            _playerCharacterArray = _characterMovingLayer.playerCharacterArray;
+            _enemyCharacterArray = _characterMovingLayer.enemyCharacterArray;
             
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreated);
