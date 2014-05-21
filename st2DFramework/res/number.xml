@@ -1,0 +1,15 @@
+<atlas>
+
+<atlasItem name="1.png" x="0" y="0" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="2.png" x="64" y="0" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="3.png" x="128" y="0" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="4.png" x="192" y="0" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="5.png" x="0" y="64" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="6.png" x="64" y="64" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="7.png" x="128" y="64" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="8.png" x="192" y="64" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="9.png" x="0" y="128" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="0.png" x="64" y="128" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+<atlasItem name="colon.png" x="128" y="128" width="64" height="64" frameX="0" frameY="0" frameWidth="64" frameHeight="64" />
+
+</atlas>
