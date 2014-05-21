@@ -54,10 +54,14 @@ package com.stintern.st2D.display.sprite
                     //다음 프레임으로 이동
                     var playFrame:AnimationFrame = nextFrame();
                     
-                    //uv좌표 변경하는 방식
-                    frame.width = playFrame.width;
-                    frame.height = playFrame.height;
-                    setUVCoord(playFrame.x/textureWidth, playFrame.y/textureHeight, playFrame.width/textureWidth, playFrame.height/textureHeight);
+                    //다음 프레임이 존재할 경우
+                    if(playFrame != null)
+                    {
+                        //uv좌표 변경하는 방식
+                        frame.width = playFrame.width;
+                        frame.height = playFrame.height;
+                        setUVCoord(playFrame.x/textureWidth, playFrame.y/textureHeight, playFrame.width/textureWidth, playFrame.height/textureHeight);
+                    }
                     
                     playFrame = null;
                 }
@@ -89,6 +93,8 @@ package com.stintern.st2D.display.sprite
                     {
                         _delayCnt = 0;
                         _playAnimationFlowIdx++;
+                        
+                        nextFrame();
                     }
                     //현재 애니메이션이 완료되어 다음 애니메이션으로 넘어가야 할 때
                     else
@@ -107,8 +113,9 @@ package com.stintern.st2D.display.sprite
                         {
                             isVisible = false;
                             _isPlaying = false;
-                            _delayCnt = 0;
-                            _playAnimationFlowIdx = 0;
+                            _playAnimationName = null;
+                            
+                            return null;
                         }
                     }
                 }
@@ -141,7 +148,8 @@ package com.stintern.st2D.display.sprite
          */
         public function playAnimation():void
         {
-            _isPlaying = true;
+            if(_playAnimationName != null) _isPlaying = true;
+            else trace("먼저 setPlayAnimation을 실행해주세요!");
         }
         
         /**
