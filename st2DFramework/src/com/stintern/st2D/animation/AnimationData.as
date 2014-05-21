@@ -95,7 +95,7 @@ package com.stintern.st2D.animation
             //이미 애니메이션 정보가 있는 path일 경우
             else
             {
-                if(onCreated != null) onCreated();
+                trace("이미 존재하는 path입니다.");
             }
             
             function onXmlLoadComplete(xml:XML):void
