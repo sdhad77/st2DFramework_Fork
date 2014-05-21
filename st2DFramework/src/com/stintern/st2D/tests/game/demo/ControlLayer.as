@@ -35,7 +35,7 @@ package com.stintern.st2D.tests.game.demo
             _enemyCharacterVector = new Vector.<CharacterObject>();  
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/dungGame.png", "res/atlas.xml", onCreated);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreated);
             addBatchSprite(_batchSprite);
             
             
@@ -44,7 +44,7 @@ package com.stintern.st2D.tests.game.demo
             
             function enemyCreater():void
             {
-                var playerCharacterObject:CharacterObject = new CharacterObject("res/dungGame.png", 100, 100, 20, false);
+                var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 100, 20, false);
                 _enemyCharacterVector.push(playerCharacterObject);
             }
             
@@ -63,10 +63,10 @@ package com.stintern.st2D.tests.game.demo
             _sprites.push(sprite);
             var x:Number = 0;
             var y:Number = 0;
-            sprite.createSpriteWithBatchSprite(_batchSprite, "char0", onSpriteCreated, x, y );
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character_run0", onSpriteCreated, x, y );
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
-            sprite.position.x = _MARGIN + sprite.width/2;
-            sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height/2;
+            sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
+            sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
         }
         
         private function onSpriteCreated():void
@@ -97,7 +97,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var playerCharacterObject:CharacterObject = new CharacterObject("res/dungGame.png", 100, 100, 20, true);
+                    var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 100, 20, true);
                     _playerCharacterVector.push(playerCharacterObject);
                 }
             }

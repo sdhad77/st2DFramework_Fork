@@ -5,7 +5,6 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
-    import com.stintern.st2D.utils.CollisionDetection;
 
     public class CharacterMovingLayer extends Layer
     {
@@ -23,7 +22,7 @@ package com.stintern.st2D.tests.game.demo
               
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/dungGame.png", "res/atlas.xml", onCompleted);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCompleted);
             addBatchSprite(_batchSprite);
            
         }
@@ -31,7 +30,8 @@ package com.stintern.st2D.tests.game.demo
         
         private function onCompleted():void
         {
-            AnimationData.instance.setAnimation("res/dungGame.png", new Animation("char",  new Array("char0", "char1"), 8, "char"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character_run",  new Array("character_run0", "character_run1"), 8, "character_run"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character_attack",  new Array("character_attack0", "character_attack1"), 8, "character_attack"));
         }
 
         

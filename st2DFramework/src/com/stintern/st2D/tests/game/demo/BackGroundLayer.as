@@ -18,7 +18,7 @@ package com.stintern.st2D.tests.game.demo
         {
             this.name = "BackGroundLayer";
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/background.png", "res/atlas.xml", onCreated);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreated);
             addBatchSprite(_batchSprite);
         }
 

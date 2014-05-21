@@ -30,7 +30,7 @@ package com.stintern.st2D.tests.game.demo
             _sprite = new SpriteAnimation();
             var x:Number = 0;
             var y:Number = 0;
-            _sprite.createAnimationSpriteWithPath("res/dungGame.png", "char", onSpriteCreated, null, x, y );
+            _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", "character_run", onSpriteCreated, null, x, y );
         }
         
         private function onSpriteCreated():void
@@ -39,16 +39,16 @@ package com.stintern.st2D.tests.game.demo
             if(_info.ally == true)
             {
                 _sprite.position.x = 0;
-                _sprite.position.y = _sprite.height*3;
+                _sprite.position.y = _sprite.height;
                 _batchSprite.addSprite(_sprite);
-                _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height*3, _info.speed);
+                _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height, _info.speed);
             }
             else
             {
                 _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
-                _sprite.position.y = _sprite.height*3;
+                _sprite.position.y = _sprite.height;
                 _batchSprite.addSprite(_sprite);
-                _sprite.moveTo(0, _sprite.height*3, _info.speed);
+                _sprite.moveTo(0, _sprite.height, _info.speed);
             }
             _sprite.playAnimation();
         }
