@@ -93,7 +93,7 @@ package com.stintern.st2D.tests.game.demo
             _sprites.push(sprite);
             var x:Number = 0;
             var y:Number = 0;
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character_run0", x, y );
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character1_run_right0", x, y );
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
             sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
@@ -111,7 +111,7 @@ package com.stintern.st2D.tests.game.demo
                         
                         if(_playerCharacterArray[i].info.state != CharacterObject.ATTACK)
                         {
-                            _playerCharacterArray[i].sprite.setPlayAnimation("character_attack");
+                            _playerCharacterArray[i].sprite.setPlayAnimation("character1_attack");
                             _playerCharacterArray[i].info.state = CharacterObject.ATTACK;
                             _playerCharacterArray[i].sprite.isMoving = false;
                             _playerCharacterArray[i].targetObject = _enemyCharacterArray[j];
@@ -119,7 +119,7 @@ package com.stintern.st2D.tests.game.demo
                         }
                         if(_enemyCharacterArray[j].info.state != CharacterObject.ATTACK)
                         {
-                            _enemyCharacterArray[j].sprite.setPlayAnimation("character_attack");
+                            _enemyCharacterArray[j].sprite.setPlayAnimation("character1_attack");
                             _enemyCharacterArray[j].info.state = CharacterObject.ATTACK;
                             _enemyCharacterArray[j].sprite.isMoving = false;
                             _enemyCharacterArray[j].targetObject = _playerCharacterArray[i];
