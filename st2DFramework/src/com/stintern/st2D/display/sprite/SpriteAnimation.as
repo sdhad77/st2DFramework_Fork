@@ -52,6 +52,7 @@ package com.stintern.st2D.display.sprite
         {
             playAnimationName = animationName; 
             
+            //재생할 애니메이션의 첫번째 frame 이미지를 매개변수로 전달합니다.
             createSpriteWithBatchSprite(batchSprite, AnimationData.instance.animationData[batchSprite.path]["animation"][animationName].animationFlow[0], x, y);
         }
         
@@ -70,6 +71,7 @@ package com.stintern.st2D.display.sprite
                     
                     //다음 프레임으로 이동
                     var playFrame:AnimationFrame = nextFrame();
+                    //현재 사용중인 스프라이트 시트 이미지. 가로 세로 길이가 필요해서 사용함
                     var currentSpriteImg:Bitmap = AssetLoader.instance.getImageTexture(path);
                     
                     //다음 프레임이 존재할 경우
@@ -82,6 +84,7 @@ package com.stintern.st2D.display.sprite
                     }
                     
                     playFrame = null;
+                    currentSpriteImg = null;
                 }
             }
             
