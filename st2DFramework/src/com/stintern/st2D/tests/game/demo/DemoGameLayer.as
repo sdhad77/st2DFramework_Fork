@@ -34,6 +34,9 @@ package com.stintern.st2D.tests.game.demo
             var characterMovingLayer:CharacterMovingLayer = new CharacterMovingLayer();
             scene.addLayer(characterMovingLayer);
             
+            var cloudLayer:CloudLayer = new CloudLayer();
+            scene.addLayer(cloudLayer);
+            
             var timeLayer:TimeLayer = new TimeLayer();
             scene.addLayer(timeLayer);
             
