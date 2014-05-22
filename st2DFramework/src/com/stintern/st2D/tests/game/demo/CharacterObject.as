@@ -32,7 +32,8 @@ package com.stintern.st2D.tests.game.demo
         
         /**
          * 캐릭터 Object를 생성합니다
-         * @param characterName 캐릭터 종류를 확인할 characterName
+         * @param runAniStr run 시 사용할 애니매이션 string
+         * @param attAniStr attack 시 사용할 애니매이션 string
          * @param hp Character의 체력
          * @param power Character의 파워
          * @param speed Character의 이동속도

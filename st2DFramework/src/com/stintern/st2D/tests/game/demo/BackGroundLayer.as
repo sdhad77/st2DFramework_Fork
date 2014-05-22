@@ -7,11 +7,9 @@ package com.stintern.st2D.tests.game.demo
     
     public class BackGroundLayer extends Layer
     {
-        
         private var _batchSprite:BatchSprite;
         private var _sprites:Array = new Array();
         
-        private var _bgPageCounter:uint = 0;
         private var _bgPageNum:uint = 4;
         
         public function BackGroundLayer()
@@ -26,20 +24,13 @@ package com.stintern.st2D.tests.game.demo
         {
             for(var i:uint = 0; i<_bgPageNum; i++)
             {
-                var sprite:Sprite = new Sprite();
-                _sprites.push(sprite);
-                var x:Number = (StageContext.instance.screenWidth/2) + (StageContext.instance.screenWidth * _bgPageCounter);
+                _sprites.push(new Sprite());
+                var x:Number = (StageContext.instance.screenWidth/2) + (StageContext.instance.screenWidth * i);
                 var y:Number = StageContext.instance.screenHeight/2;
-                sprite.createSpriteWithBatchSprite(_batchSprite, "background0", x, y );
-                sprite.setScaleWithWidthHeight(StageContext.instance.screenWidth, StageContext.instance.screenHeight);
-                _batchSprite.addSprite(sprite);
-                _bgPageCounter++;
+                _sprites[i].createSpriteWithBatchSprite(_batchSprite, "background0", x, y );
+                _sprites[i].setScaleWithWidthHeight(StageContext.instance.screenWidth, StageContext.instance.screenHeight);
+                _batchSprite.addSprite(_sprites[i]);
             }
-        }
-        
-        private function onSpriteCreated():void
-        {
-            _batchSprite.addSprite(_sprites[_sprites.length-1]);
         }
         
         override public function update(dt:Number):void
@@ -50,7 +41,6 @@ package com.stintern.st2D.tests.game.demo
         {
             return _bgPageNum;
         }
-
     }
 }
 
