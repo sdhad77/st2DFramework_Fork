@@ -188,22 +188,6 @@ package com.stintern.st2D.tests.game.demo
                 bullet.moveTo(_targetObject.sprite.position.x, _targetObject.sprite.position.y, 500);
                 _targetObject.info.hp -= _info.power;
                 
-                
-                for(var i:uint=0; i<_bulletArray.length; ++i)
-                {
-                    // bullet 회전
-                    _bulletArray[i].setRotate(_degree, new Vector3D(0.0, 0.0, 1.0));
-                    
-                    
-                    // bullet 삭제
-                    if( _bulletArray[i].isMoving == false )
-                    {
-                        _batchSprite.removeSprite(_bulletArray[i]);
-                        _bulletArray[i].dispose();
-                        _bulletArray.splice(i, 1);
-                    }
-                }
-                
                 trace(_targetObject.info.hp);
                 //타겟의 체력이 0이하가 될 경우
                 if(_targetObject.info.hp <= 0)
@@ -230,6 +214,13 @@ package com.stintern.st2D.tests.game.demo
             }
         }
         
+        public function removeBullet(index:uint):void
+        {
+            _batchSprite.removeSprite(_bulletArray[index]);
+            _bulletArray[index].dispose();
+            _bulletArray.splice(index, 1);
+        }
+        
         //get set 함수들
         public function get sprite():SpriteAnimation       {return _sprite;}
         public function get info():CharacterInfo           {return _info;}
@@ -241,17 +232,9 @@ package com.stintern.st2D.tests.game.demo
         
         public function set info(value:CharacterInfo):void           {_info = value;}
         public function set targetObject(value:CharacterObject):void {_targetObject = value;}
-
-        public function set degree(value:Number):void
-        {
-            _degree = value;
-        }
-
-        public function get degree():Number
-        {
-            return _degree;
-        }
-
+        
+        public function get bulletArray():Vector.<Sprite> { return _bulletArray; }
+            
 
     }
 }
