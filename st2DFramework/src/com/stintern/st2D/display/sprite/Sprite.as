@@ -333,12 +333,18 @@ package com.stintern.st2D.display.sprite
         public function dispose():void
         {
             if( texture != null )
+            {
                 texture.dispose();
-            texture = null;
+                texture = null;
+            }
             
-            if( textureData.bitmapData != null )
+            
+            if( textureData != null && textureData.bitmapData != null )
+            {
                 textureData.bitmapData.dispose(); 
-            textureData.bitmapData = null;
+                textureData.bitmapData = null;
+                textureData = null;
+            }
             
             _modelMatrix = null;
             _rotateAxis = null;
