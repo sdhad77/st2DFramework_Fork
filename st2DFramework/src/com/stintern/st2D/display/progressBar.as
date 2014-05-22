@@ -1,6 +1,8 @@
 package com.stintern.st2D.display
 {
     import com.stintern.st2D.display.sprite.Sprite;
+    
+    import flash.text.ReturnKeyLabel;
 
     public class progressBar
     {
@@ -60,6 +62,9 @@ package com.stintern.st2D.display
             
             if( percent <= 0 )
                 percent = 0.01;
+            
+            if(_progressSprite.scale == null)
+                return;
             
             _newScale = _oldScale * percent;
             _progressSprite.scale.x = _newScale;
