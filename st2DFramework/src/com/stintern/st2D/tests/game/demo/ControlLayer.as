@@ -54,7 +54,7 @@ package com.stintern.st2D.tests.game.demo
             
             function enemyCreater():void
             {
-                var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 1000, 30, 20, 3000, false);
+                var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 1000, 30, 10000, 3000, false);
                 _enemyCharacterArray.push(playerCharacterObject);
             }
             
@@ -74,9 +74,10 @@ package com.stintern.st2D.tests.game.demo
                     for(var j:uint=0; j<playerCharacter.sprite.getAllChildren().length; j++)
                     {
                         var childArray:Array = playerCharacter.sprite.getAllChildren();
-                        _characterMovingLayer.batchSprite.removeSprite(childArray[j]);
+                        var child:Sprite = childArray[j];
+                        _characterMovingLayer.batchSprite.removeSprite(child);
+                        child.dispose();
                     }
-                    playerCharacter.sprite.removeChildByName("spriteFront");
                     _playerCharacterArray.splice(i, 1);
                     break;
                 }
@@ -89,6 +90,14 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _enemyCharacterArray[i] == targetObject )
                 {
+                    var enemyCharacter:CharacterObject = _enemyCharacterArray[i];
+                    for(var j:uint=0; j<enemyCharacter.sprite.getAllChildren().length; j++)
+                    {
+                        var childArray:Array = enemyCharacter.sprite.getAllChildren();
+                        var child:Sprite = childArray[j];
+                        _characterMovingLayer.batchSprite.removeSprite(child);
+                        child.dispose();
+                    }
                     _enemyCharacterArray.splice(i, 1);
                     break;
                 }
@@ -158,7 +167,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 40, 20, 2000, true);
+                    var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 40, 10000, 2000, true);
                     _playerCharacterArray.push(playerCharacterObject);
                 }
             }
