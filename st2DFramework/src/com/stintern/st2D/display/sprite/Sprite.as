@@ -382,8 +382,9 @@ package com.stintern.st2D.display.sprite
                 //원하는 지점에 아직 도달하지 못했으면
                 else
                 {
-                    position.x += _increaseX;
-                    position.y += _increaseY;
+//                    position.x += _increaseX;
+//                    position.y += _increaseY;
+                    setTranslation(new Vector2D(position.x + _increaseX, position.y + _increaseY));
                 }
             }
         }
