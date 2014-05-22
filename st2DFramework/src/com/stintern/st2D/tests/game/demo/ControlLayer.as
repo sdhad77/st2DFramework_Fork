@@ -30,8 +30,7 @@ package com.stintern.st2D.tests.game.demo
         
         private static const _MARGIN:uint = 20;
         
-        private var _bulletArray:Vector.<Sprite> = new Vector.<Sprite>();
-        private var _degree:Number = 0.0;
+        
         
         
         public function ControlLayer()
@@ -56,7 +55,7 @@ package com.stintern.st2D.tests.game.demo
             
             function enemyCreater():void
             {
-                var playerCharacterObject:CharacterObject = new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 3000, 200, 300, false);
+                var playerCharacterObject:CharacterObject = new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 3000, 0, 300, false);
                 _enemyCharacterArray.push(playerCharacterObject);
             }
             
@@ -114,23 +113,6 @@ package com.stintern.st2D.tests.game.demo
                                 playerCharacter.attackScheduler.startScheduler();
                             }
                         }
-                        
-                        if( playerCharacter.tag == Resources.TAG_RED )
-                        {
-                            playerCharacter.info.state = CharacterObject.ATTACK;
-                            playerCharacter.sprite.isMoving = false;
-                            playerCharacter.targetObject = _enemyCharacterArray[j];
-                            
-                            var bullet:Sprite = new Sprite();
-                            bullet.createSpriteWithBatchSprite(_batchSprite, "hp_front", playerCharacter.sprite.position.x, playerCharacter.sprite.position.y);
-                            _batchSprite.addSprite(bullet);
-                            
-                            _bulletArray.push(bullet);
-                            
-                            bullet.moveTo(enemyCharacter.sprite.position.x, enemyCharacter.sprite.position.y, 500);
-                            playerCharacter.attackScheduler.startScheduler();
-                        }
-                        
                         if(enemyCharacter.info.state != CharacterObject.ATTACK)
                         {
                             enemyCharacter.sprite.setPlayAnimation(enemyCharacter.attAniStr);
@@ -139,6 +121,17 @@ package com.stintern.st2D.tests.game.demo
                             enemyCharacter.targetObject = _playerCharacterArray[i];
                             enemyCharacter.attackScheduler.startScheduler();
                         }
+                        
+                        
+                        if( playerCharacter.tag == Resources.TAG_RED )
+                        {
+                            playerCharacter.info.state = CharacterObject.ATTACK;
+                            playerCharacter.sprite.isMoving = false;
+                            playerCharacter.targetObject = _enemyCharacterArray[j];
+                            playerCharacter.attackScheduler.startScheduler();
+                            playerCharacter.degree += 10.0;
+                        }
+                        
                         if(playerCharacter.info.state == CharacterObject.ATTACK)
                         {
                             playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
@@ -147,29 +140,6 @@ package com.stintern.st2D.tests.game.demo
                         {
                             enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
                         }
-                    }
-                }
-            }
-            
-            for(var i:uint=0; i<_bulletArray.length; ++i)
-            {
-                // bullet 회전
-                _bulletArray[i].setRotate(_degree, new Vector3D(0.0, 0.0, 1.0));
-                
-                if( _bulletArray[i].isMoving == false )
-                {
-                    _bulletArray[i].isVisible = false;
-                }
-                
-                // bullet 삭제
-                for(var j:uint=0; j<_enemyCharacterArray.length; j++)
-                {
-                    var enemyCharacter:CharacterObject = _enemyCharacterArray[j] as CharacterObject;
-                    if( enemyCharacter.sprite.rect.contains(_bulletArray[i].position.x, _bulletArray[i].position.y) )
-                    {
-                        _batchSprite.removeSprite(_bulletArray[i]);
-                        _bulletArray[i].dispose();
-                        _bulletArray.splice(i, 1);
                     }
                 }
             }
@@ -192,7 +162,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 40, 10000, 2000, 300, 400, true);
+                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 40, 10000, 2000, 0, 400, true);
                     _playerCharacterArray.push(characterObject2);
                 }
             }

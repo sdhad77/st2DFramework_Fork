@@ -10,6 +10,7 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.Event;
+    import flash.geom.Vector3D;
     
     public class CharacterObject extends Base
     {
@@ -31,6 +32,8 @@ package com.stintern.st2D.tests.game.demo
         public static const RUN:String = "RUN";
         public static const ATTACK:String = "ATTACK";
         
+        private var _bulletArray:Vector.<Sprite> = new Vector.<Sprite>();
+        private var _degree:Number = 0.0;
         
         /**
          * 캐릭터 Object를 생성합니다
@@ -53,8 +56,14 @@ package com.stintern.st2D.tests.game.demo
             
             //스프라이트 생성
             spriteCreate();
-            
-            _attackScheduler.addFunc(_info.attackSpeed, attackFunc, 0);
+            if(!attackBoundsWidth)
+            {
+                _attackScheduler.addFunc(_info.attackSpeed, nearAttackFunc, 0);
+            }
+            else
+            {
+                _attackScheduler.addFunc(_info.attackSpeed, farAttackFunc, 0);
+            }
         }
         
         private function spriteCreate():void
@@ -128,12 +137,12 @@ package com.stintern.st2D.tests.game.demo
                 _sprite.isMoving = false;
                 _targetObject = charObject;
                 
-                attackFunc();
+                nearAttackFunc();
                 _attackScheduler.startScheduler();
             }
         }
         
-        private function attackFunc(evt:Event = null):void
+        private function nearAttackFunc(evt:Event = null):void
         {
             //this의 상태가 공격이고, 타겟이 존재할 경우
             if(_info.state==ATTACK && _targetObject)
@@ -165,6 +174,62 @@ package com.stintern.st2D.tests.game.demo
             }
         }
         
+        private function farAttackFunc(evt:Event = null):void
+        {
+            //this의 상태가 공격이고, 타겟이 존재할 경우
+            if(_info.state==ATTACK && _targetObject)
+            {
+                var bullet:Sprite = new Sprite();
+                bullet.createSpriteWithBatchSprite(_batchSprite, "hp_front", sprite.position.x, sprite.position.y);
+                _batchSprite.addSprite(bullet);
+                
+                _bulletArray.push(bullet);
+                
+                bullet.moveTo(_targetObject.sprite.position.x, _targetObject.sprite.position.y, 500);
+                _targetObject.info.hp -= _info.power;
+                
+                
+                for(var i:uint=0; i<_bulletArray.length; ++i)
+                {
+                    // bullet 회전
+                    _bulletArray[i].setRotate(_degree, new Vector3D(0.0, 0.0, 1.0));
+                    
+                    
+                    // bullet 삭제
+                    if( _bulletArray[i].isMoving == false )
+                    {
+                        _batchSprite.removeSprite(_bulletArray[i]);
+                        _bulletArray[i].dispose();
+                        _bulletArray.splice(i, 1);
+                    }
+                }
+                
+                trace(_targetObject.info.hp);
+                //타겟의 체력이 0이하가 될 경우
+                if(_targetObject.info.hp <= 0)
+                {
+                    //타겟의 스케쥴러 멈춤
+                    _targetObject.attackScheduler.stopScheduler();
+                    
+                    //this가 아군일경우, 즉 타겟이 적군일 경우 적군 삭제
+                    if(_info.ally)
+                    {
+                        _characterMovingLayer.removeEnemyCharacterObject(_targetObject);
+                    }
+                        //this가 적군일경우, 즉 타겟이 아군일 경우 아군 삭제
+                    else
+                    {
+                        _characterMovingLayer.removePlayerCharacterObject(_targetObject);
+                    }
+                    _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
+                    
+                    //this의 상태를 RUN으로 변경
+                    setState("RUN");
+                }
+                
+            }
+        }
+        
         //get set 함수들
         public function get sprite():SpriteAnimation       {return _sprite;}
         public function get info():CharacterInfo           {return _info;}
@@ -176,5 +241,17 @@ package com.stintern.st2D.tests.game.demo
         
         public function set info(value:CharacterInfo):void           {_info = value;}
         public function set targetObject(value:CharacterObject):void {_targetObject = value;}
+
+        public function set degree(value:Number):void
+        {
+            _degree = value;
+        }
+
+        public function get degree():Number
+        {
+            return _degree;
+        }
+
+
     }
 }
