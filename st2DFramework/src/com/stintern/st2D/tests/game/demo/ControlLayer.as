@@ -11,7 +11,6 @@ package com.stintern.st2D.tests.game.demo
     
     import flash.events.MouseEvent;
     import flash.geom.Rectangle;
-    import flash.geom.Vector3D;
     
     public class ControlLayer extends Layer
     {
@@ -29,10 +28,9 @@ package com.stintern.st2D.tests.game.demo
         
         private var _enemyScheduler:Scheduler = new Scheduler;
         
+        private var intervalX:Number;
+        
         private static const _MARGIN:uint = 20;
-        
-        
-        
         
         public function ControlLayer()
         {
@@ -40,9 +38,7 @@ package com.stintern.st2D.tests.game.demo
             _backGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
             _characterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
             _timeLayer = SceneManager.instance.getCurrentScene().getLayerByName("TimeLayer") as TimeLayer;
-            
-            
-            
+
             _playerCharacterArray = _characterMovingLayer.playerCharacterArray;
             _enemyCharacterArray = _characterMovingLayer.enemyCharacterArray;
             
@@ -50,15 +46,13 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreatedButton);
             addBatchSprite(_batchSprite);
             
-            
             _enemyScheduler.addFunc(2000, enemyCreater, 1);
             _enemyScheduler.startScheduler();
             
             function enemyCreater():void
             {
-                var playerCharacterObject:CharacterObject = new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 3000, Resources.TAG_ENEMY, false);
-                playerCharacterObject.tag = Resources.TAG_ENEMY;
-                _enemyCharacterArray.push(playerCharacterObject);
+                _enemyCharacterArray.push(new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 3000, Resources.TAG_ENEMY, false));
+                _enemyCharacterArray[_enemyCharacterArray.length - 1].tag = Resources.TAG_ENEMY;
             }
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
@@ -67,28 +61,24 @@ package com.stintern.st2D.tests.game.demo
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
         }
         
-
-        
         private function onCreatedButton():void
         {
             var sprite:Sprite = new Sprite();
-            var x:Number = 0;
-            var y:Number = 0;
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character1_run_right0", x, y );
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character1_run_right0");
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
             sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
             _batchSprite.addSprite(sprite);
-            x = sprite.position.x + StageContext.instance.screenHeight/8;
-            y = sprite.position.y;
+            
+            var x:Number = sprite.position.x + StageContext.instance.screenWidth/8;
+            var y:Number = sprite.position.y;
             
             sprite = new Sprite();
             sprite.createSpriteWithBatchSprite(_batchSprite, "character2_run_right0", x, y );
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
-            sprite.position.x = x;
-            sprite.position.y = y;
             _batchSprite.addSprite(sprite);
             
+            sprite = null;
         }
         
         override public function update(dt:Number):void
@@ -107,13 +97,10 @@ package com.stintern.st2D.tests.game.demo
                     {
                         if(playerCharacter.info.state != CharacterObject.ATTACK)
                         {
-                            playerCharacter.setState(CharacterObject.ATTACK, _enemyCharacterArray[j]);
-                            playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
+                            playerCharacter.setState(CharacterObject.ATTACK, enemyCharacter);
                         }
-                        else
-                        {
-                            playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
-                        }
+
+                        playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
                     }
                 }
                 
@@ -126,24 +113,21 @@ package com.stintern.st2D.tests.game.demo
                 }
             }
             
-            for(var i:uint=0; i<_enemyCharacterArray.length; ++i)
+            for(i=0; i<_enemyCharacterArray.length; ++i)
             {
-                var enemyCharacter:CharacterObject = _enemyCharacterArray[i] as CharacterObject;
+                enemyCharacter = _enemyCharacterArray[i] as CharacterObject;
                 
-                for(var j:uint=0; j<_playerCharacterArray.length; j++)
+                for(j=0; j<_playerCharacterArray.length; j++)
                 {
-                    var playerCharacter:CharacterObject = _playerCharacterArray[j] as CharacterObject;
+                    playerCharacter = _playerCharacterArray[j] as CharacterObject;
                     if(intersectRect(enemyCharacter.getAttackBounds(), playerCharacter.sprite.rect))
                     {
                         if(enemyCharacter.info.state != CharacterObject.ATTACK)
                         {
-                            enemyCharacter.setState(CharacterObject.ATTACK, _playerCharacterArray[i]);
-                            enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
+                            enemyCharacter.setState(CharacterObject.ATTACK, playerCharacter);
                         }
-                        else
-                        {
-                            enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
-                        }
+                        
+                        enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
                     }
                 }
             }
@@ -156,7 +140,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 2000, Resources.TAG_RED, true);
+                    var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
                     characterObject1.tag = Resources.TAG_RED;
                     characterObject1.info.attackBoundsWidth *= 4; 
                     characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
@@ -181,7 +165,7 @@ package com.stintern.st2D.tests.game.demo
             mouseDownFlag = true;
             prevPoint = new Vector2D(event.stageX, event.stageY);
         }
-        private var intervalX:Number;
+        
         private function onMouseMove(event:MouseEvent):void
         {   
             if(mouseDownFlag)
@@ -247,8 +231,7 @@ package com.stintern.st2D.tests.game.demo
         }
         
         private function intersectRect(rect1:Rectangle, rect2:Rectangle):Boolean
-        {
-          trace(rect1);  
+        {  
             if( rect1.contains(rect2.left, rect2.top) || 
                 rect1.contains(rect2.left, rect2.bottom) ||
                 rect1.contains(rect2.right, rect2.top) ||
