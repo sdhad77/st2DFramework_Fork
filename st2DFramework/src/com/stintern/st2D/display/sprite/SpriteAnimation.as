@@ -39,6 +39,20 @@ package com.stintern.st2D.display.sprite
         }
         
         /**
+         * 배치스프라이트를 이용해서 애니메이션 스프라이트를 생성합니다. 
+         * @param batchSprite 사용할 배치스프라이트
+         * @param animationName 사용할 애니메이션 이름
+         * @param x 초기 X좌표
+         * @param y 초기 Y좌표
+         */
+        public function createAnimationSpriteWithBatchSprite(batchSprite:BatchSprite, animationName:String, x:Number=0, y:Number=0 ):void
+        {
+            playAnimationName = animationName;
+            
+            createSpriteWithBatchSprite(batchSprite, animationName, x, y);
+        }
+        
+        /**
          * 스프라이트의 Scale, Rotation, Translation, 애니메이션 동작을 변경합니다. 
          */
         override public function update():void
