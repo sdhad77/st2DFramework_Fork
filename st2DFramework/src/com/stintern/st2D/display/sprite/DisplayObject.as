@@ -27,6 +27,7 @@ package com.stintern.st2D.display.sprite
         
         public var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
         public var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
+        public var INDEX_COUNT_PER_SPRITE:uint = 6;
         
         public function DisplayObject()
         {

@@ -81,10 +81,65 @@ package com.stintern.st2D.display.sprite
          */
         public function addSprite(sprite:Sprite):void
         {
+            updateBufferData(_sprites.length, sprite);
+            
+            _sprites.push(sprite);
+            _updateRequired = true;
+        }
+        
+        /**
+         * 특정 스프라이트를 배치스프라이트에서 삭제합니다. 
+         * 삭제된 스프라이트는 배치스프라이트를 출력할 때 출력되지 않습니다.
+         * 하지만, 스프라이트 자체의 자원은 해제되지 않습니다.
+         *  
+         * @param sprite 삭제할 스프라이트 객체
+         */
+        public function removeSprite(sprite:Sprite):void
+        {
+            var removeIndex:uint;
+            
+            for(var i:uint=0; i<_sprites.length; ++i)
+            {
+                if( _sprites[i] == sprite )
+                {
+                    _sprites.splice(i, 1);
+                    
+                    removeIndex = i;
+                    
+                    break;
+                }
+            }
+            
+            // vertexData 갱신
+            vertexData.splice(removeIndex *  VERTEX_COUNT * DATAS_PER_VERTEX, VERTEX_COUNT * DATAS_PER_VERTEX )
+            
+            // indexData 갱신
+            for(var i:uint=0; i<sprite.INDEX_COUNT_PER_SPRITE; ++i)
+            {
+                indexData.pop()
+            }
+        }
+        
+        /**
+         * 배치스프라이트에 등록된 모든 스프라이트들을 삭제합니다. 
+         */
+        public function removeAllSprites():void
+        {
+            while( _sprites.length )
+            {
+                _sprites.splice(0, 1);
+            }
+            
+            vertexData.length = 0;
+        }
+        
+        private function updateBufferData(index:uint, sprite:Sprite):void
+        {
             var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
             var spriteVertexData:Vector.<Number> = sprite.vertexData;
             
-            var targetIndex:int = _sprites.length * VERTEX_COUNT * DATAS_PER_VERTEX;
+            var targetIndex:int = index * VERTEX_COUNT * DATAS_PER_VERTEX;
+            
             var sourceIndex:int = 0;
             var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
             
@@ -118,41 +173,6 @@ package com.stintern.st2D.display.sprite
                 indexData.push(2 + i * VERTEX_COUNT);
                 indexData.push(3 + i * VERTEX_COUNT);
             }
-            
-            _sprites.push(sprite);
-            _updateRequired = true;
-        }
-        
-        /**
-         * 특정 스프라이트를 배치스프라이트에서 삭제합니다. 
-         * 삭제된 스프라이트는 배치스프라이트를 출력할 때 출력되지 않습니다.
-         * 하지만, 스프라이트 자체의 자원은 해제되지 않습니다.
-         *  
-         * @param sprite 삭제할 스프라이트 객체
-         */
-        public function removeSprite(sprite:Sprite):void
-        {
-            for(var i:uint=0; i<_sprites.length; ++i)
-            {
-                if( _sprites[i] == sprite )
-                {
-                    _sprites.splice(i, 1);
-                    break;
-                }
-            }
-        }
-        
-        /**
-         * 배치스프라이트에 등록된 모든 스프라이트들을 삭제합니다. 
-         */
-        public function removeAllSprites():void
-        {
-            while( _sprites.length )
-            {
-                _sprites.splice(0, 1);
-            }
-            
-            vertexData.length = 0;
         }
         
         /**
@@ -213,8 +233,8 @@ package com.stintern.st2D.display.sprite
                 var sprite:Sprite = _sprites[i];
                 
                 // 스프라이트의 isVisible 속성이 false 이면 VertexData 에 넣지 않음
-                if( sprite.isVisible == false )
-                    continue;
+//                if( sprite.isVisible == false )
+//                    continue;
                 
                 // 스프라이트의 model matrix 갱신
                 sprite.update();
