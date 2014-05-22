@@ -8,7 +8,6 @@ package com.stintern.st2D.display.sprite
     import flash.display3D.VertexBuffer3D;
     import flash.display3D.textures.Texture;
     import flash.geom.Matrix;
-    import flash.geom.Rectangle;
 
     public class DisplayObject extends Base
     {
@@ -25,9 +24,9 @@ package com.stintern.st2D.display.sprite
         private var _vertexBuffer:VertexBuffer3D;
         private var _indexBuffer:IndexBuffer3D;
         
-        public var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
-        public var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
-        public var INDEX_COUNT_PER_SPRITE:uint = 6;
+        public static var DATAS_PER_VERTEX:uint = 9;    // Vertex 당 필요한 vertex data
+        public static var VERTEX_COUNT:uint = 4;          // Sprite 당 필요한 Vertex 개수
+        public static var INDEX_COUNT_PER_SPRITE:uint = 6;
         
         public function DisplayObject()
         {

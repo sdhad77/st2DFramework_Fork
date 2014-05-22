@@ -139,7 +139,7 @@ package com.stintern.st2D.display
                 context.setVertexBufferAt(1, batchSprite.vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);      // tex coord
                 context.setVertexBufferAt(2, batchSprite.vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_4);      // vertex rgba
                 
-                context.drawTriangles(batchSprite.indexBuffer, 0, batchSprite.vertexData.length / (batchSprite.VERTEX_COUNT * batchSprite.DATAS_PER_VERTEX) * 2);
+                context.drawTriangles(batchSprite.indexBuffer, 0, batchSprite.vertexData.length / (DisplayObject.VERTEX_COUNT * DisplayObject.DATAS_PER_VERTEX) * 2);
                 
                 GameStatus.instance.increaseDrawCallCount();
             }

@@ -21,8 +21,18 @@ package com.stintern.st2D.display.sprite
         {
         }
         
+        /**
+         * 사용한 자원을 해제합니다.
+         * 내부에 저장된 스프라이트의 자원은 해제하지 않습니다. 
+         */
         public function dispose():void
         {
+            while(_sprites.length)
+            {
+                _sprites.pop();
+            }
+            _sprites = null;
+            
             destroyBuffers();
         }
         
@@ -91,6 +101,7 @@ package com.stintern.st2D.display.sprite
          * 특정 스프라이트를 배치스프라이트에서 삭제합니다. 
          * 삭제된 스프라이트는 배치스프라이트를 출력할 때 출력되지 않습니다.
          * 하지만, 스프라이트 자체의 자원은 해제되지 않습니다.
+         * 스프라이트 자체의 자원을 해제하려면 스프라이트의 dispose 함수를 사용하십시오.
          *  
          * @param sprite 삭제할 스프라이트 객체
          */
@@ -111,10 +122,10 @@ package com.stintern.st2D.display.sprite
             }
             
             // vertexData 갱신
-            vertexData.splice(removeIndex *  VERTEX_COUNT * DATAS_PER_VERTEX, VERTEX_COUNT * DATAS_PER_VERTEX )
+            vertexData.splice(removeIndex *  DisplayObject.VERTEX_COUNT * DisplayObject.DATAS_PER_VERTEX, DisplayObject.VERTEX_COUNT * DisplayObject.DATAS_PER_VERTEX )
             
             // indexData 갱신
-            for(var i:uint=0; i<sprite.INDEX_COUNT_PER_SPRITE; ++i)
+            for(var i:uint=0; i<DisplayObject.INDEX_COUNT_PER_SPRITE; ++i)
             {
                 indexData.pop()
             }
@@ -131,48 +142,21 @@ package com.stintern.st2D.display.sprite
             }
             
             vertexData.length = 0;
+            indexData.length = 0;
         }
         
         private function updateBufferData(index:uint, sprite:Sprite):void
         {
-            var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
-            var spriteVertexData:Vector.<Number> = sprite.vertexData;
+            //vertexData 를 갱신합니다.
+            updateVertexData(index, sprite);
             
-            var targetIndex:int = index * VERTEX_COUNT * DATAS_PER_VERTEX;
-            
-            var sourceIndex:int = 0;
-            var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
-            
-            // VertexData 를 생성합니다.
-            while(sourceIndex < sourceEnd)
-            {
-                var x:Number = spriteVertexData[sourceIndex++];
-                var y:Number = spriteVertexData[sourceIndex++];
-                var z:Number = spriteVertexData[sourceIndex++];
-                
-                vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
-                vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
-                vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
-                
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // u 
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // v
-                
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // r
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // g
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // b
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // a
-            }
-            
-            // IndexData 를 생성합니다.
-            for(var i:uint=_sprites.length; i<_sprites.length+1; ++i)
-            {
-                indexData.push(0 + i * VERTEX_COUNT);  
-                indexData.push(1 + i * VERTEX_COUNT);
-                indexData.push(2 + i * VERTEX_COUNT);
-                indexData.push(0 + i * VERTEX_COUNT);
-                indexData.push(2 + i * VERTEX_COUNT);
-                indexData.push(3 + i * VERTEX_COUNT);
-            }
+            // IndexData 를 갱신합니다.
+            indexData.push(0 + _sprites.length * VERTEX_COUNT);  
+            indexData.push(1 + _sprites.length * VERTEX_COUNT);
+            indexData.push(2 + _sprites.length * VERTEX_COUNT);
+            indexData.push(0 + _sprites.length * VERTEX_COUNT);
+            indexData.push(2 + _sprites.length * VERTEX_COUNT);
+            indexData.push(3 + _sprites.length * VERTEX_COUNT);
         }
         
         /**
@@ -189,8 +173,8 @@ package com.stintern.st2D.display.sprite
             if (numVertices == 0) 
                 return;
             
-            vertexBuffer = context.createVertexBuffer(numVertices/DATAS_PER_VERTEX, DATAS_PER_VERTEX);
-            vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
+            vertexBuffer = context.createVertexBuffer(numVertices/DisplayObject.DATAS_PER_VERTEX, DisplayObject.DATAS_PER_VERTEX);
+            vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DisplayObject.DATAS_PER_VERTEX);
             
             indexBuffer = context.createIndexBuffer(numIndices);
             indexBuffer.uploadFromVector(indexData, 0, numIndices);
@@ -239,31 +223,9 @@ package com.stintern.st2D.display.sprite
                 // 스프라이트의 model matrix 갱신
                 sprite.update();
                 
-                var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
-                var spriteVertexData:Vector.<Number> = sprite.vertexData;
+                updateVertexData(visibleSpriteCount, sprite);
                 
-                var targetIndex:int = visibleSpriteCount++ * VERTEX_COUNT * DATAS_PER_VERTEX;
-                var sourceIndex:int = 0;
-                var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
-                
-                while(sourceIndex < sourceEnd)
-                {
-                    var x:Number = spriteVertexData[sourceIndex++];
-                    var y:Number = spriteVertexData[sourceIndex++];
-                    var z:Number = spriteVertexData[sourceIndex++];
-                    
-                    vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
-                    vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
-                    vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
-                    
-                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // u 
-                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // v
-                    
-                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // r
-                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // g
-                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // b
-                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // a
-                }
+                visibleSpriteCount++;
             }
             
             // 갱신한 vertexData 에 따라 vertexBuffer 를 갱신
@@ -271,14 +233,38 @@ package com.stintern.st2D.display.sprite
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
         }
         
-        public function get spriteArray():Array
+        /**
+         * VertexData 배열을 갱신합니다. 
+         * @param index VertexData 배열에서 갱신할 시작 인덱스
+         * @param sprite VertexData 를 갱신할 스프라이트 객체
+         */
+        private function updateVertexData(index, sprite):void
         {
-            return _sprites;
-        }
-        
-        public function get updateRequired():Boolean
-        {
-            return _updateRequired;
+            var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
+            var spriteVertexData:Vector.<Number> = sprite.vertexData;
+            
+            var targetIndex:int = index * VERTEX_COUNT * DATAS_PER_VERTEX;
+            var sourceIndex:int = 0;
+            var sourceEnd:int = VERTEX_COUNT * DATAS_PER_VERTEX;
+            
+            while(sourceIndex < sourceEnd)
+            {
+                var x:Number = spriteVertexData[sourceIndex++];
+                var y:Number = spriteVertexData[sourceIndex++];
+                var z:Number = spriteVertexData[sourceIndex++];
+                
+                vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
+                vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
+                vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
+                
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // u 
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // v
+                
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // r
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // g
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // b
+                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // a
+            }
         }
         
         /**
@@ -297,6 +283,19 @@ package com.stintern.st2D.display.sprite
             }
                         
             return AnimationData.instance.animationData[path]["available"];
+        }
+        
+        /**
+         * 배치스프라이트에 등록된 스프라이트들의 배열을 반환합니다. 
+         */
+        public function get spriteArray():Array
+        {
+            return _sprites;
+        }
+        
+        public function get updateRequired():Boolean
+        {
+            return _updateRequired;
         }
     }
 }
