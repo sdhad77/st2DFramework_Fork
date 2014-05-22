@@ -61,6 +61,9 @@ package com.stintern.st2D.tests.game.demo
                 _cloud[i].isVisible = false;
             }
             
+            //초단위에서 밀리초 단위로 변경
+            _totalMoveSec *= 1000;
+            
             //첫번째 구름 출발
             _sch.addFunc(0, cloudMoveStart, 1);
             //그 이후 자동적으로 구름 출발 시킴
