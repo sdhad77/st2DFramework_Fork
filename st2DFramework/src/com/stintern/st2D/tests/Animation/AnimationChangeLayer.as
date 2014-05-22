@@ -42,19 +42,17 @@ package com.stintern.st2D.tests.Animation
             for(var i:int=0; i < 1; i++)
             {
                 sprite.push(new SpriteAnimation());
-                sprite[i].createAnimationSpriteWithPath("res/atlas.png", "down", onCreated, null, i*32 + 100, 32 + 100);
+                sprite[i].createAnimationSpriteWithBatchSprite(_batchSprite, "down", i*32 + 100, 32 + 100);
+                _loadCompleteObjectCnt++;
             }
-        }
-        
-        private function onCreated():void
-        {
-            _loadCompleteObjectCnt++;
-            if(_loadCompleteObjectCnt != _totalObjectNum) return ;
             
-            for(var i:int=0; i < 1; i++)
+            if(_loadCompleteObjectCnt == _totalObjectNum )
             {
-                _batchSprite.addSprite(sprite[i]);
-                sprite[i].playAnimation();
+                for(var i:int=0; i < 1; i++)
+                {
+                    _batchSprite.addSprite(sprite[i]);
+                    sprite[i].playAnimation();
+                }
             }
         }
         

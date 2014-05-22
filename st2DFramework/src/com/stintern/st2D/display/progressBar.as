@@ -8,6 +8,7 @@ package com.stintern.st2D.display
         
         private var _totalValue:Number;
         private var _currentValue:Number;
+        private var _oldValue:Number;
         
         private var _oldWidth:Number;
         
@@ -39,7 +40,10 @@ package com.stintern.st2D.display
             _oldScale = sprite.scale.x;
             
             _totalValue = totalValue;
+            _oldValue= _totalValue;
+            
             _currentValue = currentValue;
+            
             
             _decreseType = type;
         }
@@ -51,7 +55,8 @@ package com.stintern.st2D.display
         public function updateProgress(value:Number):void
         {
             _currentValue = value;
-            var percent:Number = _currentValue/_totalValue;
+            var percent:Number = _currentValue/_oldValue;
+            _oldValue = _currentValue;
             
             if( percent <= 0 )
                 percent = 0.01;
