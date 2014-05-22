@@ -5,10 +5,12 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
+    import com.stintern.st2D.tests.game.demo.utils.Resources;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
+    import flash.geom.Vector3D;
     
     public class ControlLayer extends Layer
     {
@@ -28,6 +30,8 @@ package com.stintern.st2D.tests.game.demo
         
         private static const _MARGIN:uint = 20;
         
+        private var _bulletArray:Vector.<Sprite> = new Vector.<Sprite>();
+        private var _degree:Number = 0.0;
         
         
         public function ControlLayer()
@@ -99,15 +103,34 @@ package com.stintern.st2D.tests.game.demo
                     var enemyCharacter:CharacterObject = _enemyCharacterArray[j] as CharacterObject;
                     if(playerCharacter.sprite.collisionCheck(enemyCharacter.sprite))
                     {
-                        
                         if(playerCharacter.info.state != CharacterObject.ATTACK)
                         {
-                            playerCharacter.sprite.setPlayAnimation(playerCharacter.attAniStr);
+                            if( playerCharacter.tag != Resources.TAG_RED )
+                            {
+                                playerCharacter.sprite.setPlayAnimation(playerCharacter.attAniStr);
+                                playerCharacter.info.state = CharacterObject.ATTACK;
+                                playerCharacter.sprite.isMoving = false;
+                                playerCharacter.targetObject = _enemyCharacterArray[j];
+                                playerCharacter.attackScheduler.startScheduler();
+                            }
+                        }
+                        
+                        if( playerCharacter.tag == Resources.TAG_RED )
+                        {
                             playerCharacter.info.state = CharacterObject.ATTACK;
                             playerCharacter.sprite.isMoving = false;
                             playerCharacter.targetObject = _enemyCharacterArray[j];
+                            
+                            var bullet:Sprite = new Sprite();
+                            bullet.createSpriteWithBatchSprite(_batchSprite, "hp_front", playerCharacter.sprite.position.x, playerCharacter.sprite.position.y);
+                            _batchSprite.addSprite(bullet);
+                            
+                            _bulletArray.push(bullet);
+                            
+                            bullet.moveTo(enemyCharacter.sprite.position.x, enemyCharacter.sprite.position.y, 500);
                             playerCharacter.attackScheduler.startScheduler();
                         }
+                        
                         if(enemyCharacter.info.state != CharacterObject.ATTACK)
                         {
                             enemyCharacter.sprite.setPlayAnimation(enemyCharacter.attAniStr);
@@ -127,6 +150,29 @@ package com.stintern.st2D.tests.game.demo
                     }
                 }
             }
+            
+            for(var i:uint=0; i<_bulletArray.length; ++i)
+            {
+                // bullet 회전
+                _bulletArray[i].setRotate(_degree, new Vector3D(0.0, 0.0, 1.0));
+                
+                if( _bulletArray[i].isMoving == false )
+                {
+                    _bulletArray[i].isVisible = false;
+                }
+                
+                // bullet 삭제
+                for(var j:uint=0; j<_enemyCharacterArray.length; j++)
+                {
+                    var enemyCharacter:CharacterObject = _enemyCharacterArray[j] as CharacterObject;
+                    if( enemyCharacter.sprite.rect.contains(_bulletArray[i].position.x, _bulletArray[i].position.y) )
+                    {
+                        _batchSprite.removeSprite(_bulletArray[i]);
+                        _bulletArray[i].dispose();
+                        _bulletArray.splice(i, 1);
+                    }
+                }
+            }
         }
         
 
@@ -137,6 +183,8 @@ package com.stintern.st2D.tests.game.demo
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
                     var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 2000, 300, 400, true);
+                    characterObject1.tag = Resources.TAG_RED;
+                    
                     _playerCharacterArray.push(characterObject1);
                 }
             }

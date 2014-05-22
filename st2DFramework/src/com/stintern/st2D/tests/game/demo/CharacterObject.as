@@ -3,12 +3,13 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.progressBar;
+    import com.stintern.st2D.display.sprite.Base;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
-    public class CharacterObject
+    public class CharacterObject extends Base
     {
         private var _runAniStr:String;
         private var _attAniStr:String;
@@ -49,7 +50,7 @@ package com.stintern.st2D.tests.game.demo
             _targetObject = null;
             
             _attackScheduler.addFunc(attackSpeed, attackFunc, 0);
-            _attackScheduler.startScheduler();
+ //           _attackScheduler.startScheduler();
             
             //스프라이트 생성
             spriteCreate();
