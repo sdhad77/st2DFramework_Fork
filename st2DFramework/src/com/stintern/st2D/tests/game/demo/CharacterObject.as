@@ -57,7 +57,7 @@ package com.stintern.st2D.tests.game.demo
             
             //스프라이트 생성
             spriteCreate();
-            if(type == Resources.TAG_PURPLE)
+            if(type == Resources.TAG_PURPLE || type == Resources.TAG_ENEMY)
             {
                 _attackScheduler.addFunc(_info.attackSpeed, nearAttackFunc, 0);
             }

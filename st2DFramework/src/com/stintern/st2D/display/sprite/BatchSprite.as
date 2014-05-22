@@ -114,9 +114,7 @@ package com.stintern.st2D.display.sprite
                 if( _sprites[i] == sprite )
                 {
                     _sprites.splice(i, 1);
-                    
                     removeIndex = i;
-                    
                     break;
                 }
             }
@@ -129,6 +127,8 @@ package com.stintern.st2D.display.sprite
             {
                 indexData.pop()
             }
+            
+            _updateRequired = true;
         }
         
         /**
@@ -143,10 +143,14 @@ package com.stintern.st2D.display.sprite
             
             vertexData.length = 0;
             indexData.length = 0;
+            
+            _updateRequired = true;
         }
         
         private function updateBufferData(index:uint, sprite:Sprite):void
         {
+            var spriteCount:uint = vertexData.length /  DisplayObject.VERTEX_COUNT * DisplayObject.DATAS_PER_VERTEX;
+                
             //vertexData 를 갱신합니다.
             updateVertexData(index, sprite);
             
@@ -157,6 +161,21 @@ package com.stintern.st2D.display.sprite
             indexData.push(0 + _sprites.length * VERTEX_COUNT);
             indexData.push(2 + _sprites.length * VERTEX_COUNT);
             indexData.push(3 + _sprites.length * VERTEX_COUNT);
+        }
+        
+        private function resetIndexData():void
+        {
+            indexData.length = 0;
+            
+            for(var i:uint=0; i<_sprites.length; ++i)
+            {
+                indexData.push(0 + i * VERTEX_COUNT);  
+                indexData.push(1 + i * VERTEX_COUNT);
+                indexData.push(2 + i * VERTEX_COUNT);
+                indexData.push(0 + i * VERTEX_COUNT);
+                indexData.push(2 + i * VERTEX_COUNT);
+                indexData.push(3 + i * VERTEX_COUNT);
+            }
         }
         
         /**
@@ -209,28 +228,28 @@ package com.stintern.st2D.display.sprite
             // 갱신할 VertexData 초기화
             vertexData.length = 0;
             
-            // Visible 속성이 true 인 스프라이트의 객체 개수
-            var visibleSpriteCount:uint=0;
-            
             for(var i:uint=0; i<_sprites.length; ++i)
             {
                 var sprite:Sprite = _sprites[i];
                 
-                // 스프라이트의 isVisible 속성이 false 이면 VertexData 에 넣지 않음
-//                if( sprite.isVisible == false )
-//                    continue;
-                
                 // 스프라이트의 model matrix 갱신
                 sprite.update();
                 
-                updateVertexData(visibleSpriteCount, sprite);
-                
-                visibleSpriteCount++;
+                updateVertexData(i, sprite);
             }
+            
+            var context:Context3D = StageContext.instance.context;
             
             // 갱신한 vertexData 에 따라 vertexBuffer 를 갱신
             var numVertices:int = vertexData.length;
+            vertexBuffer = context.createVertexBuffer(numVertices/DisplayObject.DATAS_PER_VERTEX, DisplayObject.DATAS_PER_VERTEX);
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
+            
+            resetIndexData();
+            
+            var numIndices:int = indexData.length;
+            indexBuffer = context.createIndexBuffer(numIndices);
+            indexBuffer.uploadFromVector(indexData, 0, numIndices);
         }
         
         /**
@@ -249,21 +268,28 @@ package com.stintern.st2D.display.sprite
             
             while(sourceIndex < sourceEnd)
             {
-                var x:Number = spriteVertexData[sourceIndex++];
-                var y:Number = spriteVertexData[sourceIndex++];
-                var z:Number = spriteVertexData[sourceIndex++];
-                
-                vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
-                vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
-                vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
-                
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // u 
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // v
-                
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // r
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // g
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // b
-                vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // a
+                try
+                {
+                    var x:Number = spriteVertexData[sourceIndex++];
+                    var y:Number = spriteVertexData[sourceIndex++];
+                    var z:Number = spriteVertexData[sourceIndex++];
+                    
+                    vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
+                    vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
+                    vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
+                    
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // u 
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // v
+                    
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // r
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // g
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // b
+                    vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // a
+                }
+                catch(e:Error)
+                {
+                    break;
+                }
             }
         }
         

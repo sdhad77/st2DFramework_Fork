@@ -114,11 +114,7 @@ package com.stintern.st2D.display
                 if( batchSprite.spriteArray.length == 0 )
                     continue;
                 
-                // 화면 밖의 스프라이트 인지 검사후 화면 밖이면 그리지 않음
-                if( isInScreen(batchSprite) == false )
-                    continue;
-                
-                if( batchSprite.updateRequired )
+                //if( batchSprite.updateRequired )
                     batchSprite.updateBuffers();
                 
                 batchSprite.updateSpriteMatrix();
