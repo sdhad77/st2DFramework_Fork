@@ -13,7 +13,6 @@ package com.stintern.st2D.tests.game.demo
     public class ControlLayer extends Layer
     {
         private var _batchSprite:BatchSprite;
-        private var _sprites:Array = new Array();
         
         private var mouseDownFlag:Boolean = false;
         private var prevPoint:Vector2D;
@@ -44,7 +43,7 @@ package com.stintern.st2D.tests.game.demo
             _enemyCharacterArray = _characterMovingLayer.enemyCharacterArray;
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreated);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreatedButton);
             addBatchSprite(_batchSprite);
             
             
@@ -103,10 +102,9 @@ package com.stintern.st2D.tests.game.demo
             }
         }
         
-        private function onCreated():void
+        private function onCreatedButton():void
         {
             var sprite:Sprite = new Sprite();
-            _sprites.push(sprite);
             var x:Number = 0;
             var y:Number = 0;
             sprite.createSpriteWithBatchSprite(_batchSprite, "character1_run_right0", x, y );
@@ -114,6 +112,8 @@ package com.stintern.st2D.tests.game.demo
             sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
             sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
             _batchSprite.addSprite(sprite);
+            
+            
         }
         
         override public function update(dt:Number):void
