@@ -35,8 +35,12 @@ package com.stintern.st2D.tests.game.demo
         
         private function onCompleted():void
         {
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character_run",  new Array("character_run0", "character_run1"), 8, "character_run"));
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character_attack",  new Array("character_attack0", "character_attack1"), 8, "character_attack"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character1_run_right",  new Array("character1_run_right0", "character1_run_right1"), 8, "character1_run_right"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character1_attack",  new Array("character1_attack0", "character1_attack1") ,8 ,"character1_attack"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character2_run_right",  new Array("character2_run_right0", "character2_run_right1"), 8, "character2_run_right"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character2_attack",  new Array("character2_attack0", "character2_attack1") ,8 ,"character2_attack"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_run_left",  new Array("character3_run_left0", "character3_run_left1"), 8, "character3_run_left"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_attack",  new Array("character3_attack0", "character3_attack1") ,8 ,"character3_attack"));
         }
 
         
