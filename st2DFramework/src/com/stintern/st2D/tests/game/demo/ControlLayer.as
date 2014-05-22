@@ -124,15 +124,9 @@ package com.stintern.st2D.tests.game.demo
             for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
                 var playerCharacter:CharacterObject = _playerCharacterArray[i] as CharacterObject;
-                
-                if(playerCharacter == null) continue;
-                
                 for(var j:uint=0; j<_enemyCharacterArray.length; j++)
                 {
                     var enemyCharacter:CharacterObject = _enemyCharacterArray[j] as CharacterObject;
-                    
-                    if(enemyCharacter == null) continue;
-                    
                     if(intersectRect(playerCharacter.getAttackBounds(), enemyCharacter.sprite.rect))
                     {
                         if(playerCharacter.info.state != CharacterObject.ATTACK)
@@ -157,15 +151,9 @@ package com.stintern.st2D.tests.game.demo
             for(i=0; i<_enemyCharacterArray.length; ++i)
             {
                 enemyCharacter = _enemyCharacterArray[i] as CharacterObject;
-                
-                if(enemyCharacter == null) continue;
-                
                 for(j=0; j<_playerCharacterArray.length; j++)
                 {
                     playerCharacter = _playerCharacterArray[j] as CharacterObject;
-                    
-                    if(playerCharacter == null) continue;
-                    
                     if(intersectRect(enemyCharacter.getAttackBounds(), playerCharacter.sprite.rect))
                     {
                         if(enemyCharacter.info.state != CharacterObject.ATTACK)
