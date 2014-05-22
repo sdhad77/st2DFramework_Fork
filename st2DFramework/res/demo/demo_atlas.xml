@@ -1,10 +1,19 @@
 <atlas>
 <atlasItem name="background0.png" x="0" y="0" width="743" height="557" />
-<atlasItem name="character_run1.png" x="745" y="0" width="256" height="256" />
-<atlasItem name="character_attack0.png" x="745" y="258" width="256" height="256" />
-<atlasItem name="character_run0.png" x="0" y="559" width="256" height="256" />
-<atlasItem name="character_attack1.png" x="258" y="559" width="256" height="256" />
-<atlasItem name="hp_bkg.png" x="0" y="820" width="32" height="32" />
-<atlasItem name="hp_front.png" x="0" y="853" width="32" height="32" />
-<atlasItem name="cloud.png" x="510" y="558" width="512" height="265" />
+<atlasItem name="character3_attack_left0.png" x="745" y="0" width="128" height="128" />
+<atlasItem name="character2_run_right0.png" x="875" y="0" width="128" height="128" />
+<atlasItem name="character2_run_left1.png" x="745" y="130" width="128" height="128" />
+<atlasItem name="character3_attack_left1.png" x="875" y="130" width="128" height="128" />
+<atlasItem name="character2_run_right1.png" x="745" y="260" width="128" height="128" />
+<atlasItem name="character1_run_left1.png" x="875" y="260" width="128" height="128" />
+<atlasItem name="character2_run_left0.png" x="745" y="390" width="128" height="128" />
+<atlasItem name="character3_run_left1.png" x="875" y="390" width="128" height="128" />
+<atlasItem name="character3_run_left0.png" x="0" y="559" width="128" height="128" />
+<atlasItem name="character2_attack_right0.png" x="0" y="689" width="128" height="128" />
+<atlasItem name="character2_attack_right1.png" x="0" y="819" width="128" height="128" />
+<atlasItem name="character1_attack0.png" x="130" y="559" width="128" height="128" />
+<atlasItem name="character1_attack1.png" x="130" y="689" width="128" height="128" />
+<atlasItem name="character1_run_right0.png" x="130" y="819" width="128" height="128" />
+<atlasItem name="character1_run_right1.png" x="260" y="559" width="128" height="128" />
+<atlasItem name="character1_run_left0.png" x="260" y="689" width="128" height="128" />
 </atlas>
