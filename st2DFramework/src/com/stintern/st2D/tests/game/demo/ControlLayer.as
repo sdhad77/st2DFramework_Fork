@@ -9,7 +9,6 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
-    import flash.geom.Rectangle;
     
     public class ControlLayer extends Layer
     {
@@ -54,7 +53,7 @@ package com.stintern.st2D.tests.game.demo
             
             function enemyCreater():void
             {
-                var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 1000, 30, 10000, 3000, false);
+                var playerCharacterObject:CharacterObject = new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 3000, 200, 300, false);
                 _enemyCharacterArray.push(playerCharacterObject);
             }
             
@@ -133,7 +132,7 @@ package com.stintern.st2D.tests.game.demo
                         
                         if(playerCharacter.info.state != CharacterObject.ATTACK)
                         {
-                            playerCharacter.sprite.setPlayAnimation("character1_attack");
+                            playerCharacter.sprite.setPlayAnimation(playerCharacter.attAniStr);
                             playerCharacter.info.state = CharacterObject.ATTACK;
                             playerCharacter.sprite.isMoving = false;
                             playerCharacter.targetObject = _enemyCharacterArray[j];
@@ -141,7 +140,7 @@ package com.stintern.st2D.tests.game.demo
                         }
                         if(enemyCharacter.info.state != CharacterObject.ATTACK)
                         {
-                            enemyCharacter.sprite.setPlayAnimation("character3_attack_left");
+                            enemyCharacter.sprite.setPlayAnimation(enemyCharacter.attAniStr);
                             enemyCharacter.info.state = CharacterObject.ATTACK;
                             enemyCharacter.sprite.isMoving = false;
                             enemyCharacter.targetObject = _playerCharacterArray[i];
@@ -167,7 +166,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var playerCharacterObject:CharacterObject = new CharacterObject("res/demo/demo_spritesheet.png", 100, 40, 10000, 2000, true);
+                    var playerCharacterObject:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 2000, 300, 400, true);
                     _playerCharacterArray.push(playerCharacterObject);
                 }
             }
