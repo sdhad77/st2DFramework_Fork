@@ -7,7 +7,7 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.utils.scheduler.Scheduler;
-
+    
     public class CharacterObject
     {
         private var _runAniStr:String;
@@ -27,7 +27,7 @@ package com.stintern.st2D.tests.game.demo
         
         public static const RUN:String = "RUN";
         public static const ATTACK:String = "ATTACK";
-         
+        
         
         /**
          * 캐릭터 Object를 생성합니다
@@ -50,57 +50,70 @@ package com.stintern.st2D.tests.game.demo
             
             _attackScheduler.addFunc(attackSpeed, attackFunc, 0);
             _attackScheduler.startScheduler();
+            
+            //스프라이트 생성
+            spriteCreate();
+            
             function attackFunc():void
             {
+                //this의 상태가 공격이고, 타겟이 존재할 경우
                 if(_info.state==ATTACK && _targetObject)
                 {
+                    //this의 power로 타겟의 체력 감소시킴
                     _targetObject.info.hp -= _info.power;
-                    trace(_targetObject.info.hp)
+                    trace(_targetObject.info.hp);
+                    //타겟의 체력이 0이하가 될 경우
                     if(_targetObject.info.hp <= 0)
                     {
+                        //타겟의 스케쥴러 멈춤
                         _targetObject.attackScheduler.stopScheduler();
+                        
+                        //this가 아군일경우, 즉 타겟이 적군일 경우 적군 삭제
                         if(_info.ally)
                         {
                             _characterMovingLayer.removeEnemyCharacterObject(_targetObject);
                         }
+                        //this가 적군일경우, 즉 타겟이 아군일 경우 아군 삭제
                         else
                         {
                             _characterMovingLayer.removePlayerCharacterObject(_targetObject);
                         }
                         _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
-                        _info.state = RUN;
-                        _sprite.setPlayAnimation(runAniStr);
-                        _sprite.isMoving = true;
-                        _targetObject = null;
+                        
+                        //this의 상태를 RUN으로 변경
+                        setState("RUN");
                         _attackScheduler.stopScheduler();
                     }
                 }
             }
-            
-            _sprite = new SpriteAnimation();
-            var x:Number = 0;
-            var y:Number = 0;
-            _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", _runAniStr, onSpriteCreated, null, x, y );
         }
-
-        private function onSpriteCreated():void
+        
+        private function spriteCreate():void
         {
+            //RUN 애니메이션으로 스프라이트 생성
+            _sprite = new SpriteAnimation();
+            _sprite.createAnimationSpriteWithBatchSprite(_batchSprite, _runAniStr);
+            
+            //스프라이트 생성될 y좌표 랜덤 생성
             var yPositionRange:uint = (Math.floor(Math.random() * 20)*10);
             _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
+            
+            //생성된 스프라이트가 아군일 경우 화면 좌측에 성성, 우측으로 이동
             if(_info.ally == true)
             {
                 _sprite.position.x = 0;
                 _sprite.position.y = _sprite.height/2 + yPositionRange;
-                _batchSprite.addSprite(_sprite);
                 _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height, _info.speed);
             }
+            //생성된 스프라이트가 적군일 경우 화면 우측에 성성, 좌측으로 이동
             else
             {
                 _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
                 _sprite.position.y = _sprite.height/2 + yPositionRange;
-                _batchSprite.addSprite(_sprite);
                 _sprite.moveTo(0, _sprite.height, _info.speed);
             }
+            
+            _batchSprite.addSprite(_sprite);
             setHpBar();
             _sprite.playAnimation();
         }
@@ -122,53 +135,40 @@ package com.stintern.st2D.tests.game.demo
             _sprite.addChild(spriteFront);
             _sprite.addChild(spriteBkg);
         }
-
-        public function get sprite():SpriteAnimation
+        
+        /**
+         * 캐릭터의 상태를 변경하는 함수입니다.
+         * @param state 변경할 상태
+         * @param charObject ATTACK 상태에서 쓰일 타겟 객체입니다.
+         */
+        public function setState(state:String, charObject:CharacterObject = null):void
         {
-            return _sprite;
+            if(state == "RUN")
+            {
+                _info.state = RUN;
+                _sprite.setPlayAnimation(runAniStr);
+                _sprite.isMoving = true;
+                _targetObject = null;
+            }
+            else if(state == "ATTACK")
+            {
+                _info.state = ATTACK;
+                _sprite.setPlayAnimation(_attAniStr);
+                _sprite.isMoving = false;
+                _targetObject = charObject;
+            }
         }
-
-        public function get info():CharacterInfo
-        {
-            return _info;
-        }
-
-        public function set info(value:CharacterInfo):void
-        {
-            _info = value;
-        }
-
-        public function get targetObject():CharacterObject
-        {
-            return _targetObject;
-        }
-
-        public function set targetObject(value:CharacterObject):void
-        {
-            _targetObject = value;
-        }
-
-        public function get attackScheduler():Scheduler
-        {
-            return _attackScheduler;
-        }
-
-        public function get hpProgress():progressBar
-        {
-            return _hpProgress;
-        }
-
-        public function get runAniStr():String
-        {
-            return _runAniStr;
-        }
-
-        public function get attAniStr():String
-        {
-            return _attAniStr;
-        }
-
-
-
+        
+        //get set 함수들
+        public function get sprite():SpriteAnimation       {return _sprite;}
+        public function get info():CharacterInfo           {return _info;}
+        public function get targetObject():CharacterObject {return _targetObject;}
+        public function get attackScheduler():Scheduler    {return _attackScheduler;}
+        public function get hpProgress():progressBar       {return _hpProgress;}
+        public function get runAniStr():String             {return _runAniStr;}
+        public function get attAniStr():String             {return _attAniStr;}
+        
+        public function set info(value:CharacterInfo):void           {_info = value;}
+        public function set targetObject(value:CharacterObject):void {_targetObject = value;}
     }
 }
