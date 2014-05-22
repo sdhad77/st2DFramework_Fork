@@ -382,8 +382,6 @@ package com.stintern.st2D.display.sprite
                 //원하는 지점에 아직 도달하지 못했으면
                 else
                 {
-//                    position.x += _increaseX;
-//                    position.y += _increaseY;
                     setTranslation(new Vector2D(position.x + _increaseX, position.y + _increaseY));
                 }
             }
@@ -394,26 +392,31 @@ package com.stintern.st2D.display.sprite
          * time으로 이동 거리를 나눈값을 더해서 이동합니다. 
          * @param x 이동할 좌표 x
          * @param y 이동할 좌표 y
-         * @param time 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
+         * @param milliSecond 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
          */
-        public function moveTo(x:int, y:int, second:int):void
+        public function moveTo(x:int, y:int, milliSecond:Number):void
         {
             _isMoving = true;
             _destX = x;
             _destY = y;
-            _increaseX = (x - position.x)/(second*60);
-            _increaseY = (y - position.y)/(second*60);
+            
+            //몇 프레임에 나눠서 이동해야되는지 계산, 반올림이기때문에 0이 나올수도 있는데, 0일 경우에는 한 프레임에 이동완료하도록 함.
+            var frameCallNumber:int = Math.round((milliSecond/1000)*60);
+            if(frameCallNumber == 0) frameCallNumber = 1;
+            
+            _increaseX = (x - position.x)/frameCallNumber;
+            _increaseY = (y - position.y)/frameCallNumber;
         }
         
         /**
          * 스프라이트의 현재 위치에서 x,y만큼 이동 시키는 함수입니다.
          * @param x 현재 좌표에 더할 좌표
          * @param y 현재 좌표에 더할 좌표
-         * @param second 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
+         * @param milliSecond 이동을 완료하는데 얼마나 시간을 걸리게 할 것인지
          */
-        public function moveBy(x:int, y:int, second:int):void
+        public function moveBy(x:int, y:int, milliSecond:Number):void
         {
-            moveTo(position.x + x, position.y + y, second);
+            moveTo(position.x + x, position.y + y, milliSecond);
         }
         
         /**
