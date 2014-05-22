@@ -1,7 +1,5 @@
 package com.stintern.st2D.tests.game.demo
 {
-    import com.stintern.st2D.animation.AnimationData;
-    import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
@@ -93,6 +91,7 @@ package com.stintern.st2D.tests.game.demo
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight * 0.5, StageContext.instance.screenHeight * 0.5);
             sprite.position.x = sprite.width;
             sprite.position.y = StageContext.instance.screenHeight * 0.4;
+            sprite.setPlayAnimation("castle");
             _characterMovingLayer.batchSprite.addSprite(sprite);
             var playerCastleObject:CharacterObject = new CharacterObject(null, null, 5000, 50, 0, 1000, Resources.TAG_CASTLE, true);
             playerCastleObject.tag = Resources.TAG_CASTLE;
@@ -173,6 +172,13 @@ package com.stintern.st2D.tests.game.demo
                         
                         enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
                         playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
+                    }
+                    for(bulletIndex=0; bulletIndex<playerCharacter.bulletArray.length; ++bulletIndex)
+                    {
+                        if( playerCharacter.bulletArray[bulletIndex].isMoving == false )
+                        {
+                            playerCharacter.removeBullet(bulletIndex);
+                        }
                     }
                 }
             }
