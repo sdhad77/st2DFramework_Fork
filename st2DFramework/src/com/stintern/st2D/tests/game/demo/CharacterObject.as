@@ -2,7 +2,9 @@ package com.stintern.st2D.tests.game.demo
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.SceneManager;
+    import com.stintern.st2D.display.progressBar;
     import com.stintern.st2D.display.sprite.BatchSprite;
+    import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.utils.scheduler.Scheduler;
 
@@ -17,6 +19,10 @@ package com.stintern.st2D.tests.game.demo
         private var _characterMovingLayer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
         private var _backGroundLayer:BackGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
         private var _controlLayer:ControlLayer = SceneManager.instance.getCurrentScene().getLayerByName("ControlLayer") as ControlLayer;
+        
+        private var spriteBkg:Sprite;
+        private var spriteFront:Sprite;
+        private var _hpProgress:progressBar = new progressBar(); 
         
         public static const RUN:String = "RUN";
         public static const ATTACK:String = "ATTACK";
@@ -110,7 +116,26 @@ package com.stintern.st2D.tests.game.demo
                 _batchSprite.addSprite(_sprite);
                 _sprite.moveTo(0, _sprite.height, _info.speed);
             }
+            setHpBar();
             _sprite.playAnimation();
+        }
+        
+        private function setHpBar():void
+        {
+            spriteBkg = new Sprite();
+            spriteBkg.createSpriteWithBatchSprite(_batchSprite, "hp_bkg", _sprite.position.x, _sprite.position.y + _sprite.height*0.8);
+            spriteBkg.scale.x = 3.0
+            _batchSprite.addSprite(spriteBkg);
+            
+            spriteFront = new Sprite();
+            spriteFront.createSpriteWithBatchSprite(_batchSprite, "hp_front", _sprite.position.x, _sprite.position.y + _sprite.height*0.8);
+            spriteFront.scale.x = 3.0;
+            spriteFront.scale.y = 0.8;
+            _batchSprite.addSprite(spriteFront);
+            
+            _hpProgress.init(spriteFront, _info.hp, _info.hp, progressBar.DECREASE_TO_LEFT);
+            _sprite.addChild(spriteFront);
+            _sprite.addChild(spriteBkg);
         }
 
         public function get sprite():SpriteAnimation
@@ -141,6 +166,11 @@ package com.stintern.st2D.tests.game.demo
         public function get attackScheduler():Scheduler
         {
             return _attackScheduler;
+        }
+
+        public function get hpProgress():progressBar
+        {
+            return _hpProgress;
         }
 
 

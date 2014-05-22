@@ -70,6 +70,13 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _playerCharacterArray[i] == targetObject )
                 {
+                    var playerCharacter:CharacterObject = _playerCharacterArray[i];
+                    for(var j:uint=0; j<playerCharacter.sprite.getAllChildren().length; j++)
+                    {
+                        var childArray:Array = playerCharacter.sprite.getAllChildren();
+                        _characterMovingLayer.batchSprite.removeSprite(childArray[j]);
+                    }
+                    playerCharacter.sprite.removeChildByName("spriteFront");
                     _playerCharacterArray.splice(i, 1);
                     break;
                 }
@@ -110,24 +117,34 @@ package com.stintern.st2D.tests.game.demo
             {
                 for(var j:uint=0; j<_enemyCharacterArray.length; j++)
                 {
-                    if(_playerCharacterArray[i].sprite.collisionCheck(_enemyCharacterArray[j].sprite))
+                    var playerCharacter:CharacterObject = _playerCharacterArray[i] as CharacterObject;
+                    var enemyCharacter:CharacterObject = _enemyCharacterArray[j] as CharacterObject;
+                    if(playerCharacter.sprite.collisionCheck(enemyCharacter.sprite))
                     {
                         
-                        if(_playerCharacterArray[i].info.state != CharacterObject.ATTACK)
+                        if(playerCharacter.info.state != CharacterObject.ATTACK)
                         {
-                            _playerCharacterArray[i].sprite.setPlayAnimation("character1_attack");
-                            _playerCharacterArray[i].info.state = CharacterObject.ATTACK;
-                            _playerCharacterArray[i].sprite.isMoving = false;
-                            _playerCharacterArray[i].targetObject = _enemyCharacterArray[j];
-                            _playerCharacterArray[i].attackScheduler.startScheduler();
+                            playerCharacter.sprite.setPlayAnimation("character1_attack");
+                            playerCharacter.info.state = CharacterObject.ATTACK;
+                            playerCharacter.sprite.isMoving = false;
+                            playerCharacter.targetObject = _enemyCharacterArray[j];
+                            playerCharacter.attackScheduler.startScheduler();
                         }
-                        if(_enemyCharacterArray[j].info.state != CharacterObject.ATTACK)
+                        if(enemyCharacter.info.state != CharacterObject.ATTACK)
                         {
-                            _enemyCharacterArray[j].sprite.setPlayAnimation("character3_attack_left");
-                            _enemyCharacterArray[j].info.state = CharacterObject.ATTACK;
-                            _enemyCharacterArray[j].sprite.isMoving = false;
-                            _enemyCharacterArray[j].targetObject = _playerCharacterArray[i];
-                            _enemyCharacterArray[j].attackScheduler.startScheduler();
+                            enemyCharacter.sprite.setPlayAnimation("character3_attack_left");
+                            enemyCharacter.info.state = CharacterObject.ATTACK;
+                            enemyCharacter.sprite.isMoving = false;
+                            enemyCharacter.targetObject = _playerCharacterArray[i];
+                            enemyCharacter.attackScheduler.startScheduler();
+                        }
+                        if(playerCharacter.info.state == CharacterObject.ATTACK)
+                        {
+                            playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
+                        }
+                        if(enemyCharacter.info.state == CharacterObject.ATTACK)
+                        {
+                            enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
                         }
                     }
                 }
@@ -212,6 +229,3 @@ package com.stintern.st2D.tests.game.demo
         
     }
 }
-
-
-
