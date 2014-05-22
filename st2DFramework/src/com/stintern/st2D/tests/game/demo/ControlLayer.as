@@ -1,10 +1,13 @@
 package com.stintern.st2D.tests.game.demo
 {
+    import com.stintern.st2D.animation.AnimationData;
+    import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
+    import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.tests.game.demo.utils.Resources;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
@@ -79,6 +82,36 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite.addSprite(sprite);
             
             sprite = null;
+            
+            onCreatedCastle();
+        }
+        
+        private function onCreatedCastle():void
+        {
+            var sprite:SpriteAnimation = new SpriteAnimation();
+            sprite.createAnimationSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "castle");
+            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight * 0.5, StageContext.instance.screenHeight * 0.5);
+            sprite.position.x = sprite.width;
+            sprite.position.y = StageContext.instance.screenHeight * 0.4;
+            _characterMovingLayer.batchSprite.addSprite(sprite);
+            var playerCastleObject:CharacterObject = new CharacterObject(null, null, 3000, 50, 0, 2000, Resources.TAG_RED, true);
+            playerCastleObject.sprite = sprite;
+            _characterMovingLayer.playerCharacterArray.push(playerCastleObject);
+            
+            var x:Number = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - sprite.width;
+            var y:Number = sprite.position.y;
+            
+            sprite = new SpriteAnimation();
+            sprite.createAnimationSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "castle");
+            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight * 0.5, StageContext.instance.screenHeight * 0.5);
+            sprite.position.x = x;
+            sprite.position.y = y
+            _characterMovingLayer.batchSprite.addSprite(sprite);
+            var enemyCastleObject:CharacterObject = new CharacterObject(null, null, 3000, 50, 0, 2000, Resources.TAG_RED, false);
+            enemyCastleObject.sprite = sprite;
+            _characterMovingLayer.enemyCharacterArray.push(enemyCastleObject);
+            
+            sprite = null;
         }
         
         override public function update(dt:Number):void
@@ -90,9 +123,14 @@ package com.stintern.st2D.tests.game.demo
             {
                 var playerCharacter:CharacterObject = _playerCharacterArray[i] as CharacterObject;
                 
+                if(playerCharacter == null) continue;
+                
                 for(var j:uint=0; j<_enemyCharacterArray.length; j++)
                 {
                     var enemyCharacter:CharacterObject = _enemyCharacterArray[j] as CharacterObject;
+                    
+                    if(enemyCharacter == null) continue;
+                    
                     if(intersectRect(playerCharacter.getAttackBounds(), enemyCharacter.sprite.rect))
                     {
                         if(playerCharacter.info.state != CharacterObject.ATTACK)
@@ -117,9 +155,14 @@ package com.stintern.st2D.tests.game.demo
             {
                 enemyCharacter = _enemyCharacterArray[i] as CharacterObject;
                 
+                if(enemyCharacter == null) continue;
+                
                 for(j=0; j<_playerCharacterArray.length; j++)
                 {
                     playerCharacter = _playerCharacterArray[j] as CharacterObject;
+                    
+                    if(playerCharacter == null) continue;
+                    
                     if(intersectRect(enemyCharacter.getAttackBounds(), playerCharacter.sprite.rect))
                     {
                         if(enemyCharacter.info.state != CharacterObject.ATTACK)
