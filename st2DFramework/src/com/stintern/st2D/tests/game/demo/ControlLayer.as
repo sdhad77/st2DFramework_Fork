@@ -123,7 +123,7 @@ package com.stintern.st2D.tests.game.demo
                         }
                         if(_enemyCharacterArray[j].info.state != CharacterObject.ATTACK)
                         {
-                            _enemyCharacterArray[j].sprite.setPlayAnimation("character1_attack");
+                            _enemyCharacterArray[j].sprite.setPlayAnimation("character3_attack_left");
                             _enemyCharacterArray[j].info.state = CharacterObject.ATTACK;
                             _enemyCharacterArray[j].sprite.isMoving = false;
                             _enemyCharacterArray[j].targetObject = _playerCharacterArray[i];
