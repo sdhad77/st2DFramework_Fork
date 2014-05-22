@@ -10,6 +10,8 @@ package com.stintern.st2D.tests.game.demo
 
     public class CharacterObject
     {
+        private var _runAniStr:String;
+        private var _attAniStr:String;
         private var _info:CharacterInfo;
         private var _batchSprite:BatchSprite;
         private var _sprite:SpriteAnimation;
@@ -30,7 +32,7 @@ package com.stintern.st2D.tests.game.demo
         
         /**
          * 캐릭터 Object를 생성합니다
-         * @param path CharacterObject의 이미지 경로 
+         * @param characterName 캐릭터 종류를 확인할 characterName
          * @param hp Character의 체력
          * @param power Character의 파워
          * @param speed Character의 이동속도
@@ -38,9 +40,11 @@ package com.stintern.st2D.tests.game.demo
          * @param ally 아군일 경우 true, 적군일 경우 false 반환
          * 
          */
-        public function CharacterObject(path:String, hp:Number, power:Number, speed:Number, attackSpeed:Number, ally:Boolean)
+        public function CharacterObject(runAniStr:String, attAniStr:String, hp:Number, power:Number, speed:Number, attackSpeed:Number, attackBoundsWidth:Number, attackBoundsHeight:Number, ally:Boolean)
         {
-            _info = new CharacterInfo(hp, power, speed, attackSpeed, ally);
+            _runAniStr = runAniStr;
+            _attAniStr = attAniStr;
+            _info = new CharacterInfo(hp, power, speed, attackSpeed, attackBoundsWidth, attackBoundsHeight, ally);
             _batchSprite = _characterMovingLayer.batchSprite;
             _targetObject = null;
             
@@ -65,14 +69,7 @@ package com.stintern.st2D.tests.game.demo
                         }
                         _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
                         _info.state = RUN;
-                        if(_info.ally == true)
-                        {
-                            _sprite.setPlayAnimation("character1_run_right");
-                        }
-                        else
-                        {
-                            _sprite.setPlayAnimation("character3_run_left");
-                        }
+                        _sprite.setPlayAnimation(runAniStr);
                         _sprite.isMoving = true;
                         _targetObject = null;
                         _attackScheduler.stopScheduler();
@@ -88,14 +85,8 @@ package com.stintern.st2D.tests.game.demo
             _sprite = new SpriteAnimation();
             var x:Number = 0;
             var y:Number = 0;
-            if(_info.ally == true)
-            {
-                _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", "character1_run_right", onSpriteCreated, null, x, y );
-            }
-            else
-            {
-                _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", "character3_run_left", onSpriteCreated, null, x, y );
-            }
+
+            _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", _runAniStr, onSpriteCreated, null, x, y );
         }
         
         private function onSpriteCreated():void
@@ -171,6 +162,16 @@ package com.stintern.st2D.tests.game.demo
         public function get hpProgress():progressBar
         {
             return _hpProgress;
+        }
+
+        public function get runAniStr():String
+        {
+            return _runAniStr;
+        }
+
+        public function get attAniStr():String
+        {
+            return _attAniStr;
         }
 
 
