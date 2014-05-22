@@ -435,9 +435,6 @@ package com.stintern.st2D.display.sprite
          */
         public function collisionCheck(lhs:Sprite):Boolean
         {
-            if(this.textureData  == null || lhs.textureData == null)
-                return false;
-            
             var rect1:Rectangle = new Rectangle(this.position.x - (this.width/2), this.position.y - (this.height/2), this.width, this.height);
             var rect2:Rectangle = new Rectangle(lhs.position.x - (lhs.width/2), lhs.position.y - (lhs.height/2), lhs.width, lhs.height);
             
