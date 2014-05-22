@@ -120,11 +120,10 @@ package com.stintern.st2D.utils
             {
                 trace("onLoaderComplete" + path);
                 
-                onComplete( LoaderInfo(event.target).content as Bitmap, imageCount );
-                
                 // dictionary 에 불러온 이미지 저장
                 _imageMap[path] = LoaderInfo(event.target).content as Bitmap;
-                               
+                
+                onComplete( LoaderInfo(event.target).content as Bitmap, imageCount );
             }
             
             function ioErrorHandler(event:IOErrorEvent):void
