@@ -54,9 +54,9 @@ package com.stintern.st2D.tests.Animation
     
     public class TotalAnimationLayer extends Layer
     {
-        private var gameObject:Vector.<GameObject> = new Vector.<GameObject>;
-        private var effect:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
-        private var gameStart:Boolean = false;
+        private var _gameObject:Vector.<GameObject> = new Vector.<GameObject>;
+        private var _effect:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
+        private var _gameStart:Boolean = false;
         private var _batchSprite:BatchSprite;
         private var _sch:Scheduler = new Scheduler;
         
@@ -67,35 +67,35 @@ package com.stintern.st2D.tests.Animation
         
         override public function update(dt:Number):void
         {
-            if(gameStart)
+            if(_gameStart)
             {
                 for(var i:int=0; i< 10; i++)
                 {
-                    if(gameObject[i]._isCollision) continue;
+                    if(_gameObject[i]._isCollision) continue;
                     for(var j:int=10; j< 20; j++)
                     {
-                        if(gameObject[j]._isCollision) continue;
-                        if(gameObject[i]._sprite.collisionCheck(gameObject[j]._sprite))
+                        if(_gameObject[j]._isCollision) continue;
+                        if(_gameObject[i]._sprite.collisionCheck(_gameObject[j]._sprite))
                         {
-                            gameObject[i]._info._hp -= gameObject[j]._info._power;
-                            if(gameObject[i]._info._hp <= 0) gameObject[i]._sprite.isVisible = false;
+                            _gameObject[i]._info._hp -= _gameObject[j]._info._power;
+                            if(_gameObject[i]._info._hp <= 0) _gameObject[i]._sprite.isVisible = false;
                             else
-                                {
-                                gameObject[i]._isCollision = true;
-                                gameObject[j]._isCollision = true;
-                                _sch.addFunc(100, gameObject[i].initIsCollision, 1);
-                                _sch.addFunc(100, gameObject[j].initIsCollision, 1);
+                            {
+                                _gameObject[i]._isCollision = true;
+                                _gameObject[j]._isCollision = true;
+                                _sch.addFunc(100, _gameObject[i].initIsCollision, 1);
+                                _sch.addFunc(100, _gameObject[j].initIsCollision, 1);
                                 _sch.startScheduler();
                                 
                                 for(var k:int=0; k< 20; k++)
                                 {
-                                    if(!effect[k].isPlaying)
+                                    if(!_effect[k].isPlaying)
                                     {
-                                        effect[k].position.x = (gameObject[i]._sprite.position.x + gameObject[j]._sprite.position.x)/2;
-                                        effect[k].position.y = (gameObject[i]._sprite.position.y + gameObject[j]._sprite.position.y)/2;
-                                        effect[k].setPlayAnimation("fire");
-                                        effect[k].isVisible = true;
-                                        effect[k].playAnimation();
+                                        _effect[k].position.x = (_gameObject[i]._sprite.position.x + _gameObject[j]._sprite.position.x)/2;
+                                        _effect[k].position.y = (_gameObject[i]._sprite.position.y + _gameObject[j]._sprite.position.y)/2;
+                                        _effect[k].setPlayAnimation("fire");
+                                        _effect[k].isVisible = true;
+                                        _effect[k].playAnimation();
                                         break;
                                     }
                                 }
@@ -124,42 +124,42 @@ package com.stintern.st2D.tests.Animation
                                                                                                   "fire4","fire5","fire6","fire7"),     4, null));
             for(var i:int=0; i< 20; i++)
             {
-                gameObject.push(new GameObject());
+                _gameObject.push(new GameObject());
                 
                 if(i < 10)
                 {
-                    gameObject[i].create(_batchSprite, "right", 100, 10, "PLAYER");
-                    gameObject[i]._sprite.position.x = 100;
-                    gameObject[i]._sprite.position.y = i * 64 + 100;
+                    _gameObject[i].create(_batchSprite, "right", 100, 10, "PLAYER");
+                    _gameObject[i]._sprite.position.x = 100;
+                    _gameObject[i]._sprite.position.y = i * 64 + 100;
                 }
                 else
                 {
-                    gameObject[i].create(_batchSprite, "left", 100, 10, "ENEMY");
-                    gameObject[i]._sprite.position.x = 600;
-                    gameObject[i]._sprite.position.y = (i-10) * 64 + 100;
-                    gameObject[i]._sprite.moveBy(-600, 0, (i-9)*1000);
+                    _gameObject[i].create(_batchSprite, "left", 100, 10, "ENEMY");
+                    _gameObject[i]._sprite.position.x = 600;
+                    _gameObject[i]._sprite.position.y = (i-10) * 64 + 100;
+                    _gameObject[i]._sprite.moveBy(-600, 0, (i-9)*1000);
                 }
                 
-                _batchSprite.addSprite(gameObject[i]._sprite);
-                gameObject[i]._sprite.playAnimation();
+                _batchSprite.addSprite(_gameObject[i]._sprite);
+                _gameObject[i]._sprite.playAnimation();
             }
             
             for(i=0; i< 20; i++)
             {
-                effect.push(new SpriteAnimation());
-                effect[i].createAnimationSpriteWithBatchSprite(_batchSprite, "fire");
-                effect[i].isVisible = false;
-                _batchSprite.addSprite(effect[i]);
+                _effect.push(new SpriteAnimation());
+                _effect[i].createAnimationSpriteWithBatchSprite(_batchSprite, "fire");
+                _effect[i].isVisible = false;
+                _batchSprite.addSprite(_effect[i]);
             }
             
-            gameStart = true;
+            _gameStart = true;
         }
         
         private function onTouch(event:MouseEvent):void
         {
             for(var i:int=0; i < 20; i++)
             {
-                gameObject[i]._sprite.moveStop();
+                _gameObject[i]._sprite.moveStop();
             }
         }
     }
