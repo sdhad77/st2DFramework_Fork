@@ -245,20 +245,20 @@ package com.stintern.st2D.display.sprite
          */
         public function setUVCoord(u:Number, v:Number, width:Number, height:Number):void
         {
+            vertexData[3] = u;
+            vertexData[4] = v;
+            
+            vertexData[3+9] = u+width;
+            vertexData[4+9] = v;
+            
+            vertexData[3+9*2] = u+width;
+            vertexData[4+9*2] = v+height;
+            
+            vertexData[3+9*3] = u;
+            vertexData[4+9*3] = v+height;
+                
             if(vertexBuffer != null)
             {
-                vertexData[3] = u;
-                vertexData[4] = v;
-                
-                vertexData[3+9] = u+width;
-                vertexData[4+9] = v;
-                
-                vertexData[3+9*2] = u+width;
-                vertexData[4+9*2] = v+height;
-                
-                vertexData[3+9*3] = u;
-                vertexData[4+9*3] = v+height;
-                
                 vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length/9);
             }
         }
