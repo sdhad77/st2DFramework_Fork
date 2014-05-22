@@ -40,7 +40,7 @@ package com.stintern.st2D.tests.game.demo
             AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character2_run_right",  new Array("character2_run_right0", "character2_run_right1"), 8, "character2_run_right"));
             AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character2_attack",  new Array("character2_attack0", "character2_attack1") ,8 ,"character2_attack"));
             AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_run_left",  new Array("character3_run_left0", "character3_run_left1"), 8, "character3_run_left"));
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_attack",  new Array("character3_attack0", "character3_attack1") ,8 ,"character3_attack"));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_attack_left",  new Array("character3_attack_left0", "character3_attack_left1") ,8 ,"character3_attack_left"));
         }
 
         
