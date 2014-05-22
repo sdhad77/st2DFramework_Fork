@@ -125,6 +125,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 _info.state = RUN;
                 _sprite.setPlayAnimation(runAniStr);
+                _sprite.playAnimation();
                 _sprite.isMoving = true;
                 _targetObject = null;
                 
@@ -134,6 +135,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 _info.state = ATTACK;
                 _sprite.setPlayAnimation(_attAniStr);
+                _sprite.playAnimation();
                 _sprite.isMoving = false;
                 _targetObject = charObject;
                 
