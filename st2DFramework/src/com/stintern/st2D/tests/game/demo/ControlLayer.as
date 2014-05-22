@@ -94,7 +94,8 @@ package com.stintern.st2D.tests.game.demo
             sprite.position.x = sprite.width;
             sprite.position.y = StageContext.instance.screenHeight * 0.4;
             _characterMovingLayer.batchSprite.addSprite(sprite);
-            var playerCastleObject:CharacterObject = new CharacterObject(null, null, 3000, 50, 0, 2000, Resources.TAG_RED, true);
+            var playerCastleObject:CharacterObject = new CharacterObject(null, null, 5000, 50, 0, 1000, Resources.TAG_CASTLE, true);
+            playerCastleObject.tag = Resources.TAG_CASTLE;
             playerCastleObject.sprite = sprite;
             playerCastleObject.setHpBar();
             _characterMovingLayer.playerCharacterArray.push(playerCastleObject);
@@ -108,7 +109,8 @@ package com.stintern.st2D.tests.game.demo
             sprite.position.x = x;
             sprite.position.y = y
             _characterMovingLayer.batchSprite.addSprite(sprite);
-            var enemyCastleObject:CharacterObject = new CharacterObject(null, null, 3000, 50, 0, 2000, Resources.TAG_RED, false);
+            var enemyCastleObject:CharacterObject = new CharacterObject(null, null, 5000, 50, 0, 1000, Resources.TAG_CASTLE, false);
+            enemyCastleObject.tag = Resources.TAG_CASTLE;
             enemyCastleObject.sprite = sprite;
             enemyCastleObject.setHpBar();
             _characterMovingLayer.enemyCharacterArray.push(enemyCastleObject);
@@ -132,6 +134,10 @@ package com.stintern.st2D.tests.game.demo
                         if(playerCharacter.info.state != CharacterObject.ATTACK)
                         {
                             playerCharacter.setState(CharacterObject.ATTACK, enemyCharacter);
+                            if(enemyCharacter.tag == Resources.TAG_CASTLE)
+                            {
+                                enemyCharacter.setState(CharacterObject.ATTACK, playerCharacter);
+                            }
                         }
 
                         playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
@@ -159,6 +165,10 @@ package com.stintern.st2D.tests.game.demo
                         if(enemyCharacter.info.state != CharacterObject.ATTACK)
                         {
                             enemyCharacter.setState(CharacterObject.ATTACK, playerCharacter);
+                            if(playerCharacter.tag == Resources.TAG_CASTLE)
+                            {
+                                playerCharacter.setState(CharacterObject.ATTACK, enemyCharacter);
+                            }
                         }
                         
                         enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
