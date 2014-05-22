@@ -62,6 +62,11 @@ package com.stintern.st2D.tests.game.demo
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
         }
         
+        /**
+         * 특정 캐릭터 Object를 제거합니다.
+         * @param targetObject 제거할 캐릭터 Object
+         * 
+         */
         public function removePlayerCharacterObject(targetObject:CharacterObject):void
         {
             for(var i:uint=0; i<_playerCharacterArray.length; ++i)
@@ -112,7 +117,15 @@ package com.stintern.st2D.tests.game.demo
             sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
             sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
             _batchSprite.addSprite(sprite);
+            x = sprite.position.x + StageContext.instance.screenHeight/8;
+            y = sprite.position.y;
             
+            sprite = new Sprite();
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character2_run_right0", x, y );
+            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+            sprite.position.x = x;
+            sprite.position.y = y;
+            _batchSprite.addSprite(sprite);
             
         }
         
@@ -166,8 +179,16 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var playerCharacterObject:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 2000, 300, 400, true);
-                    _playerCharacterArray.push(playerCharacterObject);
+                    var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 2000, 300, 400, true);
+                    _playerCharacterArray.push(characterObject1);
+                }
+            }
+            else if( _MARGIN +  StageContext.instance.screenHeight/8 < event.stageX && event.stageX < _MARGIN +  StageContext.instance.screenHeight/8*2)
+            {
+                if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
+                {
+                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 40, 10000, 2000, 300, 400, true);
+                    _playerCharacterArray.push(characterObject2);
                 }
             }
         }
@@ -206,7 +227,7 @@ package com.stintern.st2D.tests.game.demo
         private function onMouseUp(event:MouseEvent):void
         {
             mouseDownFlag = false;
-            for(var j:uint = 0; j < _timeLayer.batchSprite.spriteArray.length; j++)
+            for(var j:uint = 0; j < _timeLayer.batchSprite.spriteArray.length; j++)             //Camera 이동시 TimeLayer 고정을 위한 처리
             {
                 var controlTimeSprite:Sprite = _timeLayer.batchSprite.spriteArray[j] as Sprite;
                 if(-(StageContext.instance.screenWidth/2) < StageContext.instance.mainCamera.x)
@@ -219,19 +240,26 @@ package com.stintern.st2D.tests.game.demo
                 }
             }
             
-            for(var i:uint = 0; i < _batchSprite.spriteArray.length; i++)
+            for(var i:uint = 0; i < _batchSprite.spriteArray.length; i++)                       //Camera 이동시 ControlLayer 고정을 위한 처리
             {
                 var controlSprite:Sprite = _batchSprite.spriteArray[i] as Sprite;
                 if(-(StageContext.instance.screenWidth/2) < StageContext.instance.mainCamera.x)
                 {
                     controlSprite.position.x += (StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth/2));
-                    StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth/2)), 0.0) ;
                 }
                 else if(StageContext.instance.mainCamera.x < -((StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)))
                 {
                     controlSprite.position.x += (StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2));
-                    StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)), 0.0) ;
                 }
+            }
+            
+            if(-(StageContext.instance.screenWidth/2) < StageContext.instance.mainCamera.x)     //Camera 이동 처리
+            {
+                StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth/2)), 0.0) ;
+            }
+            else if(StageContext.instance.mainCamera.x < -((StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)))
+            {
+                StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)), 0.0) ;
             }
         }
         
