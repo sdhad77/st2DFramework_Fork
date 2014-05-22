@@ -2,6 +2,7 @@ import com.stintern.st2D.display.Layer;
 import com.stintern.st2D.display.sprite.SpriteAnimation;
 
 import flash.events.Event;
+import com.stintern.st2D.display.sprite.BatchSprite;
 
 class GameObject
 {
@@ -13,10 +14,10 @@ class GameObject
     {
     }
     
-    public function create(path:String, animationName:String, onCreated:Function, hp:Number, power:Number, party:String):void
+    public function create(batchSprite:BatchSprite, animationName:String, hp:Number, power:Number, party:String):void
     {
         _info = new ObjectInfo(hp, power, party);
-        _sprite.createAnimationSpriteWithPath(path, animationName, onCreated);
+        _sprite.createAnimationSpriteWithBatchSprite(batchSprite, animationName);
     }
     
     public function initIsCollision(evt:Event):void
@@ -43,10 +44,13 @@ package com.stintern.st2D.tests.Animation
 {
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.animation.datatype.Animation;
+    import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.utils.scheduler.Scheduler;
+    
+    import flash.events.MouseEvent;
     
     public class TotalAnimationLayer extends Layer
     {
@@ -54,8 +58,6 @@ package com.stintern.st2D.tests.Animation
         private var effect:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
         private var gameStart:Boolean = false;
         private var _batchSprite:BatchSprite;
-        private var _loadCompleteObjectCnt:int = 0;
-        private var _totalObjectNum:int = 0;
         private var _sch:Scheduler = new Scheduler;
         
         public function TotalAnimationLayer()
@@ -109,6 +111,8 @@ package com.stintern.st2D.tests.Animation
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/atlas.png", "res/atlas.xml", loadCompleted);
             addBatchSprite(_batchSprite);
+            
+            StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
         private function loadCompleted():void
@@ -117,69 +121,46 @@ package com.stintern.st2D.tests.Animation
             AnimationData.instance.setAnimation("res/atlas.png", new Animation("right", new Array("right0","right1","right2","right1"), 8, "right"));
             AnimationData.instance.setAnimation("res/atlas.png", new Animation("left",  new Array("left0","left1","left2","left1"),     8, "left")); 
             AnimationData.instance.setAnimation("res/atlas.png", new Animation("fire",  new Array("fire0","fire1","fire2","fire3",
-                                                                                                  "fire4","fire5","fire6","fire7"),     4, null)); 
-            _totalObjectNum = 40;
-            
+                                                                                                  "fire4","fire5","fire6","fire7"),     4, null));
             for(var i:int=0; i< 20; i++)
             {
-                effect.push(new SpriteAnimation());
-                effect[i].createAnimationSpriteWithPath("res/atlas.png", "fire", gameSetting);
-            }
-            
-            for(i=0; i< 10; i++)
-            {
                 gameObject.push(new GameObject());
-                gameObject[i].create("res/atlas.png", "right", gameSetting, 100, 10, "PLAYER");
-            }
-            
-            for(i=10; i< 20; i++)
-            {
-                gameObject.push(new GameObject());
-                gameObject[i].create("res/atlas.png", "left", gameSetting, 100, 10, "ENEMY");
-            }
-        }
-        
-        private function gameSetting():void
-        {
-            _loadCompleteObjectCnt++;
-            if(_loadCompleteObjectCnt != _totalObjectNum) return ;
-            
-            for(var i:int=0; i < 20; i++)
-            {
-                if(gameObject[i]._info._party == "PLAYER")
+                
+                if(i < 10)
                 {
+                    gameObject[i].create(_batchSprite, "right", 100, 10, "PLAYER");
                     gameObject[i]._sprite.position.x = 100;
                     gameObject[i]._sprite.position.y = i * 64 + 100;
                 }
                 else
                 {
+                    gameObject[i].create(_batchSprite, "left", 100, 10, "ENEMY");
                     gameObject[i]._sprite.position.x = 600;
                     gameObject[i]._sprite.position.y = (i-10) * 64 + 100;
+                    gameObject[i]._sprite.moveBy(-600, 0, (i-9)*1000);
                 }
                 
-                gameObject[i]._sprite.depth = 2;
                 _batchSprite.addSprite(gameObject[i]._sprite);
+                gameObject[i]._sprite.playAnimation();
             }
             
-            for(i=0; i < 20; i++)
+            for(i=0; i< 20; i++)
             {
-                effect[i].depth = 5;
+                effect.push(new SpriteAnimation());
+                effect[i].createAnimationSpriteWithBatchSprite(_batchSprite, "fire");
                 effect[i].isVisible = false;
                 _batchSprite.addSprite(effect[i]);
             }
-
-            startGame();
+            
+            gameStart = true;
         }
         
-        private function startGame():void
+        private function onTouch(event:MouseEvent):void
         {
             for(var i:int=0; i < 20; i++)
             {
-                gameObject[i]._sprite.playAnimation();
-                if(gameObject[i]._info._party == "ENEMY") gameObject[i]._sprite.moveBy(-600, 0, i-9);
+                gameObject[i]._sprite.moveStop();
             }
-
-            gameStart = true;
         }
     }
 }
