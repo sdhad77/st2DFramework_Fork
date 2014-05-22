@@ -55,9 +55,11 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite = _characterMovingLayer.batchSprite;
             _targetObject = null;
             
-            //스프라이트 생성
-            spriteCreate();
-            
+            if(runAniStr != null && attAniStr != null)
+            {
+                //스프라이트 생성
+                spriteCreate();
+            }
             if(type == Resources.TAG_PURPLE || type == Resources.TAG_ENEMY)
             {
                 _attackScheduler.addFunc(_info.attackSpeed, nearAttackFunc, 0);
@@ -194,7 +196,7 @@ package com.stintern.st2D.tests.game.demo
             if(_info.state==ATTACK && _targetObject)
             {
                 var bullet:Sprite = new Sprite();
-                bullet.createSpriteWithBatchSprite(_batchSprite, "hp_front", sprite.position.x, sprite.position.y);
+                bullet.createSpriteWithBatchSprite(_batchSprite, "bullet0", sprite.position.x, sprite.position.y);
                 _batchSprite.addSprite(bullet);
                 
                 _bulletArray.push(bullet);
@@ -255,5 +257,7 @@ package com.stintern.st2D.tests.game.demo
         
         public function set info(value:CharacterInfo):void           { _info         = value; }
         public function set targetObject(value:CharacterObject):void { _targetObject = value; }
+        public function set sprite(value:SpriteAnimation):void       { _sprite       = value; }
+
     }
 }
