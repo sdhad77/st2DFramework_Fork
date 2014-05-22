@@ -23,7 +23,7 @@ package com.stintern.st2D.tests.game.demo
          * @param ally 아군일 경우 true, 적군일 경우 false 반환
          * 
          */
-        public function CharacterInfo(hp:Number, power:Number, speed:Number, attackSpeed:Number, attackBoundsWidth:Number, attackBoundsHeight:Number, ally:Boolean)
+        public function CharacterInfo(hp:Number, power:Number, speed:Number, attackSpeed:Number, ally:Boolean)
         {
             _hp = hp;
             _power = power;
@@ -31,7 +31,6 @@ package com.stintern.st2D.tests.game.demo
             _attackSpeed = attackSpeed;
             _ally = ally;
             _state = CharacterObject.RUN;
-            setAttackBounds(attackBoundsWidth, attackBoundsHeight);
         }
         
         public function setAttackBounds(width:Number, height:Number):void

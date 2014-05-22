@@ -1,10 +1,8 @@
 package com.stintern.st2D.display.sprite
 {
-    
-
     public class Base 
     {
-        private var _tag:uint;
+        private var _tag:uint;        
         private var _name:String;
         
         private var _isVisible:Boolean;

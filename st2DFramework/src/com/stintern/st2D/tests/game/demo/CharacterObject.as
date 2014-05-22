@@ -7,10 +7,11 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
+    import com.stintern.st2D.tests.game.demo.utils.Resources;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.Event;
-    import flash.geom.Vector3D;
+    import flash.geom.Rectangle;
     
     public class CharacterObject extends Base
     {
@@ -46,17 +47,17 @@ package com.stintern.st2D.tests.game.demo
          * @param ally 아군일 경우 true, 적군일 경우 false 반환
          * 
          */
-        public function CharacterObject(runAniStr:String, attAniStr:String, hp:Number, power:Number, speed:Number, attackSpeed:Number, attackBoundsWidth:Number, attackBoundsHeight:Number, ally:Boolean)
+        public function CharacterObject(runAniStr:String, attAniStr:String, hp:Number, power:Number, speed:Number, attackSpeed:Number, type:uint, ally:Boolean)
         {
             _runAniStr = runAniStr;
             _attAniStr = attAniStr;
-            _info = new CharacterInfo(hp, power, speed, attackSpeed, attackBoundsWidth, attackBoundsHeight, ally);
+            _info = new CharacterInfo(hp, power, speed, attackSpeed, ally);
             _batchSprite = _characterMovingLayer.batchSprite;
             _targetObject = null;
             
             //스프라이트 생성
             spriteCreate();
-            if(!attackBoundsWidth)
+            if(type == Resources.TAG_PURPLE)
             {
                 _attackScheduler.addFunc(_info.attackSpeed, nearAttackFunc, 0);
             }
@@ -94,6 +95,8 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite.addSprite(_sprite);
             setHpBar();
             _sprite.playAnimation();
+            
+            _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
         }
         
         private function setHpBar():void
@@ -139,7 +142,15 @@ package com.stintern.st2D.tests.game.demo
                 _sprite.isMoving = false;
                 _targetObject = charObject;
                 
-                nearAttackFunc();
+                if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_ENEMY)
+                {
+                    nearAttackFunc();
+                }
+                else
+                {
+                    farAttackFunc();
+                }
+                
                 _attackScheduler.startScheduler();
             }
         }
@@ -221,6 +232,15 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite.removeSprite(_bulletArray[index]);
             _bulletArray[index].dispose();
             _bulletArray.splice(index, 1);
+        }
+        
+        public function getAttackBounds():Rectangle
+        {
+            return new Rectangle(
+                _sprite.position.x - _info.attackBoundsWidth * 0.5, 
+                _sprite.position.y - _info.attackBoundsHeight * 0.5,
+                _info.attackBoundsWidth,
+                _info.attackBoundsHeight);
         }
         
         //get set 함수들

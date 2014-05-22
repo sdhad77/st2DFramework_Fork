@@ -4,6 +4,7 @@ package com.stintern.st2D.basic
     import com.stintern.st2D.utils.Resources;
     
     import flash.geom.Matrix3D;
+    import flash.geom.Vector3D;
 
     public class Camera
     {
@@ -35,6 +36,8 @@ package com.stintern.st2D.basic
           _height = height;
           
           _viewMatrix.appendTranslation(_x, _y, 0);
+          //_projectionMatrix.lookAtLH(new Vector3D(0.0, 0.0, 1.0), new Vector3D(0.0, 0.0, 0.0), new Vector3D(0.0, 1.0, 0.0));
+          //_projectionMatrix.perspectiveRH(width, height, 0.01, 1000);
           _projectionMatrix.orthoRH(_width, _height, Resources.MIN_DEPTH, Resources.MAX_DEPTH);
           
         }
@@ -46,7 +49,6 @@ package com.stintern.st2D.basic
          * 카메라의 위치는 (3.0, 3.0)이 됩니다.<br/>
          *  
          * @param vector 이동할 방향
-         * 
          */
         public function moveCamera(x:Number, y:Number):void
         {
@@ -55,7 +57,6 @@ package com.stintern.st2D.basic
             
             _viewMatrix.identity();
             _viewMatrix.appendTranslation(_x, _y, 0);
-            
         }
         
         /**
