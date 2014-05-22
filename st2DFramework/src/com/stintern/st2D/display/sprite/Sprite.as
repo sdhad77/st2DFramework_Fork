@@ -476,6 +476,11 @@ package com.stintern.st2D.display.sprite
             return frame.height * scale.y;
         }
         
+        public function get rect():Rectangle
+        {
+            return new Rectangle(position.x - getContentWidth()*0.5, position.y - getContentHeight()*0.5, getContentWidth(), getContentHeight()); 
+        }
+        
         public function get numTriangle():int
         {
             return indexData.length/3;
@@ -550,6 +555,7 @@ package com.stintern.st2D.display.sprite
             _isMoving = value;
         }
 
+       
 
     }
 }
