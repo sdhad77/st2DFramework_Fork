@@ -3,6 +3,9 @@ package com.stintern.st2D.display.sprite
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.animation.datatype.AnimationFrame;
+    import com.stintern.st2D.utils.AssetLoader;
+    
+    import flash.display.Bitmap;
 
     public class SpriteAnimation extends Sprite
     {
@@ -47,9 +50,9 @@ package com.stintern.st2D.display.sprite
          */
         public function createAnimationSpriteWithBatchSprite(batchSprite:BatchSprite, animationName:String, x:Number=0, y:Number=0 ):void
         {
-            playAnimationName = animationName;
+            playAnimationName = animationName; 
             
-            createSpriteWithBatchSprite(batchSprite, animationName, x, y);
+            createSpriteWithBatchSprite(batchSprite, AnimationData.instance.animationData[batchSprite.path]["animation"][animationName].animationFlow[0], x, y);
         }
         
         /**
@@ -67,6 +70,7 @@ package com.stintern.st2D.display.sprite
                     
                     //다음 프레임으로 이동
                     var playFrame:AnimationFrame = nextFrame();
+                    var currentSpriteImg:Bitmap = AssetLoader.instance.getImageTexture(path);
                     
                     //다음 프레임이 존재할 경우
                     if(playFrame != null)
@@ -74,7 +78,7 @@ package com.stintern.st2D.display.sprite
                         //uv좌표 변경하는 방식
                         frame.width = playFrame.width;
                         frame.height = playFrame.height;
-                        setUVCoord(playFrame.x/textureWidth, playFrame.y/textureHeight, playFrame.width/textureWidth, playFrame.height/textureHeight);
+                        setUVCoord(playFrame.x/currentSpriteImg.width, playFrame.y/currentSpriteImg.height, playFrame.width/currentSpriteImg.width, playFrame.height/currentSpriteImg.height);
                     }
                     
                     playFrame = null;
