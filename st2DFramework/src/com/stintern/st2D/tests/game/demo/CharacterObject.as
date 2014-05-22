@@ -9,6 +9,8 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
+    import flash.events.Event;
+    
     public class CharacterObject extends Base
     {
         private var _runAniStr:String;
@@ -49,44 +51,10 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite = _characterMovingLayer.batchSprite;
             _targetObject = null;
             
-            _attackScheduler.addFunc(attackSpeed, attackFunc, 0);
- //           _attackScheduler.startScheduler();
-            
             //스프라이트 생성
             spriteCreate();
             
-            function attackFunc():void
-            {
-                //this의 상태가 공격이고, 타겟이 존재할 경우
-                if(_info.state==ATTACK && _targetObject)
-                {
-                    //this의 power로 타겟의 체력 감소시킴
-                    _targetObject.info.hp -= _info.power;
-                    trace(_targetObject.info.hp);
-                    //타겟의 체력이 0이하가 될 경우
-                    if(_targetObject.info.hp <= 0)
-                    {
-                        //타겟의 스케쥴러 멈춤
-                        _targetObject.attackScheduler.stopScheduler();
-                        
-                        //this가 아군일경우, 즉 타겟이 적군일 경우 적군 삭제
-                        if(_info.ally)
-                        {
-                            _characterMovingLayer.removeEnemyCharacterObject(_targetObject);
-                        }
-                        //this가 적군일경우, 즉 타겟이 아군일 경우 아군 삭제
-                        else
-                        {
-                            _characterMovingLayer.removePlayerCharacterObject(_targetObject);
-                        }
-                        _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
-                        
-                        //this의 상태를 RUN으로 변경
-                        setState("RUN");
-                        _attackScheduler.stopScheduler();
-                    }
-                }
-            }
+            _attackScheduler.addFunc(_info.attackSpeed, attackFunc, 0);
         }
         
         private function spriteCreate():void
@@ -106,7 +74,7 @@ package com.stintern.st2D.tests.game.demo
                 _sprite.position.y = _sprite.height/2 + yPositionRange;
                 _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height, _info.speed);
             }
-            //생성된 스프라이트가 적군일 경우 화면 우측에 성성, 좌측으로 이동
+                //생성된 스프라이트가 적군일 경우 화면 우측에 성성, 좌측으로 이동
             else
             {
                 _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
@@ -150,6 +118,8 @@ package com.stintern.st2D.tests.game.demo
                 _sprite.setPlayAnimation(runAniStr);
                 _sprite.isMoving = true;
                 _targetObject = null;
+                
+                _attackScheduler.stopScheduler();
             }
             else if(state == "ATTACK")
             {
@@ -157,6 +127,41 @@ package com.stintern.st2D.tests.game.demo
                 _sprite.setPlayAnimation(_attAniStr);
                 _sprite.isMoving = false;
                 _targetObject = charObject;
+                
+                attackFunc();
+                _attackScheduler.startScheduler();
+            }
+        }
+        
+        private function attackFunc(evt:Event = null):void
+        {
+            //this의 상태가 공격이고, 타겟이 존재할 경우
+            if(_info.state==ATTACK && _targetObject)
+            {
+                //this의 power로 타겟의 체력 감소시킴
+                _targetObject.info.hp -= _info.power;
+                trace(_targetObject.info.hp);
+                //타겟의 체력이 0이하가 될 경우
+                if(_targetObject.info.hp <= 0)
+                {
+                    //타겟의 스케쥴러 멈춤
+                    _targetObject.attackScheduler.stopScheduler();
+                    
+                    //this가 아군일경우, 즉 타겟이 적군일 경우 적군 삭제
+                    if(_info.ally)
+                    {
+                        _characterMovingLayer.removeEnemyCharacterObject(_targetObject);
+                    }
+                        //this가 적군일경우, 즉 타겟이 아군일 경우 아군 삭제
+                    else
+                    {
+                        _characterMovingLayer.removePlayerCharacterObject(_targetObject);
+                    }
+                    _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
+                    
+                    //this의 상태를 RUN으로 변경
+                    setState("RUN");
+                }
             }
         }
         
