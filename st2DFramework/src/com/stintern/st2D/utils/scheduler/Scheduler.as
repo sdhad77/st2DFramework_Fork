@@ -57,8 +57,11 @@ package com.stintern.st2D.utils.scheduler
         {
             for(var i:uint=0; i<_schedule.length; i++)
             {
-                _scheduleTimer[i].stop();
-                _scheduleTimer[i].removeEventListener(TimerEvent.TIMER, _schedule[i].func);
+                if(_scheduleTimer[i].running)
+                {
+                    _scheduleTimer[i].stop();
+                    _scheduleTimer[i].removeEventListener(TimerEvent.TIMER, _schedule[i].func);
+                }
             }
         }
 
