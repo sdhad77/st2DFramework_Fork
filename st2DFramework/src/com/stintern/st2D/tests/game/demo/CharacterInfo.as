@@ -1,6 +1,8 @@
 package com.stintern.st2D.tests.game.demo
 {
-    public class CharacterInfo
+    import com.stintern.st2D.display.sprite.Base;
+
+    public class CharacterInfo extends Base
     {
         private var _hp:Number;
         private var _power:Number;
