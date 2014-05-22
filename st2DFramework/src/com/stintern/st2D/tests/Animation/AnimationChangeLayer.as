@@ -11,9 +11,8 @@ package com.stintern.st2D.tests.Animation
     
     public class AnimationChangeLayer extends Layer
     {
-        private var sprite:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
+        private var _sprite:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
         private var _batchSprite:BatchSprite;
-        private var _loadCompleteObjectCnt:int = 0;
         
         public function AnimationChangeLayer()
         {
@@ -36,17 +35,17 @@ package com.stintern.st2D.tests.Animation
             
             for(var i:int=0; i < 1; i++)
             {
-                sprite.push(new SpriteAnimation());
-                sprite[i].createAnimationSpriteWithBatchSprite(_batchSprite, "down", i*32 + 100, 32 + 100);
-                _batchSprite.addSprite(sprite[i]);
-                sprite[i].playAnimation();
+                _sprite.push(new SpriteAnimation());
+                _sprite[i].createAnimationSpriteWithBatchSprite(_batchSprite, "down", i*32 + 100, 32 + 100);
+                _batchSprite.addSprite(_sprite[i]);
+                _sprite[i].playAnimation();
             }
         }
         
         private function onTouch(event:MouseEvent):void
         {
-            if(sprite[0].playAnimationName == "up") sprite[0].setPlayAnimation("down");
-            else sprite[0].setPlayAnimation("up");
+            if(_sprite[0].playAnimationName == "up") _sprite[0].setPlayAnimation("down");
+            else _sprite[0].setPlayAnimation("up");
         }
     }
 }
