@@ -9,6 +9,7 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
+    import flash.geom.Rectangle;
     
     public class ControlLayer extends Layer
     {
@@ -102,6 +103,9 @@ package com.stintern.st2D.tests.game.demo
         
         override public function update(dt:Number):void
         {
+            if( _batchSprite.imageLoaded == false )
+                return;
+            
             for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
                 for(var j:uint=0; j<_enemyCharacterArray.length; j++)
@@ -204,8 +208,8 @@ package com.stintern.st2D.tests.game.demo
                     StageContext.instance.mainCamera.moveCamera(-(StageContext.instance.mainCamera.x + (StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)), 0.0) ;
                 }
             }
-            
         }
+        
     }
 }
 

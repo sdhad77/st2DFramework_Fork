@@ -435,11 +435,44 @@ package com.stintern.st2D.display.sprite
          */
         public function collisionCheck(lhs:Sprite):Boolean
         {
+            if(this.scale.x != 1 || this.scale.y != 1)
+            {
+                this.frame.width *= this.scale.x;
+                this.frame.height *= this.scale.y;
+            }
+            if(lhs.scale.x != 1 || lhs.scale.y != 1)
+            {
+                lhs.frame.width *= lhs.scale.x;
+                lhs.frame.height *= lhs.scale.y;
+            }
+            
             var rect1:Rectangle = new Rectangle(this.position.x - (this.width/2), this.position.y - (this.height/2), this.width, this.height);
             var rect2:Rectangle = new Rectangle(lhs.position.x - (lhs.width/2), lhs.position.y - (lhs.height/2), lhs.width, lhs.height);
             
-            var result:Boolean = rect1.containsRect(rect2);
+            var r1_left_top:Point = new Point(this.position.x - (this.width/2), this.position.y + (this.height/2));
+            var r1_left_bottom:Point = new Point(this.position.x - (this.width/2), this.position.y - (this.height/2));
+            var r1_right_top:Point = new Point(this.position.x + (this.width/2), this.position.y + (this.height/2));
+            var r1_right_bottom:Point = new Point(this.position.x + (this.width/2), this.position.y - (this.height/2));
+            
+            var r2_left_top:Point = new Point(lhs.position.x - (lhs.width/2), lhs.position.y + (lhs.height/2));
+            var r2_left_bottom:Point = new Point(lhs.position.x - (lhs.width/2), lhs.position.y - (lhs.height/2));
+            var r2_right_top:Point = new Point(lhs.position.x + (lhs.width/2), lhs.position.y + (lhs.height/2));
+            var r2_right_bottom:Point = new Point(lhs.position.x + (lhs.width/2), lhs.position.y - (lhs.height/2));
+            
+            var result:Boolean;
+            if(rect2.containsPoint(r1_left_top) || rect2.containsPoint(r1_left_bottom) || rect2.containsPoint(r1_right_top) ||  rect2.containsPoint(r1_right_bottom) ||
+                rect1.containsPoint(r2_left_top) || rect1.containsPoint(r2_left_bottom) || rect1.containsPoint(r2_right_top) ||  rect1.containsPoint(r2_right_bottom) )
+            {
+                result = true;
+            }
+            else
+            {
+                result  = false;
+            }
+            
             rect1 = rect2 = null;
+            r1_left_top =  r1_left_bottom = r1_right_top = r1_right_bottom = null;
+            r2_left_top = r2_left_bottom = r2_right_top = r2_right_bottom = null;
             
             return result;
         }

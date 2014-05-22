@@ -59,8 +59,6 @@ package com.stintern.st2D.tests.game
                         trace(0 + "    <    " + _dungVector[i].position.y  + "    <    " + ( _person.position.y + _person.height));
                         if(_dungVector[i].collisionCheck(_person))
                         {
-
-
                             var scene:Scene = new Scene();
                             var secondSceneLayer:EndLayer = new EndLayer();
                             scene.addLayer(secondSceneLayer);
