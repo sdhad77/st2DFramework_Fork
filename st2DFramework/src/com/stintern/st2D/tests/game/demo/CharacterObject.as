@@ -102,7 +102,7 @@ package com.stintern.st2D.tests.game.demo
             _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
         }
         
-        private function setHpBar():void
+        public function setHpBar():void
         {
             spriteBkg = new Sprite();
             spriteBkg.createSpriteWithBatchSprite(_batchSprite, "hp_bkg", _sprite.position.x, _sprite.position.y + _sprite.height*0.8);

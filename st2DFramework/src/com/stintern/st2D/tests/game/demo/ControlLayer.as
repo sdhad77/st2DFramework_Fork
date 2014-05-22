@@ -49,7 +49,7 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreatedButton);
             addBatchSprite(_batchSprite);
             
-            _enemyScheduler.addFunc(2000, enemyCreater, 1);
+            _enemyScheduler.addFunc(2000, enemyCreater, 10);
             _enemyScheduler.startScheduler();
             
             function enemyCreater():void
@@ -96,6 +96,7 @@ package com.stintern.st2D.tests.game.demo
             _characterMovingLayer.batchSprite.addSprite(sprite);
             var playerCastleObject:CharacterObject = new CharacterObject(null, null, 3000, 50, 0, 2000, Resources.TAG_RED, true);
             playerCastleObject.sprite = sprite;
+            playerCastleObject.setHpBar();
             _characterMovingLayer.playerCharacterArray.push(playerCastleObject);
             
             var x:Number = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - sprite.width;
@@ -109,6 +110,7 @@ package com.stintern.st2D.tests.game.demo
             _characterMovingLayer.batchSprite.addSprite(sprite);
             var enemyCastleObject:CharacterObject = new CharacterObject(null, null, 3000, 50, 0, 2000, Resources.TAG_RED, false);
             enemyCastleObject.sprite = sprite;
+            enemyCastleObject.setHpBar();
             _characterMovingLayer.enemyCharacterArray.push(enemyCastleObject);
             
             sprite = null;
@@ -139,6 +141,7 @@ package com.stintern.st2D.tests.game.demo
                         }
 
                         playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
+                        enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
                     }
                 }
                 
@@ -171,6 +174,7 @@ package com.stintern.st2D.tests.game.demo
                         }
                         
                         enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
+                        playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
                     }
                 }
             }
