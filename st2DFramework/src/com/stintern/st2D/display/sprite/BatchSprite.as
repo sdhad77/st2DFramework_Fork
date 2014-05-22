@@ -123,7 +123,7 @@ package com.stintern.st2D.display.sprite
             vertexData.splice(removeIndex *  DisplayObject.VERTEX_COUNT * DisplayObject.DATAS_PER_VERTEX, DisplayObject.VERTEX_COUNT * DisplayObject.DATAS_PER_VERTEX )
             
             // indexData 갱신
-            for(var i:uint=0; i<DisplayObject.INDEX_COUNT_PER_SPRITE; ++i)
+            for(i=0; i<DisplayObject.INDEX_COUNT_PER_SPRITE; ++i)
             {
                 indexData.pop()
             }

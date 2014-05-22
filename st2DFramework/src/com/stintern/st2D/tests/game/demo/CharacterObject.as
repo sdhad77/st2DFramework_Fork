@@ -57,6 +57,7 @@ package com.stintern.st2D.tests.game.demo
             
             //스프라이트 생성
             spriteCreate();
+            
             if(type == Resources.TAG_PURPLE || type == Resources.TAG_ENEMY)
             {
                 _attackScheduler.addFunc(_info.attackSpeed, nearAttackFunc, 0);
@@ -162,7 +163,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 //this의 power로 타겟의 체력 감소시킴
                 _targetObject.info.hp -= _info.power;
-                trace(_targetObject.info.hp);
+                
                 //타겟의 체력이 0이하가 될 경우
                 if(_targetObject.info.hp <= 0)
                 {
@@ -201,7 +202,6 @@ package com.stintern.st2D.tests.game.demo
                 bullet.moveTo(_targetObject.sprite.position.x, _targetObject.sprite.position.y, 500);
                 _targetObject.info.hp -= _info.power;
                 
-                trace(_targetObject.info.hp);
                 //타겟의 체력이 0이하가 될 경우
                 if(_targetObject.info.hp <= 0)
                 {
@@ -244,19 +244,16 @@ package com.stintern.st2D.tests.game.demo
         }
         
         //get set 함수들
-        public function get sprite():SpriteAnimation       {return _sprite;}
-        public function get info():CharacterInfo           {return _info;}
-        public function get targetObject():CharacterObject {return _targetObject;}
-        public function get attackScheduler():Scheduler    {return _attackScheduler;}
-        public function get hpProgress():progressBar       {return _hpProgress;}
-        public function get runAniStr():String             {return _runAniStr;}
-        public function get attAniStr():String             {return _attAniStr;}
+        public function get sprite():SpriteAnimation       { return _sprite;          }
+        public function get info():CharacterInfo           { return _info;            }
+        public function get targetObject():CharacterObject { return _targetObject;    }
+        public function get attackScheduler():Scheduler    { return _attackScheduler; }
+        public function get hpProgress():progressBar       { return _hpProgress;      }
+        public function get runAniStr():String             { return _runAniStr;       }
+        public function get attAniStr():String             { return _attAniStr;       }
+        public function get bulletArray():Vector.<Sprite>  { return _bulletArray;     }
         
-        public function set info(value:CharacterInfo):void           {_info = value;}
-        public function set targetObject(value:CharacterObject):void {_targetObject = value;}
-        
-        public function get bulletArray():Vector.<Sprite> { return _bulletArray; }
-            
-
+        public function set info(value:CharacterInfo):void           { _info         = value; }
+        public function set targetObject(value:CharacterObject):void { _targetObject = value; }
     }
 }

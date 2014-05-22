@@ -1,6 +1,7 @@
 package com.stintern.st2D.tests.game.demo
 {
     import com.stintern.st2D.animation.AnimationData;
+    import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.SceneManager;
@@ -45,21 +46,25 @@ package com.stintern.st2D.tests.game.demo
         
         private function loadCompleted():void
         {
+            //구름의 가로세로 길이가 필요함.
+            var cloudFrame:AnimationFrame = AnimationData.instance.animationData["res/demo/demo_spritesheet.png"]["frame"]["cloud"];
             //맵의 전체길이
             _totalWidth = StageContext.instance.screenWidth * (SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer).bgPageNum;
             //구름이 맵을 이동하는데 걸리는 시간
-            _totalMoveSec = (_totalWidth + AnimationData.instance.animationData["res/demo/demo_spritesheet.png"]["frame"]["cloud"].width) / _cloudMovePixelPerSecond;
+            _totalMoveSec = (_totalWidth + cloudFrame.width) / _cloudMovePixelPerSecond;
             //구름의 출발 간격. 연달아서 출발하도록 하였음
-            var startSec:Number = AnimationData.instance.animationData["res/demo/demo_spritesheet.png"]["frame"]["cloud"].width / _cloudMovePixelPerSecond;
+            var startSec:Number = cloudFrame.width / _cloudMovePixelPerSecond;
             
             //필요한 구름 갯수만큼 구름 생성
             for(var i:int = 0; i < Math.ceil(_totalMoveSec / startSec); i++)
             {
                 _cloud.push(new Sprite);
-                _cloud[i].createSpriteWithBatchSprite(_batchSprite, "cloud");
+                _cloud[i].createSpriteWithBatchSprite(_batchSprite, "cloud", -cloudFrame.width, StageContext.instance.screenHeight + cloudFrame.height);
                 _batchSprite.addSprite(_cloud[i]);
                 _cloud[i].isVisible = false;
             }
+            
+            cloudFrame = null;
             
             //초단위에서 밀리초 단위로 변경
             _totalMoveSec *= 1000;
