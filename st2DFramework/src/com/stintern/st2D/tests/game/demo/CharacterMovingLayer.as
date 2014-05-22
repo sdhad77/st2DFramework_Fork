@@ -36,6 +36,10 @@ package com.stintern.st2D.tests.game.demo
                         _batchSprite.removeSprite(child);
                         child.dispose();
                     }
+                    for(var k:uint=0; k<_playerCharacterArray[i].bulletArray.length; k++)
+                    {
+                        _playerCharacterArray[i].removeBullet(k);
+                    }
                     _playerCharacterArray.splice(i, 1);
                     break;
                 }
