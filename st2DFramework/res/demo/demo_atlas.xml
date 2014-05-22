@@ -6,4 +6,5 @@
 <atlasItem name="character_attack1.png" x="258" y="559" width="256" height="256" />
 <atlasItem name="hp_bkg.png" x="0" y="820" width="32" height="32" />
 <atlasItem name="hp_front.png" x="0" y="853" width="32" height="32" />
+<atlasItem name="cloud.png" x="510" y="558" width="512" height="265" />
 </atlas>
