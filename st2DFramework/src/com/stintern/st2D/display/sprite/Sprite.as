@@ -332,8 +332,6 @@ package com.stintern.st2D.display.sprite
          */
         public function dispose():void
         {
-            AssetLoader.instance.removeImage(path);
-            
             if( texture != null )
                 texture.dispose();
             texture = null;
