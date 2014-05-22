@@ -1,6 +1,8 @@
 package com.stintern.st2D.tests.game.demo
 {
-    public class CharacterInfo
+    import com.stintern.st2D.display.sprite.Base;
+
+    public class CharacterInfo extends Base
     {
         private var _hp:Number;
         private var _power:Number;
@@ -8,6 +10,9 @@ package com.stintern.st2D.tests.game.demo
         private var _attackSpeed:Number
         private var _ally:Boolean;
         private var _state:String;
+        
+        private var _attackBoundsWidth:Number = 0.0;
+        private var _attackBoundsHeight:Number = 0.0;
         
         /**
          * 캐릭터 정보 Object
@@ -26,6 +31,30 @@ package com.stintern.st2D.tests.game.demo
             _attackSpeed = attackSpeed;
             _ally = ally;
             _state = CharacterObject.RUN;
+        }
+        
+        public function setAttackBounds(width:Number, height:Number):void
+        {
+            _attackBoundsWidth = width;
+            _attackBoundsHeight = height;
+        }
+        
+        public function get attackBoundsWidth():Number
+        {
+            return _attackBoundsWidth;
+        }
+        public function set attackBoundsWidth(width:Number):void
+        {
+            _attackBoundsWidth = width;
+        }
+        
+        public function get attackBoundsHeight():Number
+        {
+            return _attackBoundsHeight;
+        }
+        public function set attackBoundsHeight(height:Number):void
+        {
+            _attackBoundsHeight = height;
         }
         
         public function get hp():Number
