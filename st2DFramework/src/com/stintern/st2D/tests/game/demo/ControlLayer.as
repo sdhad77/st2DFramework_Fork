@@ -62,50 +62,7 @@ package com.stintern.st2D.tests.game.demo
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
         }
         
-        /**
-         * 특정 캐릭터 Object를 제거합니다.
-         * @param targetObject 제거할 캐릭터 Object
-         * 
-         */
-        public function removePlayerCharacterObject(targetObject:CharacterObject):void
-        {
-            for(var i:uint=0; i<_playerCharacterArray.length; ++i)
-            {
-                if( _playerCharacterArray[i] == targetObject )
-                {
-                    var playerCharacter:CharacterObject = _playerCharacterArray[i];
-                    for(var j:uint=0; j<playerCharacter.sprite.getAllChildren().length; j++)
-                    {
-                        var childArray:Array = playerCharacter.sprite.getAllChildren();
-                        var child:Sprite = childArray[j];
-                        _characterMovingLayer.batchSprite.removeSprite(child);
-                        child.dispose();
-                    }
-                    _playerCharacterArray.splice(i, 1);
-                    break;
-                }
-            }
-        }
-        
-        public function removeEnemyCharacterObject(targetObject:CharacterObject):void
-        {
-            for(var i:uint=0; i<_enemyCharacterArray.length; ++i)
-            {
-                if( _enemyCharacterArray[i] == targetObject )
-                {
-                    var enemyCharacter:CharacterObject = _enemyCharacterArray[i];
-                    for(var j:uint=0; j<enemyCharacter.sprite.getAllChildren().length; j++)
-                    {
-                        var childArray:Array = enemyCharacter.sprite.getAllChildren();
-                        var child:Sprite = childArray[j];
-                        _characterMovingLayer.batchSprite.removeSprite(child);
-                        child.dispose();
-                    }
-                    _enemyCharacterArray.splice(i, 1);
-                    break;
-                }
-            }
-        }
+
         
         private function onCreatedButton():void
         {

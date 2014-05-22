@@ -20,7 +20,6 @@ package com.stintern.st2D.tests.game.demo
         
         private var _characterMovingLayer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
         private var _backGroundLayer:BackGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
-        private var _controlLayer:ControlLayer = SceneManager.instance.getCurrentScene().getLayerByName("ControlLayer") as ControlLayer;
         
         private var spriteBkg:Sprite;
         private var spriteFront:Sprite;
@@ -62,11 +61,11 @@ package com.stintern.st2D.tests.game.demo
                         _targetObject.attackScheduler.stopScheduler();
                         if(_info.ally)
                         {
-                            _controlLayer.removeEnemyCharacterObject(_targetObject);
+                            _characterMovingLayer.removeEnemyCharacterObject(_targetObject);
                         }
                         else
                         {
-                            _controlLayer.removePlayerCharacterObject(_targetObject);
+                            _characterMovingLayer.removePlayerCharacterObject(_targetObject);
                         }
                         _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
                         _info.state = RUN;
@@ -78,18 +77,12 @@ package com.stintern.st2D.tests.game.demo
                 }
             }
             
-            onCreated();
-        }
-
-        private function onCreated():void
-        {
             _sprite = new SpriteAnimation();
             var x:Number = 0;
             var y:Number = 0;
-
             _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", _runAniStr, onSpriteCreated, null, x, y );
         }
-        
+
         private function onSpriteCreated():void
         {
             var yPositionRange:uint = (Math.floor(Math.random() * 20)*10);

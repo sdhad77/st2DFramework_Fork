@@ -42,6 +42,55 @@ package com.stintern.st2D.tests.game.demo
             AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_run_left",  new Array("character3_run_left0", "character3_run_left1"), 8, "character3_run_left"));
             AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_attack_left",  new Array("character3_attack_left0", "character3_attack_left1") ,8 ,"character3_attack_left"));
         }
+        
+        
+        /**
+         * 특정 아군 캐릭터 Object를 제거합니다.
+         * @param targetObject 제거할 캐릭터 Object
+         */
+        public function removePlayerCharacterObject(targetObject:CharacterObject):void
+        {
+            for(var i:uint=0; i<_playerCharacterArray.length; ++i)
+            {
+                if( _playerCharacterArray[i] == targetObject )
+                {
+                    var playerCharacter:CharacterObject = _playerCharacterArray[i];
+                    for(var j:uint=0; j<playerCharacter.sprite.getAllChildren().length; j++)
+                    {
+                        var childArray:Array = playerCharacter.sprite.getAllChildren();
+                        var child:Sprite = childArray[j];
+                        _batchSprite.removeSprite(child);
+                        child.dispose();
+                    }
+                    _playerCharacterArray.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        
+        /**
+         * 특정 적군 캐릭터 Object를 제거합니다.
+         * @param targetObject 제거할 캐릭터 Object
+         */
+        public function removeEnemyCharacterObject(targetObject:CharacterObject):void
+        {
+            for(var i:uint=0; i<_enemyCharacterArray.length; ++i)
+            {
+                if( _enemyCharacterArray[i] == targetObject )
+                {
+                    var enemyCharacter:CharacterObject = _enemyCharacterArray[i];
+                    for(var j:uint=0; j<enemyCharacter.sprite.getAllChildren().length; j++)
+                    {
+                        var childArray:Array = enemyCharacter.sprite.getAllChildren();
+                        var child:Sprite = childArray[j];
+                        _batchSprite.removeSprite(child);
+                        child.dispose();
+                    }
+                    _enemyCharacterArray.splice(i, 1);
+                    break;
+                }
+            }
+        }
 
         
         override public function update(dt:Number):void
