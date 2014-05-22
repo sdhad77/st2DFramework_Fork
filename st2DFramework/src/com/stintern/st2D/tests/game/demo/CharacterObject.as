@@ -59,7 +59,14 @@ package com.stintern.st2D.tests.game.demo
                         }
                         _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
                         _info.state = RUN;
-                        _sprite.setPlayAnimation("character_run")
+                        if(_info.ally == true)
+                        {
+                            _sprite.setPlayAnimation("character1_run_right");
+                        }
+                        else
+                        {
+                            _sprite.setPlayAnimation("character3_run_left");
+                        }
                         _sprite.isMoving = true;
                         _targetObject = null;
                         _attackScheduler.stopScheduler();
@@ -75,7 +82,14 @@ package com.stintern.st2D.tests.game.demo
             _sprite = new SpriteAnimation();
             var x:Number = 0;
             var y:Number = 0;
-            _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", "character_run", onSpriteCreated, null, x, y );
+            if(_info.ally == true)
+            {
+                _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", "character1_run_right", onSpriteCreated, null, x, y );
+            }
+            else
+            {
+                _sprite.createAnimationSpriteWithPath("res/demo/demo_spritesheet.png", "character3_run_left", onSpriteCreated, null, x, y );
+            }
         }
         
         private function onSpriteCreated():void
