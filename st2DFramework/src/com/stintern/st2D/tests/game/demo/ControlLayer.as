@@ -96,9 +96,10 @@ package com.stintern.st2D.tests.game.demo
             
             for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
+                var playerCharacter:CharacterObject = _playerCharacterArray[i] as CharacterObject;
+                
                 for(var j:uint=0; j<_enemyCharacterArray.length; j++)
                 {
-                    var playerCharacter:CharacterObject = _playerCharacterArray[i] as CharacterObject;
                     var enemyCharacter:CharacterObject = _enemyCharacterArray[j] as CharacterObject;
                     if(playerCharacter.sprite.collisionCheck(enemyCharacter.sprite))
                     {
@@ -129,7 +130,6 @@ package com.stintern.st2D.tests.game.demo
                             playerCharacter.sprite.isMoving = false;
                             playerCharacter.targetObject = _enemyCharacterArray[j];
                             playerCharacter.attackScheduler.startScheduler();
-                            playerCharacter.degree += 10.0;
                         }
                         
                         if(playerCharacter.info.state == CharacterObject.ATTACK)
@@ -140,6 +140,14 @@ package com.stintern.st2D.tests.game.demo
                         {
                             enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
                         }
+                    }
+                }
+                
+                for(var bulletIndex:uint=0; bulletIndex<playerCharacter.bulletArray.length; ++bulletIndex)
+                {
+                    if( playerCharacter.bulletArray[bulletIndex].isMoving == false )
+                    {
+                        playerCharacter.removeBullet(bulletIndex);
                     }
                 }
             }
