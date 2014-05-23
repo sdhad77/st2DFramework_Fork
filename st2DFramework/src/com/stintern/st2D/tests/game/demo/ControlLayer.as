@@ -2,6 +2,7 @@ package com.stintern.st2D.tests.game.demo
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
+    import com.stintern.st2D.display.ProgressBar;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
@@ -11,7 +12,6 @@ package com.stintern.st2D.tests.game.demo
     
     import flash.events.MouseEvent;
     import flash.geom.Rectangle;
-    import com.stintern.st2D.display.ProgressBar;
     
     public class ControlLayer extends Layer
     {
@@ -117,7 +117,7 @@ package com.stintern.st2D.tests.game.demo
             if( _batchSprite.imageLoaded == false )
                 return;
             
-            _currentCash = _cashData/1000;
+            _currentCash = _cashData/Resources.CASH_BAR_SPEED;
             if( _currentCash <= 100 )
             {
                 _cashBarProgress.updateProgress(_currentCash);
@@ -126,7 +126,7 @@ package com.stintern.st2D.tests.game.demo
             else
             {
                 _currentCash = _cashBarProgress.totalValue;
-                _cashData = _cashBarProgress.totalValue * 1000;
+                _cashData = _cashBarProgress.totalValue * Resources.CASH_BAR_SPEED;
             }
         }
         
@@ -210,21 +210,28 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true);
-                    
-                    _playerCharacterArray.push(characterObject2);
+                    if(_currentCash >= Resources.CHARECTER2_CASH)
+                    {
+                        var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true);
+                        
+                        _playerCharacterArray.push(characterObject2);
+                        _cashData -= Resources.CHARECTER2_CASH * Resources.CASH_BAR_SPEED; 
+                    }
                 }
             }
             else if( _MARGIN +  StageContext.instance.screenHeight/8 < event.stageX && event.stageX < _MARGIN +  StageContext.instance.screenHeight/8*2)
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
-                    characterObject1.info.attackBoundsWidth *= 4; 
-                    characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
-                    
-                    _playerCharacterArray.push(characterObject1);
-                   
+                    if(_currentCash >= Resources.CHARECTER1_CASH)
+                    {
+                        var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
+                        characterObject1.info.attackBoundsWidth *= 4; 
+                        characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
+                        
+                        _playerCharacterArray.push(characterObject1);
+                        _cashData -= Resources.CHARECTER1_CASH * Resources.CASH_BAR_SPEED; 
+                    }
                 }
             }
         }
