@@ -224,6 +224,13 @@ package com.stintern.st2D.tests.game.demo
                 if( -(StageContext.instance.screenWidth/2) >= StageContext.instance.mainCamera.x  && StageContext.instance.mainCamera.x >= -((StageContext.instance.screenWidth*_backGroundLayer.bgPageNum) - (StageContext.instance.screenWidth/2)))
                 {
                     intervalX = event.stageX - prevPoint.x;
+                    if( intervalX + StageContext.instance.mainCamera.x > -512 )
+                        intervalX = -512 - StageContext.instance.mainCamera.x;
+                    
+                    var rightSide:int = (StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - StageContext.instance.screenWidth * 0.5) * -1;
+                    if( intervalX + StageContext.instance.mainCamera.x < rightSide )
+                        intervalX = rightSide - StageContext.instance.mainCamera.x;
+                    
                     StageContext.instance.mainCamera.moveCamera(intervalX, 0.0);
                     prevPoint.x = event.stageX;
                     
