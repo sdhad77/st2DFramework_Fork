@@ -5,13 +5,13 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
-    import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.tests.game.demo.utils.Resources;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
     import flash.geom.Rectangle;
+    import com.stintern.st2D.display.ProgressBar;
     
     public class ControlLayer extends Layer
     {
@@ -19,6 +19,12 @@ package com.stintern.st2D.tests.game.demo
         
         private var mouseDownFlag:Boolean = false;
         private var prevPoint:Vector2D;
+        
+        private var _cashData:uint;
+        private var _currentCash:uint = 0;
+        private var _cashBarBg:Sprite;
+        private var _cashBarFront:Sprite;
+        private var _cashBarProgress:ProgressBar = new ProgressBar();
         
         private var _backGroundLayer:BackGroundLayer;
         private var _characterMovingLayer:CharacterMovingLayer;
@@ -64,7 +70,7 @@ package com.stintern.st2D.tests.game.demo
         private function onCreatedButton():void
         {
             var sprite:Sprite = new Sprite();
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character1_run_right0");
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character2_btn");
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
             sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
@@ -74,13 +80,54 @@ package com.stintern.st2D.tests.game.demo
             var y:Number = sprite.position.y;
             
             sprite = new Sprite();
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character2_run_right0", x, y );
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character1_btn", x, y );
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             _batchSprite.addSprite(sprite);
             
-            sprite = null;
+            onCreatedCashBar(_MARGIN + StageContext.instance.screenHeight/8*4, sprite.position.y );
             
+            sprite = null;
             onCreatedCastle();
+        }
+        
+        
+        private function onCreatedCashBar(positionX:Number, positionY:Number):void
+        {
+            _cashBarBg = new Sprite();
+            _cashBarBg.createSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "hp_bkg", positionX, positionY);
+            _cashBarBg.scale.x = 15.0;
+            _cashBarBg.scale.y = 1.5;
+            _cashBarBg.position.x = positionX + _cashBarBg.width/2;
+            _cashBarBg.position.y = positionY - _cashBarBg.height;
+            _batchSprite.addSprite(_cashBarBg);
+            
+            _cashBarFront = new Sprite();
+            _cashBarFront.createSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "cash_front", positionX, positionY);
+            _cashBarFront.scale.x = 15.0;
+            _cashBarFront.scale.y = 1.2;
+            _cashBarFront.position.x = positionX + _cashBarFront.width/2;
+            _cashBarFront.position.y = positionY - _cashBarFront.height
+            _batchSprite.addSprite(_cashBarFront);
+            
+            _cashBarProgress.init(_cashBarFront, _cashBarBg, 100, 0, ProgressBar.FROM_LEFT);
+        }
+        
+        private function updateCash():void
+        {
+            if( _batchSprite.imageLoaded == false )
+                return;
+            
+            _currentCash = _cashData/1000;
+            if( _currentCash <= 100 )
+            {
+                _cashBarProgress.updateProgress(_currentCash);
+                
+            }
+            else
+            {
+                _currentCash = _cashBarProgress.totalValue;
+                _cashData = _cashBarProgress.totalValue * 1000;
+            }
         }
         
         private function onCreatedCastle():void
@@ -94,6 +141,9 @@ package com.stintern.st2D.tests.game.demo
         
         override public function update(dt:Number):void
         {
+            _cashData += dt;
+            updateCash();           
+            
             if( _batchSprite.imageLoaded == false )
                 return;
             
@@ -160,20 +210,21 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
-                    characterObject1.info.attackBoundsWidth *= 4; 
-                    characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
+                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true);
                     
-                    _playerCharacterArray.push(characterObject1);
+                    _playerCharacterArray.push(characterObject2);
                 }
             }
             else if( _MARGIN +  StageContext.instance.screenHeight/8 < event.stageX && event.stageX < _MARGIN +  StageContext.instance.screenHeight/8*2)
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true);
+                    var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
+                    characterObject1.info.attackBoundsWidth *= 4; 
+                    characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
                     
-                    _playerCharacterArray.push(characterObject2);
+                    _playerCharacterArray.push(characterObject1);
+                   
                 }
             }
         }
