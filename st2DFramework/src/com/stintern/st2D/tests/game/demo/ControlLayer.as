@@ -128,15 +128,23 @@ package com.stintern.st2D.tests.game.demo
             if( _batchSprite.imageLoaded == false )
                 return;
             
-            _currentCash = _cashData/Resources.CASH_BAR_SPEED;
-            if( _currentCash <= 100 )
+            if(Resources.CASH_BAR_SPEED > 0)
+            {
+                _currentCash = _cashData/Resources.CASH_BAR_SPEED;
+            }
+            else
+            {
+                _currentCash = _cashData/1;
+            }
+            
+            if( _currentCash <= Resources.CASH_BAR_SPEED )
             {
                 _cashBarProgress.updateProgress(_currentCash);
-                
             }
             else
             {
                 _currentCash = _cashBarProgress.totalValue;
+                _cashBarProgress.updateProgress(_currentCash);
                 _cashData = _cashBarProgress.totalValue * Resources.CASH_BAR_SPEED;
             }
         }
