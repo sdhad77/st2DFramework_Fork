@@ -92,7 +92,7 @@ package com.stintern.st2D.tests.game.demo
                     _sprite.position.y = _sprite.height/2 + Math.floor(Math.random() * 20)*10;
                     _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.position.y, _info.speed);
                     
-                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
+                    _info.setAttackBounds( _sprite.getContentWidth(), StageContext.instance.screenHeight );
                 }
                 else if(tag == Resources.TAG_CASTLE)
                 {
@@ -101,7 +101,7 @@ package com.stintern.st2D.tests.game.demo
                     _sprite.position.x = _sprite.width;
                     _sprite.position.y = StageContext.instance.screenHeight * 0.5;
                     
-                    _info.setAttackBounds( _sprite.getContentWidth() * 3, _sprite.getContentHeight() * 2);
+                    _info.setAttackBounds( _sprite.getContentWidth() * 3, StageContext.instance.screenHeight);
                 }
                 else
                 {
@@ -120,7 +120,7 @@ package com.stintern.st2D.tests.game.demo
                     _sprite.position.y = _sprite.height/2 + Math.floor(Math.random() * 20)*10;
                     _sprite.moveTo(0, _sprite.position.y, _info.speed);
                     
-                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
+                    _info.setAttackBounds( _sprite.getContentWidth(), StageContext.instance.screenHeight );
                 }
                 else if(tag == Resources.TAG_CASTLE)
                 {
@@ -129,7 +129,7 @@ package com.stintern.st2D.tests.game.demo
                     _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - _sprite.width;
                     _sprite.position.y = StageContext.instance.screenHeight * 0.5;
                     
-                    _info.setAttackBounds( _sprite.getContentWidth() * 3, _sprite.getContentHeight() * 2);
+                    _info.setAttackBounds( _sprite.getContentWidth() * 3, StageContext.instance.screenHeight);
                 }
                 else
                 {
