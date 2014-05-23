@@ -113,9 +113,6 @@ package com.stintern.st2D.tests.game.demo
                                 enemyCharacter.setState(CharacterObject.ATTACK, playerCharacter);
                             }
                         }
-
-                        playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
-                        enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
                     }
                 }
                 
@@ -144,9 +141,6 @@ package com.stintern.st2D.tests.game.demo
                                 playerCharacter.setState(CharacterObject.ATTACK, enemyCharacter);
                             }
                         }
-                        
-                        enemyCharacter.hpProgress.updateProgress(enemyCharacter.info.hp);
-                        playerCharacter.hpProgress.updateProgress(playerCharacter.info.hp);
                     }
                     for(bulletIndex=0; bulletIndex<playerCharacter.bulletArray.length; ++bulletIndex)
                     {
@@ -177,7 +171,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 40, 10000, 2000, Resources.TAG_PURPLE, true);
+                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true);
                     
                     _playerCharacterArray.push(characterObject2);
                 }

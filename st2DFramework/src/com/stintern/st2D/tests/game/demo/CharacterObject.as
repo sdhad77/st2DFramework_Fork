@@ -229,6 +229,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 //this의 power로 타겟의 체력 감소시킴
                 _targetObject.info.hp -= _info.power;
+                _targetObject.hpProgress.updateProgress(_targetObject.info.hp);
                 
                 //타겟의 체력이 0이하가 될 경우
                 if(_targetObject.info.hp <= 0)
@@ -256,7 +257,10 @@ package com.stintern.st2D.tests.game.demo
                 _bulletArray.push(bullet);
                 
                 bullet.moveTo(_targetObject.sprite.position.x, _targetObject.sprite.position.y, 500);
+                
+                //this의 power로 타겟의 체력 감소시킴
                 _targetObject.info.hp -= _info.power;
+                _targetObject.hpProgress.updateProgress(_targetObject.info.hp);
                 
                 //타겟의 체력이 0이하가 될 경우
                 if(_targetObject.info.hp <= 0)
