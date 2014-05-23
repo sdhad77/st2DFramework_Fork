@@ -2,7 +2,7 @@ package com.stintern.st2D.tests.progressbar
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.progressBar;
+    import com.stintern.st2D.display.ProgressBar;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
     
@@ -14,7 +14,7 @@ package com.stintern.st2D.tests.progressbar
         private var spriteFront:Sprite;
         
         private var _batchSprite:BatchSprite = new BatchSprite();
-        private var _hpProgress:progressBar = new progressBar(); 
+        private var _hpProgress:ProgressBar = new ProgressBar(); 
         
         public function ProgressTestLayer()
         {            
@@ -47,11 +47,11 @@ package com.stintern.st2D.tests.progressbar
             spriteBkg.addChild(spriteFront);
             
             // 프로그래스바 초기화
-            _hpProgress.init(spriteFront, 100, 100, progressBar.DECREASE_TO_LEFT);
+            _hpProgress.init(spriteFront, 100, 100, ProgressBar.FROM_LEFT);
         }
         
         // 프로그래스바 테스트
-        private var hp:Number = 90;
+        private var hp:Number = 100;
         private function onTouch(event:MouseEvent):void
         {
             _hpProgress.updateProgress(hp);
