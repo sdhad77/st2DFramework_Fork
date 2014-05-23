@@ -5,13 +5,13 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
-    import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.tests.game.demo.utils.Resources;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
     import flash.geom.Rectangle;
+    import com.stintern.st2D.display.ProgressBar;
     
     public class ControlLayer extends Layer
     {
@@ -19,6 +19,12 @@ package com.stintern.st2D.tests.game.demo
         
         private var mouseDownFlag:Boolean = false;
         private var prevPoint:Vector2D;
+        
+        private var _cashData:uint;
+        private var _currentCash:uint = 0;
+        private var _cashBarBg:Sprite;
+        private var _cashBarFront:Sprite;
+        private var _cashBarProgress:ProgressBar = new ProgressBar();
         
         private var _backGroundLayer:BackGroundLayer;
         private var _characterMovingLayer:CharacterMovingLayer;
@@ -78,9 +84,50 @@ package com.stintern.st2D.tests.game.demo
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             _batchSprite.addSprite(sprite);
             
-            sprite = null;
+            onCreatedCashBar(_MARGIN + StageContext.instance.screenHeight/8*4, sprite.position.y );
             
+            sprite = null;
             onCreatedCastle();
+        }
+        
+        
+        private function onCreatedCashBar(positionX:Number, positionY:Number):void
+        {
+            _cashBarBg = new Sprite();
+            _cashBarBg.createSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "hp_bkg", positionX, positionY);
+            _cashBarBg.scale.x = 15.0;
+            _cashBarBg.scale.y = 1.5;
+            _cashBarBg.position.x = positionX + _cashBarBg.width/2;
+            _cashBarBg.position.y = positionY - _cashBarBg.height;
+            _batchSprite.addSprite(_cashBarBg);
+            
+            _cashBarFront = new Sprite();
+            _cashBarFront.createSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "cash_front", positionX, positionY);
+            _cashBarFront.scale.x = 15.0;
+            _cashBarFront.scale.y = 1.2;
+            _cashBarFront.position.x = positionX + _cashBarFront.width/2;
+            _cashBarFront.position.y = positionY - _cashBarFront.height
+            _batchSprite.addSprite(_cashBarFront);
+            
+            _cashBarProgress.init(_cashBarFront, _cashBarBg, 100, 0, ProgressBar.FROM_LEFT);
+        }
+        
+        private function updateCash():void
+        {
+            if( _batchSprite.imageLoaded == false )
+                return;
+            
+            _currentCash = _cashData/1000;
+            if( _currentCash <= 100 )
+            {
+                _cashBarProgress.updateProgress(_currentCash);
+                
+            }
+            else
+            {
+                _currentCash = _cashBarProgress.totalValue;
+                _cashData = _cashBarProgress.totalValue * 1000;
+            }
         }
         
         private function onCreatedCastle():void
@@ -94,6 +141,9 @@ package com.stintern.st2D.tests.game.demo
         
         override public function update(dt:Number):void
         {
+            _cashData += dt;
+            updateCash();           
+            
             if( _batchSprite.imageLoaded == false )
                 return;
             
