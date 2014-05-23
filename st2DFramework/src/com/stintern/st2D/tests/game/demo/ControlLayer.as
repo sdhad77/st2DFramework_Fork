@@ -70,7 +70,7 @@ package com.stintern.st2D.tests.game.demo
         private function onCreatedButton():void
         {
             var sprite:Sprite = new Sprite();
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character1_run_right0");
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character2_btn");
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
             sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
@@ -80,7 +80,7 @@ package com.stintern.st2D.tests.game.demo
             var y:Number = sprite.position.y;
             
             sprite = new Sprite();
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character2_run_right0", x, y );
+            sprite.createSpriteWithBatchSprite(_batchSprite, "character1_btn", x, y );
             sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             _batchSprite.addSprite(sprite);
             
@@ -210,20 +210,21 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
-                    characterObject1.info.attackBoundsWidth *= 4; 
-                    characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
+                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true);
                     
-                    _playerCharacterArray.push(characterObject1);
+                    _playerCharacterArray.push(characterObject2);
                 }
             }
             else if( _MARGIN +  StageContext.instance.screenHeight/8 < event.stageX && event.stageX < _MARGIN +  StageContext.instance.screenHeight/8*2)
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true);
+                    var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
+                    characterObject1.info.attackBoundsWidth *= 4; 
+                    characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
                     
-                    _playerCharacterArray.push(characterObject2);
+                    _playerCharacterArray.push(characterObject1);
+                   
                 }
             }
         }
