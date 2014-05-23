@@ -49,18 +49,18 @@ package com.stintern.st2D.tests.game.demo
          */
         public function CharacterObject(runAniStr:String, attAniStr:String, hp:Number, power:Number, speed:Number, attackSpeed:Number, type:uint, ally:Boolean)
         {
+            tag = type;
+            
             _runAniStr = runAniStr;
             _attAniStr = attAniStr;
             _info = new CharacterInfo(hp, power, speed, attackSpeed, ally);
             _batchSprite = _characterMovingLayer.batchSprite;
             _targetObject = null;
             
-            if(runAniStr != null && attAniStr != null)
-            {
-                //스프라이트 생성
-                spriteCreate();
-            }
-            if(type == Resources.TAG_PURPLE || type == Resources.TAG_ENEMY)
+            //스프라이트 생성
+            spriteCreate();
+            
+            if(type == Resources.TAG_PURPLE || type == Resources.TAG_GREEN)
             {
                 _attackScheduler.addFunc(_info.attackSpeed, nearAttackFunc, 0);
             }
@@ -76,30 +76,63 @@ package com.stintern.st2D.tests.game.demo
             _sprite = new SpriteAnimation();
             _sprite.createAnimationSpriteWithBatchSprite(_batchSprite, _runAniStr);
             
-            //스프라이트 생성될 y좌표 랜덤 생성
-            var yPositionRange:uint = (Math.floor(Math.random() * 20)*10);
-            _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
-            
-            //생성된 스프라이트가 아군일 경우 화면 좌측에 성성, 우측으로 이동
+            //tag 수정해야함.
+            //생성된 스프라이트가 아군일 경우 화면 좌측에 성성
             if(_info.ally == true)
             {
-                _sprite.position.x = 0;
-                _sprite.position.y = _sprite.height/2 + yPositionRange;
-                _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height, _info.speed);
+                if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_RED || tag == Resources.TAG_GREEN)
+                {
+                    _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
+                    
+                    //생성된 스프라이트가 아군일 경우 화면 좌측에 성성, 우측으로 이동
+                    _sprite.position.x = 0;
+                    _sprite.position.y = _sprite.height/2 + Math.floor(Math.random() * 20)*10;
+                    _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height, _info.speed);
+                    
+                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
+                }
+                else if(tag == Resources.TAG_CASTLE)
+                {
+                    _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight * 0.5, StageContext.instance.screenHeight * 0.5);
+                    
+                    _sprite.position.x = _sprite.width;
+                    _sprite.position.y = StageContext.instance.screenHeight * 0.5;
+                }
+                else
+                {
+                    trace("tag를 확인해주세요");
+                }
             }
-                //생성된 스프라이트가 적군일 경우 화면 우측에 성성, 좌측으로 이동
+            //생성된 스프라이트가 적군일 경우 화면 우측에 성성
             else
             {
-                _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
-                _sprite.position.y = _sprite.height/2 + yPositionRange;
-                _sprite.moveTo(0, _sprite.height, _info.speed);
+                if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_RED || tag == Resources.TAG_GREEN)
+                {
+                    _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
+                    
+                    //생성된 스프라이트가 적군일 경우 화면 우측에 성성, 좌측으로 이동
+                    _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
+                    _sprite.position.y = _sprite.height/2 + Math.floor(Math.random() * 20)*10;
+                    _sprite.moveTo(0, _sprite.height, _info.speed);
+                    
+                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
+                }
+                else if(tag == Resources.TAG_CASTLE)
+                {
+                    _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight * 0.5, StageContext.instance.screenHeight * 0.5);
+                    
+                    _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - _sprite.width;
+                    _sprite.position.y = StageContext.instance.screenHeight * 0.5;
+                }
+                else
+                {
+                    trace("tag를 확인해주세요");
+                }
             }
             
             _batchSprite.addSprite(_sprite);
             setHpBar();
             _sprite.playAnimation();
-            
-            _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
         }
         
         public function setHpBar():void
@@ -145,7 +178,7 @@ package com.stintern.st2D.tests.game.demo
                 _sprite.isMoving = false;
                 _targetObject = charObject;
                 
-                if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_ENEMY)
+                if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_GREEN)
                 {
                     nearAttackFunc();
                 }
