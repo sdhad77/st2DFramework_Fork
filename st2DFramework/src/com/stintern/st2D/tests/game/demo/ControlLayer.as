@@ -45,7 +45,7 @@ package com.stintern.st2D.tests.game.demo
             _backGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
             _characterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
             _timeLayer = SceneManager.instance.getCurrentScene().getLayerByName("TimeLayer") as TimeLayer;
-
+            
             _playerCharacterArray = _characterMovingLayer.playerCharacterArray;
             _enemyCharacterArray = _characterMovingLayer.enemyCharacterArray;
             
@@ -58,7 +58,7 @@ package com.stintern.st2D.tests.game.demo
             
             function enemyCreater():void
             {
-                _enemyCharacterArray.push(new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 3000, Resources.TAG_GREEN, false));
+                _enemyCharacterArray.push(new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 500, Resources.TAG_GREEN, false));
             }
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
@@ -149,61 +149,43 @@ package com.stintern.st2D.tests.game.demo
             
             for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
-                var playerCharacter:CharacterObject = _playerCharacterArray[i] as CharacterObject;
                 for(var j:uint=0; j<_enemyCharacterArray.length; j++)
                 {
-                    var enemyCharacter:CharacterObject = _enemyCharacterArray[j] as CharacterObject;
-                    if(intersectRect(playerCharacter.getAttackBounds(), enemyCharacter.sprite.rect))
+                    if(intersectRect(_playerCharacterArray[i].getAttackBounds(), _enemyCharacterArray[j].sprite.rect))
                     {
-                        if(playerCharacter.info.state != CharacterObject.ATTACK)
-                        {
-                            playerCharacter.setState(CharacterObject.ATTACK, enemyCharacter);
-                            if(enemyCharacter.tag == Resources.TAG_CASTLE)
-                            {
-                                enemyCharacter.setState(CharacterObject.ATTACK, playerCharacter);
-                            }
-                        }
+                        if(_playerCharacterArray[i].info.state != CharacterObject.ATTACK) _playerCharacterArray[i].setState(CharacterObject.ATTACK, _enemyCharacterArray[j]);
                     }
                 }
                 
-                for(var bulletIndex:uint=0; bulletIndex<playerCharacter.bulletArray.length; ++bulletIndex)
+                for(var bulletIndex:uint=0; bulletIndex<_playerCharacterArray[i].bulletArray.length; ++bulletIndex)
                 {
-                    if( playerCharacter.bulletArray[bulletIndex].isMoving == false )
+                    if( _playerCharacterArray[i].bulletArray[bulletIndex].isMoving == false )
                     {
-                        playerCharacter.removeBullet(bulletIndex);
+                        _playerCharacterArray[i].removeBullet(bulletIndex);
                     }
                 }
             }
             
             for(i=0; i<_enemyCharacterArray.length; ++i)
             {
-                enemyCharacter = _enemyCharacterArray[i] as CharacterObject;
                 for(j=0; j<_playerCharacterArray.length; j++)
                 {
-                    playerCharacter = _playerCharacterArray[j] as CharacterObject;
-                    if(intersectRect(enemyCharacter.getAttackBounds(), playerCharacter.sprite.rect))
+                    if(intersectRect(_enemyCharacterArray[i].getAttackBounds(), _playerCharacterArray[j].sprite.rect))
                     {
-                        if(enemyCharacter.info.state != CharacterObject.ATTACK)
-                        {
-                            enemyCharacter.setState(CharacterObject.ATTACK, playerCharacter);
-                            if(playerCharacter.tag == Resources.TAG_CASTLE)
-                            {
-                                playerCharacter.setState(CharacterObject.ATTACK, enemyCharacter);
-                            }
-                        }
+                        if(_enemyCharacterArray[i].info.state != CharacterObject.ATTACK) _enemyCharacterArray[i].setState(CharacterObject.ATTACK, _playerCharacterArray[j]);
                     }
-                    for(bulletIndex=0; bulletIndex<playerCharacter.bulletArray.length; ++bulletIndex)
+                }
+                
+                for(bulletIndex=0; bulletIndex<_enemyCharacterArray[i].bulletArray.length; ++bulletIndex)
+                {
+                    if( _enemyCharacterArray[i].bulletArray[bulletIndex].isMoving == false )
                     {
-                        if( playerCharacter.bulletArray[bulletIndex].isMoving == false )
-                        {
-                            playerCharacter.removeBullet(bulletIndex);
-                        }
+                        _enemyCharacterArray[i].removeBullet(bulletIndex);
                     }
                 }
             }
         }
         
-
         private function onTouch(event:MouseEvent):void
         {
             if( _MARGIN < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/8)
@@ -212,9 +194,7 @@ package com.stintern.st2D.tests.game.demo
                 {
                     if(_currentCash >= Resources.CHARECTER2_CASH)
                     {
-                        var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true);
-                        
-                        _playerCharacterArray.push(characterObject2);
+                        _playerCharacterArray.push(new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true));
                         _cashData -= Resources.CHARECTER2_CASH * Resources.CASH_BAR_SPEED; 
                     }
                 }
@@ -225,11 +205,9 @@ package com.stintern.st2D.tests.game.demo
                 {
                     if(_currentCash >= Resources.CHARECTER1_CASH)
                     {
-                        var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
-                        characterObject1.info.attackBoundsWidth *= 4; 
-                        characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
-                        
-                        _playerCharacterArray.push(characterObject1);
+                        _playerCharacterArray.push(new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true));
+                        _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsWidth *= 4;
+                        _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsHeight = _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsWidth;
                         _cashData -= Resources.CHARECTER1_CASH * Resources.CASH_BAR_SPEED; 
                     }
                 }

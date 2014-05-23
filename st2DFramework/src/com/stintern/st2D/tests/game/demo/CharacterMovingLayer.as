@@ -36,10 +36,12 @@ package com.stintern.st2D.tests.game.demo
                         _batchSprite.removeSprite(child);
                         child.dispose();
                     }
-                    for(var k:uint=0; k<_playerCharacterArray[i].bulletArray.length; k++)
+                    
+                    while(_playerCharacterArray[i].bulletArray.length > 0)
                     {
-                        _playerCharacterArray[i].removeBullet(k);
+                        _playerCharacterArray[i].removeBullet(_playerCharacterArray[i].bulletArray.length-1);
                     }
+
                     _playerCharacterArray.splice(i, 1);
                     break;
                 }
@@ -62,6 +64,12 @@ package com.stintern.st2D.tests.game.demo
                         _batchSprite.removeSprite(child);
                         child.dispose();
                     }
+                    
+                    while(_enemyCharacterArray[i].bulletArray.length > 0)
+                    {
+                        _enemyCharacterArray[i].removeBullet(_enemyCharacterArray[i].bulletArray.length-1);
+                    }
+                    
                     _enemyCharacterArray.splice(i, 1);
                     break;
                 }
