@@ -52,8 +52,7 @@ package com.stintern.st2D.tests.game.demo
             
             function enemyCreater():void
             {
-                _enemyCharacterArray.push(new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 3000, Resources.TAG_ENEMY, false));
-                _enemyCharacterArray[_enemyCharacterArray.length - 1].tag = Resources.TAG_ENEMY;
+                _enemyCharacterArray.push(new CharacterObject("character3_run_left", "character3_attack_left", 1000, 30, 10000, 3000, Resources.TAG_GREEN, false));
             }
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
@@ -86,35 +85,11 @@ package com.stintern.st2D.tests.game.demo
         
         private function onCreatedCastle():void
         {
-            var sprite:SpriteAnimation = new SpriteAnimation();
-            sprite.createAnimationSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "castle");
-            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight * 0.5, StageContext.instance.screenHeight * 0.5);
-            sprite.position.x = sprite.width;
-            sprite.position.y = StageContext.instance.screenHeight * 0.4;
-            sprite.setPlayAnimation("castle");
-            _characterMovingLayer.batchSprite.addSprite(sprite);
-            var playerCastleObject:CharacterObject = new CharacterObject(null, null, 5000, 50, 0, 1000, Resources.TAG_CASTLE, true);
-            playerCastleObject.tag = Resources.TAG_CASTLE;
-            playerCastleObject.sprite = sprite;
-            playerCastleObject.setHpBar();
+            var playerCastleObject:CharacterObject = new CharacterObject("castle", "castle", 5000, 50, 0, 1000, Resources.TAG_CASTLE, true);
             _characterMovingLayer.playerCharacterArray.push(playerCastleObject);
             
-            var x:Number = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - sprite.width;
-            var y:Number = sprite.position.y;
-            
-            sprite = new SpriteAnimation();
-            sprite.createAnimationSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "castle");
-            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight * 0.5, StageContext.instance.screenHeight * 0.5);
-            sprite.position.x = x;
-            sprite.position.y = y
-            _characterMovingLayer.batchSprite.addSprite(sprite);
-            var enemyCastleObject:CharacterObject = new CharacterObject(null, null, 5000, 50, 0, 1000, Resources.TAG_CASTLE, false);
-            enemyCastleObject.tag = Resources.TAG_CASTLE;
-            enemyCastleObject.sprite = sprite;
-            enemyCastleObject.setHpBar();
+            var enemyCastleObject:CharacterObject = new CharacterObject("castle", "castle", 5000, 50, 0, 1000, Resources.TAG_CASTLE, false);
             _characterMovingLayer.enemyCharacterArray.push(enemyCastleObject);
-            
-            sprite = null;
         }
         
         override public function update(dt:Number):void
@@ -192,7 +167,6 @@ package com.stintern.st2D.tests.game.demo
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
                     var characterObject1:CharacterObject = new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true);
-                    characterObject1.tag = Resources.TAG_RED;
                     characterObject1.info.attackBoundsWidth *= 4; 
                     characterObject1.info.attackBoundsHeight = characterObject1.sprite.getContentWidth();
                     
@@ -204,7 +178,6 @@ package com.stintern.st2D.tests.game.demo
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
                     var characterObject2:CharacterObject = new CharacterObject("character2_run_right", "character2_attack_right", 100, 40, 10000, 2000, Resources.TAG_PURPLE, true);
-                    characterObject2.tag = Resources.TAG_PURPLE;
                     
                     _playerCharacterArray.push(characterObject2);
                 }
