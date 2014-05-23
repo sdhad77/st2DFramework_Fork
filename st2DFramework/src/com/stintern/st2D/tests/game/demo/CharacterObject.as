@@ -99,7 +99,7 @@ package com.stintern.st2D.tests.game.demo
                     _sprite.position.x = _sprite.width;
                     _sprite.position.y = StageContext.instance.screenHeight * 0.5;
                     
-                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
+                    _info.setAttackBounds( _sprite.getContentWidth() * 2, _sprite.getContentHeight() * 2);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ package com.stintern.st2D.tests.game.demo
                     _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - _sprite.width;
                     _sprite.position.y = StageContext.instance.screenHeight * 0.5;
                     
-                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
+                    _info.setAttackBounds( _sprite.getContentWidth() * 2, _sprite.getContentHeight() * 2);
                 }
                 else
                 {
