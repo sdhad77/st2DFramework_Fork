@@ -37,7 +37,7 @@ package com.stintern.st2D.display.sprite
         private var _increaseY:Number;         //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
         private var _destX:int;                //이동중일때 목적지의 좌표
         private var _destY:int;                //이동중일때 목적지의 좌표
-               
+        
         public function Sprite()
         {
             super();
@@ -245,18 +245,52 @@ package com.stintern.st2D.display.sprite
          */
         public function setUVCoord(u:Number, v:Number, width:Number, height:Number):void
         {
-            vertexData[3] = u;
-            vertexData[4] = v;
-            
-            vertexData[3+9] = u+width;
-            vertexData[4+9] = v;
-            
-            vertexData[3+9*2] = u+width;
-            vertexData[4+9*2] = v+height;
-            
-            vertexData[3+9*3] = u;
-            vertexData[4+9*3] = v+height;
+            // 뒤집어진 객체이면
+            if( vertexData[3] > vertexData[3+9] )
+            {
+                vertexData[3] = u+width;
+                vertexData[4] = v;
                 
+                vertexData[3+9] = u;
+                vertexData[4+9] = v;
+                
+                vertexData[3+9*2] = u;
+                vertexData[4+9*2] = v+height;
+                
+                vertexData[3+9*3] = u+width;
+                vertexData[4+9*3] = v+height;
+            }
+            else
+            {
+                vertexData[3] = u;
+                vertexData[4] = v;
+                
+                vertexData[3+9] = u+width;
+                vertexData[4+9] = v;
+                
+                vertexData[3+9*2] = u+width;
+                vertexData[4+9*2] = v+height;
+                
+                vertexData[3+9*3] = u;
+                vertexData[4+9*3] = v+height;
+            }
+                
+            if(vertexBuffer != null)
+            {
+                vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length/9);
+            }
+        }
+        
+        public function reverseLeftRight():void
+        {
+            var tmp:Number = vertexData[3];
+            vertexData[3] = vertexData[3+9];
+            vertexData[3+9] = tmp;
+            
+            tmp = vertexData[3+9*2]; 
+            vertexData[3+9*2] = vertexData[3+9*3];
+            vertexData[3+9*3] = tmp;
+            
             if(vertexBuffer != null)
             {
                 vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length/9);
