@@ -71,7 +71,7 @@ package com.stintern.st2D.tests.game.demo
             sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
             _batchSprite.addSprite(sprite);
             
-            var x:Number = sprite.position.x + StageContext.instance.screenWidth/8;
+            var x:Number = _MARGIN + StageContext.instance.screenWidth/8;
             var y:Number = sprite.position.y;
             
             sprite = new Sprite();
