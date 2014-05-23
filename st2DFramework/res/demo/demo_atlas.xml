@@ -17,7 +17,7 @@
 <atlasItem name="character2_run_left1.png" x="488" y="819" width="128" height="128" />
 <atlasItem name="character1_run_left0.png" x="618" y="559" width="128" height="128" />
 <atlasItem name="character1_run_right0.png" x="748" y="559" width="128" height="128" />
-<atlasItem name="castle.png" x="878" y="559" width="105" height="105" />
+<atlasItem name="castle0.png" x="878" y="559" width="105" height="105" />
 <atlasItem name="bullet0.png" x="0" y="955" width="44" height="44" />
 <atlasItem name="hp_front.png" x="745" y="520" width="28" height="32" />
 <atlasItem name="hp_bkg.png" x="775" y="520" width="32" height="32" />
