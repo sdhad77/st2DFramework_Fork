@@ -98,6 +98,8 @@ package com.stintern.st2D.tests.game.demo
                     
                     _sprite.position.x = _sprite.width;
                     _sprite.position.y = StageContext.instance.screenHeight * 0.5;
+                    
+                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
                 }
                 else
                 {
@@ -124,6 +126,8 @@ package com.stintern.st2D.tests.game.demo
                     
                     _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - _sprite.width;
                     _sprite.position.y = StageContext.instance.screenHeight * 0.5;
+                    
+                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
                 }
                 else
                 {
@@ -263,14 +267,11 @@ package com.stintern.st2D.tests.game.demo
             //타겟이 존재할 경우
             if(_targetObject)
             {
-                var bullet:Sprite = new Sprite();
-                bullet.createSpriteWithBatchSprite(_batchSprite, "bullet0", sprite.position.x, sprite.position.y);
-                _batchSprite.addSprite(bullet);
-                
-                _bulletArray.push(bullet);
-                
-                bullet.moveTo(_targetObject.sprite.position.x, _targetObject.sprite.position.y, 500);
-                
+                _bulletArray.push(new Sprite());
+                _bulletArray[_bulletArray.length-1].createSpriteWithBatchSprite(_batchSprite, "bullet0", sprite.position.x, sprite.position.y);
+                _bulletArray[_bulletArray.length-1].moveTo(_targetObject.sprite.position.x, _targetObject.sprite.position.y, 500);
+                _batchSprite.addSprite(_bulletArray[_bulletArray.length-1]);
+
                 //this의 power로 타겟의 체력 감소시킴
                 _targetObject.info.hp -= _info.power;
                 _targetObject.hpProgress.updateProgress(_targetObject.info.hp);
