@@ -22,6 +22,7 @@ package com.stintern.st2D.tests.game.demo
         private var _sprite:SpriteAnimation;
         private var _targetObject:CharacterObject;
         private var _attackScheduler:Scheduler = new Scheduler;
+        private var _deadScheduler:Scheduler = new Scheduler;
         
         private var _characterMovingLayer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
         private var _backGroundLayer:BackGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
@@ -36,6 +37,7 @@ package com.stintern.st2D.tests.game.demo
         
         private var _bulletArray:Vector.<Sprite> = new Vector.<Sprite>();
         private var _degree:Number = 0.0;
+        private var _alpha:Number = 1.0;
         
         /**
          * 캐릭터 Object를 생성합니다
@@ -210,34 +212,52 @@ package com.stintern.st2D.tests.game.demo
             }
             else if(state == "DEAD")
             {
-                if(_info.ally)
-                {
-                    _attackScheduler.stopScheduler();
-                    
-                    for(var i:uint=0; i<_characterMovingLayer.enemyCharacterArray.length; i++)
-                    {
-                        if(this == _characterMovingLayer.enemyCharacterArray[i].targetObject) _characterMovingLayer.enemyCharacterArray[i].setState("RUN");
-                    }
-                    
-                    _characterMovingLayer.batchSprite.removeSprite(_sprite);
-                    _sprite.dispose();
-                    _characterMovingLayer.removePlayerCharacterObject(this);
-                }
-                else
-                {
-                    _attackScheduler.stopScheduler();
-                    
-                    for(i=0; i<_characterMovingLayer.playerCharacterArray.length; i++)
-                    {
-                        if(this == _characterMovingLayer.playerCharacterArray[i].targetObject) _characterMovingLayer.playerCharacterArray[i].setState("RUN");
-                    }
-                    
-                    _characterMovingLayer.batchSprite.removeSprite(_sprite);
-                    _sprite.dispose();
-                    _characterMovingLayer.removeEnemyCharacterObject(this);
-                }
+                _attackScheduler.stopScheduler();
+                
+                _deadScheduler.addFunc(100, deadFunction, 1);  
+                _deadScheduler.startScheduler();
             }
             else trace("정의되지 않은 state입니다.");
+        }
+        
+        private function deadFunction(evt:Event = null):void
+        {
+            _sprite.setAlpha(_alpha);     
+            _alpha -= 0.05;      
+            if( _alpha <= 0.0 )
+            {
+                afterDead();
+                _deadScheduler.stopScheduler();
+                _deadScheduler = null;
+            }
+        }
+        
+        private function afterDead():void
+        {
+            if(_info.ally)
+            {
+                for(var i:uint=0; i<_characterMovingLayer.enemyCharacterArray.length; i++)
+                {
+                    if(this == _characterMovingLayer.enemyCharacterArray[i].targetObject) 
+                        _characterMovingLayer.enemyCharacterArray[i].setState("RUN");
+                }
+                
+                _characterMovingLayer.batchSprite.removeSprite(_sprite);
+                _sprite.dispose();
+                _characterMovingLayer.removePlayerCharacterObject(this);
+            }
+            else
+            {
+                for(i=0; i<_characterMovingLayer.playerCharacterArray.length; i++)
+                {
+                    if(this == _characterMovingLayer.playerCharacterArray[i].targetObject) 
+                        _characterMovingLayer.playerCharacterArray[i].setState("RUN");
+                }
+                
+                _characterMovingLayer.batchSprite.removeSprite(_sprite);
+                _sprite.dispose();
+                _characterMovingLayer.removeEnemyCharacterObject(this);
+            }
         }
         
         private function nearAttackFunc(evt:Event = null):void
