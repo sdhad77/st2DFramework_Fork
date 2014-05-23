@@ -217,11 +217,15 @@ package com.stintern.st2D.tests.game.demo
             
             for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
-                for(var j:uint=0; j<_enemyCharacterArray.length; j++)
+                if(_playerCharacterArray[i].info.state != CharacterObject.ATTACK)
                 {
-                    if(intersectRect(_playerCharacterArray[i].getAttackBounds(), _enemyCharacterArray[j].sprite.rect))
+                    for(var j:uint=0; j<_enemyCharacterArray.length; j++)
                     {
-                        if(_playerCharacterArray[i].info.state != CharacterObject.ATTACK) _playerCharacterArray[i].setState(CharacterObject.ATTACK, _enemyCharacterArray[j]);
+                        if(intersectRect(_playerCharacterArray[i].getAttackBounds(), _enemyCharacterArray[j].sprite.rect))
+                        {
+                            _playerCharacterArray[i].setState(CharacterObject.ATTACK, _enemyCharacterArray[j]);
+                            break;
+                        }
                     }
                 }
                 
@@ -236,11 +240,15 @@ package com.stintern.st2D.tests.game.demo
             
             for(i=0; i<_enemyCharacterArray.length; ++i)
             {
-                for(j=0; j<_playerCharacterArray.length; j++)
+                if(_enemyCharacterArray[i].info.state != CharacterObject.ATTACK)
                 {
-                    if(intersectRect(_enemyCharacterArray[i].getAttackBounds(), _playerCharacterArray[j].sprite.rect))
+                    for(j=0; j<_playerCharacterArray.length; j++)
                     {
-                        if(_enemyCharacterArray[i].info.state != CharacterObject.ATTACK) _enemyCharacterArray[i].setState(CharacterObject.ATTACK, _playerCharacterArray[j]);
+                        if(intersectRect(_enemyCharacterArray[i].getAttackBounds(), _playerCharacterArray[j].sprite.rect))
+                        {
+                            _enemyCharacterArray[i].setState(CharacterObject.ATTACK, _playerCharacterArray[j]);
+                            break;
+                        }
                     }
                 }
                 
