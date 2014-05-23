@@ -33,8 +33,8 @@ package com.stintern.st2D.tests.game.demo
         private var _coolTimeBar2:Sprite;
         private var _coolTimeProgress1:ProgressBar = new ProgressBar();
         private var _coolTimeProgress2:ProgressBar = new ProgressBar();
-        private var _coolTimeData1:uint = 50;
-        private var _coolTimeData2:uint = 50;
+        private var _coolTimeData1:uint = 30;
+        private var _coolTimeData2:uint = 30;
 
         private var _backGroundLayer:BackGroundLayer;
         private var _characterMovingLayer:CharacterMovingLayer;
@@ -268,7 +268,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    if(_currentCash >= Resources.CHARECTER2_CASH && _coolTimeBar1.isVisible == false)
+                    if(_currentCash >= Resources.CHARECTER2_CASH)
                     {
                         _playerCharacterArray.push(new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true));
                         _cashData -= Resources.CHARECTER2_CASH * Resources.CASH_BAR_SPEED; 
@@ -280,7 +280,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 if( _MARGIN < event.stageY && event.stageY < _MARGIN +  StageContext.instance.screenHeight/8)
                 {
-                    if(_currentCash >= Resources.CHARECTER1_CASH && _coolTimeBar2.isVisible == false)
+                    if(_currentCash >= Resources.CHARECTER1_CASH)
                     {
                         _playerCharacterArray.push(new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true));
                         _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsWidth *= 4;
