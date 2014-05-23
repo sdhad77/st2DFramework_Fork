@@ -269,7 +269,7 @@ package com.stintern.st2D.display.sprite
          * @param index VertexData 배열에서 갱신할 시작 인덱스
          * @param sprite VertexData 를 갱신할 스프라이트 객체
          */
-        private function inputVertexDataAt(index, sprite):void
+        private function inputVertexDataAt(index:uint, sprite:Sprite):void
         {
             var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
             var spriteVertexData:Vector.<Number> = sprite.vertexData;
@@ -286,9 +286,18 @@ package com.stintern.st2D.display.sprite
                     var y:Number = spriteVertexData[sourceIndex++];
                     var z:Number = spriteVertexData[sourceIndex++];
                     
-                    vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
-                    vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
-                    vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
+                    if(sprite.isVisible == false)
+                    {
+                        vertexData[targetIndex++] = 0;
+                        vertexData[targetIndex++] = 0;
+                        vertexData[targetIndex++] = 0;
+                    }
+                    else
+                    {
+                        vertexData[targetIndex++] =   spriteMatrixRawData[0] * x + spriteMatrixRawData[1] * y + spriteMatrixRawData[2] * z + sprite.modelMatrix.position.x ;         // x
+                        vertexData[targetIndex++] =   spriteMatrixRawData[4] * x + spriteMatrixRawData[5] * y + spriteMatrixRawData[6] * z + sprite.modelMatrix.position.y;         // y
+                        vertexData[targetIndex++] =   spriteMatrixRawData[8] * x + spriteMatrixRawData[9] * y + spriteMatrixRawData[10] * z + sprite.modelMatrix.position.z;       // z
+                    }
                     
                     vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // u 
                     vertexData[targetIndex++] = spriteVertexData[sourceIndex++];   // v
