@@ -46,9 +46,9 @@ package com.stintern.st2D.display.sprite
             vertexData.push(
                     //X, Y, Z,              U, V,            R,  G, B, A
                     -0.5, 0.5,  0.5,      0,  0,              1.0,1.0,1.0,1.0,
-                    0.5,  0.5,  0.5,      1,  0,             0.0,0.0,1.0,1.0,
-                    0.5,  -0.5, 0.5,      1,  1,             0.0,1.0,0.0,1.0,
-                    -0.5, -0.5, 0.5,      0,  1,             1.0,0.0,0.0,1.0
+                    0.5,  0.5,  0.5,      1,  0,             1.0,1.0,1.0,1.0,
+                    0.5,  -0.5, 0.5,      1,  1,             1.0,1.0,1.0,1.0,
+                    -0.5, -0.5, 0.5,      0,  1,             1.0,1.0,1.0,1.0
                 );
             
             _isMoving = false;
@@ -422,6 +422,19 @@ package com.stintern.st2D.display.sprite
                 {
                     setTranslation(new Vector2D(position.x + _increaseX, position.y + _increaseY));
                 }
+            }
+        }
+        
+        public function setAlpha(alpha:Number):void
+        {
+            if( alpha > 1.0 )
+                alpha = 1.0;
+            else if( alpha < 0.0 )
+                alpha = 0.0;
+            
+            for(var i:uint = 0; i<DisplayObject.VERTEX_COUNT; ++i)
+            {
+                vertexData[8 + i*DisplayObject.DATAS_PER_VERTEX] = alpha; 
             }
         }
         

@@ -114,7 +114,8 @@ package com.stintern.st2D.basic
                 ( 
                     Context3DProgramType.FRAGMENT,	
                     "tex ft0, v1, fs0 <2d,linear,repeat,miplinear>\n" +	
-                    "mov oc, ft0\n"									
+                    "mul ft1, v2, ft0\n" +
+                    "mov oc, ft1\n"									
                 );
             
             _shaderProgram = _context3D.createProgram();
