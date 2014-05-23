@@ -99,7 +99,7 @@ package com.stintern.st2D.tests.game.demo
                     _sprite.position.x = _sprite.width;
                     _sprite.position.y = StageContext.instance.screenHeight * 0.5;
                     
-                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
+                    _info.setAttackBounds( _sprite.getContentWidth() * 3, _sprite.getContentHeight() * 2);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ package com.stintern.st2D.tests.game.demo
                     _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum - _sprite.width;
                     _sprite.position.y = StageContext.instance.screenHeight * 0.5;
                     
-                    _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
+                    _info.setAttackBounds( _sprite.getContentWidth() * 3, _sprite.getContentHeight() * 2);
                 }
                 else
                 {
@@ -155,14 +155,15 @@ package com.stintern.st2D.tests.game.demo
         {
             spriteBkg = new Sprite();
             spriteBkg.createSpriteWithBatchSprite(_batchSprite, "hp_bkg", _sprite.position.x, _sprite.position.y + _sprite.height*0.8);
-            spriteBkg.scale.x = 3.0;
+            spriteBkg.scale.x = 2.2;
+            spriteBkg.scale.y = 0.6;
             spriteBkg.depth = _sprite.depth - 0.01;
             _batchSprite.addSprite(spriteBkg);
             
             spriteFront = new Sprite();
             spriteFront.createSpriteWithBatchSprite(_batchSprite, "hp_front", _sprite.position.x, _sprite.position.y + _sprite.height*0.8);
-            spriteFront.scale.x = 3.0;
-            spriteFront.scale.y = 0.8;
+            spriteFront.scale.x = 2.2;
+            spriteFront.scale.y = 0.4;
             spriteFront.depth = _sprite.depth - 0.02;
             _batchSprite.addSprite(spriteFront);
             
