@@ -20,12 +20,22 @@ package com.stintern.st2D.tests.game.demo
         private var mouseDownFlag:Boolean = false;
         private var prevPoint:Vector2D;
         
+        private var _characterBtn1:Sprite;
+        private var _characterBtn2:Sprite;
+        
         private var _cashData:uint;
         private var _currentCash:uint = 0;
         private var _cashBarBg:Sprite;
         private var _cashBarFront:Sprite;
         private var _cashBarProgress:ProgressBar = new ProgressBar();
         
+        private var _coolTimeBar1:Sprite;
+        private var _coolTimeBar2:Sprite;
+        private var _coolTimeProgress1:ProgressBar = new ProgressBar();
+        private var _coolTimeProgress2:ProgressBar = new ProgressBar();
+        private var _coolTimeData1:uint = 100;
+        private var _coolTimeData2:uint = 100;
+
         private var _backGroundLayer:BackGroundLayer;
         private var _characterMovingLayer:CharacterMovingLayer;
         private var _timeLayer:TimeLayer;
@@ -69,24 +79,25 @@ package com.stintern.st2D.tests.game.demo
         
         private function onCreatedButton():void
         {
-            var sprite:Sprite = new Sprite();
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character2_btn");
-            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
-            sprite.position.x = _MARGIN + sprite.width / 2 * sprite.scale.x;
-            sprite.position.y = StageContext.instance.screenHeight - _MARGIN - sprite.height / 2 * sprite.scale.y;
-            _batchSprite.addSprite(sprite);
+            _characterBtn2 = new Sprite();
+            _characterBtn2.createSpriteWithBatchSprite(_batchSprite, "character2_btn");
+            _characterBtn2.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+            _characterBtn2.position.x = _MARGIN + _characterBtn2.width / 2 * _characterBtn2.scale.x;
+            _characterBtn2.position.y = StageContext.instance.screenHeight - _MARGIN - _characterBtn2.height / 2 * _characterBtn2.scale.y;
+            _batchSprite.addSprite(_characterBtn2);
+            onCreatedCoolTime(1, _characterBtn2.position.x, _characterBtn2.position.y);
             
             var x:Number = _MARGIN + StageContext.instance.screenWidth/8;
-            var y:Number = sprite.position.y;
+            var y:Number = _characterBtn2.position.y;
             
-            sprite = new Sprite();
-            sprite.createSpriteWithBatchSprite(_batchSprite, "character1_btn", x, y );
-            sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
-            _batchSprite.addSprite(sprite);
+            _characterBtn1 = new Sprite();
+            _characterBtn1.createSpriteWithBatchSprite(_batchSprite, "character1_btn", x, y );
+            _characterBtn1.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+            _batchSprite.addSprite(_characterBtn1);
+            onCreatedCoolTime(2, _characterBtn1.position.x, _characterBtn1.position.y);
             
-            onCreatedCashBar(_MARGIN + StageContext.instance.screenHeight/8*4, sprite.position.y );
+            onCreatedCashBar(_MARGIN + StageContext.instance.screenHeight/8*4, _characterBtn1.position.y );
             
-            sprite = null;
             onCreatedCastle();
         }
         
@@ -139,10 +150,67 @@ package com.stintern.st2D.tests.game.demo
             _characterMovingLayer.enemyCharacterArray.push(enemyCastleObject);
         }
         
+        private function onCreatedCoolTime(characterIndex:uint, positionX:Number, positionY:Number):void
+        {
+            if(characterIndex == 1)
+            {
+                _coolTimeBar1 = new Sprite();
+                _coolTimeBar1.createSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "cooldown_front", positionX, positionY);
+                _coolTimeBar1.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+                _coolTimeBar1.position.x = positionX;
+                _coolTimeBar1.position.y = positionY;
+                _batchSprite.addSprite(_coolTimeBar1);
+                
+                _coolTimeProgress1.init(_coolTimeBar1, _characterBtn2, _coolTimeData1, _coolTimeData1, ProgressBar.FROM_LEFT);
+                _coolTimeBar1.isVisible = false;
+            }
+            else if(characterIndex == 2)
+            {
+                _coolTimeBar2 = new Sprite();
+                _coolTimeBar2.createSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "cooldown_front", positionX, positionY);
+                _coolTimeBar2.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+                _coolTimeBar2.position.x = positionX;
+                _coolTimeBar2.position.y = positionY;
+                _batchSprite.addSprite(_coolTimeBar2);
+                
+                _coolTimeProgress2.init(_coolTimeBar2, _characterBtn1, _coolTimeData2, _coolTimeData2, ProgressBar.FROM_LEFT);
+                _coolTimeBar2.isVisible = false;
+            }
+        }
+        
+        private function updateCoolTime():void
+        {
+            if( _batchSprite.imageLoaded == false )
+                return;
+            
+            if(_coolTimeBar1.isVisible == true)
+            {
+                _coolTimeData1--;
+                _coolTimeProgress1.updateProgress(_coolTimeData1);
+                if(_coolTimeData1 == 0)
+                {
+                    _coolTimeBar1.isVisible = false;
+                    _coolTimeData1 = 100;
+                }
+            }
+            
+            if(_coolTimeBar2.isVisible == true)
+            {
+                _coolTimeData2--;
+                _coolTimeProgress2.updateProgress(_coolTimeData2);
+                if(_coolTimeData2 == 0)
+                {
+                    _coolTimeBar2.isVisible = false;
+                    _coolTimeData2 = 100;
+                }
+            }
+        }
+        
         override public function update(dt:Number):void
         {
             _cashData += dt;
-            updateCash();           
+            updateCash();
+            updateCoolTime();
             
             if( _batchSprite.imageLoaded == false )
                 return;
@@ -196,6 +264,7 @@ package com.stintern.st2D.tests.game.demo
                     {
                         _playerCharacterArray.push(new CharacterObject("character2_run_right", "character2_attack_right", 100, 20, 10000, 300, Resources.TAG_PURPLE, true));
                         _cashData -= Resources.CHARECTER2_CASH * Resources.CASH_BAR_SPEED; 
+                        _coolTimeBar1.isVisible = true;
                     }
                 }
             }
@@ -208,7 +277,8 @@ package com.stintern.st2D.tests.game.demo
                         _playerCharacterArray.push(new CharacterObject("character1_run_right", "character1_attack", 100, 40, 10000, 600, Resources.TAG_RED, true));
                         _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsWidth *= 4;
                         _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsHeight = _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsWidth;
-                        _cashData -= Resources.CHARECTER1_CASH * Resources.CASH_BAR_SPEED; 
+                        _cashData -= Resources.CHARECTER1_CASH * Resources.CASH_BAR_SPEED;
+                        _coolTimeBar2.isVisible = true;
                     }
                 }
             }
