@@ -2,7 +2,6 @@ package com.stintern.st2D.tests.game.demo
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.SceneManager;
-    import com.stintern.st2D.display.progressBar;
     import com.stintern.st2D.display.sprite.Base;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
@@ -12,6 +11,7 @@ package com.stintern.st2D.tests.game.demo
     
     import flash.events.Event;
     import flash.geom.Rectangle;
+    import com.stintern.st2D.display.ProgressBar;
     
     public class CharacterObject extends Base
     {
@@ -28,10 +28,11 @@ package com.stintern.st2D.tests.game.demo
         
         private var spriteBkg:Sprite;
         private var spriteFront:Sprite;
-        private var _hpProgress:progressBar = new progressBar(); 
+        private var _hpProgress:ProgressBar = new ProgressBar(); 
         
         public static const RUN:String = "RUN";
         public static const ATTACK:String = "ATTACK";
+        public static const DEAD:String = "DEAD";
         
         private var _bulletArray:Vector.<Sprite> = new Vector.<Sprite>();
         private var _degree:Number = 0.0;
@@ -87,7 +88,7 @@ package com.stintern.st2D.tests.game.demo
                     //생성된 스프라이트가 아군일 경우 화면 좌측에 성성, 우측으로 이동
                     _sprite.position.x = 0;
                     _sprite.position.y = _sprite.height/2 + Math.floor(Math.random() * 20)*10;
-                    _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.height, _info.speed);
+                    _sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum, _sprite.position.y, _info.speed);
                     
                     _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
                 }
@@ -113,7 +114,7 @@ package com.stintern.st2D.tests.game.demo
                     //생성된 스프라이트가 적군일 경우 화면 우측에 성성, 좌측으로 이동
                     _sprite.position.x = StageContext.instance.screenWidth * _backGroundLayer.bgPageNum;
                     _sprite.position.y = _sprite.height/2 + Math.floor(Math.random() * 20)*10;
-                    _sprite.moveTo(0, _sprite.height, _info.speed);
+                    _sprite.moveTo(0, _sprite.position.y, _info.speed);
                     
                     _info.setAttackBounds( _sprite.getContentWidth(), _sprite.getContentHeight() );
                 }
@@ -148,7 +149,7 @@ package com.stintern.st2D.tests.game.demo
             spriteFront.scale.y = 0.8;
             _batchSprite.addSprite(spriteFront);
             
-            _hpProgress.init(spriteFront, _info.hp, _info.hp, progressBar.DECREASE_TO_LEFT);
+            _hpProgress.init(spriteFront, spriteBkg, _info.hp, _info.hp, ProgressBar.FROM_LEFT);
             _sprite.addChild(spriteFront);
             _sprite.addChild(spriteBkg);
         }
@@ -189,12 +190,42 @@ package com.stintern.st2D.tests.game.demo
                 
                 _attackScheduler.startScheduler();
             }
+            else if(state == "DEAD")
+            {
+                if(_info.ally)
+                {
+                    _attackScheduler.stopScheduler();
+                    
+                    for(var i:uint=0; i<_characterMovingLayer.enemyCharacterArray.length; i++)
+                    {
+                        if(this == _characterMovingLayer.enemyCharacterArray[i].targetObject) _characterMovingLayer.enemyCharacterArray[i].setState("RUN");
+                    }
+                    
+                    _characterMovingLayer.batchSprite.removeSprite(_sprite);
+                    _sprite.dispose();
+                    _characterMovingLayer.removePlayerCharacterObject(this);
+                }
+                else
+                {
+                    _attackScheduler.stopScheduler();
+                    
+                    for(i=0; i<_characterMovingLayer.playerCharacterArray.length; i++)
+                    {
+                        if(this == _characterMovingLayer.playerCharacterArray[i].targetObject) _characterMovingLayer.playerCharacterArray[i].setState("RUN");
+                    }
+                    
+                    _characterMovingLayer.batchSprite.removeSprite(_sprite);
+                    _sprite.dispose();
+                    _characterMovingLayer.removeEnemyCharacterObject(this);
+                }
+            }
+            else trace("정의되지 않은 state입니다.");
         }
         
         private function nearAttackFunc(evt:Event = null):void
         {
-            //this의 상태가 공격이고, 타겟이 존재할 경우
-            if(_info.state==ATTACK && _targetObject)
+            //타겟이 존재할 경우
+            if(_targetObject)
             {
                 //this의 power로 타겟의 체력 감소시킴
                 _targetObject.info.hp -= _info.power;
@@ -202,31 +233,21 @@ package com.stintern.st2D.tests.game.demo
                 //타겟의 체력이 0이하가 될 경우
                 if(_targetObject.info.hp <= 0)
                 {
-                    //타겟의 스케쥴러 멈춤
-                    _targetObject.attackScheduler.stopScheduler();
-                    
-                    //this가 아군일경우, 즉 타겟이 적군일 경우 적군 삭제
-                    if(_info.ally)
-                    {
-                        _characterMovingLayer.removeEnemyCharacterObject(_targetObject);
-                    }
-                        //this가 적군일경우, 즉 타겟이 아군일 경우 아군 삭제
-                    else
-                    {
-                        _characterMovingLayer.removePlayerCharacterObject(_targetObject);
-                    }
-                    _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
-                    
-                    //this의 상태를 RUN으로 변경
+                    _targetObject.setState("DEAD");
                     setState("RUN");
                 }
+            }
+            //타겟이 존재하지 않을 경우
+            else
+            {
+                setState("RUN");
             }
         }
         
         private function farAttackFunc(evt:Event = null):void
         {
-            //this의 상태가 공격이고, 타겟이 존재할 경우
-            if(_info.state==ATTACK && _targetObject)
+            //타겟이 존재할 경우
+            if(_targetObject)
             {
                 var bullet:Sprite = new Sprite();
                 bullet.createSpriteWithBatchSprite(_batchSprite, "bullet0", sprite.position.x, sprite.position.y);
@@ -240,25 +261,15 @@ package com.stintern.st2D.tests.game.demo
                 //타겟의 체력이 0이하가 될 경우
                 if(_targetObject.info.hp <= 0)
                 {
-                    //타겟의 스케쥴러 멈춤
-                    _targetObject.attackScheduler.stopScheduler();
-                    
-                    //this가 아군일경우, 즉 타겟이 적군일 경우 적군 삭제
-                    if(_info.ally)
-                    {
-                        _characterMovingLayer.removeEnemyCharacterObject(_targetObject);
-                    }
-                        //this가 적군일경우, 즉 타겟이 아군일 경우 아군 삭제
-                    else
-                    {
-                        _characterMovingLayer.removePlayerCharacterObject(_targetObject);
-                    }
-                    _characterMovingLayer.batchSprite.removeSprite(_targetObject.sprite);
-                    
-                    //this의 상태를 RUN으로 변경
+                    _targetObject.setState("DEAD");
                     setState("RUN");
                 }
                 
+            }
+            //타겟이 존재하지 않을 경우
+            else
+            {
+                setState("RUN");
             }
         }
         
@@ -283,7 +294,7 @@ package com.stintern.st2D.tests.game.demo
         public function get info():CharacterInfo           { return _info;            }
         public function get targetObject():CharacterObject { return _targetObject;    }
         public function get attackScheduler():Scheduler    { return _attackScheduler; }
-        public function get hpProgress():progressBar       { return _hpProgress;      }
+        public function get hpProgress():ProgressBar       { return _hpProgress;      }
         public function get runAniStr():String             { return _runAniStr;       }
         public function get attAniStr():String             { return _attAniStr;       }
         public function get bulletArray():Vector.<Sprite>  { return _bulletArray;     }
