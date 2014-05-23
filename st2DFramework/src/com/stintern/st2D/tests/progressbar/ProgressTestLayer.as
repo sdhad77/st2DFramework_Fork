@@ -47,7 +47,7 @@ package com.stintern.st2D.tests.progressbar
             spriteBkg.addChild(spriteFront);
             
             // 프로그래스바 초기화
-            _hpProgress.init(spriteFront, 100, 100, ProgressBar.FROM_LEFT);
+            _hpProgress.init(spriteFront, spriteBkg, 100, 100, ProgressBar.FROM_LEFT);
         }
         
         // 프로그래스바 테스트

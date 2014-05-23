@@ -8,7 +8,7 @@ package com.stintern.st2D.display
         
         private var _totalValue:Number;
         
-        private var _originX:Number;
+        private var _parent:Sprite;
         private var _originWdith:Number;
         private var _originScaleX:Number;
         
@@ -25,7 +25,7 @@ package com.stintern.st2D.display
          * @param type progressBar.DECREASE_TO_LEFT : 프로그래스바가 왼쪽으로 줄어듬 <br/> 
          *                      progressBar.DECREASE_TO_RIGHT : 오른쪽으로 줄어듬
          */
-        public function init(sprite:Sprite, totalValue:Number, currentValue:Number, type:int ):void
+        public function init(sprite:Sprite, parent:Sprite, totalValue:Number, currentValue:Number, type:int ):void
         {
             _progressSprite = sprite;
             
@@ -33,7 +33,7 @@ package com.stintern.st2D.display
             
             _progressType = type;
             
-            _originX = sprite.position.x;
+            _parent = parent;
             _originWdith = sprite.getContentWidth();
             _originScaleX = sprite.scale.x;
             
@@ -59,9 +59,9 @@ package com.stintern.st2D.display
             _progressSprite.scale.x = _originScaleX * scale;
             
             if( _progressType == ProgressBar.FROM_LEFT )
-                _progressSprite.position.x = _originX - ( _originWdith - (_originWdith*scale) ) / 2;
+                _progressSprite.position.x = _parent.position.x - ( _originWdith - (_originWdith*scale) ) / 2;
             else
-                _progressSprite.position.x = _originX + ( _originWdith - (_originWdith*scale) ) / 2;
+                _progressSprite.position.x = _parent.position.x + ( _originWdith - (_originWdith*scale) ) / 2;
         }
 
         
