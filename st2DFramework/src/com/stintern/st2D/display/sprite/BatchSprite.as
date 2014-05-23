@@ -17,10 +17,6 @@ package com.stintern.st2D.display.sprite
         private var _sprites:Array = new Array();
         private var _updateRequired:Boolean = true;     //Vertex, Index Buffer 를 그리기 전에 갱신해야 하는 여부
         
-        public function BatchSprite()
-        {
-        }
-        
         /**
          * 사용한 자원을 해제합니다.
          * 내부에 저장된 스프라이트의 자원은 해제하지 않습니다. 
@@ -48,9 +44,11 @@ package com.stintern.st2D.display.sprite
             this.path = path;
             
             //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
-            if(pathXML != null) AnimationData.instance.createAnimationDictionary(path, pathXML);
+            if(pathXML != null) 
+                AnimationData.instance.createAnimationDictionary(path, pathXML);
             //xml파일을 사용하지 않는 단일 이미지 파일 일경우에는 Dictionary를 생성만 합니다.
-            else AnimationData.instance.createDictionary(path);
+            else 
+                AnimationData.instance.createDictionary(path);
             
             //이미지 파일을 읽어옵니다.
             AssetLoader.instance.loadImageTexture(path, onComplete, onProgress);
@@ -89,11 +87,19 @@ package com.stintern.st2D.display.sprite
          * BatchSprite 에 새로운 Sprite 를 추가합니다. 
          * @param sprite 추가할 Sprite
          */
-        public function addSprite(sprite:Sprite):void
+        public function addSprite(sprite:Sprite, sortFunc:Function = null):void
         {
-            updateBufferData(_sprites.length, sprite);
-            
             _sprites.push(sprite);
+            if( sortFunc != null )
+            {
+                _sprites.sort(sortFunc);
+                resetBuffer();
+            }
+            else
+            {
+                updateBufferData(sprite);
+            }
+            
             _updateRequired = true;
         }
         
@@ -147,20 +153,31 @@ package com.stintern.st2D.display.sprite
             _updateRequired = true;
         }
         
-        private function updateBufferData(index:uint, sprite:Sprite):void
+        /**
+         * VertexData, IndexData 배열에 새로운 스프라이트 정보를 추가합니다. 
+         * @param sprite 추가할 스프라이트
+         */
+        private function updateBufferData(sprite:Sprite):void
         {
-            var spriteCount:uint = vertexData.length /  DisplayObject.VERTEX_COUNT * DisplayObject.DATAS_PER_VERTEX;
-                
-            //vertexData 를 갱신합니다.
-            updateVertexData(index, sprite);
+            //vertexData에 새로운 스프라이트 정보를 추가합니다.
+            inputVertexDataAt(_sprites.length-1, sprite);
             
-            // IndexData 를 갱신합니다.
-            indexData.push(0 + _sprites.length * VERTEX_COUNT);  
-            indexData.push(1 + _sprites.length * VERTEX_COUNT);
-            indexData.push(2 + _sprites.length * VERTEX_COUNT);
-            indexData.push(0 + _sprites.length * VERTEX_COUNT);
-            indexData.push(2 + _sprites.length * VERTEX_COUNT);
-            indexData.push(3 + _sprites.length * VERTEX_COUNT);
+            // IndexData 를 추가합니다.
+            inputIndexDataAt(_sprites.length-1);
+        }
+        
+        private function resetBuffer():void
+        {
+            for(var i:uint=0; i<_sprites.length; ++i)
+            {
+                //vertexData에 새로운 스프라이트 정보를 추가합니다.
+                inputVertexDataAt(i, _sprites[i]);
+                
+                // IndexData 를 추가합니다.
+                inputIndexDataAt(i);    
+            }
+            
+            updateBuffers();
         }
         
         private function resetIndexData():void
@@ -169,12 +186,7 @@ package com.stintern.st2D.display.sprite
             
             for(var i:uint=0; i<_sprites.length; ++i)
             {
-                indexData.push(0 + i * VERTEX_COUNT);  
-                indexData.push(1 + i * VERTEX_COUNT);
-                indexData.push(2 + i * VERTEX_COUNT);
-                indexData.push(0 + i * VERTEX_COUNT);
-                indexData.push(2 + i * VERTEX_COUNT);
-                indexData.push(3 + i * VERTEX_COUNT);
+                inputIndexDataAt(i);
             }
         }
         
@@ -235,7 +247,7 @@ package com.stintern.st2D.display.sprite
                 // 스프라이트의 model matrix 갱신
                 sprite.update();
                 
-                updateVertexData(i, sprite);
+                inputVertexDataAt(i, sprite);
             }
             
             var context:Context3D = StageContext.instance.context;
@@ -257,7 +269,7 @@ package com.stintern.st2D.display.sprite
          * @param index VertexData 배열에서 갱신할 시작 인덱스
          * @param sprite VertexData 를 갱신할 스프라이트 객체
          */
-        private function updateVertexData(index, sprite):void
+        private function inputVertexDataAt(index, sprite):void
         {
             var spriteMatrixRawData:Vector.<Number> = sprite.modelMatrix.rawData;
             var spriteVertexData:Vector.<Number> = sprite.vertexData;
@@ -291,6 +303,16 @@ package com.stintern.st2D.display.sprite
                     break;
                 }
             }
+        }
+        
+        private function inputIndexDataAt(index:uint):void
+        {
+            indexData.push(0 + index * VERTEX_COUNT);  
+            indexData.push(1 + index * VERTEX_COUNT);
+            indexData.push(2 + index * VERTEX_COUNT);
+            indexData.push(0 + index * VERTEX_COUNT);
+            indexData.push(2 + index * VERTEX_COUNT);
+            indexData.push(3 + index * VERTEX_COUNT);
         }
         
         /**

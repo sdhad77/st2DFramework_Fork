@@ -1,6 +1,7 @@
 package com.stintern.st2D.tests.game.demo
 {
     import com.stintern.st2D.basic.StageContext;
+    import com.stintern.st2D.display.ProgressBar;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.Base;
     import com.stintern.st2D.display.sprite.BatchSprite;
@@ -11,7 +12,6 @@ package com.stintern.st2D.tests.game.demo
     
     import flash.events.Event;
     import flash.geom.Rectangle;
-    import com.stintern.st2D.display.ProgressBar;
     
     public class CharacterObject extends Base
     {
@@ -131,22 +131,35 @@ package com.stintern.st2D.tests.game.demo
                 }
             }
             
-            _batchSprite.addSprite(_sprite);
+            _sprite.depth = _sprite.position.y;            
             setHpBar();
+            _batchSprite.addSprite(_sprite, sortSprite);
             _sprite.playAnimation();
+        }
+        
+        private function sortSprite(lhs:Sprite, rhs:Sprite):int
+        {
+            if( lhs.depth > rhs.depth )
+                return -1;
+            else if( lhs.depth < rhs.depth )
+                return 1;
+            else
+                return 0;
         }
         
         public function setHpBar():void
         {
             spriteBkg = new Sprite();
             spriteBkg.createSpriteWithBatchSprite(_batchSprite, "hp_bkg", _sprite.position.x, _sprite.position.y + _sprite.height*0.8);
-            spriteBkg.scale.x = 3.0
+            spriteBkg.scale.x = 3.0;
+            spriteBkg.depth = _sprite.depth - 0.01;
             _batchSprite.addSprite(spriteBkg);
             
             spriteFront = new Sprite();
             spriteFront.createSpriteWithBatchSprite(_batchSprite, "hp_front", _sprite.position.x, _sprite.position.y + _sprite.height*0.8);
             spriteFront.scale.x = 3.0;
             spriteFront.scale.y = 0.8;
+            spriteFront.depth = _sprite.depth - 0.02;
             _batchSprite.addSprite(spriteFront);
             
             _hpProgress.init(spriteFront, spriteBkg, _info.hp, _info.hp, ProgressBar.FROM_LEFT);
