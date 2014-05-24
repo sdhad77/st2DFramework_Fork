@@ -125,9 +125,6 @@ package com.stintern.st2D.tests.game.demo
         
         private function updateCash():void
         {
-            if( _batchSprite.imageLoaded == false )
-                return;
-            
             if(Resources.CASH_BAR_SPEED > 0)
             {
                 _currentCash = _cashData/Resources.CASH_BAR_SPEED;
@@ -188,9 +185,6 @@ package com.stintern.st2D.tests.game.demo
         
         private function updateCoolTime():void
         {
-            if( _batchSprite.imageLoaded == false )
-                return;
-            
             if(_coolTimeBar1.isVisible == true)
             {
                 _coolTimeData1--;
@@ -198,7 +192,7 @@ package com.stintern.st2D.tests.game.demo
                 if(_coolTimeData1 == 0)
                 {
                     _coolTimeBar1.isVisible = false;
-                    _coolTimeData1 = 100;
+                    _coolTimeData1 = 30;
                 }
             }
             
@@ -209,7 +203,7 @@ package com.stintern.st2D.tests.game.demo
                 if(_coolTimeData2 == 0)
                 {
                     _coolTimeBar2.isVisible = false;
-                    _coolTimeData2 = 100;
+                    _coolTimeData2 = 30;
                 }
             }
         }
@@ -217,11 +211,12 @@ package com.stintern.st2D.tests.game.demo
         override public function update(dt:Number):void
         {
             _cashData += dt;
-            updateCash();
-            updateCoolTime();
             
             if( _batchSprite.imageLoaded == false )
                 return;
+            
+            updateCash();
+            updateCoolTime();
             
             for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
