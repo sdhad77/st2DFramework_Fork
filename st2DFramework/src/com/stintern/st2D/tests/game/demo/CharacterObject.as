@@ -214,7 +214,7 @@ package com.stintern.st2D.tests.game.demo
             {
                 _attackScheduler.stopScheduler();
                 
-                _deadScheduler.addFunc(100, deadFunction, 1);  
+                _deadScheduler.addFunc(20, deadFunction, 0);  
                 _deadScheduler.startScheduler();
             }
             else trace("정의되지 않은 state입니다.");
