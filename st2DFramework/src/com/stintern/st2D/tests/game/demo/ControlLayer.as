@@ -22,6 +22,9 @@ package com.stintern.st2D.tests.game.demo
         
         private var _characterBtn1:Sprite;
         private var _characterBtn2:Sprite;
+        private var _playerBtn1:Sprite;
+        private var _playerBtn2:Sprite;
+        private var _playerBtn3:Sprite;
         
         private var _cashData:uint;
         private var _currentCash:uint = 0;
@@ -40,6 +43,7 @@ package com.stintern.st2D.tests.game.demo
         private var _characterMovingLayer:CharacterMovingLayer;
         private var _timeLayer:TimeLayer;
         
+        private var _player:CharacterObject;
         private var _playerCharacterArray:Array;
         private var _enemyCharacterArray:Array;
         
@@ -60,7 +64,7 @@ package com.stintern.st2D.tests.game.demo
             _enemyCharacterArray = _characterMovingLayer.enemyCharacterArray;
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCreatedButton);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", loadComplete);
             addBatchSprite(_batchSprite);
             
             _enemyScheduler.addFunc(2000, enemyCreater, 10);
@@ -75,6 +79,17 @@ package com.stintern.st2D.tests.game.demo
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+        }
+        
+        private function loadComplete():void
+        {
+            onCreatedButton();
+            
+            onCreatedCashBar(_MARGIN + StageContext.instance.screenHeight/8*4, _characterBtn1.position.y );
+            
+            onCreatedCastle();
+            
+            onCreatePlayer();
         }
         
         private function onCreatedButton():void
@@ -96,11 +111,41 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite.addSprite(_characterBtn1);
             onCreatedCoolTime(2, _characterBtn1.position.x, _characterBtn1.position.y);
             
-            onCreatedCashBar(_MARGIN + StageContext.instance.screenHeight/8*4, _characterBtn1.position.y );
+            //player 캐릭터 관련 버튼들입니다.
+            x = _MARGIN + StageContext.instance.screenHeight/16;
+            y = _MARGIN + StageContext.instance.screenHeight/16;
             
-            onCreatedCastle();
+            _playerBtn1 = new Sprite();
+            _playerBtn1.createSpriteWithBatchSprite(_batchSprite, "playerarrow", x, y);
+            _playerBtn1.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+            _batchSprite.addSprite(_playerBtn1);
+            
+            _playerBtn2 = new Sprite();
+            _playerBtn2.createSpriteWithBatchSprite(_batchSprite, "playerarrow", x+StageContext.instance.screenHeight/8, y );
+            _playerBtn2.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+            _playerBtn2.reverseLeftRight();
+            _batchSprite.addSprite(_playerBtn2);
+            
+            _playerBtn3 = new Sprite();
+            _playerBtn3.createSpriteWithBatchSprite(_batchSprite, "playerstop", x+StageContext.instance.screenHeight/8+StageContext.instance.screenHeight/8, y );
+            _playerBtn3.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+            _batchSprite.addSprite(_playerBtn3);
         }
         
+        /**
+         * 조종 가능한 캐릭터를 생성하는 함수입니다.
+         */
+        private function onCreatePlayer():void
+        {
+            _player = new CharacterObject("character3_run_left", "character3_attack_left", 20000, 400, 7000, 300, Resources.TAG_GREEN, true);
+            _player.sprite.reverseLeftRight();
+            _player.directionLeft = false;
+            _player.sprite.setTranslation(new Vector2D(_player.sprite.position.x, StageContext.instance.screenHeight/3));
+            _player.sprite.setScaleWithWidthHeight(_player.sprite.width*2, _player.sprite.height*2);
+            _player.info.setAttackBounds(_player.sprite.width*2, StageContext.instance.screenHeight);
+            _player.setState(CharacterObject.STAY);
+            _playerCharacterArray.push(_player);
+        }
         
         private function onCreatedCashBar(positionX:Number, positionY:Number):void
         {
@@ -231,6 +276,13 @@ package com.stintern.st2D.tests.game.demo
                         }
                     }
                 }
+                else
+                {
+                    if(!(intersectRect(_playerCharacterArray[i].getAttackBounds(), _playerCharacterArray[i].targetObject.sprite.rect)))
+                    {
+                        _playerCharacterArray[i].setState(CharacterObject.RUN);
+                    }
+                }
                 
                 for(var bulletIndex:uint=0; bulletIndex<_playerCharacterArray[i].bulletArray.length; ++bulletIndex)
                 {
@@ -252,6 +304,13 @@ package com.stintern.st2D.tests.game.demo
                             _enemyCharacterArray[i].setState(CharacterObject.ATTACK, _playerCharacterArray[j]);
                             break;
                         }
+                    }
+                }
+                else
+                {
+                    if(!(intersectRect(_enemyCharacterArray[i].getAttackBounds(), _enemyCharacterArray[i].targetObject.sprite.rect)))
+                    {
+                        _enemyCharacterArray[i].setState(CharacterObject.RUN);
                     }
                 }
                 
@@ -290,6 +349,49 @@ package com.stintern.st2D.tests.game.demo
                         _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsHeight = _playerCharacterArray[_playerCharacterArray.length-1].info.attackBoundsWidth;
                         _cashData -= Resources.CHARECTER1_CASH * Resources.CASH_BAR_SPEED;
                         _coolTimeBar2.isVisible = true;
+                    }
+                }
+            }
+            
+            if(_MARGIN < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/8)
+            {
+                if(StageContext.instance.screenHeight*7/8 - _MARGIN < event.stageY && event.stageY < StageContext.instance.screenHeight - _MARGIN)
+                {
+                    if(_player.info.state != CharacterObject.ATTACK)
+                    {
+                        if(!_player.directionLeft)
+                        {
+                            _player.sprite.reverseLeftRight();
+                            _player.directionLeft = true;
+                        }
+                        _player.setState(CharacterObject.RUN);
+                        _player.sprite.moveBy(-StageContext.instance.screenWidth * _backGroundLayer.bgPageNum,0,_player.info.speed);
+                    }
+                }
+            }
+            else if(_MARGIN + StageContext.instance.screenHeight/8 < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/4)
+            {
+            if(StageContext.instance.screenHeight*7/8 - _MARGIN < event.stageY && event.stageY < StageContext.instance.screenHeight - _MARGIN)
+                {
+                    if(_player.info.state != CharacterObject.ATTACK)
+                    {
+                        if(_player.directionLeft)
+                        {
+                            _player.sprite.reverseLeftRight();
+                            _player.directionLeft = false;
+                        }
+                        _player.setState(CharacterObject.RUN);
+                        _player.sprite.moveBy(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum,0,_player.info.speed);
+                    }
+                }
+            }
+            else if(_MARGIN + StageContext.instance.screenHeight/4 < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/8 * 3)
+            {
+            if(StageContext.instance.screenHeight*7/8 - _MARGIN < event.stageY && event.stageY < StageContext.instance.screenHeight - _MARGIN)
+                {
+                    if(_player.info.state == CharacterObject.RUN)
+                    {
+                        _player.setState(CharacterObject.STAY);
                     }
                 }
             }
