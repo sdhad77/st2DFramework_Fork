@@ -1,0 +1,17 @@
+<atlas>
+  <atlasItem name="ice2.png" x="2" y="2" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice1.png" x="2" y="154" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice10.png" x="2" y="306" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice11.png" x="93" y="2" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice12.png" x="184" y="2" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice13.png" x="275" y="2" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice14.png" x="366" y="2" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice0.png" x="93" y="154" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice3.png" x="93" y="306" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice4.png" x="184" y="154" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice5.png" x="184" y="306" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice6.png" x="275" y="154" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice7.png" x="366" y="154" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice8.png" x="275" y="306" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+  <atlasItem name="ice9.png" x="366" y="306" width="89" height="150" frameX="0" frameY="0" frameWidth="89" frameHeight="150"/>
+</atlas>
