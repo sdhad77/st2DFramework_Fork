@@ -263,23 +263,31 @@ package com.stintern.st2D.tests.game.demo
             updateCash();
             updateCoolTime();
             
+            //아군을 전부 검사합니다.
             for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
+                //지금 검사중인 아군이 공격상태가 아니면
                 if(_playerCharacterArray[i].info.state != CharacterObject.ATTACK)
                 {
+                    //모든 적군과 충돌검사를 합니다.
                     for(var j:uint=0; j<_enemyCharacterArray.length; j++)
                     {
+                        //공격범위 내에 적군이 있을 경우
                         if(intersectRect(_playerCharacterArray[i].getAttackBounds(), _enemyCharacterArray[j].sprite.rect))
                         {
+                            //공격상태로 만들고 break로 반복문을 빠져나갑니다.
                             _playerCharacterArray[i].setState(CharacterObject.ATTACK, _enemyCharacterArray[j]);
                             break;
                         }
                     }
                 }
+                //지금 공격상태이면
                 else
                 {
+                    //타겟과 아군의 공격범위를 충돌체크해봅니다.
                     if(!(intersectRect(_playerCharacterArray[i].getAttackBounds(), _playerCharacterArray[i].targetObject.sprite.rect)))
                     {
+                        //아군의 공격범위안에 타겟이 없으면 아군의 상태를 RUN으로 변경합니다.
                         _playerCharacterArray[i].setState(CharacterObject.RUN);
                     }
                 }
@@ -293,23 +301,31 @@ package com.stintern.st2D.tests.game.demo
                 }
             }
             
+            //적군 전부를 검사합니다.
             for(i=0; i<_enemyCharacterArray.length; ++i)
             {
+                //지금 검사중인 적군의 상태가 공격이 아니면
                 if(_enemyCharacterArray[i].info.state != CharacterObject.ATTACK)
                 {
+                    //모든 아군과 충돌검사를 합니다.
                     for(j=0; j<_playerCharacterArray.length; j++)
                     {
+                        //적군의 공격범위내에 아군이 있을 경우
                         if(intersectRect(_enemyCharacterArray[i].getAttackBounds(), _playerCharacterArray[j].sprite.rect))
                         {
+                            //적군을 공격상태로 만들고 break를 이용하여 반복문을 벗어납니다.
                             _enemyCharacterArray[i].setState(CharacterObject.ATTACK, _playerCharacterArray[j]);
                             break;
                         }
                     }
                 }
+                //지금 검사중인 적군이 공격상태라면
                 else
                 {
+                    //적군의 공격범위와 타겟인 아군과의 충돌검사를 합니다.
                     if(!(intersectRect(_enemyCharacterArray[i].getAttackBounds(), _enemyCharacterArray[i].targetObject.sprite.rect)))
                     {
+                        //적군의 공격범위안에 타겟이 없으면 적군의 상태를 RUN으로 변경합니다.
                         _enemyCharacterArray[i].setState(CharacterObject.RUN);
                     }
                 }
@@ -353,12 +369,15 @@ package com.stintern.st2D.tests.game.demo
                 }
             }
             
+            //플레이 캐릭터 관련 버튼입니다. 첫번째 버튼인 왼쪽으로 이동입니다.
             if(_MARGIN < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/8)
             {
                 if(StageContext.instance.screenHeight*7/8 - _MARGIN < event.stageY && event.stageY < StageContext.instance.screenHeight - _MARGIN)
                 {
+                    //공격 상태가 아닐때만 움직일 수 있습니다.
                     if(_player.info.state != CharacterObject.ATTACK)
                     {
+                        //현재 오른쪽을 보고 있다면 이미지를 뒤집어 줍니다.
                         if(!_player.directionLeft)
                         {
                             _player.sprite.reverseLeftRight();
@@ -369,12 +388,15 @@ package com.stintern.st2D.tests.game.demo
                     }
                 }
             }
+            //두번째 버튼인 오른쪽으로 이동입니다.
             else if(_MARGIN + StageContext.instance.screenHeight/8 < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/4)
             {
             if(StageContext.instance.screenHeight*7/8 - _MARGIN < event.stageY && event.stageY < StageContext.instance.screenHeight - _MARGIN)
                 {
+                    //공격 상태가 아닐때만 움직일 수 있습니다.
                     if(_player.info.state != CharacterObject.ATTACK)
                     {
+                        //현재 왼쪽을 보고 있다면 이미지를 뒤집어 줍니다.
                         if(_player.directionLeft)
                         {
                             _player.sprite.reverseLeftRight();
@@ -385,9 +407,10 @@ package com.stintern.st2D.tests.game.demo
                     }
                 }
             }
+            //세번째 버튼인 정지입니다.
             else if(_MARGIN + StageContext.instance.screenHeight/4 < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/8 * 3)
             {
-            if(StageContext.instance.screenHeight*7/8 - _MARGIN < event.stageY && event.stageY < StageContext.instance.screenHeight - _MARGIN)
+                if(StageContext.instance.screenHeight*7/8 - _MARGIN < event.stageY && event.stageY < StageContext.instance.screenHeight - _MARGIN)
                 {
                     if(_player.info.state == CharacterObject.RUN)
                     {
