@@ -7,6 +7,7 @@ package com.stintern.st2D.tests.game.demo
     public class CharacterMovingLayer extends Layer
     {
         private var _batchSprite:BatchSprite;
+        private var _effectBatchSprite:BatchSprite;
         
         private var _playerCharacterArray:Array = new Array();
         private var _enemyCharacterArray:Array = new Array(); 
@@ -18,6 +19,10 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", null);
             addBatchSprite(_batchSprite);
+            
+            _effectBatchSprite = new BatchSprite();
+            _effectBatchSprite.createBatchSpriteWithPath("res/demo/effect.png", "res/demo/effect.xml", null);
+            addBatchSprite(_effectBatchSprite);
         }
         
         /**
@@ -81,12 +86,14 @@ package com.stintern.st2D.tests.game.demo
         }
         
         //get, set 함수들
-        public function get batchSprite():BatchSprite    { return _batchSprite;          }
-        public function get playerCharacterArray():Array { return _playerCharacterArray; }
-        public function get enemyCharacterArray():Array  { return _enemyCharacterArray;  }
+        public function get batchSprite():BatchSprite       { return _batchSprite;          }
+        public function get playerCharacterArray():Array    { return _playerCharacterArray; }
+        public function get enemyCharacterArray():Array     { return _enemyCharacterArray;  }
+        public function get effectBatchSprite():BatchSprite { return _effectBatchSprite;    }
         
-        public function set batchSprite(value:BatchSprite):void    { _batchSprite = value;          }
-        public function set playerCharacterArray(value:Array):void { _playerCharacterArray = value; }
-        public function set enemyCharacterArray(value:Array):void  { _enemyCharacterArray = value;  }
+        public function set batchSprite(value:BatchSprite):void       { _batchSprite          = value; }
+        public function set playerCharacterArray(value:Array):void    { _playerCharacterArray = value; }
+        public function set enemyCharacterArray(value:Array):void     { _enemyCharacterArray  = value; }
+        public function set effectBatchSprite(value:BatchSprite):void { _effectBatchSprite    = value; }
     }
 }
