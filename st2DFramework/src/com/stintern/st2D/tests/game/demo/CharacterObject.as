@@ -8,6 +8,7 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.tests.game.demo.utils.Resources;
+    import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.Event;
@@ -19,10 +20,13 @@ package com.stintern.st2D.tests.game.demo
         private var _attAniStr:String;
         private var _info:CharacterInfo;
         private var _batchSprite:BatchSprite;
+        private var _effectBatchSprite:BatchSprite;
         private var _sprite:SpriteAnimation;
+        private var _effect:SpriteAnimation = null;
         private var _targetObject:CharacterObject;
         private var _attackScheduler:Scheduler = new Scheduler;
         private var _deadScheduler:Scheduler = new Scheduler;
+        private var _skill1:Function = null;
         
         private var _characterMovingLayer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
         private var _backGroundLayer:BackGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
@@ -61,6 +65,7 @@ package com.stintern.st2D.tests.game.demo
             _attAniStr = attAniStr;
             _info = new CharacterInfo(hp, power, speed, attackSpeed, ally);
             _batchSprite = _characterMovingLayer.batchSprite;
+            _effectBatchSprite = _characterMovingLayer.effectBatchSprite;
             _targetObject = null;
             
             //스프라이트 생성
@@ -287,16 +292,7 @@ package com.stintern.st2D.tests.game.demo
             //타겟이 존재할 경우
             if(_targetObject)
             {
-                //this의 power로 타겟의 체력 감소시킴
-                _targetObject.info.hp -= _info.power;
-                _targetObject.hpProgress.updateProgress(_targetObject.info.hp);
-                
-                //타겟의 체력이 0이하가 될 경우
-                if(_targetObject.info.hp <= 0)
-                {
-                    _targetObject.setState("DEAD");
-                    setState("RUN");
-                }
+                damage(_info.power);
             }
             //타겟이 존재하지 않을 경우
             else
@@ -315,17 +311,7 @@ package com.stintern.st2D.tests.game.demo
                 _bulletArray[_bulletArray.length-1].moveTo(_targetObject.sprite.position.x, _targetObject.sprite.position.y, 500);
                 _batchSprite.addSprite(_bulletArray[_bulletArray.length-1]);
 
-                //this의 power로 타겟의 체력 감소시킴
-                _targetObject.info.hp -= _info.power;
-                _targetObject.hpProgress.updateProgress(_targetObject.info.hp);
-                
-                //타겟의 체력이 0이하가 될 경우
-                if(_targetObject.info.hp <= 0)
-                {
-                    _targetObject.setState("DEAD");
-                    setState("RUN");
-                }
-                
+                damage(_info.power);
             }
             //타겟이 존재하지 않을 경우
             else
@@ -350,6 +336,48 @@ package com.stintern.st2D.tests.game.demo
                 _info.attackBoundsHeight);
         }
         
+        public function iceAttackSkill():void
+        {
+            if(_targetObject != null)
+            {
+                if(_effect == null)
+                {
+                    _effect = new SpriteAnimation;
+                    _effect.createAnimationSpriteWithBatchSprite(_effectBatchSprite, "ice");
+                    _effectBatchSprite.addSprite(_effect);
+                }
+                
+                _effect.setTranslation(new Vector2D(_targetObject.sprite.position.x, _targetObject.sprite.position.y));
+                _effect.setPlayAnimation("ice");
+                _effect.isVisible = true;
+                _effect.playAnimation();
+                
+                damage(_info.power + _info.power);
+            }
+        }
+        
+        /**
+         * 타겟에 데미지를 입히는 함수입니다.
+         * @param power 타겟에 입힐 데미지의 수치입니다.
+         */
+        private function damage(power:Number):void
+        {
+            if(_targetObject != null)
+            {
+                //this의 power로 타겟의 체력 감소시킴
+                _targetObject.info.hp -= power;
+                _targetObject.hpProgress.updateProgress(_targetObject.info.hp);
+                
+                //타겟의 체력이 0이하가 될 경우
+                if(_targetObject.info.hp <= 0)
+                {
+                    _targetObject.setState("DEAD");
+                    setState("RUN");
+                }
+            }
+            else trace("target이 존재하지 않습니다.");
+        }
+        
         //get set 함수들
         public function get sprite():SpriteAnimation       { return _sprite;          }
         public function get info():CharacterInfo           { return _info;            }
@@ -359,12 +387,14 @@ package com.stintern.st2D.tests.game.demo
         public function get runAniStr():String             { return _runAniStr;       }
         public function get attAniStr():String             { return _attAniStr;       }
         public function get bulletArray():Vector.<Sprite>  { return _bulletArray;     }
-        public function get directionLeft():Boolean        { return _directionLeft;    }
+        public function get directionLeft():Boolean        { return _directionLeft;   }
+        public function get skill1():Function              { return _skill1;          }
         
-        public function set info(value:CharacterInfo):void           { _info         = value;  }
-        public function set targetObject(value:CharacterObject):void { _targetObject = value;  }
-        public function set sprite(value:SpriteAnimation):void       { _sprite       = value;  }
+        public function set info(value:CharacterInfo):void           { _info          = value; }
+        public function set targetObject(value:CharacterObject):void { _targetObject  = value; }
+        public function set sprite(value:SpriteAnimation):void       { _sprite        = value; }
         public function set directionLeft(value:Boolean):void        { _directionLeft = value; }
+        public function set skill1(value:Function):void              { _skill1        = value; }
 
     }
 }
