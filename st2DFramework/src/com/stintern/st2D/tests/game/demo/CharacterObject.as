@@ -199,14 +199,14 @@ package com.stintern.st2D.tests.game.demo
                 _sprite.isMoving = false;
                 _targetObject = charObject;
                 
-                if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_GREEN)
+  /*              if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_GREEN)
                 {
                     nearAttackFunc();
                 }
                 else
                 {
                     farAttackFunc();
-                }
+                }*/
                 
                 _attackScheduler.startScheduler();
             }
