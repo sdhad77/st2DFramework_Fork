@@ -25,6 +25,7 @@ package com.stintern.st2D.tests.game.demo
         private var _playerBtn1:Sprite;
         private var _playerBtn2:Sprite;
         private var _playerBtn3:Sprite;
+        private var _playerBtn4:Sprite;
         
         private var _cashData:uint;
         private var _currentCash:uint = 0;
@@ -34,10 +35,13 @@ package com.stintern.st2D.tests.game.demo
         
         private var _coolTimeBar1:Sprite;
         private var _coolTimeBar2:Sprite;
+        private var _coolTimeBar3:Sprite;
         private var _coolTimeProgress1:ProgressBar = new ProgressBar();
         private var _coolTimeProgress2:ProgressBar = new ProgressBar();
+        private var _coolTimeProgress3:ProgressBar = new ProgressBar();
         private var _coolTimeData1:uint = 30;
         private var _coolTimeData2:uint = 30;
+        private var _coolTimeData3:uint = 50;
 
         private var _backGroundLayer:BackGroundLayer;
         private var _characterMovingLayer:CharacterMovingLayer;
@@ -127,9 +131,15 @@ package com.stintern.st2D.tests.game.demo
             _batchSprite.addSprite(_playerBtn2);
             
             _playerBtn3 = new Sprite();
-            _playerBtn3.createSpriteWithBatchSprite(_batchSprite, "playerstop", x+StageContext.instance.screenHeight/8+StageContext.instance.screenHeight/8, y );
+            _playerBtn3.createSpriteWithBatchSprite(_batchSprite, "playerstop", x+StageContext.instance.screenHeight/4, y );
             _playerBtn3.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
             _batchSprite.addSprite(_playerBtn3);
+            
+            _playerBtn4 = new Sprite();
+            _playerBtn4.createSpriteWithBatchSprite(_batchSprite, "icebutton", x+StageContext.instance.screenHeight/4+StageContext.instance.screenHeight/8, y );
+            _playerBtn4.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+            _batchSprite.addSprite(_playerBtn4);
+            onCreatedCoolTime(3, _playerBtn4.position.x, _playerBtn4.position.y);
         }
         
         /**
@@ -137,13 +147,14 @@ package com.stintern.st2D.tests.game.demo
          */
         private function onCreatePlayer():void
         {
-            _player = new CharacterObject("character3_run_left", "character3_attack_left", 20000, 400, 7000, 300, Resources.TAG_GREEN, true);
+            _player = new CharacterObject("character3_run_left", "character3_attack_left", 20000, 200, 7000, 400, Resources.TAG_GREEN, true);
             _player.sprite.reverseLeftRight();
             _player.directionLeft = false;
             _player.sprite.setTranslation(new Vector2D(_player.sprite.position.x, StageContext.instance.screenHeight/3));
             _player.sprite.setScaleWithWidthHeight(_player.sprite.width*2, _player.sprite.height*2);
             _player.info.setAttackBounds(_player.sprite.width*2, StageContext.instance.screenHeight);
             _player.setState(CharacterObject.STAY);
+            _player.skill1 = _player.iceAttackSkill;
             _playerCharacterArray.push(_player);
         }
         
@@ -226,6 +237,18 @@ package com.stintern.st2D.tests.game.demo
                 _coolTimeProgress2.init(_coolTimeBar2, _characterBtn1, _coolTimeData2, _coolTimeData2, ProgressBar.FROM_LEFT);
                 _coolTimeBar2.isVisible = false;
             }
+            else if(characterIndex == 3)
+            {
+                _coolTimeBar3 = new Sprite();
+                _coolTimeBar3.createSpriteWithBatchSprite(_characterMovingLayer.batchSprite, "cooldown_front", positionX, positionY);
+                _coolTimeBar3.setScaleWithWidthHeight(StageContext.instance.screenHeight/8, StageContext.instance.screenHeight/8);
+                _coolTimeBar3.position.x = positionX;
+                _coolTimeBar3.position.y = positionY;
+                _batchSprite.addSprite(_coolTimeBar3);
+                
+                _coolTimeProgress3.init(_coolTimeBar3, _playerBtn4, _coolTimeData3, _coolTimeData3, ProgressBar.FROM_LEFT);
+                _coolTimeBar3.isVisible = false;
+            }
         }
         
         private function updateCoolTime():void
@@ -251,18 +274,21 @@ package com.stintern.st2D.tests.game.demo
                     _coolTimeData2 = 30;
                 }
             }
+            
+            if(_coolTimeBar3.isVisible == true)
+            {
+                _coolTimeData3--;
+                _coolTimeProgress3.updateProgress(_coolTimeData3);
+                if(_coolTimeData3 == 0)
+                {
+                    _coolTimeBar3.isVisible = false;
+                    _coolTimeData3 = 50;
+                }
+            }
         }
         
-        override public function update(dt:Number):void
+        private function collisionCheck():void
         {
-            _cashData += dt;
-            
-            if( _batchSprite.imageLoaded == false )
-                return;
-            
-            updateCash();
-            updateCoolTime();
-            
             //아군을 전부 검사합니다.
             for(var i:uint=0; i<_playerCharacterArray.length; i++)
             {
@@ -281,7 +307,7 @@ package com.stintern.st2D.tests.game.demo
                         }
                     }
                 }
-                //지금 공격상태이면
+                    //지금 공격상태이면
                 else
                 {
                     //타겟과 아군의 공격범위를 충돌체크해봅니다.
@@ -319,7 +345,7 @@ package com.stintern.st2D.tests.game.demo
                         }
                     }
                 }
-                //지금 검사중인 적군이 공격상태라면
+                    //지금 검사중인 적군이 공격상태라면
                 else
                 {
                     //적군의 공격범위와 타겟인 아군과의 충돌검사를 합니다.
@@ -338,6 +364,19 @@ package com.stintern.st2D.tests.game.demo
                     }
                 }
             }
+        }
+        
+        override public function update(dt:Number):void
+        {
+            _cashData += dt;
+            
+            if( _batchSprite.imageLoaded == false )
+                return;
+            
+            updateCash();
+            updateCoolTime();
+            
+            collisionCheck();
         }
         
         private function onTouch(event:MouseEvent):void
@@ -415,6 +454,18 @@ package com.stintern.st2D.tests.game.demo
                     if(_player.info.state == CharacterObject.RUN)
                     {
                         _player.setState(CharacterObject.STAY);
+                    }
+                }
+            }
+            //네번째 버튼인 스킬입니다.
+            else if(_MARGIN + StageContext.instance.screenHeight/8 * 3 < event.stageX && event.stageX < _MARGIN + StageContext.instance.screenHeight/2)
+            {
+                if(StageContext.instance.screenHeight*7/8 - _MARGIN < event.stageY && event.stageY < StageContext.instance.screenHeight - _MARGIN)
+                {
+                    if(_player.info.state == CharacterObject.ATTACK && _coolTimeBar3.isVisible == false)
+                    {
+                        _player.skill1();
+                        _coolTimeBar3.isVisible = true;
                     }
                 }
             }
