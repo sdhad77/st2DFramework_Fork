@@ -31,6 +31,7 @@ package com.stintern.st2D.tests.game.demo
         private var spriteFront:Sprite;
         private var _hpProgress:ProgressBar = new ProgressBar(); 
         
+        public static const STAY:String = "STAY";
         public static const RUN:String = "RUN";
         public static const ATTACK:String = "ATTACK";
         public static const DEAD:String = "DEAD";
@@ -38,6 +39,8 @@ package com.stintern.st2D.tests.game.demo
         private var _bulletArray:Vector.<Sprite> = new Vector.<Sprite>();
         private var _degree:Number = 0.0;
         private var _alpha:Number = 1.0;
+        
+        private var _directionLeft:Boolean = false;
         
         /**
          * 캐릭터 Object를 생성합니다
@@ -83,6 +86,9 @@ package com.stintern.st2D.tests.game.demo
             //생성된 스프라이트가 아군일 경우 화면 좌측에 성성
             if(_info.ally == true)
             {
+                //아군은 오른쪽 방향을 보면서 시작
+                directionLeft = false;
+                
                 if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_RED || tag == Resources.TAG_GREEN)
                 {
                     _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
@@ -111,6 +117,9 @@ package com.stintern.st2D.tests.game.demo
             //생성된 스프라이트가 적군일 경우 화면 우측에 성성
             else
             {
+                //적군은 왼쪽 방향을 보면서 시작
+                directionLeft = true;
+                
                 if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_RED || tag == Resources.TAG_GREEN)
                 {
                     _sprite.setScaleWithWidthHeight(StageContext.instance.screenHeight/5, StageContext.instance.screenHeight/5);
@@ -181,7 +190,17 @@ package com.stintern.st2D.tests.game.demo
          */
         public function setState(state:String, charObject:CharacterObject = null):void
         {
-            if(state == "RUN")
+            if(state == "STAY")
+            {
+                _info.state = STAY;
+                _sprite.setPlayAnimation(runAniStr);
+                _sprite.pauseAnimation();
+                _sprite.isMoving = false;
+                _targetObject = null;
+                
+                _attackScheduler.stopScheduler();
+            }
+            else if(state == "RUN")
             {
                 _info.state = RUN;
                 _sprite.setPlayAnimation(runAniStr);
@@ -199,14 +218,17 @@ package com.stintern.st2D.tests.game.demo
                 _sprite.isMoving = false;
                 _targetObject = charObject;
                 
-  /*              if(tag == Resources.TAG_PURPLE || tag == Resources.TAG_GREEN)
+                //공격 시작할때 반대 방향을 보고 있을 경우 방향 전환시킴.
+                if(directionLeft && info.ally)
                 {
-                    nearAttackFunc();
+                    sprite.reverseLeftRight();
+                    directionLeft = !directionLeft;
                 }
-                else
+                else if(!directionLeft && !info.ally)
                 {
-                    farAttackFunc();
-                }*/
+                    sprite.reverseLeftRight();
+                    directionLeft = !directionLeft;
+                }
                 
                 _attackScheduler.startScheduler();
             }
@@ -337,10 +359,12 @@ package com.stintern.st2D.tests.game.demo
         public function get runAniStr():String             { return _runAniStr;       }
         public function get attAniStr():String             { return _attAniStr;       }
         public function get bulletArray():Vector.<Sprite>  { return _bulletArray;     }
+        public function get directionLeft():Boolean        { return _directionLeft;    }
         
-        public function set info(value:CharacterInfo):void           { _info         = value; }
-        public function set targetObject(value:CharacterObject):void { _targetObject = value; }
-        public function set sprite(value:SpriteAnimation):void       { _sprite       = value; }
+        public function set info(value:CharacterInfo):void           { _info         = value;  }
+        public function set targetObject(value:CharacterObject):void { _targetObject = value;  }
+        public function set sprite(value:SpriteAnimation):void       { _sprite       = value;  }
+        public function set directionLeft(value:Boolean):void        { _directionLeft = value; }
 
     }
 }
