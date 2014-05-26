@@ -1,8 +1,13 @@
 package com.stintern.st2D.tests.game.demo
 {
     import com.stintern.st2D.display.Layer;
+    import com.stintern.st2D.display.Scene;
+    import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
+    import com.stintern.st2D.tests.game.LoseLayer;
+    import com.stintern.st2D.tests.game.demo.utils.Resources;
+    import com.stintern.st2D.tests.game.WinLayer;
     
     public class CharacterMovingLayer extends Layer
     {
@@ -46,7 +51,7 @@ package com.stintern.st2D.tests.game.demo
                     {
                         _playerCharacterArray[i].removeBullet(_playerCharacterArray[i].bulletArray.length-1);
                     }
-
+                    winnerCheck(_playerCharacterArray[i]);
                     _playerCharacterArray.splice(i, 1);
                     break;
                 }
@@ -74,10 +79,30 @@ package com.stintern.st2D.tests.game.demo
                     {
                         _enemyCharacterArray[i].removeBullet(_enemyCharacterArray[i].bulletArray.length-1);
                     }
-                    
+                    winnerCheck(_enemyCharacterArray[i]);
                     _enemyCharacterArray.splice(i, 1);
                     break;
                 }
+            }
+        }
+        
+        
+        private function winnerCheck(character:CharacterObject):void
+        {
+            if(character.tag == Resources.TAG_CASTLE)
+            {
+                var scene:Scene = new Scene();
+                if(character.info.ally)
+                {
+                    var endLayer:LoseLayer = new LoseLayer();
+                    scene.addLayer(endLayer);
+                }
+                else
+                {
+                    var winLayer:WinLayer = new WinLayer();
+                    scene.addLayer(winLayer);
+                }
+                SceneManager.instance.pushScene(scene);
             }
         }
         
