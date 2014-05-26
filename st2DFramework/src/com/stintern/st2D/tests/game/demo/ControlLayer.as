@@ -147,7 +147,7 @@ package com.stintern.st2D.tests.game.demo
          */
         private function onCreatePlayer():void
         {
-            _player = new CharacterObject("character3_run_left", "character3_attack_left", 20000, 200, 7000, 400, Resources.TAG_GREEN, true);
+            _player = new CharacterObject("character3_run_left", "character3_attack_left", 20000, 200, 0.5, 400, Resources.TAG_GREEN, true);
             _player.sprite.reverseLeftRight();
             _player.directionLeft = false;
             _player.sprite.setTranslation(new Vector2D(_player.sprite.position.x, StageContext.instance.screenHeight/3));
@@ -423,7 +423,7 @@ package com.stintern.st2D.tests.game.demo
                             _player.directionLeft = true;
                         }
                         _player.setState(CharacterObject.RUN);
-                        _player.sprite.moveBy(-StageContext.instance.screenWidth * _backGroundLayer.bgPageNum,0,_player.info.speed);
+                        _player.sprite.moveTo(0, _player.sprite.position.y, _player.sprite.position.x/_player.info.speed);
                     }
                 }
             }
@@ -442,7 +442,7 @@ package com.stintern.st2D.tests.game.demo
                             _player.directionLeft = false;
                         }
                         _player.setState(CharacterObject.RUN);
-                        _player.sprite.moveBy(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum,0,_player.info.speed);
+                        _player.sprite.moveTo(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum,_player.sprite.position.y,(StageContext.instance.screenWidth * _backGroundLayer.bgPageNum-_player.sprite.position.x)/_player.info.speed);
                     }
                 }
             }
