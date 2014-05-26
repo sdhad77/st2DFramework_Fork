@@ -8,11 +8,11 @@ package com.stintern.st2D.tests.game
     
     import flash.events.MouseEvent;
     
-    public class EndLayer extends Layer
+    public class LoseLayer extends Layer
     {
-        private var sprite1:Sprite = new Sprite();;
+        private var sprite1:Sprite = new Sprite();
         
-        public function EndLayer()
+        public function LoseLayer()
         {
             sprite1.createSpriteWithPath("res/gameover.jpg", onCreated, null, StageContext.instance.screenWidth/2, StageContext.instance.screenHeight/2);
             
