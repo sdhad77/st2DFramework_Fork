@@ -29,6 +29,7 @@ package com.stintern.st2D.tests.game.demo
                 var y:Number = StageContext.instance.screenHeight/2;
                 _sprites[i].createSpriteWithBatchSprite(_batchSprite, "background0", x, y );
                 _sprites[i].setScaleWithWidthHeight(StageContext.instance.screenWidth, StageContext.instance.screenHeight);
+                if(i%2 == 1) _sprites[i].reverseLeftRight();
                 _batchSprite.addSprite(_sprites[i]);
             }
         }
