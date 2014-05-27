@@ -124,6 +124,7 @@ package com.stintern.st2D.utils
                 
                 // dictionary 에 불러온 이미지 저장
                 _assetMap[path] = LoaderInfo(event.target).content as Bitmap;
+                (_assetMap[path] as Bitmap).name = path;
                 
                 onComplete( LoaderInfo(event.target).content as Bitmap, imageCount );
             }
@@ -197,6 +198,7 @@ package com.stintern.st2D.utils
                 var result:Array = swfLoader.loadMovieClip(mc);
                 
                 _assetMap[path] = result[0];
+                (_assetMap[path] as Bitmap).name = path;
                 
                 onComplete( result );
                 

@@ -56,7 +56,7 @@ package com.stintern.st2D.display.sprite
             function onComplete(object:Object, zOrder:uint):void
             {
                 //이미지파일을 저장합니다.
-                createTextureData((object as Bitmap));
+                createSpriteWithBitmap((object as Bitmap));
                 
                 //읽어온 데이터들을 이제 사용할 수 있다고 표시해줍니다.
                 AnimationData.instance.animationData[path]["available"] = true;
@@ -74,14 +74,13 @@ package com.stintern.st2D.display.sprite
         {
             this.path = path;
             
-            AssetLoader.instance.loadSWF(path, onLoad);
             
             function onLoad(result:Array):void
             {
                 //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
                 AnimationData.instance.createAnimationDictionaryWithSWF(path, result[1]);
                 
-                createTextureData(result[0]);
+                createSpriteWithBitmap(result[0]);
                 
                 onComplete();
             }
@@ -92,8 +91,10 @@ package com.stintern.st2D.display.sprite
          * 스프라이트에 사용할 텍스쳐를 초기화합니다. 
          * @param bitmap 텍스쳐에 사용할 비트맵객체
          */
-        public function createTextureData(bitmap:Bitmap):void
+        public function createSpriteWithBitmap(bitmap:Bitmap):void
         {
+            this.path = bitmap.name;
+            
             this.textureData = bitmap;
             
             var context:Context3D = StageContext.instance.context;

@@ -60,7 +60,7 @@ package com.stintern.st2D.tests.game
                         if(_dungVector[i].collisionCheck(_person))
                         {
                             var scene:Scene = new Scene();
-                            var secondSceneLayer:EndLayer = new EndLayer();
+                            var secondSceneLayer:LoseLayer = new LoseLayer();
                             scene.addLayer(secondSceneLayer);
                             
                             SceneManager.instance.pushScene(scene);
