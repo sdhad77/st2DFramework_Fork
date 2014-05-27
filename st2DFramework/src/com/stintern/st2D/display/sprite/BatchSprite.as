@@ -83,9 +83,6 @@ package com.stintern.st2D.display.sprite
                 
                 createTextureData(result[0]);
                 
-                //읽어온 데이터들을 이제 사용할 수 있다고 표시해줍니다.
-                AnimationData.instance.animationData[path]["available"] = true;
-                
                 onComplete();
             }
             

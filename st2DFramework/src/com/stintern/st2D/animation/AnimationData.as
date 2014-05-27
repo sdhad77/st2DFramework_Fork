@@ -110,7 +110,7 @@ package com.stintern.st2D.animation
                 _animationData[path] = new Dictionary;
                 _animationData[path]["animation"] = new Dictionary;
                 _animationData[path]["type"] = 1;
-                _animationData[path]["available"] = false;
+                _animationData[path]["available"] = true;
                 
                 //xml파일을 파싱하여 저장합니다.
                 _animationData[path]["frame"] = createAnimationFrameDictionary(xml);
@@ -201,8 +201,6 @@ package com.stintern.st2D.animation
             {
                 var fileName:String = nameList[i];
                 fileName = fileName.substr(0, fileName.indexOf("."));
-                
-                trace("fileName : " + fileName);
                 animationFrameDictionary[fileName] = new AnimationFrame(fileName, xList[i], yList[i], widthList[i], heightList[i], frameXList[i], frameYList[i], frameWidthList[i], frameHeightList[i]);
             }
             
