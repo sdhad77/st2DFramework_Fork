@@ -6,6 +6,7 @@ package com.stintern.st2D.display.sprite
     import com.stintern.st2D.utils.AssetLoader;
     
     import flash.display.Bitmap;
+    import com.stintern.st2D.utils.Vector2D;
 
     public class SpriteAnimation extends Sprite
     {
@@ -14,6 +15,7 @@ package com.stintern.st2D.display.sprite
         private var _delayCnt:int;             //frame delay를 위한 카운트 변수
         private var _isPlaying:Boolean         //지금 재생중인지?
         private var _isFirstUpdate:Boolean     //첫번째 업데이트인지. init을 위해 만든 변수
+        private var _basePosition:Vector2D;
         
         public function SpriteAnimation()
         {
@@ -39,6 +41,7 @@ package com.stintern.st2D.display.sprite
             playAnimationName = animationName;
             
             createSpriteWithPath(path, onCreated, onProgress,  x, y );
+            _basePosition = new Vector2D(x, y);
         }
         
         /**
@@ -54,6 +57,7 @@ package com.stintern.st2D.display.sprite
             
             //재생할 애니메이션의 첫번째 frame 이미지를 매개변수로 전달합니다.
             createSpriteWithBatchSprite(batchSprite, AnimationData.instance.animationData[batchSprite.path]["animation"][animationName].animationFlow[0], x, y);
+            _basePosition = new Vector2D(x, y);
         }
         
         /**
@@ -71,12 +75,18 @@ package com.stintern.st2D.display.sprite
                     
                     //다음 프레임으로 이동
                     var playFrame:AnimationFrame = nextFrame();
+                    var firstFrame:AnimationFrame = AnimationData.instance.animationData[path]["frame"][0];
                     //현재 사용중인 스프라이트 시트 이미지. 가로 세로 길이가 필요해서 사용함
                     var currentSpriteImg:Bitmap = AssetLoader.instance.getImageTexture(path);
                     
                     //다음 프레임이 존재할 경우
                     if(playFrame != null)
                     {
+                        if(isPlaying){
+                            this.position.x = _basePosition.x + Math.abs((playFrame.frameX)- firstFrame.frameX);    
+                            this.position.y = _basePosition.y + Math.abs((playFrame.frameY)- firstFrame.frameY);    
+                        }
+                        
                         //uv좌표 변경하는 방식
                         frame.width = playFrame.width;
                         frame.height = playFrame.height;
