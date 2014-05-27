@@ -197,7 +197,7 @@ package com.stintern.st2D.utils
             bmpData = null;
             tempFrameData = null;
             
-            return new Array(_spriteSheet, _xml);
+            return new Array(new Bitmap(_spriteSheet), _xml);
         }
         
         /**

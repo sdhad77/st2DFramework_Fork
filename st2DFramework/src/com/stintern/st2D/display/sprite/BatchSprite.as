@@ -72,6 +72,8 @@ package com.stintern.st2D.display.sprite
         
         public function createBatchSpriteWithSWF(path:String, onComplete:Function):void
         {
+            this.path = path;
+            
             AssetLoader.instance.loadSWF(path, onLoad);
             
             function onLoad(result:Array):void

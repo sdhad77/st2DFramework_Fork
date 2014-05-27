@@ -163,7 +163,7 @@ package com.stintern.st2D.utils
         /**
          * SWF 파일을 로드합니다.  
          * @param path 로드할 SWF 파일(Movie Clip)
-         * @param onComplete 파일이 로드되면 결과를 받을 콜백함수 ( Array 로 결과값을 반환합니다. [0] : Sprite Sheet Bitmapdata, [1] : XML Data ) 
+         * @param onComplete 파일이 로드되면 결과를 받을 콜백함수 ( Array 로 결과값을 반환합니다. [0] : Sprite Sheet Bitmap, [1] : XML Data ) 
          * @param onProgress 파일을 로드하는 과정 퍼센트를 반환받는 콜백함수
          */
         public function loadSWF(path:String, onComplete:Function, onProgress:Function = null):void
@@ -192,10 +192,11 @@ package com.stintern.st2D.utils
                 trace("onLoadComplete" + path);
                 
                 var mc:MovieClip = event.target.content as MovieClip;
-                _assetMap[path] = mc;
                 
                 var swfLoader:SwfLoader = new SwfLoader();
                 var result:Array = swfLoader.loadMovieClip(mc);
+                
+                _assetMap[path] = result[0];
                 
                 onComplete( result );
                 
