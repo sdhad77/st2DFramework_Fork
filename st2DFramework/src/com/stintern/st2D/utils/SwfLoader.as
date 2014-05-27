@@ -3,7 +3,6 @@ import flash.geom.Rectangle;
 
 class FrameData
 {
-    private var _bmpIdx:int;
     private var _name:String;
     private var _frameX:Number;
     private var _frameY:Number;
@@ -15,7 +14,6 @@ class FrameData
     {
     }
     
-    public function get bmpIdx():int                 { return _bmpIdx;      }
     public function get name():String                { return _name;        }
     public function get rotate():Boolean             { return _rotate;      }
     public function get frameX():Number              { return _frameX;      }
@@ -23,7 +21,6 @@ class FrameData
     public function get frameWidth():Number          { return _frameWidth;  }
     public function get frameHeight():Number         { return _frameHeight; }
     
-    public function set bmpIdx(value:int):void         { _bmpIdx      = value; }
     public function set name(value:String):void        { _name        = value; }
     public function set rotate(value:Boolean):void     { _rotate      = value; }
     public function set frameX(value:Number):void      { _frameX      = value; }
@@ -91,12 +88,14 @@ package com.stintern.st2D.utils
     import flash.display.MovieClip;
     import flash.geom.Matrix;
     import flash.geom.Rectangle;
+    import flash.utils.Dictionary;
     import flash.utils.getQualifiedClassName;
     
     public class SwfLoader
     {
         private var _dataVector      :Vector.<FrameData>;
         private var _bmpVector       :Vector.<Bitmap>;
+        private var _bmpDictionary   :Dictionary;
         private var _imgBorderLine   :int;       //이미지의 경계선 두께
         private var _imgTotalSize    :int;       //패킹할 이미지들의 전체 사이즈
               
@@ -131,8 +130,9 @@ package com.stintern.st2D.utils
         
         private function init():void
         {
-            _dataVector = new Vector.<FrameData>;
-            _bmpVector  = new Vector.<Bitmap>;
+            _dataVector    = new Vector.<FrameData>;
+            _bmpVector     = new Vector.<Bitmap>;
+            _bmpDictionary = new Dictionary;
             _imgBorderLine = 2;       //경계선을 2px로 설정
             _imgTotalSize  = 0;
             
@@ -178,9 +178,8 @@ package com.stintern.st2D.utils
                     if(thisBmpIsNewBmp == true)
                     {
                         _bmpVector.push(new Bitmap(bmpData));
-                        tempFrameData.bmpIdx = _bmpVector.length - 1;
+                        _bmpDictionary[selected.toString()] = _bmpVector[_bmpVector.length - 1];
                     }
-                    else tempFrameData.bmpIdx = k;
                     
                     tempFrameData.name = selected.toString();
                     tempFrameData.frameX = selected.x;
@@ -210,6 +209,9 @@ package com.stintern.st2D.utils
                 while(_dataVector.length > 0) _dataVector.pop();
                 _dataVector = null;
             }
+            
+            for (var key:* in _bmpDictionary) delete _bmpDictionary[key];
+            key = null;
             
             if(_bmpVector != null)
             {
@@ -435,9 +437,9 @@ package com.stintern.st2D.utils
             
             for(var i:int=0; i<_dataVector.length; i++)
             {
-                var selectedBmp:Bitmap = _bmpVector[_dataVector[i].bmpIdx];
+                var selectedBmp:Bitmap = _bmpDictionary[_dataVector[i].name];
                 var newItem:XML =
-                    XML("<atlasItem name ="         + "\"" + _dataVector[i].name        + "\" " + 
+                    XML("<atlasItem name ="         + "\"" + i + ".png"                 + "\" " + 
                                     "x ="           + "\"" + selectedBmp.x              + "\" " +
                                     "y ="           + "\"" + selectedBmp.y              + "\" " + 
                                     "width ="       + "\"" + selectedBmp.width          + "\" " + 
