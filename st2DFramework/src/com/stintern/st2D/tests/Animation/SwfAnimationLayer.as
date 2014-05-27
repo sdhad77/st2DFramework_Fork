@@ -1,7 +1,6 @@
 package com.stintern.st2D.tests.Animation
 {
     import com.stintern.st2D.animation.AnimationData;
-    import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
@@ -18,7 +17,7 @@ package com.stintern.st2D.tests.Animation
         
         public function SwfAnimationLayer()
         {
-            AssetLoader.instance.loadSWF("res/ice.swf", onLoad);
+            AssetLoader.instance.loadSWF("res/ice_asura.swf", onLoad);
         }
         
         private function onLoad(result:Array):void
@@ -30,16 +29,8 @@ package com.stintern.st2D.tests.Animation
             _batchSprite.createSpriteWithBitmap(result[0]);
             addBatchSprite(_batchSprite);
           
-            var arr:Array = new Array;
-            
-            for(var i:int=0; i< 60; i++)
-            {
-                arr.push(i.toString());
-            }
-            
-            AnimationData.instance.setAnimation("res/ice.swf", new Animation("ice", arr, 1, "ice"));
-            
-            _effect.createAnimationSpriteWithBatchSprite(_batchSprite, "ice", 300, 300);
+            AnimationData.instance.setAnimationDeleayNum(_batchSprite.path, "walk", 4);
+            _effect.createAnimationSpriteWithBatchSprite(_batchSprite, "walk", 300, 300);
             _batchSprite.addSprite(_effect);
             _effect.playAnimation();
         }
