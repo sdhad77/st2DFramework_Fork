@@ -56,7 +56,8 @@ package com.stintern.st2D.display.sprite
             function onComplete(object:Object, zOrder:uint):void
             {
                 //이미지파일을 저장합니다.
-                createBatchSpriteWithBitmap((object as Bitmap));
+                createTextureData((object as Bitmap));
+                
                 //읽어온 데이터들을 이제 사용할 수 있다고 표시해줍니다.
                 AnimationData.instance.animationData[path]["available"] = true;
                 
@@ -69,12 +70,30 @@ package com.stintern.st2D.display.sprite
             }
         }
         
+        public function createBatchSpriteWithSWF(path:String, onComplete:Function):void
+        {
+            AssetLoader.instance.loadSWF(path, onLoad);
+            
+            function onLoad(result:Array):void
+            {
+                //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
+                AnimationData.instance.createAnimationDictionaryWithSWF(path, result[1]);
+                
+                createTextureData(result[0]);
+                
+                //읽어온 데이터들을 이제 사용할 수 있다고 표시해줍니다.
+                AnimationData.instance.animationData[path]["available"] = true;
+                
+                onComplete();
+            }
+            
+        }
+        
         /**
          * 스프라이트에 사용할 텍스쳐를 초기화합니다. 
          * @param bitmap 텍스쳐에 사용할 비트맵객체
-         * @param useMipMap 비트맵 밉맵을 생성할 지 여부
          */
-        public function createBatchSpriteWithBitmap(bitmap:Bitmap):void
+        public function createTextureData(bitmap:Bitmap):void
         {
             this.textureData = bitmap;
             
@@ -254,13 +273,13 @@ package com.stintern.st2D.display.sprite
             
             // 갱신한 vertexData 에 따라 vertexBuffer 를 갱신
             var numVertices:int = vertexData.length;
-            vertexBuffer = context.createVertexBuffer(numVertices/DisplayObject.DATAS_PER_VERTEX, DisplayObject.DATAS_PER_VERTEX);
+            //vertexBuffer = context.createVertexBuffer(numVertices/DisplayObject.DATAS_PER_VERTEX, DisplayObject.DATAS_PER_VERTEX);
             vertexBuffer.uploadFromVector(vertexData, 0, numVertices/DATAS_PER_VERTEX);
             
             resetIndexData();
             
             var numIndices:int = indexData.length;
-            indexBuffer = context.createIndexBuffer(numIndices);
+            //indexBuffer = context.createIndexBuffer(numIndices);
             indexBuffer.uploadFromVector(indexData, 0, numIndices);
         }
         
