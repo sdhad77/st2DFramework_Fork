@@ -82,7 +82,7 @@ package com.stintern.st2D.animation
                 _animationData[path]["available"] = false;
                 
                 //xml파일을 읽어온 후 저장합니다.
-                _animationData[path]["frame"] = createAnimationFrameDictionary(AssetLoader.instance.loadXML(pathXML));
+                _animationData[path]["frame"] = createAnimationFrame(AssetLoader.instance.loadXML(pathXML));
             }
             //아직 로딩중인경우
             else if(_animationData[path]["available"] == false)
@@ -113,7 +113,8 @@ package com.stintern.st2D.animation
                 _animationData[path]["available"] = true;
                 
                 //xml파일을 파싱하여 저장합니다.
-                _animationData[path]["frame"] = createAnimationFrameDictionary(xml);
+                _animationData[path]["frame"] = createAnimationFrame(xml);
+                _animationData[path]["animation"] = createAnimation(xml);
             }
             //아직 로딩중인경우
             else if(_animationData[path]["available"] == false)
@@ -175,6 +176,18 @@ package com.stintern.st2D.animation
             else trace("texture가 존재하지 않습니다");
         }
         
+        
+        /**
+         * 특정 애니메이션의 지속시간(각 frame별 유지시간)을 설정하는 함수입니다.
+         * @param path 스프라이트 시트의 경로
+         * @param animationName 지속시간을 변경할 애니메이션 이름
+         * @param delayNum 변경할 지속시간(프레임)
+         */
+        public function setAnimationDeleayNum(path:String, animationName:String, delayNum:int):void
+        {
+            _animationData[path]["animation"][animationName].delayNum = delayNum;
+        }
+        
         /**
          * Dictionary 안의 Data를 전부 지우는 함수입니다.</br>
          * 내부의 상세한 데이터들도 null을 하도록 보완해야 합니다.
@@ -184,7 +197,7 @@ package com.stintern.st2D.animation
             for (var key:* in _animationData) delete _animationData[key];
         }
         
-        private function createAnimationFrameDictionary(xml:XML):Dictionary
+        private function createAnimationFrame(xml:XML):Dictionary
         {
             var nameList:XMLList = xml.child("atlasItem").attribute("name");
             var xList:XMLList = xml.child("atlasItem").attribute("x");
@@ -205,6 +218,55 @@ package com.stintern.st2D.animation
             }
             
             return animationFrameDictionary;
+        }
+        
+        /**
+         * xml 파일에서 name 정보를 이용해서 애니메이션 Frame 순서를 만드는 함수입니다.</br>
+         * xml에서 name -> Animation이름_FrameNumber.png 의 구조로 이루어져 있습니다.
+         * @param xml 스프라이트 시트의 xml파일
+         * @return Animation 객체들이 저장된 Dictionary
+         */
+        private function createAnimation(xml:XML):Dictionary
+        {
+            var nameList:XMLList = xml.child("atlasItem").attribute("name");
+            var aniName:String;
+            var frameName:String;
+            
+            var animationDictionary:Dictionary = new Dictionary();
+            var nameDictionary:Dictionary = new Dictionary();
+            var aniNameArray:Array = new Array;
+            
+            //애니메이션 순서를 저장하는 곳
+            for(var i:uint = 0; i<xml.children().length(); i++)
+            {
+                aniName = nameList[i];
+                aniName = aniName.substr(0, aniName.indexOf("_"));
+                
+                frameName = nameList[i];
+                frameName = frameName.substr(0, frameName.indexOf("."));
+                
+                if(!(aniName in nameDictionary))
+                {
+                    nameDictionary[aniName] = new Array;
+                    nameDictionary[aniName].push(frameName);
+                    aniNameArray.push(aniName);
+                }
+                else nameDictionary[aniName].push(frameName);
+            }
+            
+            //animation 객체 생성
+            for(i=0; i<aniNameArray.length; i++)
+            {
+                animationDictionary[aniNameArray[i]] = new Animation(aniNameArray[i], nameDictionary[aniNameArray[i]], 1, aniNameArray[i]);
+            }
+            
+            //메모리 해제
+            while(aniNameArray.length > 0) aniNameArray.pop();
+            for (var key:* in nameDictionary) delete nameDictionary[key];
+            key = null;
+            nameDictionary = null;
+            
+            return animationDictionary;
         }
         
         //get set 함수입니다.
