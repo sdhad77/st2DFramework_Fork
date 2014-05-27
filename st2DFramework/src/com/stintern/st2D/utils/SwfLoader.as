@@ -4,6 +4,7 @@ import flash.geom.Rectangle;
 class FrameData
 {
     private var _name:String;
+    private var _sceneName:String;
     private var _frameX:Number;
     private var _frameY:Number;
     private var _frameWidth:Number;
@@ -15,6 +16,7 @@ class FrameData
     }
     
     public function get name():String                { return _name;        }
+    public function get sceneName():String           { return _sceneName;   }
     public function get rotate():Boolean             { return _rotate;      }
     public function get frameX():Number              { return _frameX;      }
     public function get frameY():Number              { return _frameY;      }
@@ -22,6 +24,7 @@ class FrameData
     public function get frameHeight():Number         { return _frameHeight; }
     
     public function set name(value:String):void        { _name        = value; }
+    public function set sceneName(value:String):void   { _sceneName   = value; }
     public function set rotate(value:Boolean):void     { _rotate      = value; }
     public function set frameX(value:Number):void      { _frameX      = value; }
     public function set frameY(value:Number):void      { _frameY      = value; }
@@ -93,6 +96,7 @@ package com.stintern.st2D.utils
     
     public class SwfLoader
     {
+        private var _sceneDataVector :Vector.<Vector.<FrameData>>;
         private var _dataVector      :Vector.<FrameData>;
         private var _bmpVector       :Vector.<Bitmap>;
         private var _bmpDictionary   :Dictionary;
@@ -130,11 +134,11 @@ package com.stintern.st2D.utils
         
         private function init():void
         {
-            _dataVector    = new Vector.<FrameData>;
-            _bmpVector     = new Vector.<Bitmap>;
-            _bmpDictionary = new Dictionary;
-            _imgBorderLine = 2;       //경계선을 2px로 설정
-            _imgTotalSize  = 0;
+            _sceneDataVector = new Vector.<Vector.<FrameData>>;
+            _bmpVector       = new Vector.<Bitmap>;
+            _bmpDictionary   = new Dictionary;
+            _imgBorderLine   = 2;       //경계선을 2px로 설정
+            _imgTotalSize    = 0;
             
             _packedSpace = 0;
             _packingMaxSpace = 0;
@@ -152,42 +156,50 @@ package com.stintern.st2D.utils
             var selected:DisplayObject;
             var bmpData:BitmapData;
             
-            for( var i:uint=1; i<=mc.totalFrames; ++i)
-            { 
-                mc.gotoAndStop(i);
+            for(var l:uint=1; l<=mc.scenes.length; l++)
+            {
+                _dataVector = new Vector.<FrameData>;
                 
-                for(var j:uint = 0; j<mc.numChildren; ++j)
-                {
-                    thisBmpIsNewBmp = true;
-                    selected = mc.getChildAt(j);
-                    bmpData = new BitmapData (selected.width, selected.height,true,0x00000000);
+                for( var i:uint=1; i<=mc.currentScene.numFrames; ++i)
+                { 
+                    mc.gotoAndStop(i);
                     
-                    bmpData.draw(mc, new Matrix(1,0,0,1,-selected.x, -selected.y));
-                    
-                    for(var k:uint=0; k<_bmpVector.length; k++)
+                    for(var j:uint = 0; j<mc.numChildren; ++j)
                     {
-                        if(_bmpVector[k].bitmapData.compare(bmpData) == 0)
+                        thisBmpIsNewBmp = true;
+                        selected = mc.getChildAt(j);
+                        bmpData = new BitmapData (selected.width, selected.height,true,0x00000000);
+                        
+                        bmpData.draw(mc, new Matrix(1,0,0,1,-selected.x, -selected.y));
+                        
+                        for(var k:uint=0; k<_bmpVector.length; k++)
                         {
-                            thisBmpIsNewBmp = false;
-                            break;
+                            if(_bmpVector[k].bitmapData.compare(bmpData) == 0)
+                            {
+                                thisBmpIsNewBmp = false;
+                                break;
+                            }
                         }
+                        
+                        tempFrameData = new FrameData;
+                        
+                        if(thisBmpIsNewBmp == true)
+                        {
+                            _bmpVector.push(new Bitmap(bmpData));
+                            _bmpDictionary[selected.toString()] = _bmpVector[_bmpVector.length - 1];
+                        }
+                        
+                        tempFrameData.name = selected.toString();
+                        tempFrameData.sceneName = mc.currentScene.name;
+                        tempFrameData.frameX = selected.x;
+                        tempFrameData.frameY = selected.y;
+                        tempFrameData.frameWidth = mc.loaderInfo.width;
+                        tempFrameData.frameHeight = mc.loaderInfo.height;
+                        _dataVector.push(tempFrameData);
                     }
-                    
-                    tempFrameData = new FrameData;
-                    
-                    if(thisBmpIsNewBmp == true)
-                    {
-                        _bmpVector.push(new Bitmap(bmpData));
-                        _bmpDictionary[selected.toString()] = _bmpVector[_bmpVector.length - 1];
-                    }
-                    
-                    tempFrameData.name = selected.toString();
-                    tempFrameData.frameX = selected.x;
-                    tempFrameData.frameY = selected.y;
-                    tempFrameData.frameWidth = mc.loaderInfo.width;
-                    tempFrameData.frameHeight = mc.loaderInfo.height;
-                    _dataVector.push(tempFrameData);
                 }
+                _sceneDataVector.push(_dataVector);
+                mc.nextScene();
             }
             
             createSpriteSheet();
@@ -204,6 +216,19 @@ package com.stintern.st2D.utils
          */
         public function clear():void
         {
+            if(_sceneDataVector != null)
+            {
+                while(_sceneDataVector.length > 0)
+                {
+                    if(_sceneDataVector[0] != null)
+                    {
+                        while(_sceneDataVector[0].length > 0) _sceneDataVector[0].pop();
+                        _sceneDataVector[0] = null;
+                    }
+                    _sceneDataVector.pop();
+                }
+            }
+            
             if(_dataVector != null)
             {
                 while(_dataVector.length > 0) _dataVector.pop();
@@ -357,15 +382,15 @@ package com.stintern.st2D.utils
         }
         
         /**
-         * root node를 입력받아서 2배확장한 후 반환함
+         * root node를 입력받아서 가로 세로 2배확장한 후 반환함
          * @param root 이미지패킹의 시작점이 되는 root node
          * @return 확장한 후의 root node
          */
         private function packingSpaceExtend(root:Node):Node
         {
-            //가로 혹은 세로 2배 증가
-            if(_packingSpaceWidth > _packingSpaceHeight) _packingSpaceHeight = _packingSpaceHeight + _packingSpaceHeight;
-            else _packingSpaceWidth = _packingSpaceWidth + _packingSpaceWidth;
+            //가로  세로 2배 증가
+            _packingSpaceHeight = _packingSpaceHeight + _packingSpaceHeight;
+            _packingSpaceWidth = _packingSpaceWidth + _packingSpaceWidth;
             
             _packingMaxSpace = _packingSpaceWidth * _packingSpaceHeight;
             
@@ -405,13 +430,9 @@ package com.stintern.st2D.utils
                 trace("Sprite Sheet Size is too Big : " + tempSize + "* " + tempSize);
             }
             
-            //예측을 기반으로 sheet의 세로 길이 설정
-            //정사각형이 아닌 직사각형 형태가 더 효율적이라 판단되면 세로 길이를 원래 길이의 절반으로 줄임
-            if((_imgTotalSize/2) < (tempSheetSpace/2)) _packingSpaceHeight = tempSize/2;
-            else _packingSpaceHeight = tempSize;
-            
-            //예측을 기반으로 sheet의 가로길이 설정
+            //예측을 기반으로 sheet의 가로 세로길이 설정
             _packingSpaceWidth = tempSize;
+            _packingSpaceHeight = tempSize;
             _packingMaxSpace = _packingSpaceWidth * _packingSpaceHeight;
         }
         
@@ -435,23 +456,26 @@ package com.stintern.st2D.utils
                 <atlas>
                 </atlas>;
             
-            for(var i:int=0; i<_dataVector.length; i++)
+            for(var j:int=0; j<_sceneDataVector.length; j++)
             {
-                var selectedBmp:Bitmap = _bmpDictionary[_dataVector[i].name];
-                var newItem:XML =
-                    XML("<atlasItem name ="         + "\"" + i + ".png"                 + "\" " + 
-                                    "x ="           + "\"" + selectedBmp.x              + "\" " +
-                                    "y ="           + "\"" + selectedBmp.y              + "\" " + 
-                                    "width ="       + "\"" + selectedBmp.width          + "\" " + 
-                                    "height ="      + "\"" + selectedBmp.height         + "\" " + 
-                                    "frameX ="      + "\"" + _dataVector[i].frameX      + "\" " +
-                                    "frameY ="      + "\"" + _dataVector[i].frameY      + "\" " + 
-                                    "frameWidth ="  + "\"" + _dataVector[i].frameWidth  + "\" " + 
-                                    "frameHeight =" + "\"" + _dataVector[i].frameHeight + "\" " + " />");
-                
-                _xml.appendChild(newItem);
-                newItem = null;
-                selectedBmp = null;
+                for(var i:int=0; i<_sceneDataVector[j].length; i++)
+                {
+                    var selectedBmp:Bitmap = _bmpDictionary[_sceneDataVector[j][i].name];
+                    var newItem:XML =
+                        XML("<atlasItem name =" + "\"" + _sceneDataVector[j][i].sceneName + "_" + i.toString() + ".png" + "\" " + 
+                                          "x =" + "\"" + selectedBmp.x                      + "\" " +
+                                          "y =" + "\"" + selectedBmp.y                      + "\" " + 
+                                      "width =" + "\"" + selectedBmp.width                  + "\" " + 
+                                     "height =" + "\"" + selectedBmp.height                 + "\" " + 
+                                     "frameX =" + "\"" + _sceneDataVector[j][i].frameX      + "\" " +
+                                     "frameY =" + "\"" + _sceneDataVector[j][i].frameY      + "\" " + 
+                                 "frameWidth =" + "\"" + _sceneDataVector[j][i].frameWidth  + "\" " + 
+                                "frameHeight =" + "\"" + _sceneDataVector[j][i].frameHeight + "\" " + " />");
+                    
+                    _xml.appendChild(newItem);
+                    newItem = null;
+                    selectedBmp = null;
+                }
             }
         }
     }
