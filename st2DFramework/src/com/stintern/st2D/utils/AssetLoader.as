@@ -4,12 +4,14 @@ package com.stintern.st2D.utils
     import flash.display.BitmapData;
     import flash.display.Loader;
     import flash.display.LoaderInfo;
+    import flash.display.MovieClip;
     import flash.events.Event;
     import flash.events.IOErrorEvent;
     import flash.events.ProgressEvent;
     import flash.filesystem.File;
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
+    import flash.system.LoaderContext;
     import flash.utils.ByteArray;
     import flash.utils.Dictionary;
 
@@ -24,7 +26,7 @@ package com.stintern.st2D.utils
         private static var _creatingSingleton:Boolean = false;
         
         // 이미지 Dictionary
-        private var _imageMap:Dictionary = new Dictionary(); 
+        private var _assetMap:Dictionary = new Dictionary(); 
         private var _imageCount:uint = 0;
         
         public function AssetLoader()
@@ -51,9 +53,9 @@ package com.stintern.st2D.utils
          */
         public function getImageTexture(path:String):Bitmap
         {
-            if( path in _imageMap )
+            if( path in _assetMap )
             {
-                return _imageMap[path];
+                return _assetMap[path];
             }
             
             trace("해당 경로로 저장된 이미지 텍스쳐가 없습니다.");
@@ -87,9 +89,9 @@ package com.stintern.st2D.utils
             _imageCount++;
             
             // 이미 불러온 이미지가 있을 경우에는 로드하지 않고 바로 보냄
-            if( path in _imageMap )
+            if( path in _assetMap )
             {
-                onComplete(_imageMap[path], imageCount);
+                onComplete(_assetMap[path], imageCount);
                 return;
             }
             
@@ -121,7 +123,7 @@ package com.stintern.st2D.utils
                 trace("onLoaderComplete" + path);
                 
                 // dictionary 에 불러온 이미지 저장
-                _imageMap[path] = LoaderInfo(event.target).content as Bitmap;
+                _assetMap[path] = LoaderInfo(event.target).content as Bitmap;
                 
                 onComplete( LoaderInfo(event.target).content as Bitmap, imageCount );
             }
@@ -159,6 +161,68 @@ package com.stintern.st2D.utils
         }
         
         /**
+         * SWF 파일을 로드합니다.  
+         * @param path 로드할 SWF 파일(Movie Clip)
+         * @param onComplete 파일이 로드되면 결과를 받을 콜백함수 ( Array 로 결과값을 반환합니다. [0] : Sprite Sheet Bitmapdata, [1] : XML Data ) 
+         * @param onProgress 파일을 로드하는 과정 퍼센트를 반환받는 콜백함수
+         */
+        public function loadSWF(path:String, onComplete:Function, onProgress:Function = null):void
+        {
+            var file:File = findFile(path);
+            var fileStream:FileStream = new FileStream();
+            fileStream.open(file, FileMode.READ);
+            
+            var bytes:ByteArray = new ByteArray();
+            fileStream.readBytes(bytes);
+            
+            fileStream.close();
+            
+            var loader:Loader = new Loader();
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete);
+            loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoadProgress);
+            loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+            
+            var loaderContext:LoaderContext = new LoaderContext();
+            loaderContext.allowCodeImport = true;
+            
+            loader.loadBytes(bytes, loaderContext);
+            
+            function onLoadComplete(event:Event):void
+            {
+                trace("onLoadComplete" + path);
+                
+                var mc:MovieClip = event.target.content as MovieClip;
+                _assetMap[path] = mc;
+                
+                var swfLoader:SwfLoader = new SwfLoader();
+                var result:Array = swfLoader.loadMovieClip(mc);
+                
+                onComplete( result );
+                
+                loader = null;
+                loaderContext = null;
+                
+                swfLoader.clear();
+                swfLoader = null;
+            }
+            
+            function onLoadProgress(event:ProgressEvent):void
+            {
+                if( onProgress != null )
+                {
+                    onProgress(event.bytesLoaded/event.bytesTotal * 100);
+                }
+            }
+            
+            function ioErrorHandler(event:IOErrorEvent):void
+            {
+                trace("SWF Load error: " + event.target + " _ " + event.text );                  
+            }
+                
+        }
+          
+        
+        /**
          * 디바이스 내부 저장소를 확인하여 File 객체를 리턴합니다. 
          */
         private function findFile(path:String):File
@@ -179,15 +243,15 @@ package com.stintern.st2D.utils
          */
         public function removeImage(path:String):void
         {
-            var bmp:Bitmap = _imageMap[path];
+            var bmp:Bitmap = _assetMap[path];
             
-            var bmpData:BitmapData = (_imageMap[path] as Bitmap).bitmapData;
+            var bmpData:BitmapData = (_assetMap[path] as Bitmap).bitmapData;
             if( bmpData != null )
             {
                 bmpData.dispose();
             }
             
-            _imageMap[path] = null;
+            _assetMap[path] = null;
         }
         
         public function get imageCount():uint
