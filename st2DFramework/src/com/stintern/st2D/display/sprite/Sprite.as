@@ -360,6 +360,18 @@ package com.stintern.st2D.display.sprite
             dest = null;
         }
         
+        public function setVisible(isVisible:Boolean):void
+        {
+            if( isVisible )
+            {
+                setAlpha(1.0);
+            }
+            else
+            {
+                setAlpha(0.0);
+            }
+        }
+        
         
         /**
          * 사용한 자원을 해제합니다. 
