@@ -1,8 +1,8 @@
 import com.stintern.st2D.display.Layer;
+import com.stintern.st2D.display.sprite.BatchSprite;
 import com.stintern.st2D.display.sprite.SpriteAnimation;
 
 import flash.events.Event;
-import com.stintern.st2D.display.sprite.BatchSprite;
 
 class GameObject
 {
@@ -17,7 +17,7 @@ class GameObject
     public function create(batchSprite:BatchSprite, animationName:String, hp:Number, power:Number, party:String):void
     {
         _info = new ObjectInfo(hp, power, party);
-        _sprite.createAnimationSpriteWithBatchSprite(batchSprite, animationName);
+        _sprite.createAnimationSpriteWithBatchSprite(batchSprite, animationName, animationName);
     }
     
     public function initIsCollision(evt:Event):void
@@ -48,16 +48,20 @@ package com.stintern.st2D.tests.Animation
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
+    import com.stintern.st2D.utils.AssetLoader;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
+    import flash.display.Bitmap;
     import flash.events.MouseEvent;
     
     public class TotalAnimationLayer extends Layer
     {
         private var _gameObject:Vector.<GameObject> = new Vector.<GameObject>;
         private var _effect:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
+        private var _walk:SpriteAnimation = new SpriteAnimation;
         private var _gameStart:Boolean = false;
         private var _batchSprite:BatchSprite;
+        private var _batchSprite2:BatchSprite;
         private var _sch:Scheduler = new Scheduler;
         
         public function TotalAnimationLayer()
@@ -117,11 +121,11 @@ package com.stintern.st2D.tests.Animation
         
         private function loadCompleted():void
         {   
-            //원하는 애니메이션 자유롭게 설정.              사용할 텍스쳐 이름                                         애니메이션 이름                    프레임 호출 순서                                각 프레임 별 대기 시간(프레임) 다음 애니메이션
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("right", new Array("right0","right1","right2","right1"), 8, "right"));
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("left",  new Array("left0","left1","left2","left1"),     8, "left")); 
+            //원하는 애니메이션 자유롭게 설정.              사용할 텍스쳐 이름                                         애니메이션 이름                    프레임 호출 순서                                각 프레임 별 대기 시간(프레임)
+            AnimationData.instance.setAnimation("res/atlas.png", new Animation("right", new Array("right0","right1","right2","right1"), 8));
+            AnimationData.instance.setAnimation("res/atlas.png", new Animation("left",  new Array("left0","left1","left2","left1"),     8)); 
             AnimationData.instance.setAnimation("res/atlas.png", new Animation("fire",  new Array("fire0","fire1","fire2","fire3",
-                                                                                                  "fire4","fire5","fire6","fire7"),     4, null));
+                                                                                                  "fire4","fire5","fire6","fire7"),     4));
             for(var i:int=0; i< 20; i++)
             {
                 _gameObject.push(new GameObject());
@@ -144,12 +148,27 @@ package com.stintern.st2D.tests.Animation
                 _gameObject[i]._sprite.playAnimation();
             }
             
-            for(i=0; i< 20; i++)
+            AssetLoader.instance.loadSWF("res/effect.swf", onLoad);
+        }
+        
+        private function onLoad(bmp:Bitmap, xml:XML):void
+        {
+            //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
+            AnimationData.instance.createAnimationDictionaryWithSWF( bmp.name, xml);
+            
+            _batchSprite2 = new BatchSprite();
+            _batchSprite2.createSpriteWithBitmap(bmp);
+            addBatchSprite(_batchSprite2);
+            
+            AnimationData.instance.setAnimationDeleayNum(_batchSprite2.path, "fire", 4);
+            AnimationData.instance.setAnimationDeleayNum(_batchSprite2.path, "ice", 4);
+            
+            for(var i:int=0; i< 20; i++)
             {
                 _effect.push(new SpriteAnimation());
-                _effect[i].createAnimationSpriteWithBatchSprite(_batchSprite, "fire");
+                _effect[i].createAnimationSpriteWithBatchSprite(_batchSprite2, "fire");
                 _effect[i].isVisible = false;
-                _batchSprite.addSprite(_effect[i]);
+                _batchSprite2.addSprite(_effect[i]);
             }
             
             _gameStart = true;
