@@ -20,13 +20,13 @@ package com.stintern.st2D.tests.Animation
             AssetLoader.instance.loadSWF("res/ice_asura.swf", onLoad);
         }
         
-        private function onLoad(result:Array):void
+        private function onLoad(bmp:Bitmap, xml:XML):void
         {
             //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
-            AnimationData.instance.createAnimationDictionaryWithSWF( (result[0] as Bitmap).name, result[1]);
+            AnimationData.instance.createAnimationDictionaryWithSWF( bmp.name, xml);
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createSpriteWithBitmap(result[0]);
+            _batchSprite.createSpriteWithBitmap(bmp);
             addBatchSprite(_batchSprite);
           
             AnimationData.instance.setAnimationDeleayNum(_batchSprite.path, "walk", 4);
