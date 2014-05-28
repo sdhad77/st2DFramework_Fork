@@ -182,7 +182,7 @@ package com.stintern.st2D.animation
          * @param animationName 지속시간을 변경할 애니메이션 이름
          * @param delayNum 변경할 지속시간(프레임)
          */
-        public function setAnimationDeleayNum(path:String, animationName:String, delayNum:int):void
+        public function setAnimationDelayNum(path:String, animationName:String, delayNum:int):void
         {
             _animationData[path]["animation"][animationName].delayNum = delayNum;
         }

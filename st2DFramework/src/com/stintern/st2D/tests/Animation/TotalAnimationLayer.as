@@ -160,8 +160,8 @@ package com.stintern.st2D.tests.Animation
             _batchSprite2.createSpriteWithBitmap(bmp);
             addBatchSprite(_batchSprite2);
             
-            AnimationData.instance.setAnimationDeleayNum(_batchSprite2.path, "fire", 4);
-            AnimationData.instance.setAnimationDeleayNum(_batchSprite2.path, "ice", 4);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "fire", 4);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "ice", 4);
             
             for(var i:int=0; i< 20; i++)
             {

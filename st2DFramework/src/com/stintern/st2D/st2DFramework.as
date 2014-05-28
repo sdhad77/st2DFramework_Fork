@@ -4,7 +4,7 @@ package com.stintern.st2D
     import com.stintern.st2D.display.DrawManager;
     import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
-    import com.stintern.st2D.tests.Animation.TotalAnimationLayer;
+    import com.stintern.st2D.tests.Animation.SwfAnimationLayer;
     import com.stintern.st2D.utils.GameStatus;
     import com.stintern.st2D.utils.GameTimer;
     
@@ -36,7 +36,7 @@ package com.stintern.st2D
         {
             var scene:Scene = new Scene();
             
-            var testLayer:TotalAnimationLayer = new TotalAnimationLayer();
+            var testLayer:SwfAnimationLayer = new SwfAnimationLayer();
             scene.addLayer(testLayer);
             
             SceneManager.instance.pushScene(scene);
