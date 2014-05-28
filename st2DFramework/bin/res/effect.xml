@@ -1,0 +1,26 @@
+<atlas>
+  <atlasItem name="ice_0.png" x="366" y="154" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_1.png" x="2" y="154" width="89" height="150" frameX="55.75" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_2.png" x="2" y="306" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_3.png" x="93" y="2" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_4.png" x="184" y="2" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_5.png" x="275" y="2" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_6.png" x="366" y="2" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_7.png" x="93" y="154" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_8.png" x="93" y="306" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_9.png" x="184" y="154" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_10.png" x="184" y="306" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_11.png" x="275" y="154" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_12.png" x="2" y="2" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_13.png" x="275" y="306" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="ice_14.png" x="366" y="306" width="89" height="150" frameX="55.5" frameY="25" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_0.png" x="51" y="499" width="8" height="10" frameX="96" frameY="95" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_1.png" x="93" y="493" width="14" height="16" frameX="93" frameY="92" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_2.png" x="129" y="458" width="24" height="24" frameX="88" frameY="88" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_3.png" x="93" y="458" width="34" height="33" frameX="83" frameY="83.5" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_4.png" x="51" y="458" width="39" height="39" frameX="80.5" frameY="80.5" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_5.png" x="457" y="94" width="41" height="41" frameX="79.5" frameY="79.5" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_6.png" x="457" y="49" width="43" height="43" frameX="78.5" frameY="78.5" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_7.png" x="457" y="2" width="45" height="45" frameX="77.5" frameY="77.5" frameWidth="200" frameHeight="200"/>
+  <atlasItem name="fire_8.png" x="2" y="458" width="47" height="47" frameX="76.5" frameY="76.5" frameWidth="200" frameHeight="200"/>
+</atlas>
