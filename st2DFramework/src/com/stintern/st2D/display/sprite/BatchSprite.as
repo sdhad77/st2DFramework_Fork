@@ -70,31 +70,12 @@ package com.stintern.st2D.display.sprite
             }
         }
         
-        public function createBatchSpriteWithSWF(path:String, onComplete:Function):void
-        {
-            this.path = path;
-            
-            
-            function onLoad(result:Array):void
-            {
-                //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
-                AnimationData.instance.createAnimationDictionaryWithSWF(path, result[1]);
-                
-                createSpriteWithBitmap(result[0]);
-                
-                onComplete();
-            }
-            
-        }
-        
         /**
          * 스프라이트에 사용할 텍스쳐를 초기화합니다. 
          * @param bitmap 텍스쳐에 사용할 비트맵객체
          */
         public function createSpriteWithBitmap(bitmap:Bitmap):void
         {
-            this.path = bitmap.name;
-            
             this.textureData = bitmap;
             
             var context:Context3D = StageContext.instance.context;

@@ -122,12 +122,9 @@ package com.stintern.st2D.utils
             {
                 trace("onLoaderComplete" + path);
                 
-                // dictionary 에 불러온 이미지 저장
-                var imgData:BitmapData = event.target.content.bitmapData;
-                _assetMap[path] = new Bitmap(imgData);
-                _assetMap[path].name = path;
+                _assetMap[path] = LoaderInfo(event.target).content as Bitmap;
                 
-                onComplete( _assetMap[path], imageCount );
+                onComplete( LoaderInfo(event.target).content as Bitmap, imageCount );
             }
             
             function ioErrorHandler(event:IOErrorEvent):void
@@ -160,71 +157,7 @@ package com.stintern.st2D.utils
                 
                 onComplete(xmlNode);
             } 
-        }
-        
-        /**
-         * SWF 파일을 로드합니다.  
-         * @param path 로드할 SWF 파일(Movie Clip)
-         * @param onComplete 파일이 로드되면 결과를 받을 콜백함수 (파라미터: bmp:Bitmap(스프라이트 시트), xml:XML(XML Data ) ) 
-         * @param onProgress 파일을 로드하는 과정 퍼센트를 반환받는 콜백함수
-         */
-        public function loadSWF(path:String, onComplete:Function, onProgress:Function = null):void
-        {
-            var file:File = findFile(path);
-            var fileStream:FileStream = new FileStream();
-            fileStream.open(file, FileMode.READ);
-            
-            var bytes:ByteArray = new ByteArray();
-            fileStream.readBytes(bytes);
-            
-            fileStream.close();
-            
-            var loader:Loader = new Loader();
-            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete);
-            loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoadProgress);
-            loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-            
-            var loaderContext:LoaderContext = new LoaderContext();
-            loaderContext.allowCodeImport = true;
-            
-            loader.loadBytes(bytes, loaderContext);
-            
-            function onLoadComplete(event:Event):void
-            {
-                trace("onLoadComplete" + path);
-                
-                var mc:MovieClip = event.target.content as MovieClip;
-                
-                var swfLoader:SwfLoader = new SwfLoader();
-                var result:Array = swfLoader.loadMovieClip(mc);
-                
-                _assetMap[path] = result[0];
-                (_assetMap[path] as Bitmap).name = path;
-                
-                onComplete( result[0], result[1] );
-                
-                loader = null;
-                loaderContext = null;
-                
-                swfLoader.clear();
-                swfLoader = null;
-            }
-            
-            function onLoadProgress(event:ProgressEvent):void
-            {
-                if( onProgress != null )
-                {
-                    onProgress(event.bytesLoaded/event.bytesTotal * 100);
-                }
-            }
-            
-            function ioErrorHandler(event:IOErrorEvent):void
-            {
-                trace("SWF Load error: " + event.target + " _ " + event.text );                  
-            }
-                
-        }
-          
+        } 
         
         /**
          * 디바이스 내부 저장소를 확인하여 File 객체를 리턴합니다. 

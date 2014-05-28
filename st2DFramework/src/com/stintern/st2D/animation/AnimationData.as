@@ -75,46 +75,16 @@ package com.stintern.st2D.animation
             //애니메이션 정보가 아직 등록되지않은 path 일 경우
             if(!(path in _animationData))
             {
-                //path를 키로 하는 Dictionayr 초기화
-                _animationData[path] = new Dictionary;
-                _animationData[path]["animation"] = new Dictionary;
-                _animationData[path]["type"] = 1;
-                _animationData[path]["available"] = false;
+                var xml:XML = AssetLoader.instance.loadXML(pathXML);
                 
-                //xml파일을 읽어온 후 저장합니다.
-                _animationData[path]["frame"] = createAnimationFrame(AssetLoader.instance.loadXML(pathXML));
-            }
-            //아직 로딩중인경우
-            else if(_animationData[path]["available"] == false)
-            {
-                trace("로딩중입니다.");
-            }
-            //이미 애니메이션 정보가 있는 path일 경우
-            else
-            {
-                trace("이미 존재하는 path입니다.");
-            }
-        }
-        
-        /**
-         * 애니메이션 정보들을 저장할 수 있는 Dictionary를 생성하고 초기화 하는 함수입니다.
-         * @param path 이 Dictionary를 사용할 이미지의 경로
-         * @param pathXML 이 Dictionary에서 사용할 Frame정보들이 있는 xml 파일 경로
-         */
-        public function createAnimationDictionaryWithSWF(path:String, xml:XML):void
-        {
-            //애니메이션 정보가 아직 등록되지않은 path 일 경우
-            if(!(path in _animationData))
-            {
                 //path를 키로 하는 Dictionayr 초기화
                 _animationData[path] = new Dictionary;
-                _animationData[path]["animation"] = new Dictionary;
+                _animationData[path]["frame"] = createAnimationFrame(xml);
+                _animationData[path]["animation"] = createAnimation(xml);
                 _animationData[path]["type"] = 1;
                 _animationData[path]["available"] = true;
                 
-                //xml파일을 파싱하여 저장합니다.
-                _animationData[path]["frame"] = createAnimationFrame(xml);
-                _animationData[path]["animation"] = createAnimation(xml);
+                xml = null;
             }
             //아직 로딩중인경우
             else if(_animationData[path]["available"] == false)
