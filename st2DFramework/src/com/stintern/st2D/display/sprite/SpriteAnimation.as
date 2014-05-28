@@ -135,9 +135,9 @@ package com.stintern.st2D.display.sprite
                     else
                     {
                         //다음 애니메이션이 존재할경우
-                        if(nextAnimationName != null)
+                        if(_nextAnimationName != null)
                         {
-                            _playAnimationName = nextAnimationName;
+                            _playAnimationName = _nextAnimationName;
                             _delayCnt = 0;
                             _playAnimationFlowIdx = 0;
                             
