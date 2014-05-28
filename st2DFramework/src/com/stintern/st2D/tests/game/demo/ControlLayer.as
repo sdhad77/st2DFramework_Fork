@@ -68,7 +68,7 @@ package com.stintern.st2D.tests.game.demo
             _enemyCharacterArray = _characterMovingLayer.enemyCharacterArray;
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", loadComplete);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", loadComplete, null, false);
             addBatchSprite(_batchSprite);
             
             _enemyScheduler.addFunc(2000, enemyCreater, 10);

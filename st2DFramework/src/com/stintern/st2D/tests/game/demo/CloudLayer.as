@@ -40,7 +40,7 @@ package com.stintern.st2D.tests.game.demo
             _cloudMovePixelPerSecond = pixelPerSecond;
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", loadCompleted);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", loadCompleted, null, false);
             addBatchSprite(_batchSprite);
         }
         

@@ -22,11 +22,11 @@ package com.stintern.st2D.tests.game.demo
             this.name = "CharacterMovingLayer";
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", null);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", null, null, false);
             addBatchSprite(_batchSprite);
             
             _effectBatchSprite = new BatchSprite();
-            _effectBatchSprite.createBatchSpriteWithPath("res/demo/effect.png", "res/demo/effect.xml", null);
+            _effectBatchSprite.createBatchSpriteWithPath("res/effect.png", "res/effect.xml", null);
             addBatchSprite(_effectBatchSprite);
         }
         

@@ -85,7 +85,7 @@ package com.stintern.st2D.tests.game.demo
         {
             //RUN 애니메이션으로 스프라이트 생성
             _sprite = new SpriteAnimation();
-            _sprite.createAnimationSpriteWithBatchSprite(_batchSprite, _runAniStr);
+            _sprite.createAnimationSpriteWithBatchSprite(_batchSprite, _runAniStr, _runAniStr);
             
             //tag 수정해야함.
             //생성된 스프라이트가 아군일 경우 화면 좌측에 성성
@@ -198,7 +198,7 @@ package com.stintern.st2D.tests.game.demo
             if(state == "STAY")
             {
                 _info.state = STAY;
-                _sprite.setPlayAnimation(runAniStr);
+                _sprite.setPlayAnimation(_runAniStr, _runAniStr);
                 _sprite.pauseAnimation();
                 _sprite.isMoving = false;
                 _targetObject = null;
@@ -208,7 +208,7 @@ package com.stintern.st2D.tests.game.demo
             else if(state == "RUN")
             {
                 _info.state = RUN;
-                _sprite.setPlayAnimation(runAniStr);
+                _sprite.setPlayAnimation(_runAniStr, _runAniStr);
                 _sprite.playAnimation();
                 _sprite.isMoving = true;
                 _targetObject = null;
@@ -218,7 +218,7 @@ package com.stintern.st2D.tests.game.demo
             else if(state == "ATTACK")
             {
                 _info.state = ATTACK;
-                _sprite.setPlayAnimation(_attAniStr);
+                _sprite.setPlayAnimation(_attAniStr, _attAniStr);
                 _sprite.playAnimation();
                 _sprite.isMoving = false;
                 _targetObject = charObject;

@@ -81,12 +81,12 @@ package com.stintern.st2D.animation
                 //path를 키로 하는 Dictionayr 초기화
                 _animationData[path] = new Dictionary;
                 _animationData[path]["type"] = 1;
+                _animationData[path]["available"] = false;
                 _animationData[path]["frame"] = createAnimationFrame(xml);
                 
                 //애니메이션을 자동으로 등록
                 if(auto) _animationData[path]["animation"] = createAnimation(xml);
-                
-                _animationData[path]["available"] = true;
+                else _animationData[path]["animation"] = new Dictionary;
                 
                 xml = null;
             }

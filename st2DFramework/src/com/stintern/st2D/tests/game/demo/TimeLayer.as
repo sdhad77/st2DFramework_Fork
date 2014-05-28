@@ -26,7 +26,7 @@ package com.stintern.st2D.tests.game.demo
             super();
             this.name = "TimeLayer";
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath(Resources.PATH_SPRITE_NUMBER, Resources.PATH_XML_NUMBER, onCreated);
+            _batchSprite.createBatchSpriteWithPath(Resources.PATH_SPRITE_NUMBER, Resources.PATH_XML_NUMBER, onCreated, null, false);
             
             addBatchSprite(_batchSprite);
         }

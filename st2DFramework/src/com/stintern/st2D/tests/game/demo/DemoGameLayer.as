@@ -17,30 +17,30 @@ package com.stintern.st2D.tests.game.demo
         public function DemoGameLayer()
         {
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCompleted);
+            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", onCompleted, null, false);
             
             _batchSprite2 = new BatchSprite();
-            _batchSprite2.createBatchSpriteWithPath("res/demo/effect.png", "res/demo/effect.xml", onCompleted2);
+            _batchSprite2.createBatchSpriteWithPath("res/effect.png", "res/effect.xml", onCompleted2);
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
         }
         
         private function onCompleted():void
         {
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character1_run_right",    new Array("character1_run_right0",    "character1_run_right1"),    8, "character1_run_right"));
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character1_attack",       new Array("character1_attack0",       "character1_attack1"),       8 ,"character1_attack"));
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character2_run_right",    new Array("character2_run_right0",    "character2_run_right1"),    8, "character2_run_right"));
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character2_attack_right", new Array("character2_attack_right0", "character2_attack_right1"), 8 ,"character2_attack_right"));
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_run_left",     new Array("character3_run_left0",     "character3_run_left1"),     8, "character3_run_left"));
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_attack_left",  new Array("character3_attack_left0",  "character3_attack_left1"),  8 ,"character3_attack_left"));
-            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("castle",                  new Array("castle0"),                                              8 ,"castle"));   
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character1_run_right",    new Array("character1_run_right0",    "character1_run_right1"),    8));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character1_attack",       new Array("character1_attack0",       "character1_attack1"),       8));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character2_run_right",    new Array("character2_run_right0",    "character2_run_right1"),    8));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character2_attack_right", new Array("character2_attack_right0", "character2_attack_right1"), 8));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_run_left",     new Array("character3_run_left0",     "character3_run_left1"),     8));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("character3_attack_left",  new Array("character3_attack_left0",  "character3_attack_left1"),  8));
+            AnimationData.instance.setAnimation("res/demo/demo_spritesheet.png", new Animation("castle",                  new Array("castle0"),                                              8));   
             
         }
         
         private function onCompleted2():void
         {
-            AnimationData.instance.setAnimation("res/demo/effect.png", new Animation("ice", new Array("ice0","ice1","ice2","ice3","ice4","ice5","ice6","ice7",
-                                                                                                       "ice8","ice9","ice10","ice11","ice12","ice13","ice14"), 3 , null));
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "fire", 4);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "ice", 4);
         }
         
         override public function update(dt:Number):void
