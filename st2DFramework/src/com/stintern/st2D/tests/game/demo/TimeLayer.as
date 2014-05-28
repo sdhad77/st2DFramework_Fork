@@ -12,10 +12,12 @@ package com.stintern.st2D.tests.game.demo
         
         private var _batchSprite:BatchSprite;
         
+        private var _tenMin:uint = 0;
         private var _min:uint = 0;
         private var _sec:uint = 0;
         private var _mil:uint = 0;
        
+        private var tenMinSprite:Sprite = new Sprite();
         private var minSprite:Sprite = new Sprite();
         private var colonSprite:Sprite = new Sprite();
         private var secSprite:Sprite = new Sprite();
@@ -33,6 +35,10 @@ package com.stintern.st2D.tests.game.demo
         
         private function onCreated():void
         {
+            // 10분 초기화
+            tenMinSprite.createSpriteWithBatchSprite(_batchSprite, "0", StageContext.instance.screenWidth * 0.5 - 64, StageContext.instance.screenHeight - 50);
+            tenMinSprite.isVisible = false;
+            
             // 분 초기화
             minSprite.createSpriteWithBatchSprite(_batchSprite, "0", StageContext.instance.screenWidth * 0.5 - 32, StageContext.instance.screenHeight - 50);
             
@@ -59,12 +65,28 @@ package com.stintern.st2D.tests.game.demo
             if( _sec >= 60 )
             {
                 _min++;
+                if(_min == 10)
+                {
+                    if(_tenMin == 0) { tenMinSprite.isVisible = true; }
+                    _tenMin++;
+                    if(_tenMin == 10)
+                    {
+                        _tenMin = 0;
+                        _currentTime = 0;
+                        tenMinSprite.isVisible = false;
+                    }
+                    _min = 0;
+                }
                 _sec = 0;
                 _currentTime = 0;
             }
             
             _batchSprite.removeAllSprites();
                         
+            // 분 출력
+            tenMinSprite.getSpriteInBatchSprite(_batchSprite, _tenMin.toString());
+            _batchSprite.addSprite(tenMinSprite);
+
             // 분 출력
             minSprite.getSpriteInBatchSprite(_batchSprite, _min.toString());
             _batchSprite.addSprite(minSprite);
