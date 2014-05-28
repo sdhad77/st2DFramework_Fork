@@ -4,9 +4,9 @@ package com.stintern.st2D.display.sprite
     import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.utils.AssetLoader;
+    import com.stintern.st2D.utils.Vector2D;
     
     import flash.display.Bitmap;
-    import com.stintern.st2D.utils.Vector2D;
 
     public class SpriteAnimation extends Sprite
     {
@@ -16,6 +16,7 @@ package com.stintern.st2D.display.sprite
         private var _isPlaying:Boolean         //지금 재생중인지?
         private var _isFirstUpdate:Boolean     //첫번째 업데이트인지. init을 위해 만든 변수
         private var _basePosition:Vector2D;
+        private var _nextAnimationName:String;
         
         public function SpriteAnimation()
         {
@@ -48,12 +49,14 @@ package com.stintern.st2D.display.sprite
          * 배치스프라이트를 이용해서 애니메이션 스프라이트를 생성합니다. 
          * @param batchSprite 사용할 배치스프라이트
          * @param animationName 사용할 애니메이션 이름
+         * @param nextAnimationName 지금 재생하는 애니메이션이 종료되고 나서 재생될 애니메이션
          * @param x 초기 X좌표
          * @param y 초기 Y좌표
          */
-        public function createAnimationSpriteWithBatchSprite(batchSprite:BatchSprite, animationName:String, x:Number=0, y:Number=0 ):void
+        public function createAnimationSpriteWithBatchSprite(batchSprite:BatchSprite, animationName:String, nextAnimationName:String = null, x:Number=0, y:Number=0 ):void
         {
-            playAnimationName = animationName; 
+            playAnimationName = animationName;
+            _nextAnimationName = nextAnimationName;
             
             //재생할 애니메이션의 첫번째 frame 이미지를 매개변수로 전달합니다.
             createSpriteWithBatchSprite(batchSprite, AnimationData.instance.animationData[batchSprite.path]["animation"][animationName].animationFlow[0], x, y);
@@ -132,9 +135,9 @@ package com.stintern.st2D.display.sprite
                     else
                     {
                         //다음 애니메이션이 존재할경우
-                        if(playAnimation.nextAnimationName != null)
+                        if(nextAnimationName != null)
                         {
-                            _playAnimationName = playAnimation.nextAnimationName;
+                            _playAnimationName = nextAnimationName;
                             _delayCnt = 0;
                             _playAnimationFlowIdx = 0;
                             
@@ -159,12 +162,14 @@ package com.stintern.st2D.display.sprite
         /**
          * 재생할 애니메이션을 변경합니다.
          * @param name 변경할 애니메이션 이름
+         * @param nextAnimationName 다음에 재생할 애니메이션 이름. 설정하지 않을경우 한번만 재생하고 종료
          */
-        public function setPlayAnimation(name:String):void
+        public function setPlayAnimation(name:String, nextAnimationName:String = null):void
         {
             _playAnimationName = name;
             _playAnimationFlowIdx = 0;
             _delayCnt = 0;
+            _nextAnimationName = nextAnimationName;
         }
         
         /**
@@ -172,7 +177,8 @@ package com.stintern.st2D.display.sprite
          */
         public function pauseAnimation():void
         {
-            _isPlaying = false;
+            if(_playAnimationName != null) _isPlaying = false;
+            else trace("먼저 setPlayAnimation을 실행해주세요!");
         }
         
         /**
@@ -214,7 +220,9 @@ package com.stintern.st2D.display.sprite
         //get set함수들
         public function get playAnimationName():String {return _playAnimationName;}
         public function get isPlaying():Boolean        {return _isPlaying;}
+        public function get nextAnimationName():String {return _nextAnimationName;}
         
-        public function set playAnimationName(value:String):void {_playAnimationName = value;}    
+        public function set playAnimationName(value:String):void {_playAnimationName = value;}
+        public function set nextAnimationName(value:String):void {_nextAnimationName = value;}
     }
 }

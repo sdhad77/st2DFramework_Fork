@@ -176,7 +176,6 @@ package com.stintern.st2D.animation
             else trace("texture가 존재하지 않습니다");
         }
         
-        
         /**
          * 특정 애니메이션의 지속시간(각 frame별 유지시간)을 설정하는 함수입니다.
          * @param path 스프라이트 시트의 경로
@@ -257,7 +256,7 @@ package com.stintern.st2D.animation
             //animation 객체 생성
             for(i=0; i<aniNameArray.length; i++)
             {
-                animationDictionary[aniNameArray[i]] = new Animation(aniNameArray[i], nameDictionary[aniNameArray[i]], 1, aniNameArray[i]);
+                animationDictionary[aniNameArray[i]] = new Animation(aniNameArray[i], nameDictionary[aniNameArray[i]], 1);
             }
             
             //메모리 해제
