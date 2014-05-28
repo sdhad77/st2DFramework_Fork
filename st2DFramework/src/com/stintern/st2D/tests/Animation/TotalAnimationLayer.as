@@ -43,15 +43,12 @@ class ObjectInfo
 package com.stintern.st2D.tests.Animation
 {
     import com.stintern.st2D.animation.AnimationData;
-    import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
-    import com.stintern.st2D.utils.AssetLoader;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
-    import flash.display.Bitmap;
     import flash.events.MouseEvent;
     
     public class TotalAnimationLayer extends Layer
@@ -62,6 +59,7 @@ package com.stintern.st2D.tests.Animation
         private var _gameStart:Boolean = false;
         private var _batchSprite:BatchSprite;
         private var _batchSprite2:BatchSprite;
+        private var _batchSpriteNum:int = 2;
         private var _sch:Scheduler = new Scheduler;
         
         public function TotalAnimationLayer()
@@ -112,8 +110,12 @@ package com.stintern.st2D.tests.Animation
         
         private function init():void
         {
+            _batchSprite2 = new BatchSprite();
+            _batchSprite2.createBatchSpriteWithPath("res/skel.png", "res/skel.xml", loadCompleted);
+            addBatchSprite(_batchSprite2);
+            
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/atlas.png", "res/atlas.xml", loadCompleted);
+            _batchSprite.createBatchSpriteWithPath("res/effect.png", "res/effect.xml", loadCompleted);
             addBatchSprite(_batchSprite);
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
@@ -121,54 +123,46 @@ package com.stintern.st2D.tests.Animation
         
         private function loadCompleted():void
         {   
-            //원하는 애니메이션 자유롭게 설정.              사용할 텍스쳐 이름                                         애니메이션 이름                    프레임 호출 순서                                각 프레임 별 대기 시간(프레임)
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("right", new Array("right0","right1","right2","right1"), 8));
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("left",  new Array("left0","left1","left2","left1"),     8)); 
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("fire",  new Array("fire0","fire1","fire2","fire3",
-                                                                                                  "fire4","fire5","fire6","fire7"),     4));
+            _batchSpriteNum--;
+            if(_batchSpriteNum != 0) return;
+            
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "fire",  4);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "ice",   4);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "meteo", 4);
+            
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "right", 8);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "up",    8);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "down",  8);
+            
             for(var i:int=0; i< 20; i++)
             {
                 _gameObject.push(new GameObject());
                 
                 if(i < 10)
                 {
-                    _gameObject[i].create(_batchSprite, "right", 100, 10, "PLAYER");
+                    _gameObject[i].create(_batchSprite2, "right", 100, 10, "PLAYER");
                     _gameObject[i]._sprite.position.x = 100;
                     _gameObject[i]._sprite.position.y = i * 64 + 100;
                 }
                 else
                 {
-                    _gameObject[i].create(_batchSprite, "left", 100, 10, "ENEMY");
+                    _gameObject[i].create(_batchSprite2, "right", 100, 10, "ENEMY");
                     _gameObject[i]._sprite.position.x = 600;
                     _gameObject[i]._sprite.position.y = (i-10) * 64 + 100;
-                    _gameObject[i]._sprite.moveBy(-600, 0, (i-9)*1000);
+                    _gameObject[i]._sprite.moveBy(-550, 0, (i-9)*1000);
+                    _gameObject[i]._sprite.reverseLeftRight();
                 }
                 
-                _batchSprite.addSprite(_gameObject[i]._sprite);
+                _batchSprite2.addSprite(_gameObject[i]._sprite);
                 _gameObject[i]._sprite.playAnimation();
             }
             
-            AssetLoader.instance.loadSWF("res/effect.swf", onLoad);
-        }
-        
-        private function onLoad(bmp:Bitmap, xml:XML):void
-        {
-            //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
-            AnimationData.instance.createAnimationDictionaryWithSWF( bmp.name, xml);
-            
-            _batchSprite2 = new BatchSprite();
-            _batchSprite2.createSpriteWithBitmap(bmp);
-            addBatchSprite(_batchSprite2);
-            
-            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "fire", 4);
-            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "ice", 4);
-            
-            for(var i:int=0; i< 20; i++)
+            for(i=0; i< 20; i++)
             {
                 _effect.push(new SpriteAnimation());
-                _effect[i].createAnimationSpriteWithBatchSprite(_batchSprite2, "fire");
+                _effect[i].createAnimationSpriteWithBatchSprite(_batchSprite, "fire");
                 _effect[i].isVisible = false;
-                _batchSprite2.addSprite(_effect[i]);
+                _batchSprite.addSprite(_effect[i]);
             }
             
             _gameStart = true;

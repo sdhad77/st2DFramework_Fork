@@ -1,7 +1,6 @@
 package com.stintern.st2D.tests.Animation
 {
     import com.stintern.st2D.animation.AnimationData;
-    import com.stintern.st2D.animation.datatype.Animation;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
@@ -17,7 +16,7 @@ package com.stintern.st2D.tests.Animation
         public function AnimationChangeLayer()
         {
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/atlas.png", "res/atlas.xml", loadCompleted);
+            _batchSprite.createBatchSpriteWithPath("res/skel.png", "res/skel.xml", loadCompleted);
             addBatchSprite(_batchSprite);
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
@@ -29,14 +28,14 @@ package com.stintern.st2D.tests.Animation
         
         private function loadCompleted():void
         {
-            //원하는 애니메이션 자유롭게 설정.              사용할 텍스쳐 이름                                         애니메이션 이름                    프레임 호출 순서                                   각 프레임 별 대기 시간(프레임) 다음 애니메이션
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("up",    new Array("up0","up1","up2","up1"),             8, "up"));
-            AnimationData.instance.setAnimation("res/atlas.png", new Animation("down",  new Array("down0","down1","down2","down1"),     8, "down"));
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "right", 8);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "up",    8);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "down",  8);
             
             for(var i:int=0; i < 1; i++)
             {
                 _sprite.push(new SpriteAnimation());
-                _sprite[i].createAnimationSpriteWithBatchSprite(_batchSprite, "down", i*32 + 100, 32 + 100);
+                _sprite[i].createAnimationSpriteWithBatchSprite(_batchSprite, "right", "right", i*32 + 100, 32 + 100);
                 _batchSprite.addSprite(_sprite[i]);
                 _sprite[i].playAnimation();
             }
@@ -44,8 +43,9 @@ package com.stintern.st2D.tests.Animation
         
         private function onTouch(event:MouseEvent):void
         {
-            if(_sprite[0].playAnimationName == "up") _sprite[0].setPlayAnimation("down");
-            else _sprite[0].setPlayAnimation("up");
+            if(_sprite[0].playAnimationName == "right") _sprite[0].setPlayAnimation("up", "up");
+            else if(_sprite[0].playAnimationName == "up") _sprite[0].setPlayAnimation("down", "down");
+            else _sprite[0].setPlayAnimation("right", "right");
         }
     }
 }
