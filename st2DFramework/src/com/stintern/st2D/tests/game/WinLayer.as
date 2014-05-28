@@ -11,6 +11,7 @@ package com.stintern.st2D.tests.game
         public function WinLayer()
         {
             sprite1.createSpriteWithPath("res/youwin.jpg", onCreated, null, StageContext.instance.screenWidth/2, StageContext.instance.screenHeight/2);
+            StageContext.instance.mainCamera.moveCamera(-StageContext.instance.mainCamera.x - StageContext.instance.screenWidth/2, 0);
         }
         
         override public function update(dt:Number):void
