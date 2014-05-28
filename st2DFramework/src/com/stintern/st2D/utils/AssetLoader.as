@@ -123,10 +123,11 @@ package com.stintern.st2D.utils
                 trace("onLoaderComplete" + path);
                 
                 // dictionary 에 불러온 이미지 저장
-                _assetMap[path] = LoaderInfo(event.target).content as Bitmap;
-                (_assetMap[path] as Bitmap).name = path;
+                var imgData:BitmapData = event.target.content.bitmapData;
+                _assetMap[path] = new Bitmap(imgData);
+                _assetMap[path].name = path;
                 
-                onComplete( LoaderInfo(event.target).content as Bitmap, imageCount );
+                onComplete( _assetMap[path], imageCount );
             }
             
             function ioErrorHandler(event:IOErrorEvent):void
