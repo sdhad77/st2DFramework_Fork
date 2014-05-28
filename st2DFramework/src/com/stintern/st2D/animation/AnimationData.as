@@ -69,8 +69,9 @@ package com.stintern.st2D.animation
          * 애니메이션 정보들을 저장할 수 있는 Dictionary를 생성하고 초기화 하는 함수입니다.
          * @param path 이 Dictionary를 사용할 이미지의 경로
          * @param pathXML 이 Dictionary에서 사용할 Frame정보들이 있는 xml 파일 경로
+         * @param auto 애니메이션을 자동으로 등록할 것인지 여부
          */
-        public function createAnimationDictionary(path:String, pathXML:String):void
+        public function createAnimationDictionary(path:String, pathXML:String, auto:Boolean):void
         {
             //애니메이션 정보가 아직 등록되지않은 path 일 경우
             if(!(path in _animationData))
@@ -79,9 +80,12 @@ package com.stintern.st2D.animation
                 
                 //path를 키로 하는 Dictionayr 초기화
                 _animationData[path] = new Dictionary;
-                _animationData[path]["frame"] = createAnimationFrame(xml);
-                _animationData[path]["animation"] = createAnimation(xml);
                 _animationData[path]["type"] = 1;
+                _animationData[path]["frame"] = createAnimationFrame(xml);
+                
+                //애니메이션을 자동으로 등록
+                if(auto) _animationData[path]["animation"] = createAnimation(xml);
+                
                 _animationData[path]["available"] = true;
                 
                 xml = null;

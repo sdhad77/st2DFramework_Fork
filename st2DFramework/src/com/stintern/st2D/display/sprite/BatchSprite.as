@@ -38,14 +38,15 @@ package com.stintern.st2D.display.sprite
          * @param pathXML path로 읽어온 이미지에서 사용할 frame 정보들을 가져올 xml 경로
          * @param onCreated 생성된 후 호출될 메소드
          * @param onProgress 생성중 진행 상황을 알 수 있는 메소드
+         * @param animationAutoSet 애니메이션을 자동으로 설정할 것인지 여부
          */
-        public function createBatchSpriteWithPath(path:String, pathXML:String, onCreated:Function, onProgress:Function = null ):void
+        public function createBatchSpriteWithPath(path:String, pathXML:String, onCreated:Function, onProgress:Function = null, animationAutoSet:Boolean = true):void
         {
             this.path = path;
             
             //애니메이션 데이터를 저장할 수 있게 path를 key로 하는 dictionary를 만들고 xml 데이터를 읽어옵니다.
             if(pathXML != null) 
-                AnimationData.instance.createAnimationDictionary(path, pathXML);
+                AnimationData.instance.createAnimationDictionary(path, pathXML, animationAutoSet);
             //xml파일을 사용하지 않는 단일 이미지 파일 일경우에는 Dictionary를 생성만 합니다.
             else 
                 AnimationData.instance.createDictionary(path);
