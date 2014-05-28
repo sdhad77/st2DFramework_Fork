@@ -75,17 +75,18 @@ package com.stintern.st2D.display.sprite
                     
                     //다음 프레임으로 이동
                     var playFrame:AnimationFrame = nextFrame();
-  //                  var firstFrame:AnimationFrame = AnimationData.instance.animationData[path]["frame"][0];
+                    
                     //현재 사용중인 스프라이트 시트 이미지. 가로 세로 길이가 필요해서 사용함
                     var currentSpriteImg:Bitmap = AssetLoader.instance.getImageTexture(path);
                     
                     //다음 프레임이 존재할 경우
                     if(playFrame != null)
                     {
-/*                        if(isPlaying){
-                            this.position.x = _basePosition.x + Math.abs((playFrame.frameX)- firstFrame.frameX);    
-                            this.position.y = _basePosition.y + Math.abs((playFrame.frameY)- firstFrame.frameY);    
-                        }*/
+                        if(isPlaying){
+                            var firstFrame:AnimationFrame = AnimationData.instance.animationData[path]["frame"][AnimationData.instance.animationData[path]["animation"][_playAnimationName].animationFlow[0]];
+               //             this.position.x = _basePosition.x + Math.abs((playFrame.frameX)- firstFrame.frameX);    
+                //            this.position.y = _basePosition.y + Math.abs((playFrame.frameY)- firstFrame.frameY);  
+                        }
                         
                         //uv좌표 변경하는 방식
                         frame.width = playFrame.width;
