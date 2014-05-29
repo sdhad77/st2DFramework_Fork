@@ -433,9 +433,8 @@ package com.stintern.st2D.display.sprite
                 else
                 {
                     setTranslation(new Vector2D(position.x + _increaseX, position.y + _increaseY));
+                    _moveCnt--;
                 }
-                
-                _moveCnt--;
             }
         }
         
