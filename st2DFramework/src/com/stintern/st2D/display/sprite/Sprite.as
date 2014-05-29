@@ -35,8 +35,7 @@ package com.stintern.st2D.display.sprite
         private var _isMoving:Boolean;
         private var _increaseX:Number;         //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
         private var _increaseY:Number;         //지금 움직이는중이면 얼마만큼씩 움직여야 하는지
-        private var _destX:int;                //이동중일때 목적지의 좌표
-        private var _destY:int;                //이동중일때 목적지의 좌표
+        private var _moveCnt:uint;             //움직이는 중일때 몇 프레임동안 움직여야 되는지 체크하기 위한 변수
         
         public function Sprite()
         {
@@ -54,8 +53,7 @@ package com.stintern.st2D.display.sprite
             _isMoving = false;
             _increaseX = 0;
             _increaseY = 0;
-            _destX = 0;
-            _destY = 0;
+            _moveCnt = 0;
         }
         
         /**
@@ -425,15 +423,19 @@ package com.stintern.st2D.display.sprite
             if(_isMoving)
             {
                 //원하는 지점에 도달 하였으면
-                if((Math.abs(_destX - position.x) <= 1) && (Math.abs(_destY - position.y) <= 1)) 
+                if(_moveCnt == 0) 
                 {
                     _isMoving = false;
+                    position.x = Math.round(position.x);
+                    position.y = Math.round(position.y);
                 }
                 //원하는 지점에 아직 도달하지 못했으면
                 else
                 {
                     setTranslation(new Vector2D(position.x + _increaseX, position.y + _increaseY));
                 }
+                
+                _moveCnt--;
             }
         }
         
@@ -460,15 +462,13 @@ package com.stintern.st2D.display.sprite
         public function moveTo(x:int, y:int, milliSecond:Number):void
         {
             _isMoving = true;
-            _destX = x;
-            _destY = y;
             
             //몇 프레임에 나눠서 이동해야되는지 계산, 반올림이기때문에 0이 나올수도 있는데, 0일 경우에는 한 프레임에 이동완료하도록 함.
-            var frameCallNumber:int = Math.round((milliSecond/1000)*60);
-            if(frameCallNumber == 0) frameCallNumber = 1;
+            _moveCnt = Math.round((milliSecond/1000)*60);
+            if(_moveCnt == 0) _moveCnt = 1;
             
-            _increaseX = (x - position.x)/frameCallNumber;
-            _increaseY = (y - position.y)/frameCallNumber;
+            _increaseX = (x - position.x)/_moveCnt;
+            _increaseY = (y - position.y)/_moveCnt;
         }
         
         /**
@@ -484,14 +484,13 @@ package com.stintern.st2D.display.sprite
         
         /**
          * 스프라이트의 이동을 중지합니다.</br>
-         * 현재 좌표에서 가장가까운 정수 좌표로 이동시키고, 목적지 좌표도 현재 좌표와 동일하도록 변경하여 중지시킵니다.
+         * 현재 좌표에서 가장가까운 정수 좌표로 이동시키고, 움직여야하는 횟수를 0으로 만들어서 이동을 중지시킵니다.
          */
         public function moveStop():void
         {
             position.x = Math.floor(position.x);
             position.y = Math.floor(position.y);
-            _destX = position.x;
-            _destY = position.y;
+            _moveCnt = 0;
         }
         
         /**
