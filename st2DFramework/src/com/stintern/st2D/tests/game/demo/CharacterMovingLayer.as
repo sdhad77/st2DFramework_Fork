@@ -6,8 +6,8 @@ package com.stintern.st2D.tests.game.demo
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.tests.game.LoseLayer;
-    import com.stintern.st2D.tests.game.demo.utils.Resources;
     import com.stintern.st2D.tests.game.WinLayer;
+    import com.stintern.st2D.tests.game.demo.utils.Resources;
     
     public class CharacterMovingLayer extends Layer
     {
@@ -86,11 +86,12 @@ package com.stintern.st2D.tests.game.demo
             }
         }
         
-        
         private function winnerCheck(character:CharacterObject):void
         {
             if(character.tag == Resources.TAG_CASTLE)
             {
+                sceneRemove();
+                
                 var scene:Scene = new Scene();
                 if(character.info.ally)
                 {
@@ -104,6 +105,24 @@ package com.stintern.st2D.tests.game.demo
                 }
                 SceneManager.instance.pushScene(scene);
             }
+        }
+        
+        private function sceneRemove():void
+        {
+            var controlLayer:ControlLayer = SceneManager.instance.getCurrentScene().getLayerByName("ControlLayer") as ControlLayer;
+            var timeLayer:TimeLayer = SceneManager.instance.getCurrentScene().getLayerByName("TimeLayer") as TimeLayer;
+            var cloudLayer:CloudLayer = SceneManager.instance.getCurrentScene().getLayerByName("CloudLayer") as CloudLayer;
+            var characterMovingLayer:CharacterMovingLayer = SceneManager.instance.getCurrentScene().getLayerByName("CharacterMovingLayer") as CharacterMovingLayer;
+            var backGroundLayer:BackGroundLayer = SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer;
+            
+            controlLayer.removeEvent();
+            SceneManager.instance.getCurrentScene().removeLayer(controlLayer);
+            SceneManager.instance.getCurrentScene().removeLayer(timeLayer);
+            SceneManager.instance.getCurrentScene().removeLayer(cloudLayer);
+            SceneManager.instance.getCurrentScene().removeLayer(characterMovingLayer);
+            SceneManager.instance.getCurrentScene().removeLayer(backGroundLayer);
+            
+            SceneManager.instance.popScene();
         }
         
         override public function update(dt:Number):void

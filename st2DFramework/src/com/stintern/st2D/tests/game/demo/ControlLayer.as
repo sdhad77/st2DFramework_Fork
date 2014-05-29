@@ -561,5 +561,13 @@ package com.stintern.st2D.tests.game.demo
             return false;
         }
         
+        public function removeEvent():void
+        {
+            StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, onTouch);
+            StageContext.instance.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+            StageContext.instance.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+            StageContext.instance.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+        }
+        
     }
 }
