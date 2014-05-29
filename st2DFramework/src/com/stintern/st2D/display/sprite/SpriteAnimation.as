@@ -15,7 +15,7 @@ package com.stintern.st2D.display.sprite
         private var _delayCnt:int;             //frame delay를 위한 카운트 변수
         private var _isPlaying:Boolean         //지금 재생중인지?
         private var _isFirstUpdate:Boolean     //첫번째 업데이트인지. init을 위해 만든 변수
-        private var _basePosition:Vector2D;
+        private var preFrame:AnimationFrame;   //이전 프레임에서 사용했던 프레임
         private var _nextAnimationName:String;
         
         public function SpriteAnimation()
@@ -26,6 +26,7 @@ package com.stintern.st2D.display.sprite
             _delayCnt = 0;
             _isPlaying = false;
             _isFirstUpdate = true;
+            preFrame = null;
         }
         
         /**
@@ -42,7 +43,6 @@ package com.stintern.st2D.display.sprite
             playAnimationName = animationName;
             
             createSpriteWithPath(path, onCreated, onProgress,  x, y );
-            _basePosition = new Vector2D(x, y);
         }
         
         /**
@@ -60,7 +60,6 @@ package com.stintern.st2D.display.sprite
             
             //재생할 애니메이션의 첫번째 frame 이미지를 매개변수로 전달합니다.
             createSpriteWithBatchSprite(batchSprite, AnimationData.instance.animationData[batchSprite.path]["animation"][animationName].animationFlow[0], x, y);
-            _basePosition = new Vector2D(x, y);
         }
         
         /**
@@ -85,10 +84,51 @@ package com.stintern.st2D.display.sprite
                     //다음 프레임이 존재할 경우
                     if(playFrame != null)
                     {
-                        if(isPlaying){
-                            var firstFrame:AnimationFrame = AnimationData.instance.animationData[path]["frame"][AnimationData.instance.animationData[path]["animation"][_playAnimationName].animationFlow[0]];
-               //             this.position.x = _basePosition.x + Math.abs((playFrame.frameX)- firstFrame.frameX);    
-                //            this.position.y = _basePosition.y + Math.abs((playFrame.frameY)- firstFrame.frameY);  
+                        if(isPlaying)
+                        {
+                            //이미지가 뒤집힌 상태이면
+                            if(vertexData[3] > vertexData[3+9])
+                            {
+                                //이전 프레임이 없는, 애니메이션을 처음 실행할 경우
+                                if(preFrame == null)
+                                {
+                                    //frameX,Y로 이동
+                                    position.x += - playFrame.width/2  - playFrame.frameX + playFrame.frameWidth/2;
+                                    position.y += - playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2;
+                                }
+                                else
+                                {
+                                    //이전 프레임에서 했던 frameX,Y로의 이동 제거
+                                    position.x += + preFrame.width/2  + preFrame.frameX - preFrame.frameWidth/2;
+                                    position.y += + preFrame.height/2 + preFrame.frameY - preFrame.frameHeight/2;
+                                    
+                                    //frameX,Y로 이동
+                                    position.x += - playFrame.width/2  - playFrame.frameX + playFrame.frameWidth/2;
+                                    position.y += - playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2;
+                                }
+                            }
+                            //이미지가 뒤집히지 않은, 원래의 상태일 경우
+                            else
+                            {
+                                //이전 프레임이 없는, 애니메이션을 처음 실행할 경우
+                                if(preFrame == null)
+                                {
+                                    position.x += + playFrame.width/2  + playFrame.frameX - playFrame.frameWidth/2;
+                                    position.y += - playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2;
+                                }
+                                else
+                                {
+                                    //이전 프레임에서 했던 frameX,Y로의 이동 제거
+                                    position.x += - preFrame.width/2  - preFrame.frameX + preFrame.frameWidth/2;
+                                    position.y += + preFrame.height/2 + preFrame.frameY - preFrame.frameHeight/2;
+                                    
+                                    //frameX,Y로 이동
+                                    position.x += + playFrame.width/2  + playFrame.frameX - playFrame.frameWidth/2;
+                                    position.y += - playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2;
+                                }
+                            }
+                            
+                            preFrame = playFrame;
                         }
                         
                         //uv좌표 변경하는 방식
