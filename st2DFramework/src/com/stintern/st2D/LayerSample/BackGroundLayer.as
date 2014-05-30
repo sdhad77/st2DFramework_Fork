@@ -1,4 +1,4 @@
-package com.stintern.st2D.utils.LayerSample
+package com.stintern.st2D.LayerSample
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;

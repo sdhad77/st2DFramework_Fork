@@ -1,4 +1,4 @@
-package com.stintern.st2D.utils.LayerSample
+package com.stintern.st2D.LayerSample
 {
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.animation.datatype.AnimationFrame;
