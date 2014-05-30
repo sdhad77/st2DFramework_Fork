@@ -133,6 +133,60 @@ package com.stintern.st2D.utils
             }
         }
         
+        public function loadSWF( path:String, onComplete:Function, onProgress:Function = null ):void
+        {
+            var imageCount:uint = _imageCount;
+            _imageCount++;
+            
+            // 이미 불러온 이미지가 있을 경우에는 로드하지 않고 바로 보냄
+            if( path in _assetMap )
+            {
+                onComplete(_assetMap[path], imageCount);
+                return;
+            }
+            
+            var file:File = findFile(path);
+            var fileStream:FileStream = new FileStream(); 
+            fileStream.open(file, FileMode.READ);
+            
+            var bytes:ByteArray = new ByteArray();
+            fileStream.readBytes(bytes);
+            
+            fileStream.close();
+            
+            var loaderContext: LoaderContext = new LoaderContext();
+            loaderContext.allowLoadBytesCodeExecution = true;
+            
+            var loader:Loader = new Loader();
+            
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoaderComplete);
+            loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoaderProgress);
+            loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+            loader.loadBytes(bytes, loaderContext);
+            
+            function onLoaderProgress(event:ProgressEvent):void
+            {
+                if( onProgress != null )
+                {
+                    onProgress(event.bytesLoaded/event.bytesTotal * 100);
+                }
+            }
+            
+            function onLoaderComplete(event:Event):void
+            {
+                trace("onLoaderComplete" + path);
+                
+                _assetMap[path] = LoaderInfo(event.target).content as MovieClip;
+                
+                onComplete( LoaderInfo(event.target).content as MovieClip, imageCount );
+            }
+            
+            function ioErrorHandler(event:IOErrorEvent):void
+            {
+                trace("SWF Load error: " + event.target + " _ " + event.text );                  
+            }
+        }
+        
         public function loadXML(path:String):XML
         {
             var file:File = findFile(path);
