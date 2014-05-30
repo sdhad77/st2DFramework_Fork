@@ -1,4 +1,4 @@
-package com.stintern.st2D.tests
+package com.stintern.st2D.utils.LayerSample.utils
 {
     public class Resources
     {

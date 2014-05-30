@@ -1,10 +1,10 @@
-package com.stintern.st2D.tests.game.demo
+package com.stintern.st2D.utils.LayerSample
 {
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
-    import com.stintern.st2D.tests.Resources;
+    import com.stintern.st2D.utils.LayerSample.utils.Resources;
     
     public class TimeLayer extends Layer
     {

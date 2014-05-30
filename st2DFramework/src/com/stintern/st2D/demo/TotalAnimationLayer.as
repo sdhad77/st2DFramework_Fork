@@ -40,7 +40,7 @@ class ObjectInfo
     }
 }
 
-package com.stintern.st2D.tests.Animation
+package com.stintern.st2D.demo
 {
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;

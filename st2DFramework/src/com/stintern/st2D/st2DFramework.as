@@ -7,12 +7,11 @@ package com.stintern.st2D
     import com.stintern.st2D.utils.GameStatus;
     import com.stintern.st2D.utils.GameTimer;
     
-    import flash.desktop.NativeApplication;
     import flash.display.Sprite;
     import flash.display.StageOrientation;
     import flash.events.Event;
     import flash.events.StageOrientationEvent;
-    import com.stintern.st2D.tests.game.demo.DemoGameLayer;
+    import com.stintern.st2D.demo.TotalAnimationLayer;
     
     public class st2DFramework extends Sprite
     {
@@ -24,7 +23,6 @@ package com.stintern.st2D
             super();
             
             StageContext.instance.init(stage, onInited);
-            stage.addEventListener(Event.DEACTIVATE, deactivate);
             stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGING, orientationChanging);
         }
         
@@ -36,7 +34,7 @@ package com.stintern.st2D
         {
             var scene:Scene = new Scene();
             
-            var testLayer:DemoGameLayer = new DemoGameLayer();
+            var testLayer:TotalAnimationLayer = new TotalAnimationLayer();
             scene.addLayer(testLayer);
             
             SceneManager.instance.pushScene(scene);
@@ -71,12 +69,6 @@ package com.stintern.st2D
         private function draw():void
         {
             _drawManager.draw();
-        }
-        
-        private function deactivate(e:Event):void   
-        {  
-            // auto-close  
-            NativeApplication.nativeApplication.exit();  
         }
         
         private function orientationChanging(e:StageOrientationEvent):void {
