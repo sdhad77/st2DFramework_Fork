@@ -4,7 +4,7 @@ package com.stintern.st2D.LayerSample
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
-    import com.stintern.st2D.utils.LayerSample.utils.Resources;
+    import com.stintern.st2D.LayerSample.utils.Resources;
     
     public class TimeLayer extends Layer
     {

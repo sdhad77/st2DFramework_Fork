@@ -4,13 +4,13 @@ package com.stintern.st2D.LayerSample
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
-    import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.Event;
+    import com.stintern.st2D.LayerSample.utils.Resources;
     
     /**
      * 자동으로 이동하는 구름을 배경으로 사용할 수 있게하는 레이어입니다.
@@ -40,16 +40,16 @@ package com.stintern.st2D.LayerSample
             _cloudMovePixelPerSecond = pixelPerSecond;
             
             _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/demo/demo_spritesheet.png", "res/demo/demo_atlas.xml", loadCompleted, null, false);
+            _batchSprite.createBatchSpriteWithPath(Resources.PATH_SPRITE_BACKGROUND, Resources.PATH_XML_BACKGROUND, loadCompleted, null, false);
             addBatchSprite(_batchSprite);
         }
         
         private function loadCompleted():void
         {
             //구름의 가로세로 길이가 필요함.
-            var cloudFrame:AnimationFrame = AnimationData.instance.animationData["res/demo/demo_spritesheet.png"]["frame"]["cloud"];
+            var cloudFrame:AnimationFrame = AnimationData.instance.animationData[Resources.PATH_SPRITE_BACKGROUND]["frame"]["cloud"];
             //맵의 전체길이
-            _totalWidth = StageContext.instance.screenWidth * (SceneManager.instance.getCurrentScene().getLayerByName("BackGroundLayer") as BackGroundLayer).bgPageNum;
+            _totalWidth = StageContext.instance.screenWidth;
             //구름이 맵을 이동하는데 걸리는 시간
             _totalMoveSec = (_totalWidth + cloudFrame.width) / _cloudMovePixelPerSecond;
             //구름의 출발 간격. 연달아서 출발하도록 하였음
@@ -68,11 +68,12 @@ package com.stintern.st2D.LayerSample
             
             //초단위에서 밀리초 단위로 변경
             _totalMoveSec *= 1000;
+            startSec *= 1000;
             
             //첫번째 구름 출발
             _sch.addFunc(0, cloudMoveStart, 1);
             //그 이후 자동적으로 구름 출발 시킴
-            _sch.addFunc(startSec * 1000, cloudMoveStart, 0);
+            _sch.addFunc(startSec, cloudMoveStart, 0);
             _sch.startScheduler();
         }
         
