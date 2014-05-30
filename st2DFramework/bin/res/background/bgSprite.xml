@@ -1,0 +1,4 @@
+<atlas>
+  <atlasItem name="background.png" x="2" y="2" width="743" height="557" frameX="0" frameY="0" frameWidth="743" frameHeight="557"/>
+  <atlasItem name="cloud.png" x="747" y="2" width="257" height="139" frameX="0" frameY="0" frameWidth="257" frameHeight="139"/>
+</atlas>
