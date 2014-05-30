@@ -11,11 +11,11 @@ package com.stintern.st2D.demo
     import flash.display.MovieClip;
     import flash.events.MouseEvent;
     
-    public class title extends Layer
+    public class Title extends Layer
     {
         private var mc:MovieClip;
         
-        public function title()
+        public function Title()
         {
             AssetLoader.instance.loadSWF("res/background/title.swf", onLoadComplete);
             
@@ -40,7 +40,7 @@ package com.stintern.st2D.demo
             var scene:Scene = new Scene();
             SceneManager.instance.pushScene(scene);
             
-            var totalAnimationLayer:game = new game();
+            var totalAnimationLayer:Game = new Game();
             scene.addLayer(totalAnimationLayer);
             
             var cloudLayer:CloudLayer = new CloudLayer();
