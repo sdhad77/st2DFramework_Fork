@@ -11,7 +11,7 @@ package com.stintern.st2D
     import flash.display.StageOrientation;
     import flash.events.Event;
     import flash.events.StageOrientationEvent;
-    import com.stintern.st2D.demo.title;
+    import com.stintern.st2D.demo.Title;
     
     public class st2DFramework extends Sprite
     {
@@ -34,7 +34,7 @@ package com.stintern.st2D
         {
             var scene:Scene = new Scene();
             
-            var testLayer:title = new title();
+            var testLayer:Title = new Title();
             scene.addLayer(testLayer);
             
             SceneManager.instance.pushScene(scene);
