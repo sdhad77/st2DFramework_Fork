@@ -500,14 +500,14 @@ package com.stintern.st2D.display.sprite
         public function collisionCheck(lhs:Sprite):Boolean
         {
             var rect:Rectangle = new Rectangle(this.position.x - (this.width/2), this.position.y - (this.height/2), this.width, this.height);
-                        
-            var leftTop:Point = new Point(lhs.position.x - (lhs.width/2), lhs.position.y + (lhs.height/2));
-            var leftBottom:Point = new Point(lhs.position.x - (lhs.width/2), lhs.position.y - (lhs.height/2));
-            var rightTop:Point = new Point(lhs.position.x + (lhs.width/2), lhs.position.y + (lhs.height/2));
-            var rightBottom:Point = new Point(lhs.position.x + (lhs.width/2), lhs.position.y - (lhs.height/2));
+            
+            var left:Number = lhs.position.x - lhs.width/2;
+            var right:Number = lhs.position.x + lhs.width/2;
+            var top:Number = lhs.position.y + lhs.height/2;
+            var bottom:Number = lhs.position.y - lhs.height/2;
             
             var result:Boolean;
-            if(rect.containsPoint(leftTop) || rect.containsPoint(leftBottom) || rect.containsPoint(rightTop) ||  rect.containsPoint(rightBottom) )
+            if(rect.left <= right && left <= rect.right && rect.bottom <= top && bottom <= rect.top)
             {
                 result = true;
             }
@@ -517,7 +517,6 @@ package com.stintern.st2D.display.sprite
             }
             
             rect = null;
-            leftTop = leftBottom = rightTop = rightBottom = null;
             
             return result;
         }
