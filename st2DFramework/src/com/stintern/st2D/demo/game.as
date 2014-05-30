@@ -51,7 +51,7 @@ package com.stintern.st2D.demo
     
     import flash.events.MouseEvent;
     
-    public class TotalAnimationLayer extends Layer
+    public class game extends Layer
     {
         private var _gameObject:Vector.<GameObject> = new Vector.<GameObject>;
         private var _effect:Vector.<SpriteAnimation> = new Vector.<SpriteAnimation>;
@@ -62,9 +62,79 @@ package com.stintern.st2D.demo
         private var _batchSpriteNum:int = 2;
         private var _sch:Scheduler = new Scheduler;
         
-        public function TotalAnimationLayer()
+        public function game()
         {
-            init();
+            resourceLoad();
+        }
+        
+        private function resourceLoad():void
+        {
+            _batchSprite2 = new BatchSprite();
+            _batchSprite2.createBatchSpriteWithPath("res/character/skel.png", "res/character/skel.xml", loadCompleted);
+            addBatchSprite(_batchSprite2);
+            
+            _batchSprite = new BatchSprite();
+            _batchSprite.createBatchSpriteWithPath("res/effect/effect.png", "res/effect/effect.xml", loadCompleted);
+            addBatchSprite(_batchSprite);
+        }
+        
+        private function loadCompleted():void
+        {   
+            _batchSpriteNum--;
+            if(_batchSpriteNum != 0) return;
+            
+            gameSetting();
+        }
+        
+        private function AnimationDelaySet():void
+        {
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "fire",  4);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "ice",   4);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "meteo", 4);
+            
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "right", 8);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "up",    8);
+            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "down",  8);
+        }
+        
+        private function gameSetting():void
+        {
+            AnimationDelaySet();
+            
+            for(var i:int=0; i< 20; i++)
+            {
+                _gameObject.push(new GameObject());
+                
+                if(i < 10)
+                {
+                    _gameObject[i].create(_batchSprite2, "right", 100, 10, "PLAYER");
+                    _gameObject[i]._sprite.position.x = 100;
+                    _gameObject[i]._sprite.position.y = i * 64 + 100;
+                }
+                else
+                {
+                    _gameObject[i].create(_batchSprite2, "right", 100, 10, "ENEMY");
+                    _gameObject[i]._sprite.position.x = 600;
+                    _gameObject[i]._sprite.position.y = (i-10) * 64 + 100;
+                    _gameObject[i]._sprite.moveBy(-550, 0, (i-9)*1000);
+                    _gameObject[i]._sprite.reverseLeftRight();
+                }
+                
+                _batchSprite2.addSprite(_gameObject[i]._sprite);
+                _gameObject[i]._sprite.playAnimation();
+            }
+            
+            for(i=0; i< 20; i++)
+            {
+                _effect.push(new SpriteAnimation());
+                _effect[i].createAnimationSpriteWithBatchSprite(_batchSprite, "fire");
+                _effect[i].isVisible = false;
+                _batchSprite.addSprite(_effect[i]);
+            }
+            
+            StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
+            
+            _gameStart = true;
         }
         
         override public function update(dt:Number):void
@@ -106,66 +176,6 @@ package com.stintern.st2D.demo
                     }
                 }
             }
-        }
-        
-        private function init():void
-        {
-            _batchSprite2 = new BatchSprite();
-            _batchSprite2.createBatchSpriteWithPath("res/skel.png", "res/skel.xml", loadCompleted);
-            addBatchSprite(_batchSprite2);
-            
-            _batchSprite = new BatchSprite();
-            _batchSprite.createBatchSpriteWithPath("res/effect.png", "res/effect.xml", loadCompleted);
-            addBatchSprite(_batchSprite);
-            
-            StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
-        }
-        
-        private function loadCompleted():void
-        {   
-            _batchSpriteNum--;
-            if(_batchSpriteNum != 0) return;
-            
-            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "fire",  4);
-            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "ice",   4);
-            AnimationData.instance.setAnimationDelayNum(_batchSprite.path, "meteo", 4);
-            
-            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "right", 8);
-            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "up",    8);
-            AnimationData.instance.setAnimationDelayNum(_batchSprite2.path, "down",  8);
-            
-            for(var i:int=0; i< 20; i++)
-            {
-                _gameObject.push(new GameObject());
-                
-                if(i < 10)
-                {
-                    _gameObject[i].create(_batchSprite2, "right", 100, 10, "PLAYER");
-                    _gameObject[i]._sprite.position.x = 100;
-                    _gameObject[i]._sprite.position.y = i * 64 + 100;
-                }
-                else
-                {
-                    _gameObject[i].create(_batchSprite2, "right", 100, 10, "ENEMY");
-                    _gameObject[i]._sprite.position.x = 600;
-                    _gameObject[i]._sprite.position.y = (i-10) * 64 + 100;
-                    _gameObject[i]._sprite.moveBy(-550, 0, (i-9)*1000);
-                    _gameObject[i]._sprite.reverseLeftRight();
-                }
-                
-                _batchSprite2.addSprite(_gameObject[i]._sprite);
-                _gameObject[i]._sprite.playAnimation();
-            }
-            
-            for(i=0; i< 20; i++)
-            {
-                _effect.push(new SpriteAnimation());
-                _effect[i].createAnimationSpriteWithBatchSprite(_batchSprite, "fire");
-                _effect[i].isVisible = false;
-                _batchSprite.addSprite(_effect[i]);
-            }
-            
-            _gameStart = true;
         }
         
         private function onTouch(event:MouseEvent):void
