@@ -1,0 +1,22 @@
+<atlas>
+  <atlasItem name="Scene 1_0.png" x="256" y="163" width="130" height="74" frameX="8.6" frameY="3.4" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_1.png" x="141" y="327" width="128" height="70" frameX="10.8" frameY="1.8" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_2.png" x="298" y="2" width="128" height="76" frameX="15.2" frameY="0.2" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_3.png" x="265" y="80" width="124" height="78" frameX="17.8" frameY="-1" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_4.png" x="271" y="252" width="114" height="80" frameX="21.2" frameY="0" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_5.png" x="271" y="333" width="110" height="80" frameX="24.2" frameY="1.4" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_6.png" x="141" y="399" width="110" height="82" frameX="21.4" frameY="0" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_7.png" x="141" y="80" width="122" height="82" frameX="17.8" frameY="-1.4" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_8.png" x="2" y="413" width="126" height="82" frameX="16.2" frameY="-0.6" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_9.png" x="2" y="80" width="138" height="80" frameX="12.6" frameY="0" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_10.png" x="2" y="2" width="146" height="76" frameX="8.8" frameY="1" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_11.png" x="149" y="2" width="148" height="72" frameX="7" frameY="2" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_12.png" x="2" y="161" width="138" height="80" frameX="9.6" frameY="2.8" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_13.png" x="2" y="242" width="130" height="84" frameX="16" frameY="2.4" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_14.png" x="2" y="327" width="124" height="84" frameX="18.4" frameY="2" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_15.png" x="141" y="163" width="114" height="88" frameX="23.8" frameY="1.6" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_16.png" x="388" y="163" width="112" height="82" frameX="20.6" frameY="1.2" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_17.png" x="386" y="252" width="108" height="78" frameX="17.6" frameY="1.8" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_18.png" x="391" y="80" width="120" height="76" frameX="11.6" frameY="2.6" frameWidth="145" frameHeight="90"/>
+  <atlasItem name="Scene 1_19.png" x="141" y="252" width="128" height="74" frameX="9.8" frameY="3.4" frameWidth="145" frameHeight="90"/>
+</atlas>
