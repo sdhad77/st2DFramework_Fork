@@ -10,7 +10,6 @@ package com.stintern.st2D.display.sprite
     import flash.display3D.Context3D;
     import flash.display3D.Context3DTextureFormat;
     import flash.geom.Matrix3D;
-    import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.geom.Vector3D;
     
@@ -499,26 +498,21 @@ package com.stintern.st2D.display.sprite
          */
         public function collisionCheck(lhs:Sprite):Boolean
         {
-            var rect:Rectangle = new Rectangle(this.position.x - (this.width/2), this.position.y - (this.height/2), this.width, this.height);
+            var s1:Rectangle = new Rectangle(position.x, position.y, width, height);
+            var s2:Rectangle = new Rectangle(lhs.position.x, lhs.position.y, lhs.width, lhs.height);
             
-            var left:Number = lhs.position.x - lhs.width/2;
-            var right:Number = lhs.position.x + lhs.width/2;
-            var top:Number = lhs.position.y + lhs.height/2;
-            var bottom:Number = lhs.position.y - lhs.height/2;
-            
-            var result:Boolean;
-            if(rect.left <= right && left <= rect.right && rect.bottom <= top && bottom <= rect.top)
+            if(s1.left <= s2.right && s2.left <= s1.right && s1.top <= s2.bottom && s2.top <= s1.bottom)
             {
-                result = true;
+                s1 = null;
+                s2 = null;
+                return true;
             }
             else
             {
-                result  = false;
+                s1 = null;
+                s2 = null;
+                return false;
             }
-            
-            rect = null;
-            
-            return result;
         }
         
 
