@@ -17,6 +17,11 @@ package com.stintern.st2D.demo
     public class Title extends Layer
     {
         private var _titleBatch:BatchSprite;
+        private var _sprite1:Sprite;
+        private var _sprite2:Sprite;
+        private var _sprite3:Sprite;
+        private var _sprite4:Sprite;
+        private var _sprite5:SpriteAnimation;
         
         public function Title()
         {
@@ -33,35 +38,35 @@ package com.stintern.st2D.demo
             
             var scale:Number = StageContext.instance.screenWidth/AnimationData.instance.animationData[_titleBatch.path]["frame"]["장면 1_0"].frameWidth;
             
-            var sprite1:Sprite = new Sprite;
-            sprite1.createSpriteWithBatchSprite(_titleBatch, "장면 1_0", 512, 384);
-            sprite1.setScale(new Vector2D(scale,scale));
-            sprite1.setFrameStagePos("장면 1_0");
-            _titleBatch.addSprite(sprite1);
+            _sprite1 = new Sprite;
+            _sprite1.createSpriteWithBatchSprite(_titleBatch, "장면 1_0", 512, 384);
+            _sprite1.setScale(new Vector2D(scale,scale));
+            _sprite1.setFrameStagePos("장면 1_0");
+            _titleBatch.addSprite(_sprite1);
             
-            var sprite2:Sprite = new Sprite;
-            sprite2.createSpriteWithBatchSprite(_titleBatch, "장면 1_1", 512, 384);
-            sprite2.setScale(new Vector2D(scale,scale));
-            sprite2.setFrameStagePos("장면 1_1");
-            _titleBatch.addSprite(sprite2);
+            _sprite2 = new Sprite;
+            _sprite2.createSpriteWithBatchSprite(_titleBatch, "장면 1_1", 512, 384);
+            _sprite2.setScale(new Vector2D(scale,scale));
+            _sprite2.setFrameStagePos("장면 1_1");
+            _titleBatch.addSprite(_sprite2);
             
-            var sprite3:Sprite = new Sprite;
-            sprite3.createSpriteWithBatchSprite(_titleBatch, "장면 1_2", 512, 384);
-            sprite3.setScale(new Vector2D(scale,scale));
-            sprite3.setFrameStagePos("장면 1_2");
-            _titleBatch.addSprite(sprite3);
+            _sprite3 = new Sprite;
+            _sprite3.createSpriteWithBatchSprite(_titleBatch, "장면 1_2", 512, 384);
+            _sprite3.setScale(new Vector2D(scale,scale));
+            _sprite3.setFrameStagePos("장면 1_2");
+            _titleBatch.addSprite(_sprite3);
             
-            var sprite4:Sprite = new Sprite;
-            sprite4.createSpriteWithBatchSprite(_titleBatch, "장면 1_4", 512, 384);
-            sprite4.setScale(new Vector2D(scale,scale));
-            sprite4.setFrameStagePos("장면 1_4");
-            _titleBatch.addSprite(sprite4);
+            _sprite4 = new Sprite;
+            _sprite4.createSpriteWithBatchSprite(_titleBatch, "장면 1_4", 512, 384);
+            _sprite4.setScale(new Vector2D(scale,scale));
+            _sprite4.setFrameStagePos("장면 1_4");
+            _titleBatch.addSprite(_sprite4);
             
-            var sprite5:SpriteAnimation = new SpriteAnimation;
-            sprite5.createAnimationSpriteWithBatchSprite(_titleBatch, "mole", "mole",512,384);
-            sprite5.setScale(new Vector2D(scale,scale));
-            _titleBatch.addSprite(sprite5);
-            sprite5.playAnimation();
+            _sprite5 = new SpriteAnimation;
+            _sprite5.createAnimationSpriteWithBatchSprite(_titleBatch, "mole", "mole",512,384);
+            _sprite5.setScale(new Vector2D(scale,scale));
+            _titleBatch.addSprite(_sprite5);
+            _sprite5.playAnimation();
         }
         
         override public function update(dt:Number):void
@@ -70,17 +75,25 @@ package com.stintern.st2D.demo
         
         private function buttonClick(evt:MouseEvent):void
         {
-            var scene:Scene = new Scene();
-            SceneManager.instance.pushScene(scene);
-            
-            var totalAnimationLayer:Game = new Game();
-            scene.addLayer(totalAnimationLayer);
-            
-            var cloudLayer:CloudLayer = new CloudLayer();
-            scene.addLayer(cloudLayer);
-            
-            var timeLayer:TimeLayer = new TimeLayer();
-            scene.addLayer(timeLayer);
+            if( (_sprite2.position.x-_sprite2.width/2*_sprite2.scale.x) < evt.stageX && evt.stageX < (_sprite2.position.x+_sprite2.width/2*_sprite2.scale.x))
+            {
+                if(StageContext.instance.screenHeight-(_sprite2.position.y+_sprite2.height/2*_sprite2.scale.x) < evt.stageY && evt.stageY < StageContext.instance.screenHeight-(_sprite2.position.y-_sprite2.height/2*_sprite2.scale.x))
+                {
+                    StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, buttonClick);
+                    
+                    var scene:Scene = new Scene();
+                    SceneManager.instance.pushScene(scene);
+                    
+                    var totalAnimationLayer:Game = new Game();
+                    scene.addLayer(totalAnimationLayer);
+                    
+                    var cloudLayer:CloudLayer = new CloudLayer();
+                    scene.addLayer(cloudLayer);
+                    
+                    var timeLayer:TimeLayer = new TimeLayer();
+                    scene.addLayer(timeLayer);
+                }
+            }
         }
     }
 }
