@@ -8,6 +8,7 @@ package com.stintern.st2D.demo
     import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
+    import com.stintern.st2D.display.sprite.Event;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
     import com.stintern.st2D.utils.Vector2D;
@@ -26,7 +27,7 @@ package com.stintern.st2D.demo
         public function Title()
         {
             _titleBatch = new BatchSprite();
-            _titleBatch.createBatchSpriteWithPath("res/system/title.png", "res/system/title.xml", loadCompleted);
+            _titleBatch.createBatchSpriteWithPath("res/system/title.png", "res/system/title.xml", loadCompleted, null, false);
             addBatchSprite(_titleBatch);
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, buttonClick);
@@ -34,6 +35,7 @@ package com.stintern.st2D.demo
         
         private function loadCompleted():void
         {
+            AnimationData.instance.setAnimationAuto(_titleBatch.path, "res/system/title.xml", "mole");
             AnimationData.instance.setAnimationDelayNum(_titleBatch.path, "mole", 3);
             
             var scale:Number = StageContext.instance.screenWidth/AnimationData.instance.animationData[_titleBatch.path]["frame"]["장면 1_0"].frameWidth;
@@ -49,6 +51,8 @@ package com.stintern.st2D.demo
             _sprite2.setScale(new Vector2D(scale,scale));
             _sprite2.setFrameStagePos("장면 1_1");
             _titleBatch.addSprite(_sprite2);
+            _sprite2.addEventListener("touch", touchEvent);
+            
             
             _sprite3 = new Sprite;
             _sprite3.createSpriteWithBatchSprite(_titleBatch, "장면 1_2", 512, 384);
@@ -63,10 +67,28 @@ package com.stintern.st2D.demo
             _titleBatch.addSprite(_sprite4);
             
             _sprite5 = new SpriteAnimation;
-            _sprite5.createAnimationSpriteWithBatchSprite(_titleBatch, "mole", "mole",512,384);
+            _sprite5.createAnimationSpriteWithBatchSprite(_titleBatch, "mole", "mole", 512,384);
             _sprite5.setScale(new Vector2D(scale,scale));
             _titleBatch.addSprite(_sprite5);
             _sprite5.playAnimation();
+            
+            function touchEvent():void
+            {
+                _sprite2.removeEventListener("touch", touchEvent);
+                StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, buttonClick);
+                
+                var scene:Scene = new Scene();
+                SceneManager.instance.pushScene(scene);
+                
+                var totalAnimationLayer:Game = new Game();
+                scene.addLayer(totalAnimationLayer);
+                
+                var cloudLayer:CloudLayer = new CloudLayer();
+                scene.addLayer(cloudLayer);
+                
+                var timeLayer:TimeLayer = new TimeLayer();
+                scene.addLayer(timeLayer);
+            }
         }
         
         override public function update(dt:Number):void
@@ -75,25 +97,7 @@ package com.stintern.st2D.demo
         
         private function buttonClick(evt:MouseEvent):void
         {
-            if( (_sprite2.position.x-_sprite2.width/2*_sprite2.scale.x) < evt.stageX && evt.stageX < (_sprite2.position.x+_sprite2.width/2*_sprite2.scale.x))
-            {
-                if(StageContext.instance.screenHeight-(_sprite2.position.y+_sprite2.height/2*_sprite2.scale.x) < evt.stageY && evt.stageY < StageContext.instance.screenHeight-(_sprite2.position.y-_sprite2.height/2*_sprite2.scale.x))
-                {
-                    StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, buttonClick);
-                    
-                    var scene:Scene = new Scene();
-                    SceneManager.instance.pushScene(scene);
-                    
-                    var totalAnimationLayer:Game = new Game();
-                    scene.addLayer(totalAnimationLayer);
-                    
-                    var cloudLayer:CloudLayer = new CloudLayer();
-                    scene.addLayer(cloudLayer);
-                    
-                    var timeLayer:TimeLayer = new TimeLayer();
-                    scene.addLayer(timeLayer);
-                }
-            }
+            Event.instance.touchCheck(evt.stageX, evt.stageY);
         }
     }
 }
