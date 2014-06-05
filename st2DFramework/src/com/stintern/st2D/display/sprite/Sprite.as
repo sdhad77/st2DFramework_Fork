@@ -534,6 +534,26 @@ package com.stintern.st2D.display.sprite
             }
         }
         
+        /**
+         * 이벤트 추가 함수
+         * @param eventName 추가할 이벤트 이름
+         * @param func 이벤트 발생시 호출할 함수
+         */
+        public function addEventListener(eventName:String, func:Function):void
+        {
+            Event.instance.addEventListener(this, eventName, func);
+        }
+        
+        /**
+         * 이벤트 삭제 함수
+         * @param eventName 제거할 이벤트 이름
+         * @param func 제거할 함수이름
+         */
+        public function removeEventListener(eventName:String, func:Function):void
+        {
+            Event.instance.removeEventListener(this, eventName, func);
+        }
+        
         /** Property */
         public function getContentWidth():Number
         {
