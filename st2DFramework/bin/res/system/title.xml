@@ -2,7 +2,7 @@
   <atlasItem name="장면 1_0.png" x="2" y="2" width="1024" height="768" frameX="0" frameY="0" frameWidth="1024" frameHeight="768"/>
   <atlasItem name="장면 1_1.png" x="1028" y="2" width="256" height="388" frameX="384" frameY="110" frameWidth="1024" frameHeight="768"/>
   <atlasItem name="장면 1_2.png" x="1286" y="645" width="244" height="100" frameX="390" frameY="514" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_3.png" x="1561" y="640" width="250" height="56" frameX="224" frameY="127.2" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_3.png" x="1561" y="698" width="224" height="54" frameX="414.8" frameY="126.4" frameWidth="1024" frameHeight="768"/>
   <atlasItem name="장면 1_4.png" x="1873" y="2" width="48" height="48" frameX="618.8" frameY="90.8" frameWidth="1024" frameHeight="768"/>
   <atlasItem name="장면 1_5.png" x="1561" y="640" width="250" height="56" frameX="224" frameY="277.2" frameWidth="1024" frameHeight="768"/>
   <atlasItem name="mole_6.png" x="2" y="772" width="260" height="146" frameX="11.6" frameY="604.2" frameWidth="1024" frameHeight="768"/>
