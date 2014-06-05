@@ -21,7 +21,7 @@ package com.stintern.st2D.LayerSample
         private function onCreated():void
         {
             _sprite = new Sprite;
-            _sprite.createSpriteWithBatchSprite(_batchSprite, "background", StageContext.instance.screenWidth/2, StageContext.instance.screenHeight/2);
+            _sprite.createSpriteWithBatchSprite(_batchSprite, "bg1", StageContext.instance.screenWidth/2, StageContext.instance.screenHeight/2);
             _sprite.setScaleWithWidthHeight(StageContext.instance.screenWidth, StageContext.instance.screenHeight);
             _batchSprite.addSprite(_sprite);
         }
