@@ -1,5 +1,6 @@
 package com.stintern.st2D.demo
 {
+    import com.stintern.st2D.LayerSample.BackGroundLayer;
     import com.stintern.st2D.LayerSample.CloudLayer;
     import com.stintern.st2D.LayerSample.TimeLayer;
     import com.stintern.st2D.animation.AnimationData;
@@ -99,8 +100,11 @@ package com.stintern.st2D.demo
             var scene:Scene = new Scene();
             SceneManager.instance.pushScene(scene);
             
-            var totalAnimationLayer:Game = new Game();
-            scene.addLayer(totalAnimationLayer);
+            var backGroundLayer:BackGroundLayer = new BackGroundLayer();
+            scene.addLayer(backGroundLayer);
+            
+            var game:Game = new Game();
+            scene.addLayer(game);
             
             var cloudLayer:CloudLayer = new CloudLayer();
             scene.addLayer(cloudLayer);
