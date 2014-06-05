@@ -38,37 +38,40 @@ package com.stintern.st2D.demo
             AnimationData.instance.setAnimationAuto(_titleBatch.path, "res/system/title.xml", "mole");
             AnimationData.instance.setAnimationDelayNum(_titleBatch.path, "mole", 3);
             
-            var scale:Number = StageContext.instance.screenWidth/AnimationData.instance.animationData[_titleBatch.path]["frame"]["장면 1_0"].frameWidth;
+            var scaleX:Number = StageContext.instance.screenWidth/AnimationData.instance.animationData[_titleBatch.path]["frame"]["장면 1_0"].frameWidth;
+            var scaleY:Number = StageContext.instance.screenHeight/AnimationData.instance.animationData[_titleBatch.path]["frame"]["장면 1_0"].frameHeight;
+            var uiPosX:Number = StageContext.instance.screenWidth/2;
+            var uiPosY:Number = StageContext.instance.screenHeight/2;
             
             _sprite1 = new Sprite;
-            _sprite1.createSpriteWithBatchSprite(_titleBatch, "장면 1_0", 512, 384);
-            _sprite1.setScale(new Vector2D(scale,scale));
+            _sprite1.createSpriteWithBatchSprite(_titleBatch, "장면 1_0", uiPosX, uiPosY);
+            _sprite1.setScale(new Vector2D(scaleY,scaleY));
             _sprite1.setFrameStagePos("장면 1_0");
             _titleBatch.addSprite(_sprite1);
             
             _sprite2 = new Sprite;
-            _sprite2.createSpriteWithBatchSprite(_titleBatch, "장면 1_1", 512, 384);
-            _sprite2.setScale(new Vector2D(scale,scale));
+            _sprite2.createSpriteWithBatchSprite(_titleBatch, "장면 1_1", uiPosX, uiPosY);
+            _sprite2.setScale(new Vector2D(scaleY,scaleY));
             _sprite2.setFrameStagePos("장면 1_1");
             _titleBatch.addSprite(_sprite2);
             
             _sprite3 = new Sprite;
-            _sprite3.createSpriteWithBatchSprite(_titleBatch, "장면 1_2", 512, 384);
-            _sprite3.setScale(new Vector2D(scale,scale));
+            _sprite3.createSpriteWithBatchSprite(_titleBatch, "장면 1_2", uiPosX, uiPosY);
+            _sprite3.setScale(new Vector2D(scaleY,scaleY));
             _sprite3.setFrameStagePos("장면 1_2");
             _sprite3.addEventListener("touch", startButtonTouch);
             _titleBatch.addSprite(_sprite3);
             
             _sprite4 = new Sprite;
-            _sprite4.createSpriteWithBatchSprite(_titleBatch, "장면 1_4", 512, 384);
-            _sprite4.setScale(new Vector2D(scale,scale));
+            _sprite4.createSpriteWithBatchSprite(_titleBatch, "장면 1_4", uiPosX, uiPosY);
+            _sprite4.setScale(new Vector2D(scaleY,scaleY));
             _sprite4.setFrameStagePos("장면 1_4");
             _sprite4.addEventListener("touch", noticeCloseTouch);
             _titleBatch.addSprite(_sprite4);
             
             _sprite5 = new SpriteAnimation;
-            _sprite5.createAnimationSpriteWithBatchSprite(_titleBatch, "mole", "mole", 512,384);
-            _sprite5.setScale(new Vector2D(scale,scale));
+            _sprite5.createAnimationSpriteWithBatchSprite(_titleBatch, "mole", "mole", uiPosX, uiPosY);
+            _sprite5.setScale(new Vector2D(scaleY,scaleY));
             _titleBatch.addSprite(_sprite5);
             _sprite5.playAnimation();
             

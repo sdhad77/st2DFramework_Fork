@@ -93,17 +93,17 @@ package com.stintern.st2D.display.sprite
                                 {
                                     //frameX,Y로 이동
                                     position.x += (- playFrame.width/2  - playFrame.frameX + playFrame.frameWidth/2)*scale.x;
-                                    position.y += (- playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2)*scale.x;
+                                    position.y += (- playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2)*scale.y;
                                 }
                                 else
                                 {
                                     //이전 프레임에서 했던 frameX,Y로의 이동 제거
                                     position.x += (+ preFrame.width/2  + preFrame.frameX - preFrame.frameWidth/2)*scale.x;
-                                    position.y += (+ preFrame.height/2 + preFrame.frameY - preFrame.frameHeight/2)*scale.x;
+                                    position.y += (+ preFrame.height/2 + preFrame.frameY - preFrame.frameHeight/2)*scale.y;
                                     
                                     //frameX,Y로 이동
                                     position.x += (- playFrame.width/2  - playFrame.frameX + playFrame.frameWidth/2)*scale.x;
-                                    position.y += (- playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2)*scale.x;
+                                    position.y += (- playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2)*scale.y;
                                 }
                             }
                             //이미지가 뒤집히지 않은, 원래의 상태일 경우
@@ -113,17 +113,17 @@ package com.stintern.st2D.display.sprite
                                 if(preFrame == null)
                                 {
                                     position.x += (+ playFrame.width/2  + playFrame.frameX - playFrame.frameWidth/2)*scale.x;
-                                    position.y += (- playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2)*scale.x;
+                                    position.y += (- playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2)*scale.y;
                                 }
                                 else
                                 {
                                     //이전 프레임에서 했던 frameX,Y로의 이동 제거
                                     position.x += (- preFrame.width/2  - preFrame.frameX + preFrame.frameWidth/2)*scale.x;
-                                    position.y += (+ preFrame.height/2 + preFrame.frameY - preFrame.frameHeight/2)*scale.x;
+                                    position.y += (+ preFrame.height/2 + preFrame.frameY - preFrame.frameHeight/2)*scale.y;
                                     
                                     //frameX,Y로 이동
                                     position.x += (+ playFrame.width/2  + playFrame.frameX - playFrame.frameWidth/2)*scale.x;
-                                    position.y += (- playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2)*scale.x;
+                                    position.y += (- playFrame.height/2 - playFrame.frameY + playFrame.frameHeight/2)*scale.y;
                                 }
                             }
                             

@@ -524,13 +524,13 @@ package com.stintern.st2D.display.sprite
             {
                 //frameX,Y로 이동
                 position.x += (- currentFrame.width/2  - currentFrame.frameX + currentFrame.frameWidth/2)*scale.x;
-                position.y += (- currentFrame.height/2 - currentFrame.frameY + currentFrame.frameHeight/2)*scale.x;
+                position.y += (- currentFrame.height/2 - currentFrame.frameY + currentFrame.frameHeight/2)*scale.y;
             }
                 //이미지가 뒤집히지 않은, 원래의 상태일 경우
             else
             {
                 position.x += (+ currentFrame.width/2  + currentFrame.frameX - currentFrame.frameWidth/2)*scale.x;
-                position.y += (- currentFrame.height/2 - currentFrame.frameY + currentFrame.frameHeight/2)*scale.x;
+                position.y += (- currentFrame.height/2 - currentFrame.frameY + currentFrame.frameHeight/2)*scale.y;
             }
         }
         
