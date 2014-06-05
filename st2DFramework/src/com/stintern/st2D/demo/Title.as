@@ -22,7 +22,8 @@ package com.stintern.st2D.demo
         private var _sprite2:Sprite;
         private var _sprite3:Sprite;
         private var _sprite4:Sprite;
-        private var _sprite5:SpriteAnimation;
+        private var _sprite5:Sprite;
+        private var _sprite6:SpriteAnimation;
         
         public function Title()
         {
@@ -63,43 +64,23 @@ package com.stintern.st2D.demo
             _titleBatch.addSprite(_sprite3);
             
             _sprite4 = new Sprite;
-            _sprite4.createSpriteWithBatchSprite(_titleBatch, "장면 1_4", uiPosX, uiPosY);
+            _sprite4.createSpriteWithBatchSprite(_titleBatch, "장면 1_3", uiPosX, uiPosY);
             _sprite4.setScale(new Vector2D(scaleY,scaleY));
-            _sprite4.setFrameStagePos("장면 1_4");
-            _sprite4.addEventListener("touch", noticeCloseTouch);
+            _sprite4.setFrameStagePos("장면 1_3");
             _titleBatch.addSprite(_sprite4);
             
-            _sprite5 = new SpriteAnimation;
-            _sprite5.createAnimationSpriteWithBatchSprite(_titleBatch, "mole", "mole", uiPosX, uiPosY);
+            _sprite5 = new Sprite;
+            _sprite5.createSpriteWithBatchSprite(_titleBatch, "장면 1_4", uiPosX, uiPosY);
             _sprite5.setScale(new Vector2D(scaleY,scaleY));
+            _sprite5.setFrameStagePos("장면 1_4");
+            _sprite5.addEventListener("touch", noticeCloseTouch);
             _titleBatch.addSprite(_sprite5);
-            _sprite5.playAnimation();
             
-            function startButtonTouch():void
-            {
-                _sprite3.removeEventListener("touch", startButtonTouch);
-                StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, buttonClick);
-                
-                var scene:Scene = new Scene();
-                SceneManager.instance.pushScene(scene);
-                
-                var totalAnimationLayer:Game = new Game();
-                scene.addLayer(totalAnimationLayer);
-                
-                var cloudLayer:CloudLayer = new CloudLayer();
-                scene.addLayer(cloudLayer);
-                
-                var timeLayer:TimeLayer = new TimeLayer();
-                scene.addLayer(timeLayer);
-            }
-            
-            function noticeCloseTouch():void
-            {
-                _sprite4.removeEventListener("touch", noticeCloseTouch);
-                
-                _sprite2.isVisible = false;
-                _sprite4.isVisible = false;
-            }
+            _sprite6 = new SpriteAnimation;
+            _sprite6.createAnimationSpriteWithBatchSprite(_titleBatch, "mole", "mole", uiPosX, uiPosY);
+            _sprite6.setScale(new Vector2D(scaleY,scaleY));
+            _titleBatch.addSprite(_sprite6);
+            _sprite6.playAnimation();
         }
         
         override public function update(dt:Number):void
@@ -109,6 +90,50 @@ package com.stintern.st2D.demo
         private function buttonClick(evt:MouseEvent):void
         {
             Event.instance.touchCheck(evt.stageX, evt.stageY);
+        }
+        
+        private function startButtonTouch():void
+        {
+            clear();
+            
+            var scene:Scene = new Scene();
+            SceneManager.instance.pushScene(scene);
+            
+            var totalAnimationLayer:Game = new Game();
+            scene.addLayer(totalAnimationLayer);
+            
+            var cloudLayer:CloudLayer = new CloudLayer();
+            scene.addLayer(cloudLayer);
+            
+            var timeLayer:TimeLayer = new TimeLayer();
+            scene.addLayer(timeLayer);
+        }
+        
+        private function noticeCloseTouch():void
+        {
+            _sprite5.removeEventListener("touch", noticeCloseTouch);
+            
+            _sprite2.isVisible = false;
+            _sprite4.isVisible = false;
+            _sprite5.isVisible = false;
+        }
+        
+        private function clear():void
+        {
+            _sprite3.removeEventListener("touch", startButtonTouch);
+            _sprite5.removeEventListener("touch", noticeCloseTouch);
+            StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, buttonClick);
+            
+            _sprite1.dispose();
+            _sprite2.dispose();
+            _sprite3.dispose();
+            _sprite4.dispose();
+            _sprite5.dispose();
+            _sprite6.dispose();
+            _sprite1 = _sprite2 = _sprite3 = _sprite4 = _sprite5 = _sprite6 = null;
+            
+            _titleBatch.dispose();
+            _titleBatch = null;
         }
     }
 }
