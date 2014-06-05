@@ -136,6 +136,27 @@ package com.stintern.st2D.animation
         }
         
         /**
+         * 애니메이션을 새로 추가하는 함수입니다. 
+         * @param pathTexture 애니메이션을 추가할 경로(SpriteSheet)
+         * @param pathXML 애니메이션이 저장되어있는 xml
+         * @param animationName 추가할 애니메이션 이름
+         */
+        public function setAnimationAuto(pathTexture:String, pathXML:String, animationName:String):void
+        {
+            if(pathTexture in _animationData)
+            {
+                if(_animationData[pathTexture]["animation"][animationName] == null)
+                {
+                    var xml:XML = AssetLoader.instance.loadXML(pathXML);
+                    _animationData[pathTexture]["animation"][animationName] = createSelectAnimation(xml, animationName);
+                    if(_animationData[pathTexture]["animation"][animationName] == null) trace("존재하지 않는 animationName 입니다.");
+                }
+                else trace("Animation이 이미 존재합니다 : " + pathTexture + " : " + animationName);
+            }
+            else trace("texture가 존재하지 않습니다");
+        }
+        
+        /**
          * 특정 애니메이션을 해제하는 함수입니다. 
          * @param pathTexture 특정 애니메이션을 지우고 싶은 경로(SpriteSheet)
          * @param animationName 해제될 애니메이션의 이름
@@ -212,11 +233,9 @@ package com.stintern.st2D.animation
             //애니메이션 순서를 저장하는 곳
             for(var i:uint = 0; i<xml.children().length(); i++)
             {
-                aniName = nameList[i];
-                aniName = aniName.substr(0, aniName.indexOf("_"));
+                aniName = nameList[i].substr(0, nameList[i].indexOf("_"));
                 
-                frameName = nameList[i];
-                frameName = frameName.substr(0, frameName.indexOf("."));
+                frameName = nameList[i].substr(0, nameList[i].indexOf("."));
                 
                 if(!(aniName in nameDictionary))
                 {
@@ -240,6 +259,47 @@ package com.stintern.st2D.animation
             nameDictionary = null;
             
             return animationDictionary;
+        }
+        
+        /**
+         * xml 파일에서 특정 애니메이션의 Frame 순서를 만드는 함수입니다.</br>
+         * xml에서 name -> Animation이름_FrameNumber.png 의 구조로 이루어져 있습니다.
+         * @param xml 스프라이트 시트의 xml파일
+         * @param animationName 읽어올 특정 애니메이션의 이름
+         * @return 새로 만든 Animation 객체
+         */
+        private function createSelectAnimation(xml:XML, animationName:String):Animation
+        {
+            var nameList:XMLList = xml.child("atlasItem").attribute("name");
+            var frameName:String;
+            
+            var animation:Animation;
+            var animationFlow:Array;
+            
+            //애니메이션 순서를 저장하는 곳
+            for(var i:uint = 0; i<xml.children().length(); i++)
+            {
+                if(animationName != nameList[i].substr(0, nameList[i].indexOf("_"))) continue;
+                
+                frameName = nameList[i].substr(0, nameList[i].indexOf("."));
+                
+                if(animationFlow == null)
+                {
+                    animationFlow = new Array;
+                    animationFlow.push(frameName);
+                }
+                else animationFlow.push(frameName);
+            }
+            
+            //animation 객체 생성
+            if(animationFlow != null) animation = new Animation(animationName, animationFlow, 1);
+            
+            //메모리 해제
+            animationFlow = null;
+            frameName = null;
+            nameList = null;
+            
+            return animation;
         }
         
         //get set 함수입니다.
