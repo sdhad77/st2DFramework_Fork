@@ -75,7 +75,7 @@ package com.stintern.st2D.display.sprite
          */
         public function removeEventListener(sprite:Sprite, eventName:String, func:Function):void
         {
-            for(var i:int=0; i<_event.length; i++)
+            for(var i:int=0; i<_event["touch"].length; i++)
             {
                 //원하는 것을 찾으면
                 if(_event[eventName][i]["sprite"] == sprite && _event[eventName][i]["function"] == func)

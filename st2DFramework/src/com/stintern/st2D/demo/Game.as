@@ -6,6 +6,7 @@ package com.stintern.st2D.demo
     import com.stintern.st2D.display.Layer;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
+    import com.stintern.st2D.utils.Vector2D;
     import com.stintern.st2D.utils.scheduler.Scheduler;
     
     import flash.events.MouseEvent;
@@ -79,6 +80,7 @@ package com.stintern.st2D.demo
                 _playerChar[i].create(_charBatch, "ManRight", 100, 10, "PLAYER");
                 _playerChar[i].sprite.position.x = 100;
                 _playerChar[i].sprite.position.y = i * 64 + 100;
+                _playerChar[i].sprite.setScale(new Vector2D(2,2));
                 _playerChar[i].sprite.playAnimation();
             }
             
@@ -91,6 +93,7 @@ package com.stintern.st2D.demo
                 _enemyChar[i].sprite.position.y = i * 64 + 100;
                 _enemyChar[i].sprite.moveBy(-550, 0, (i+1) * 1000);
                 _enemyChar[i].sprite.reverseLeftRight();
+                _enemyChar[i].sprite.setScale(new Vector2D(2,2));
                 _enemyChar[i].sprite.playAnimation();
             }
             
@@ -100,10 +103,9 @@ package com.stintern.st2D.demo
                 
                 _effect[i].createAnimationSpriteWithBatchSprite(_effectBatch, "fire");
                 _effect[i].isVisible = false;
+                _effect[i].setScale(new Vector2D(2,2));
                 _effectBatch.addSprite(_effect[i]);
             }
-            
-            StageContext.instance.stage.addEventListener(MouseEvent.CLICK, onTouch);
             
             _gameStart = true;
         }
@@ -160,10 +162,6 @@ package com.stintern.st2D.demo
                     break;
                 }
             }
-        }
-        
-        private function onTouch(event:MouseEvent):void
-        {
         }
     }
 }

@@ -103,11 +103,14 @@ package com.stintern.st2D.demo
             var backGroundLayer:BackGroundLayer = new BackGroundLayer();
             scene.addLayer(backGroundLayer);
             
-            var game:Game = new Game();
-            scene.addLayer(game);
+            var gameLayer:Game = new Game();
+            scene.addLayer(gameLayer);
             
             var cloudLayer:CloudLayer = new CloudLayer();
             scene.addLayer(cloudLayer);
+            
+            var gameUILayer:GameUI = new GameUI;
+            scene.addLayer(gameUILayer);
             
             var timeLayer:TimeLayer = new TimeLayer();
             scene.addLayer(timeLayer);
