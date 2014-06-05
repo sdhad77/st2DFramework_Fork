@@ -1,4 +1,5 @@
 <atlas>
-  <atlasItem name="background.png" x="2" y="2" width="743" height="557" frameX="0" frameY="0" frameWidth="743" frameHeight="557"/>
-  <atlasItem name="cloud.png" x="747" y="2" width="257" height="139" frameX="0" frameY="0" frameWidth="257" frameHeight="139"/>
+  <atlasItem name="bg1.png" x="2" y="2" width="1024" height="520" frameX="0" frameY="0" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="bg2.png" x="2" y="524" width="1024" height="520" frameX="0" frameY="0" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="cloud.png" x="1028" y="2" width="488" height="264" frameX="0" frameY="0" frameWidth="488" frameHeight="264"/>
 </atlas>
