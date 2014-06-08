@@ -4,6 +4,7 @@ package com.stintern.st2D.demo
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.demo.datatype.Character;
     import com.stintern.st2D.display.Layer;
+    import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.display.sprite.SpriteAnimation;
@@ -23,8 +24,9 @@ package com.stintern.st2D.demo
         private var _effectBatch:BatchSprite;
         private var _batchSpriteNum:int = 2;
         
-        private var _sch:Scheduler = new Scheduler;
         private var _enemyCreateSch:Scheduler = new Scheduler;
+        
+        private var _gameBGLayer:GameBG = SceneManager.instance.getCurrentScene().getLayerByName("GameBGLayer") as GameBG;
         
         public function Game()
         {
@@ -75,13 +77,17 @@ package com.stintern.st2D.demo
             
             _effectIdx = 0;
             
+            //성 생성
+            createBuilding("CASTLE", "PLAYER", 0);
+            createBuilding("CASTLE", "ENEMY", StageContext.instance.screenWidth*_gameBGLayer.bgNum);
+            
             //적 자동생성 기능
-            _enemyCreateSch.addFunc(10000, enemyCreate, 5);
+            _enemyCreateSch.addFunc(5000, enemyCreate, 20);
             _enemyCreateSch.startScheduler();
             
             function enemyCreate():void
             {
-                createCharacter("SKELETON", "ENEMY");
+                createCharacter("MAN3", "ENEMY");
             }
         }
         
@@ -94,23 +100,21 @@ package com.stintern.st2D.demo
             AnimationData.instance.setAnimationDelayNum(_effectBatch.path, "ice",   4);
             AnimationData.instance.setAnimationDelayNum(_effectBatch.path, "meteo", 4);
             
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SkelRight",      8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SkelUp",         8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SkelDown",       8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "ManRight",       8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "ManUp",          8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "ManDown",        8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SlimeRight",     8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SlimeUp",        8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SlimeDown",      8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SlimeKingRight", 8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SlimeKingUp",    8);
-            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SlimeKingDown",  8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Skeleton",    8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Man1",        8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Man2",        8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Man3",        8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Mage1",       8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Mage2",       8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Mage2Attack", 8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Slime",       8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SlimeKing",   8);
         }
         
         override public function update(dt:Number):void
         {
             collisionChec();
+            attack();
         }
         
         /**
@@ -124,20 +128,18 @@ package com.stintern.st2D.demo
                 //플레이어 캐릭터가 공격상태가 아니면 넘어감. 공격상태가 아닌경우 -> 공격한지 얼마 안되서 쿨타임 기다리는중
                 if(!_playerChar[i].isAttackAble) continue;
                 //타겟이 이미 존재할 경우에는 바로 공격 개시
-                else if(_playerChar[i].target != null) attack(_playerChar[i]);
+                else if(_playerChar[i].target != null) _playerChar[i].setState(Character.ATTACK);
                 //타겟이 없으니 적군들을 상대로 충돌 검사
                 else
                 {
                     for(var j:int=0; j<_enemyChar.length; j++)
                     {
-                        if(_enemyChar[j].isCollision) continue;
-                        
                         //타겟을 찾았으면
                         if(collisionCheckRect(_playerChar[i].attackRect(), _enemyChar[j].sprite.rect))
                         {
                             //타겟으로 설정하고 공격개시
                             _playerChar[i].target = _enemyChar[j];
-                            attack(_playerChar[i]);
+                            _playerChar[i].setState(Character.ATTACK);
                         }
                     }
                 }
@@ -149,60 +151,34 @@ package com.stintern.st2D.demo
                 //적 캐릭터가 공격상태가 아니면 넘어감. 공격상태가 아닌경우 -> 공격한지 얼마 안되서 쿨타임 기다리는중
                 if(!_enemyChar[i].isAttackAble) continue;
                 //타겟이 이미 존재할 경우에는 바로 공격 개시
-                else if(_enemyChar[i].target != null) attack(_enemyChar[i]);
+                else if(_enemyChar[i].target != null) _enemyChar[i].setState(Character.ATTACK);
                 //타겟이 없으니 플레이어를 상대로 충돌 검사
                 else
                 {
                     for(j=0; j<_playerChar.length; j++)
                     {
-                        if(_playerChar[j].isCollision) continue;
-                        
                         //타겟을 찾았으면
                         if(collisionCheckRect(_enemyChar[i].attackRect(), _playerChar[j].sprite.rect))
                         {
                             //타겟으로 설정하고 공격개시
                             _enemyChar[i].target = _playerChar[j];
-                            attack(_enemyChar[i]);
+                            _enemyChar[i].setState(Character.ATTACK);
                         }
                     }
                 }
             }
         }
         
-        /**
-         * 특정 캐릭터가 공격을 하도록 하는 함수입니다.
-         * @param character 공격을 할 캐릭터
-         */
-        private function attack(character:Character):void
+        private function attack():void
         {
-            //공격전에 타겟이 공격범위내에 있는지 다시한번 확인
-            if(collisionCheckRect(character.attackRect(), character.target.sprite.rect))
+            for(var i:int=0; i<_playerChar.length; i++)
             {
-                character.isAttackAble = false;
-                character.target.isCollision = true;
-                character.sprite.moveStop();
-                character.target.info.hp -= character.info.power;
-                character.target.hpProgress.updateProgress(character.target.info.hp);
-                createEffect((character.sprite.position.x + character.target.sprite.position.x)/2, (character.sprite.position.y + character.target.sprite.position.y)/2);
-                
-                //타겟이 죽었으면
-                if(character.target.info.hp <= 0)character.target.setState(Character.DEAD);
-                //타겟이 안죽었으면 뒤로 밀리게 함
-                else
-                {
-                    if(character.info.party == "PLAYER") character.target.sprite.setTranslation(new Vector2D(character.target.sprite.position.x+50,character.target.sprite.position.y));
-                    else character.target.sprite.setTranslation(new Vector2D(character.target.sprite.position.x-50,character.target.sprite.position.y));
-                    _sch.addFunc(500, character.target.resetIsCollision, 1);
-                }
-                
-                _sch.addFunc(character.info.attackDelay, character.resetIsAttackAble, 1);
-                _sch.startScheduler();
+                if(_playerChar[i].info.state == Character.ATTACK && _playerChar[i].isAttackAble == true) _playerChar[i].attack();
             }
-            //공격범위내에 없으면 타겟 해제, 걷기 상태
-            else
+            
+            for(i=0; i<_enemyChar.length; i++)
             {
-                character.target = null;
-                character.setState(Character.WALK);
+                if(_enemyChar[i].info.state == Character.ATTACK && _enemyChar[i].isAttackAble == true) _enemyChar[i].attack();
             }
         }
         
@@ -211,7 +187,7 @@ package com.stintern.st2D.demo
          * @param x 생성할 x좌표
          * @param y 생성할 y좌표
          */
-        private function createEffect(x:Number, y:Number):void
+        public function createEffect(x:Number, y:Number):void
         {
             if(_effectIdx == _effect.length) _effectIdx = 0;
             _effect[_effectIdx].position.x = x;
@@ -287,55 +263,124 @@ package com.stintern.st2D.demo
          */
         public function createCharacter(charName:String, party:String):void
         {
+            var current:Character;
+            
             //아군이면
             if(party == "PLAYER")
             {
                 //우선 new
                 _playerChar.push(new Character());
+                current = _playerChar[_playerChar.length-1];
                 
                 //이름으로 캐릭터 찾아서 추가
-                if     (charName == "MAN")       _playerChar[_playerChar.length-1].create(_charBatch, "ManRight", "ManRight", 100, 10, 500, "PLAYER", 3);
-                else if(charName == "SLIMEKING") _playerChar[_playerChar.length-1].create(_charBatch, "SlimeKingRight", "SlimeKingRight", 100, 20, 700, "PLAYER", 3);
-                else if(charName == "SKELETON")  _playerChar[_playerChar.length-1].create(_charBatch, "SkelRight", "SkelRight", 100, 10, 500, "PLAYER", 3);
-                else if(charName == "SLIME")     _playerChar[_playerChar.length-1].create(_charBatch, "SlimeRight", "SlimeRight", 100, 20, 700, "PLAYER", 3);
+                if     (charName == "MAN1")      current.create(_charBatch, "Man1", "Man1", 100, 10, 700, "PLAYER", "CHAR", 3);
+                else if(charName == "MAN2")      current.create(_charBatch, "Man2", "Man2", 150, 20, 700, "PLAYER", "CHAR", 3);
+                else if(charName == "MAN3")      current.create(_charBatch, "Man3", "Man3", 120, 15, 700, "PLAYER", "CHAR", 3);
+                else if(charName == "MAGE1")     current.create(_charBatch, "Mage1", "Mage1", 80, 15, 700, "PLAYER", "CHAR", 3);
+                else if(charName == "MAGE2")     current.create(_charBatch, "Mage2", "Mage2", 200, 30, 700, "PLAYER", "CHAR", 3);
+                else if(charName == "SKELETON")  current.create(_charBatch, "Skeleton", "Skeleton", 100, 15, 700, "PLAYER", "CHAR", 3);
+                else if(charName == "SLIME")     current.create(_charBatch, "Slime", "Slime", 100, 15, 700, "PLAYER", "CHAR", 3);
+                else if(charName == "SLIMEKING") current.create(_charBatch, "SlimeKing", "SlimeKing", 200, 30, 1000, "PLAYER", "CHAR", 3);
                 else
                 {
                     //없는 이름일경우 pop 해서 벡터 원위치 시킴
                     trace("존재하지 않는 캐릭터입니다.");
+                    current = null;
                     _playerChar.pop();
                     return;
                 }
                 
                 //캐릭터와 관계없는 공통작업. 위치지정, 공격범위 설정, 걷기 상태 설정
-                _playerChar[_playerChar.length-1].sprite.setTranslation(new Vector2D(0,StageContext.instance.screenHeight/2));
-                _playerChar[_playerChar.length-1].info.attackRadius = _playerChar[_playerChar.length-1].sprite.width * _playerChar[_playerChar.length-1].sprite.scale.x;
-                _playerChar[_playerChar.length-1].setState(Character.WALK);
+                current.sprite.setTranslation(new Vector2D(0,StageContext.instance.screenHeight*0.42 + current.sprite.height*current.sprite.scale.y/2));
+                current.info.attackRadius = current.sprite.width * current.sprite.scale.x;
+                current.setState(Character.WALK);
             }
             //적군이면
             else
             {
                 //우선 new
                 _enemyChar.push(new Character());
+                current = _enemyChar[_enemyChar.length-1];
                 
                 //이름으로 캐릭터 찾아서 추가
-                if     (charName == "MAN")       _enemyChar[_enemyChar.length-1].create(_charBatch, "ManRight", "ManRight", 100, 10, 1000, "ENEMY", 3);
-                else if(charName == "SLIMEKING") _enemyChar[_enemyChar.length-1].create(_charBatch, "SlimeKingRight", "SlimeKingRight", 100, 20, 1000, "ENEMY", 3);
-                else if(charName == "SKELETON")  _enemyChar[_enemyChar.length-1].create(_charBatch, "SkelRight", "SkelRight", 100, 10, 1000, "ENEMY", 3);
-                else if(charName == "SLIME")     _enemyChar[_enemyChar.length-1].create(_charBatch, "SlimeRight", "SlimeRight", 100, 20, 1000, "ENEMY", 3);
+                if     (charName == "MAN1")      current.create(_charBatch, "Man1", "Man1", 100, 10, 700, "ENEMY", "CHAR", 3);
+                else if(charName == "MAN2")      current.create(_charBatch, "Man2", "Man2", 150, 20, 700, "ENEMY", "CHAR", 3);
+                else if(charName == "MAN3")      current.create(_charBatch, "Man3", "Man3", 120, 15, 700, "ENEMY", "CHAR", 3);
+                else if(charName == "MAGE1")     current.create(_charBatch, "Mage1", "Mage1", 80, 15, 700, "ENEMY", "CHAR", 3);
+                else if(charName == "MAGE2")     current.create(_charBatch, "Mage2", "Mage2", 200, 30, 700, "ENEMY", "CHAR", 3);
+                else if(charName == "SKELETON")  current.create(_charBatch, "Skeleton", "Skeleton", 100, 10, 700, "ENEMY", "CHAR", 3);
+                else if(charName == "SLIME")     current.create(_charBatch, "Slime", "Slime", 100, 15, 700, "ENEMY", "CHAR", 3);
+                else if(charName == "SLIMEKING") current.create(_charBatch, "SlimeKing", "SlimeKing", 200, 30, 1000, "ENEMY", "CHAR", 3);
                 else
                 {
                     //없는 이름일경우 pop 해서 벡터 원위치 시킴
                     trace("존재하지 않는 캐릭터입니다.");
+                    current = null;
                     _enemyChar.pop();
                     return;
                 }
                 
                 //캐릭터와 관계없는 공통작업. 위치지정, 공격범위 설정, 걷기 상태 설정
-                _enemyChar[_enemyChar.length-1].sprite.reverseLeftRight();
-                _enemyChar[_enemyChar.length-1].sprite.setTranslation(new Vector2D(StageContext.instance.screenWidth,StageContext.instance.screenHeight/2));
-                _enemyChar[_enemyChar.length-1].info.attackRadius = _enemyChar[_enemyChar.length-1].sprite.width * _enemyChar[_enemyChar.length-1].sprite.scale.x;
-                _enemyChar[_enemyChar.length-1].setState(Character.WALK);
+                current.sprite.reverseLeftRight();
+                current.sprite.setTranslation(new Vector2D(StageContext.instance.screenWidth*_gameBGLayer.bgNum,StageContext.instance.screenHeight*0.42 + current.sprite.height*current.sprite.scale.y/2));
+                current.info.attackRadius = current.sprite.width * current.sprite.scale.x;
+                current.setState(Character.WALK);
             }
+            
+            current = null;
+        }
+        
+        public function createBuilding(charName:String, party:String, x:Number):void
+        {
+            var current:Character;
+            
+            //아군이면
+            if(party == "PLAYER")
+            {
+                //우선 new
+                _playerChar.push(new Character());
+                current = _playerChar[_playerChar.length-1];
+                
+                //이름으로 캐릭터 찾아서 추가
+                if(charName == "CASTLE") current.create(_charBatch, "castle", "castle", 2000, 30, 400, "PLAYER", "BUILD", 2.5);
+                else
+                {
+                    //없는 이름일경우 pop 해서 벡터 원위치 시킴
+                    trace("존재하지 않는 캐릭터입니다.");
+                    current = null;
+                    _playerChar.pop();
+                    return;
+                }
+                
+                //캐릭터와 관계없는 공통작업. 위치지정, 공격범위 설정
+                current.sprite.setTranslation(new Vector2D(x,StageContext.instance.screenHeight*0.42 + current.sprite.height*current.sprite.scale.y/2));
+                current.info.attackRadius = current.sprite.width * current.sprite.scale.x;
+            }
+                //적군이면
+            else
+            {
+                //우선 new
+                _enemyChar.push(new Character());
+                current = _enemyChar[_enemyChar.length-1];
+                
+                //이름으로 캐릭터 찾아서 추가
+                if(charName == "CASTLE") current.create(_charBatch, "castle", "castle", 2000, 30, 400, "ENEMY", "BUILD", 2.5);
+                else
+                {
+                    //없는 이름일경우 pop 해서 벡터 원위치 시킴
+                    trace("존재하지 않는 캐릭터입니다.");
+                    current = null;
+                    _enemyChar.pop();
+                    return;
+                }
+                
+                //캐릭터와 관계없는 공통작업. 위치지정, 공격범위 설정
+                current.sprite.reverseLeftRight();
+                current.sprite.setTranslation(new Vector2D(x,StageContext.instance.screenHeight*0.42 + current.sprite.height*current.sprite.scale.y/2));
+                current.info.attackRadius = current.sprite.width * current.sprite.scale.x;
+            }
+            
+            current = null;
         }
         
         //get set 함수들
