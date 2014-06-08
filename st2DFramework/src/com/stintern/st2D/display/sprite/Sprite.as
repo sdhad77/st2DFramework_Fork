@@ -565,7 +565,7 @@ package com.stintern.st2D.display.sprite
         
         public function get rect():Rectangle
         {
-            return new Rectangle(position.x, position.y, getContentWidth(), getContentHeight()); 
+            return new Rectangle(position.x - getContentWidth()*0.5, position.y - getContentHeight()*0.5, getContentWidth(), getContentHeight()); 
         }
         
         public function get numTriangle():int
