@@ -54,6 +54,7 @@ package com.stintern.st2D.LayerSample
         {
             _currentTime += dt;
             updateTime();
+            updatePos();
         }
 
         public function updateTime():void
@@ -101,6 +102,19 @@ package com.stintern.st2D.LayerSample
             
             secSprite2.getSpriteInBatchSprite(_batchSprite, (Math.floor(_sec % 10)).toString());
             _batchSprite.addSprite(secSprite2);
+        }
+        
+        private function updatePos():void
+        {
+            //카메라 위치가 바뀐 경우에만 업데이트 하도록 조건 설정해야함
+            if(1)
+            {
+                tenMinSprite.position.x = -StageContext.instance.mainCamera.x - 64;
+                minSprite.position.x    = -StageContext.instance.mainCamera.x - 32;
+                colonSprite.position.x  = -StageContext.instance.mainCamera.x;
+                secSprite.position.x    = -StageContext.instance.mainCamera.x + 32;
+                secSprite2.position.x   = -StageContext.instance.mainCamera.x + 64;
+            }
         }
 
         public function get batchSprite():BatchSprite
