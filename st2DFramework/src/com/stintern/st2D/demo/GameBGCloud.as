@@ -5,6 +5,7 @@ package com.stintern.st2D.demo
     import com.stintern.st2D.animation.datatype.AnimationFrame;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
+    import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
     import com.stintern.st2D.utils.Vector2D;
@@ -29,6 +30,8 @@ package com.stintern.st2D.demo
         
         private var _cloudMovePixelPerSecond:int;
         
+        private var _gameBGLayer:GameBG = SceneManager.instance.getCurrentScene().getLayerByName("GameBGLayer") as GameBG;
+        
         /**
          * 자동 구름 생성 레이어 초기화 함수입니다.</br>
          * 구름의 이동속도를 픽셀/초 단위로 입력할 수 있습니다.
@@ -52,7 +55,7 @@ package com.stintern.st2D.demo
             //구름의 스케일 조정을 위한 변수
             _scale = StageContext.instance.screenHeight/4/cloudFrame.height;
             //맵의 전체길이
-            _totalWidth = StageContext.instance.screenWidth;
+            _totalWidth = StageContext.instance.screenWidth*_gameBGLayer.bgNum;
             //구름이 맵을 이동하는데 걸리는 시간
             _totalMoveSec = (_totalWidth + cloudFrame.width*_scale) / _cloudMovePixelPerSecond;
             //구름의 출발 간격. 연달아서 출발하도록 하였음

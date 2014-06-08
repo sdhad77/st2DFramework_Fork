@@ -17,6 +17,7 @@ package com.stintern.st2D.demo
         public function GameBG()
         {
             _bgNum = 2;
+            this.name = "GameBGLayer";
             
             _batchSprite = new BatchSprite();
             _batchSprite.createBatchSpriteWithPath(Resources.PATH_SPRITE_BACKGROUND, Resources.PATH_XML_BACKGROUND, onCreated, null, false);
