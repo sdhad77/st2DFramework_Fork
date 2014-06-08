@@ -1,28 +1,27 @@
 <atlas>
-  <atlasItem name="장면 1_0.png" x="2" y="2" width="1024" height="768" frameX="0" frameY="0" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_1.png" x="1028" y="2" width="256" height="388" frameX="384" frameY="110" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_2.png" x="1286" y="645" width="244" height="100" frameX="390" frameY="514" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_3.png" x="1561" y="698" width="224" height="54" frameX="414.8" frameY="126.4" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_4.png" x="1873" y="2" width="48" height="48" frameX="618.8" frameY="90.8" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_5.png" x="1561" y="640" width="250" height="56" frameX="224" frameY="277.2" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_6.png" x="2" y="772" width="260" height="146" frameX="11.6" frameY="604.2" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_7.png" x="2" y="1386" width="256" height="140" frameX="16" frameY="601" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_8.png" x="1561" y="489" width="256" height="150" frameX="25" frameY="597.8" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_9.png" x="1789" y="314" width="248" height="156" frameX="30.2" frameY="594.8" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_10.png" x="2" y="1527" width="226" height="158" frameX="37" frameY="597.2" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_11.png" x="2" y="1686" width="218" height="160" frameX="43.2" frameY="599.8" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_12.png" x="2" y="1221" width="218" height="164" frameX="37.2" frameY="596.8" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_13.png" x="1286" y="482" width="244" height="162" frameX="30.2" frameY="593.8" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_14.png" x="1028" y="562" width="252" height="162" frameX="27" frameY="595.6" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_15.png" x="1286" y="155" width="274" height="158" frameX="19.8" frameY="597.4" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_16.png" x="1286" y="2" width="290" height="152" frameX="12.4" frameY="599.2" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_17.png" x="1578" y="2" width="294" height="142" frameX="8.6" frameY="601" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_18.png" x="1561" y="155" width="274" height="158" frameX="13.8" frameY="602.8" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_19.png" x="1286" y="315" width="258" height="166" frameX="26.4" frameY="602" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_20.png" x="1028" y="392" width="246" height="168" frameX="31.4" frameY="601" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_21.png" x="1561" y="314" width="226" height="174" frameX="42" frameY="600.2" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_22.png" x="1819" y="489" width="222" height="162" frameX="35.8" frameY="599.4" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_23.png" x="2" y="1847" width="216" height="154" frameX="29.8" frameY="600.8" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_24.png" x="2" y="1068" width="238" height="152" frameX="17.6" frameY="602.4" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="mole_25.png" x="2" y="920" width="256" height="146" frameX="14.2" frameY="604.2" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_0.png" x="0" y="0" width="1024" height="768" frameX="0" frameY="0" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_1.png" x="1026" y="0" width="256" height="388" frameX="384" frameY="110" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_2.png" x="1284" y="643" width="244" height="106" frameX="390" frameY="514" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_3.png" x="1559" y="638" width="224" height="54" frameX="414.8" frameY="126.4" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_4.png" x="1871" y="0" width="48" height="48" frameX="618.8" frameY="90.8" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_5.png" x="0" y="770" width="260" height="146" frameX="11.6" frameY="604.2" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_6.png" x="0" y="1384" width="256" height="140" frameX="16" frameY="601" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_7.png" x="1559" y="487" width="256" height="150" frameX="25" frameY="597.8" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_8.png" x="1787" y="312" width="248" height="156" frameX="30.2" frameY="594.8" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_9.png" x="0" y="1525" width="226" height="158" frameX="37" frameY="597.2" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_10.png" x="0" y="1684" width="218" height="160" frameX="43.2" frameY="599.8" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_11.png" x="0" y="1219" width="218" height="164" frameX="37.2" frameY="596.8" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_12.png" x="1284" y="480" width="244" height="162" frameX="30.2" frameY="593.8" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_13.png" x="1026" y="560" width="252" height="162" frameX="27" frameY="595.6" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_14.png" x="1284" y="153" width="274" height="158" frameX="19.8" frameY="597.4" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_15.png" x="1284" y="0" width="290" height="152" frameX="12.4" frameY="599.2" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_16.png" x="1576" y="0" width="294" height="142" frameX="8.6" frameY="601" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_17.png" x="1559" y="153" width="274" height="158" frameX="13.8" frameY="602.8" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_18.png" x="1284" y="313" width="258" height="166" frameX="26.4" frameY="602" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_19.png" x="1026" y="390" width="246" height="168" frameX="31.4" frameY="601" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_20.png" x="1559" y="312" width="226" height="174" frameX="42" frameY="600.2" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_21.png" x="1817" y="487" width="222" height="162" frameX="35.8" frameY="599.4" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_22.png" x="0" y="1845" width="216" height="154" frameX="29.8" frameY="600.8" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_23.png" x="0" y="1066" width="238" height="152" frameX="17.6" frameY="602.4" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="mole_24.png" x="0" y="918" width="256" height="146" frameX="14.2" frameY="604.2" frameWidth="1024" frameHeight="768"/>
 </atlas>
