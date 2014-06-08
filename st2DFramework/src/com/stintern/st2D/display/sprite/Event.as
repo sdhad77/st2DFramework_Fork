@@ -101,7 +101,7 @@ package com.stintern.st2D.display.sprite
                 //터치 영역 체크
                 if( (select.position.x-select.width/2*select.scale.x) < x && x < (select.position.x+select.width/2*select.scale.x))
                 {
-                    if(StageContext.instance.screenHeight-(select.position.y+select.height/2*select.scale.x) < y && y < StageContext.instance.screenHeight-(select.position.y-select.height/2*select.scale.x))
+                    if(StageContext.instance.screenHeight-(select.position.y+select.height/2*select.scale.y) < y && y < StageContext.instance.screenHeight-(select.position.y-select.height/2*select.scale.y))
                     {
                         //원하는 것을 찾았으면 함수 호출
                         _event["touch"][i]["function"]();

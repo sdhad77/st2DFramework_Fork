@@ -486,8 +486,7 @@ package com.stintern.st2D.display.sprite
          */
         public function moveStop():void
         {
-            position.x = Math.floor(position.x);
-            position.y = Math.floor(position.y);
+            setTranslation(new Vector2D(Math.floor(position.x), Math.floor(position.y)));
             _moveCnt = 0;
         }
         
