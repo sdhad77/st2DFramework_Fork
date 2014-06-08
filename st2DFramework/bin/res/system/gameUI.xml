@@ -1,11 +1,13 @@
 <atlas>
   <atlasItem name="장면 1_0.png" x="0" y="0" width="1024" height="250" frameX="0.2" frameY="518.2" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_1.png" x="0" y="396" width="108" height="108" frameX="50" frameY="560" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_2.png" x="0" y="726" width="108" height="108" frameX="200" frameY="560" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_3.png" x="0" y="506" width="108" height="108" frameX="350" frameY="560" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_4.png" x="0" y="836" width="108" height="108" frameX="500" frameY="560" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_5.png" x="0" y="286" width="108" height="108" frameX="650" frameY="560" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_6.png" x="0" y="616" width="108" height="108" frameX="800" frameY="560" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_7.png" x="0" y="252" width="512" height="32" frameX="50" frameY="708" frameWidth="1024" frameHeight="768"/>
-  <atlasItem name="장면 1_8.png" x="514" y="252" width="506" height="26" frameX="53" frameY="711" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_1.png" x="0" y="628" width="108" height="108" frameX="50" frameY="560" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_2.png" x="0" y="518" width="108" height="108" frameX="200" frameY="560" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_3.png" x="0" y="408" width="108" height="108" frameX="350" frameY="560" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_4.png" x="814" y="252" width="108" height="108" frameX="500" frameY="560" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_5.png" x="0" y="738" width="108" height="108" frameX="650" frameY="560" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_6.png" x="0" y="848" width="108" height="108" frameX="800" frameY="560" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_7.png" x="0" y="374" width="512" height="32" frameX="50" frameY="708" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="장면 1_8.png" x="514" y="374" width="506" height="26" frameX="53" frameY="711" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="win_0.png" x="0" y="252" width="414" height="120" frameX="305.4" frameY="-195.4" frameWidth="1024" frameHeight="768"/>
+  <atlasItem name="lose_0.png" x="416" y="252" width="198" height="100" frameX="413.4" frameY="-127.4" frameWidth="1024" frameHeight="768"/>
 </atlas>

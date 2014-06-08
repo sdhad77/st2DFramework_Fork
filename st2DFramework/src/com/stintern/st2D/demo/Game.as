@@ -31,6 +31,7 @@ package com.stintern.st2D.demo
         
         private var _oneSecond:uint =0;
         private var _gamePoint:uint = 0;
+        private var _gamePointIncrease:uint = 1;
         
         public function Game()
         {
@@ -149,7 +150,7 @@ package com.stintern.st2D.demo
             {
                 if(_gamePoint < 100)
                 {
-                    _gamePoint += 1;
+                    _gamePoint += _gamePointIncrease;
                 }
                 _oneSecond = 0;
             }
@@ -429,14 +430,25 @@ package com.stintern.st2D.demo
         
         public function gameOver(str:String):void
         {
+            var _gameUILayer:GameUI = SceneManager.instance.getCurrentScene().getLayerByName("GameUILayer") as GameUI;
+            
             if(str == "WIN")
             {
+                _gameUILayer.eventListenerClear();
+                
                 var scene:Scene = SceneManager.instance.getCurrentScene();
-                trace("win");
+                
+                var winLayer:Win = new Win();
+                scene.addLayer(winLayer);
             }
             else
             {
+                _gameUILayer.eventListenerClear();
                 
+                scene = SceneManager.instance.getCurrentScene();
+                
+                var loseLayer:Lose = new Lose();
+                scene.addLayer(loseLayer);
             }
         }
         

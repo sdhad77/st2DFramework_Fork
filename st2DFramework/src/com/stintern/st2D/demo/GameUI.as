@@ -27,6 +27,8 @@ package com.stintern.st2D.demo
         
         public function GameUI()
         {
+            this.name = "GameUILayer";
+            
             _leftSide = -StageContext.instance.screenWidth/2;
             _rightSide = -(StageContext.instance.screenWidth * 2 - StageContext.instance.screenWidth/2);
             
@@ -165,6 +167,13 @@ package com.stintern.st2D.demo
         private function onMouseUp(event:MouseEvent):void
         {
             StageContext.instance.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+        }
+        
+        public function eventListenerClear():void
+        {
+            StageContext.instance.stage.removeEventListener(MouseEvent.CLICK, buttonClick);
+            StageContext.instance.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+            StageContext.instance.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
         }
     }
 }
