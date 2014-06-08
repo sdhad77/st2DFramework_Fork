@@ -4,6 +4,7 @@ package com.stintern.st2D.demo
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.demo.datatype.Character;
     import com.stintern.st2D.display.Layer;
+    import com.stintern.st2D.display.Scene;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Sprite;
@@ -27,6 +28,9 @@ package com.stintern.st2D.demo
         private var _enemyCreateSch:Scheduler = new Scheduler;
         
         private var _gameBGLayer:GameBG = SceneManager.instance.getCurrentScene().getLayerByName("GameBGLayer") as GameBG;
+        
+        private var _oneSecond:uint =0;
+        private var _gamePoint:uint = 0;
         
         public function Game()
         {
@@ -78,16 +82,31 @@ package com.stintern.st2D.demo
             _effectIdx = 0;
             
             //성 생성
-            createBuilding("CASTLE", "PLAYER", 0);
-            createBuilding("CASTLE", "ENEMY", StageContext.instance.screenWidth*_gameBGLayer.bgNum);
+            createBuilding("CASTLE", "PLAYER", StageContext.instance.screenWidth*0.02);
+            createBuilding("CASTLE", "ENEMY", StageContext.instance.screenWidth*_gameBGLayer.bgNum - StageContext.instance.screenWidth*0.02);
             
             //적 자동생성 기능
-            _enemyCreateSch.addFunc(5000, enemyCreate, 20);
+            _enemyCreateSch.addFunc(5000, enemyCreate, 100);
+            _enemyCreateSch.addFunc(33000, enemyCreate2, 20);
+            _enemyCreateSch.addFunc(62000, enemyCreate3, 20);
+            _enemyCreateSch.addFunc(103000, enemyCreate4, 5);
             _enemyCreateSch.startScheduler();
             
             function enemyCreate():void
             {
-                createCharacter("MAN3", "ENEMY");
+                createCharacter("SLIME", "ENEMY");
+            }
+            function enemyCreate2():void
+            {
+                createCharacter("SKELETON", "ENEMY");
+            }
+            function enemyCreate3():void
+            {
+                createCharacter("SLIMEKING", "ENEMY");
+            }
+            function enemyCreate4():void
+            {
+                createCharacter("MONSTER1", "ENEMY");
             }
         }
         
@@ -104,23 +123,42 @@ package com.stintern.st2D.demo
             AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Man1",        8);
             AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Man2",        8);
             AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Man3",        8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Man4",        8);
             AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Mage1",       8);
             AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Mage2",       8);
             AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Mage2Attack", 8);
             AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Slime",       8);
             AnimationData.instance.setAnimationDelayNum(_charBatch.path, "SlimeKing",   8);
+            AnimationData.instance.setAnimationDelayNum(_charBatch.path, "Monster1",    8);
         }
         
         override public function update(dt:Number):void
         {
-            collisionChec();
+            if( _batchSpriteNum != 0) return;
+            
+            gamePointUpdate(dt);
+            collisionCheck();
             attack();
+        }
+        
+        private function gamePointUpdate(dt:Number):void
+        {
+            _oneSecond += dt;
+            
+            if(_oneSecond >= 1000)
+            {
+                if(_gamePoint < 100)
+                {
+                    _gamePoint += 1;
+                }
+                _oneSecond = 0;
+            }
         }
         
         /**
          * 모든 캐릭터들의 충돌을 검사하는 함수입니다.
          */
-        private function collisionChec():void
+        private function collisionCheck():void
         {
             //먼저 플레이어 캐릭터의 공격범위와 적군의 충돌을 검사합니다.
             for(var i:int=0; i<_playerChar.length; i++)
@@ -264,6 +302,7 @@ package com.stintern.st2D.demo
         public function createCharacter(charName:String, party:String):void
         {
             var current:Character;
+            var scale:Number = StageContext.instance.screenHeight/360;
             
             //아군이면
             if(party == "PLAYER")
@@ -273,14 +312,16 @@ package com.stintern.st2D.demo
                 current = _playerChar[_playerChar.length-1];
                 
                 //이름으로 캐릭터 찾아서 추가
-                if     (charName == "MAN1")      current.create(_charBatch, "Man1", "Man1", 100, 10, 700, "PLAYER", "CHAR", 3);
-                else if(charName == "MAN2")      current.create(_charBatch, "Man2", "Man2", 150, 20, 700, "PLAYER", "CHAR", 3);
-                else if(charName == "MAN3")      current.create(_charBatch, "Man3", "Man3", 120, 15, 700, "PLAYER", "CHAR", 3);
-                else if(charName == "MAGE1")     current.create(_charBatch, "Mage1", "Mage1", 80, 15, 700, "PLAYER", "CHAR", 3);
-                else if(charName == "MAGE2")     current.create(_charBatch, "Mage2", "Mage2", 200, 30, 700, "PLAYER", "CHAR", 3);
-                else if(charName == "SKELETON")  current.create(_charBatch, "Skeleton", "Skeleton", 100, 15, 700, "PLAYER", "CHAR", 3);
-                else if(charName == "SLIME")     current.create(_charBatch, "Slime", "Slime", 100, 15, 700, "PLAYER", "CHAR", 3);
-                else if(charName == "SLIMEKING") current.create(_charBatch, "SlimeKing", "SlimeKing", 200, 30, 1000, "PLAYER", "CHAR", 3);
+                if     (charName == "MAN1")      current.create(_charBatch, "Man1", "Man1", 100, 10, 700, "PLAYER", "CHAR", scale);
+                else if(charName == "MAN2")      current.create(_charBatch, "Man2", "Man2", 150, 20, 700, "PLAYER", "CHAR", scale);
+                else if(charName == "MAN3")      current.create(_charBatch, "Man3", "Man3", 120, 15, 700, "PLAYER", "CHAR", scale);
+                else if(charName == "MAN4")      current.create(_charBatch, "Man4", "Man4", 180, 25, 700, "PLAYER", "CHAR", scale);
+                else if(charName == "MAGE1")     current.create(_charBatch, "Mage1", "Mage1", 80, 15, 700, "PLAYER", "CHAR", scale);
+                else if(charName == "MAGE2")     current.create(_charBatch, "Mage2", "Mage2", 200, 30, 700, "PLAYER", "CHAR", scale);
+                else if(charName == "SKELETON")  current.create(_charBatch, "Skeleton", "Skeleton", 100, 15, 700, "PLAYER", "CHAR", scale);
+                else if(charName == "SLIME")     current.create(_charBatch, "Slime", "Slime", 50, 10, 700, "PLAYER", "CHAR", scale);
+                else if(charName == "SLIMEKING") current.create(_charBatch, "SlimeKing", "SlimeKing", 200, 30, 1000, "PLAYER", "CHAR", scale);
+                else if(charName == "MONSTER1")  current.create(_charBatch, "Monster1", "Monster1", 400, 50, 1000, "PLAYER", "CHAR", scale);
                 else
                 {
                     //없는 이름일경우 pop 해서 벡터 원위치 시킴
@@ -303,14 +344,16 @@ package com.stintern.st2D.demo
                 current = _enemyChar[_enemyChar.length-1];
                 
                 //이름으로 캐릭터 찾아서 추가
-                if     (charName == "MAN1")      current.create(_charBatch, "Man1", "Man1", 100, 10, 700, "ENEMY", "CHAR", 3);
-                else if(charName == "MAN2")      current.create(_charBatch, "Man2", "Man2", 150, 20, 700, "ENEMY", "CHAR", 3);
-                else if(charName == "MAN3")      current.create(_charBatch, "Man3", "Man3", 120, 15, 700, "ENEMY", "CHAR", 3);
-                else if(charName == "MAGE1")     current.create(_charBatch, "Mage1", "Mage1", 80, 15, 700, "ENEMY", "CHAR", 3);
-                else if(charName == "MAGE2")     current.create(_charBatch, "Mage2", "Mage2", 200, 30, 700, "ENEMY", "CHAR", 3);
-                else if(charName == "SKELETON")  current.create(_charBatch, "Skeleton", "Skeleton", 100, 10, 700, "ENEMY", "CHAR", 3);
-                else if(charName == "SLIME")     current.create(_charBatch, "Slime", "Slime", 100, 15, 700, "ENEMY", "CHAR", 3);
-                else if(charName == "SLIMEKING") current.create(_charBatch, "SlimeKing", "SlimeKing", 200, 30, 1000, "ENEMY", "CHAR", 3);
+                if     (charName == "MAN1")      current.create(_charBatch, "Man1", "Man1", 100, 10, 700, "ENEMY", "CHAR", scale);
+                else if(charName == "MAN2")      current.create(_charBatch, "Man2", "Man2", 150, 20, 700, "ENEMY", "CHAR", scale);
+                else if(charName == "MAN3")      current.create(_charBatch, "Man3", "Man3", 120, 15, 700, "ENEMY", "CHAR", scale);
+                else if(charName == "MAN4")      current.create(_charBatch, "Man4", "Man4", 180, 25, 700, "ENEMY", "CHAR", scale);
+                else if(charName == "MAGE1")     current.create(_charBatch, "Mage1", "Mage1", 80, 15, 700, "ENEMY", "CHAR", scale);
+                else if(charName == "MAGE2")     current.create(_charBatch, "Mage2", "Mage2", 200, 30, 700, "ENEMY", "CHAR", scale);
+                else if(charName == "SKELETON")  current.create(_charBatch, "Skeleton", "Skeleton", 100, 15, 700, "ENEMY", "CHAR", scale);
+                else if(charName == "SLIME")     current.create(_charBatch, "Slime", "Slime", 50, 10, 700, "ENEMY", "CHAR", scale);
+                else if(charName == "SLIMEKING") current.create(_charBatch, "SlimeKing", "SlimeKing", 200, 30, 1000, "ENEMY", "CHAR", scale);
+                else if(charName == "MONSTER1") current.create(_charBatch, "Monster1", "Monster1", 400, 50, 1000, "ENEMY", "CHAR", scale);
                 else
                 {
                     //없는 이름일경우 pop 해서 벡터 원위치 시킴
@@ -333,6 +376,7 @@ package com.stintern.st2D.demo
         public function createBuilding(charName:String, party:String, x:Number):void
         {
             var current:Character;
+            var scale:Number = StageContext.instance.screenHeight/400;
             
             //아군이면
             if(party == "PLAYER")
@@ -342,7 +386,7 @@ package com.stintern.st2D.demo
                 current = _playerChar[_playerChar.length-1];
                 
                 //이름으로 캐릭터 찾아서 추가
-                if(charName == "CASTLE") current.create(_charBatch, "castle", "castle", 2000, 30, 400, "PLAYER", "BUILD", 2.5);
+                if(charName == "CASTLE") current.create(_charBatch, "castle", "castle", 1000, 30, 500, "PLAYER", "BUILD", scale);
                 else
                 {
                     //없는 이름일경우 pop 해서 벡터 원위치 시킴
@@ -353,7 +397,7 @@ package com.stintern.st2D.demo
                 }
                 
                 //캐릭터와 관계없는 공통작업. 위치지정, 공격범위 설정
-                current.sprite.setTranslation(new Vector2D(x,StageContext.instance.screenHeight*0.42 + current.sprite.height*current.sprite.scale.y/2));
+                current.sprite.setTranslation(new Vector2D(x,StageContext.instance.screenHeight*0.45 + current.sprite.height*current.sprite.scale.y/2));
                 current.info.attackRadius = current.sprite.width * current.sprite.scale.x;
             }
                 //적군이면
@@ -364,7 +408,7 @@ package com.stintern.st2D.demo
                 current = _enemyChar[_enemyChar.length-1];
                 
                 //이름으로 캐릭터 찾아서 추가
-                if(charName == "CASTLE") current.create(_charBatch, "castle", "castle", 2000, 30, 400, "ENEMY", "BUILD", 2.5);
+                if(charName == "CASTLE") current.create(_charBatch, "castle", "castle", 1000, 30, 500, "ENEMY", "BUILD", scale);
                 else
                 {
                     //없는 이름일경우 pop 해서 벡터 원위치 시킴
@@ -376,20 +420,35 @@ package com.stintern.st2D.demo
                 
                 //캐릭터와 관계없는 공통작업. 위치지정, 공격범위 설정
                 current.sprite.reverseLeftRight();
-                current.sprite.setTranslation(new Vector2D(x,StageContext.instance.screenHeight*0.42 + current.sprite.height*current.sprite.scale.y/2));
+                current.sprite.setTranslation(new Vector2D(x,StageContext.instance.screenHeight*0.45 + current.sprite.height*current.sprite.scale.y/2));
                 current.info.attackRadius = current.sprite.width * current.sprite.scale.x;
             }
             
             current = null;
         }
         
+        public function gameOver(str:String):void
+        {
+            if(str == "WIN")
+            {
+                var scene:Scene = SceneManager.instance.getCurrentScene();
+                trace("win");
+            }
+            else
+            {
+                
+            }
+        }
+        
         //get set 함수들
         public function get charBatch():BatchSprite         { return _charBatch;  }
         public function get playerChar():Vector.<Character> { return _playerChar; }
         public function get enemyChar():Vector.<Character>  { return _enemyChar;  }
+        public function get gamePoint():uint                { return _gamePoint;  }
         
         public function set charBatch(value:BatchSprite):void         { _charBatch  = value; }
         public function set playerChar(value:Vector.<Character>):void { _playerChar = value; }
         public function set enemyChar(value:Vector.<Character>):void  { _enemyChar  = value; }
+        public function set gamePoint(value:uint):void                { _gamePoint  = value; }
     }
 }

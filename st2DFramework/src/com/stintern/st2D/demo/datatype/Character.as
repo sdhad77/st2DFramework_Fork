@@ -128,16 +128,16 @@ package com.stintern.st2D.demo.datatype
         public function setHpBar():void
         {
             _spriteBkg = new Sprite();
-            _spriteBkg.createSpriteWithBatchSprite(_batchSprite, "hpBar_0", _sprite.position.x, _sprite.position.y + _sprite.height*0.7*_sprite.scale.y);
-            _spriteBkg.scale.x = 2.2;
-            _spriteBkg.scale.y = 0.6;
+            _spriteBkg.createSpriteWithBatchSprite(_batchSprite, "hpBar_0", _sprite.position.x, _sprite.position.y + _sprite.height*0.8*_sprite.scale.y);
+            _spriteBkg.scale.x = _sprite.width*_sprite.scale.x/_spriteBkg.width*1.5;
+            _spriteBkg.scale.y = StageContext.instance.screenHeight*0.0008;
             _spriteBkg.depth = _sprite.depth - 0.01;
             _batchSprite.addSprite(_spriteBkg);
             
             _spriteFront = new Sprite();
-            _spriteFront.createSpriteWithBatchSprite(_batchSprite, "hpBar_1", _sprite.position.x, _sprite.position.y + _sprite.height*0.7*_sprite.scale.y);
-            _spriteFront.scale.x = 2.2;
-            _spriteFront.scale.y = 0.4;
+            _spriteFront.createSpriteWithBatchSprite(_batchSprite, "hpBar_1", _sprite.position.x, _sprite.position.y + _sprite.height*0.8*_sprite.scale.y);
+            _spriteFront.scale.x = _sprite.width*_sprite.scale.x/_spriteBkg.width*1.5;
+            _spriteFront.scale.y = StageContext.instance.screenHeight*0.0006;
             _spriteFront.depth = _sprite.depth - 0.02;
             _batchSprite.addSprite(_spriteFront);
             
@@ -194,6 +194,8 @@ package com.stintern.st2D.demo.datatype
             {
                 if(_info.party == "PLAYER")
                 {
+                    if(_info.type == "BUILD") _gameLayer.gameOver("LOSE");
+                    
                     for(var i:uint=0; i<_gameLayer.enemyChar.length; i++)
                     {
                         if(this == _gameLayer.enemyChar[i].target) _gameLayer.enemyChar[i].setState(WALK);
@@ -205,6 +207,10 @@ package com.stintern.st2D.demo.datatype
                 }
                 else
                 {
+                    if(_info.type == "BUILD") _gameLayer.gameOver("WIN");
+                    
+                    _gameLayer.gamePoint += 1;
+                    
                     for(i=0; i<_gameLayer.playerChar.length; i++)
                     {
                         if(this == _gameLayer.playerChar[i].target) _gameLayer.playerChar[i].setState(WALK);

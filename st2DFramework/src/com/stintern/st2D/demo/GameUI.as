@@ -3,6 +3,7 @@ package com.stintern.st2D.demo
     import com.stintern.st2D.animation.AnimationData;
     import com.stintern.st2D.basic.StageContext;
     import com.stintern.st2D.display.Layer;
+    import com.stintern.st2D.display.ProgressBar;
     import com.stintern.st2D.display.SceneManager;
     import com.stintern.st2D.display.sprite.BatchSprite;
     import com.stintern.st2D.display.sprite.Event;
@@ -14,17 +15,15 @@ package com.stintern.st2D.demo
     public class GameUI extends Layer
     {
         private var _batchSprite:BatchSprite;
-        private var _sprite1:Sprite;
-        private var _sprite2:Sprite;
-        private var _sprite3:Sprite;
-        private var _sprite4:Sprite;
-        private var _sprite5:Sprite;
+        private var _sprites:Vector.<Sprite> = new Vector.<Sprite>;
         
         private var _gameLayer:Game = SceneManager.instance.getCurrentScene().getLayerByName("GameLayer") as Game;
         
         private var prevPoint:Vector2D;
         private var _leftSide:int;
         private var _rightSide:int;
+        
+        private var _gpProgress:ProgressBar = new ProgressBar();
         
         public function GameUI()
         {
@@ -44,39 +43,25 @@ package com.stintern.st2D.demo
             var uiPosY:Number = StageContext.instance.screenHeight/2;
             var scale:Number = (scaleX>scaleY) ? scaleY : scaleX;
             
-            _sprite1 = new Sprite;
-            _sprite1.createSpriteWithBatchSprite(_batchSprite, "장면 1_0", uiPosX, uiPosY);
-            _sprite1.setScale(new Vector2D(scaleX,scaleY));
-            _sprite1.setFrameStagePos("장면 1_0");
-            _batchSprite.addSprite(_sprite1);
+            for(var i:int = 0; i<9; i++)
+            {
+                _sprites.push(new Sprite);
+                _sprites[i].createSpriteWithBatchSprite(_batchSprite, "장면 1_"+i.toString(), uiPosX, uiPosY);
+                _sprites[i].setScale(new Vector2D(scaleX,scaleY));
+                _sprites[i].setFrameStagePos("장면 1_"+i.toString());
+                _batchSprite.addSprite(_sprites[i]);
+            }
+
+            _sprites[1].addEventListener("touch", unitCreateButton1);
+            _sprites[2].addEventListener("touch", unitCreateButton2);
+            _sprites[3].addEventListener("touch", unitCreateButton3);
+            _sprites[4].addEventListener("touch", unitCreateButton4);
+            _sprites[5].addEventListener("touch", unitCreateButton5);
+            _sprites[6].addEventListener("touch", unitCreateButton6);
             
-            _sprite2 = new Sprite;
-            _sprite2.createSpriteWithBatchSprite(_batchSprite, "장면 1_1", uiPosX, uiPosY);
-            _sprite2.setScale(new Vector2D(scaleX,scaleY));
-            _sprite2.setFrameStagePos("장면 1_1");
-            _sprite2.addEventListener("touch", unitCreateButton1);
-            _batchSprite.addSprite(_sprite2);
-            
-            _sprite3 = new Sprite;
-            _sprite3.createSpriteWithBatchSprite(_batchSprite, "장면 1_2", uiPosX, uiPosY);
-            _sprite3.setScale(new Vector2D(scaleX,scaleY));
-            _sprite3.setFrameStagePos("장면 1_2");
-            _sprite3.addEventListener("touch", unitCreateButton2);
-            _batchSprite.addSprite(_sprite3);
-            
-            _sprite4 = new Sprite;
-            _sprite4.createSpriteWithBatchSprite(_batchSprite, "장면 1_3", uiPosX, uiPosY);
-            _sprite4.setScale(new Vector2D(scaleX,scaleY));
-            _sprite4.setFrameStagePos("장면 1_3");
-            _sprite4.addEventListener("touch", unitCreateButton3);
-            _batchSprite.addSprite(_sprite4);
-            
-            _sprite5 = new Sprite;
-            _sprite5.createSpriteWithBatchSprite(_batchSprite, "장면 1_4", uiPosX, uiPosY);
-            _sprite5.setScale(new Vector2D(scaleX,scaleY));
-            _sprite5.setFrameStagePos("장면 1_4");
-            _sprite5.addEventListener("touch", unitCreateButton4);
-            _batchSprite.addSprite(_sprite5);
+            _sprites[0].addChild(_sprites[7]);
+            _sprites[0].addChild(_sprites[8]);
+            _gpProgress.init(_sprites[8], _sprites[7], 100, _gameLayer.gamePoint, ProgressBar.FROM_LEFT);
             
             StageContext.instance.stage.addEventListener(MouseEvent.CLICK, buttonClick);
             StageContext.instance.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
@@ -90,21 +75,14 @@ package com.stintern.st2D.demo
             //카메라 위치가 바뀐 경우에만 업데이트 하도록 조건 설정해야함
             if(1)
             {
-                _sprite1.setTranslation(new Vector2D(-StageContext.instance.mainCamera.x,-StageContext.instance.mainCamera.y));
-                _sprite1.setFrameStagePos("장면 1_0");
-                
-                _sprite2.setTranslation(new Vector2D(-StageContext.instance.mainCamera.x,-StageContext.instance.mainCamera.y));
-                _sprite2.setFrameStagePos("장면 1_1");
-                
-                _sprite3.setTranslation(new Vector2D(-StageContext.instance.mainCamera.x,-StageContext.instance.mainCamera.y));
-                _sprite3.setFrameStagePos("장면 1_2");
-                
-                _sprite4.setTranslation(new Vector2D(-StageContext.instance.mainCamera.x,-StageContext.instance.mainCamera.y));
-                _sprite4.setFrameStagePos("장면 1_3");
-                
-                _sprite5.setTranslation(new Vector2D(-StageContext.instance.mainCamera.x,-StageContext.instance.mainCamera.y));
-                _sprite5.setFrameStagePos("장면 1_4");
+                for(var i:int = 0; i<7; i++)
+                {
+                    _sprites[i].setTranslation(new Vector2D(-StageContext.instance.mainCamera.x,-StageContext.instance.mainCamera.y));
+                    _sprites[i].setFrameStagePos("장면 1_"+i.toString());
+                }
             }
+            
+            _gpProgress.updateProgress(_gameLayer.gamePoint);
         }
         
         private function buttonClick(evt:MouseEvent):void
@@ -115,22 +93,56 @@ package com.stintern.st2D.demo
         
         private function unitCreateButton1():void
         {
-            _gameLayer.createCharacter("MAN", "PLAYER");
+            if(_gameLayer.gamePoint > 5)
+            {
+                _gameLayer.gamePoint -= 5;
+                _gameLayer.createCharacter("MAN1", "PLAYER");
+            }
         }
         
         private function unitCreateButton2():void
         {
-            _gameLayer.createCharacter("SKELETON", "PLAYER");
+            if(_gameLayer.gamePoint > 8)
+            {
+                _gameLayer.gamePoint -= 8;
+                _gameLayer.createCharacter("MAN3", "PLAYER");
+            }
         }
         
         private function unitCreateButton3():void
         {
-            _gameLayer.createCharacter("SLIME", "PLAYER");
+            if(_gameLayer.gamePoint > 10)
+            {
+                _gameLayer.gamePoint -= 10;
+                _gameLayer.createCharacter("MAN2", "PLAYER");
+            }
         }
         
         private function unitCreateButton4():void
         {
-            _gameLayer.createCharacter("SLIMEKING", "PLAYER");
+            if(_gameLayer.gamePoint > 15)
+            {
+                _gameLayer.gamePoint -= 15;
+                _gameLayer.createCharacter("MAN4", "PLAYER");
+            }
+        }
+        
+        private function unitCreateButton5():void
+        {
+            if(_gameLayer.gamePoint > 10)
+            {
+                _gameLayer.gamePoint -= 10;
+                _gameLayer.createCharacter("MAGE1", "PLAYER");
+            }
+        }
+        
+        private function unitCreateButton6():void
+        {
+            if(_gameLayer.gamePoint > 30)
+            {
+                _gameLayer.gamePoint -= 30;
+                _gameLayer.createCharacter("MAGE2", "PLAYER");
+            }
         }
         
         private function onMouseDown(event:MouseEvent):void
